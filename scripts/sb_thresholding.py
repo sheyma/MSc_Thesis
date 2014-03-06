@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # sb_thresholding.py : creates a thresholded matrix and saves it
+# prints simple characteristics of the thresholded matrix
 
 import networkx as nx
 import numpy as np 
@@ -37,7 +38,15 @@ def export_adjacency_matrix(G, input_mtx, r):		# save adjacency matrix
     f.write("\n")
   f.close()
 
-
+def characteristics(G, input_mtx,r):
+  print 'calculating characteristics with threshold=',r  
+  num_nodes = nx.number_of_nodes(G)
+  num_edges = nx.number_of_edges(G)
+  num_components = nx.number_connected_components(G)
+  print 'number of nodes in Graph: ', num_nodes
+  print 'number of edges in Graph: ', num_edges
+  print 'number of components in Graph: ', num_components
+  print ' '
 
 if __name__ == '__main__':
   
@@ -53,4 +62,5 @@ if __name__ == '__main__':
   network = get_threshold_matrix(infilename_data, threshold)
   print_adjacency_matrix(network)
   export_adjacency_matrix(network, infilename_data, threshold)
+  characteristics(network, infilename_data, threshold)
 
