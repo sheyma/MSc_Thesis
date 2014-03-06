@@ -88,34 +88,7 @@ def shortest_path(input_mtx):
 			f.write("%f\t%f\n" % (R, ( sum(values_2)/len(values_2) ) ) )
 	f.close()
 
-def local_eff(input_mtx):
-	R = 0
-	f = open(input_mtx[:-4]+'_local_efficency.dat','w')
-	g = open(input_mtx[:-4]+'_node_local_efficency.dat','w')
-	for i in range(0,101):
-		R = float(i)/100
-		G = get_threshold_matrix(input_mtx,R)
-		local_effic = 0
-		for node_i on G:
-			hiwi = 0.	
-			if G.degree(node_i)>1:
-				neighborhood_i = G.neigbors(node_i)
-				for node_j in neighborhood_i:
-					for node_h in neighborhood_j:
-						if node_j != node_i:
-							hiwi +=1./nx.shorthest_path_length(G,node_j,node_i)			
-				A = G.degree(node_i) * (G.degree(node_i) -1.)					
-				local_effic +=hiwi / A				
-				g.write('%d\t%f\t%f\n' % ( (node_i+1), R, (hiwi/A) ) )
-				 
-			else:
-				g.write('%d\t%f\t%f\n' % ((node_i+1), R, hiwi))
 
-			g.write("\n")
-		    local_effic = local_effic / nx.number_of_nodes(G)
-		    f.write("%f\t%f\n" % (r, local_effic))
-	f.close()
-	g.close()
 
 
 
@@ -135,4 +108,4 @@ if __name__ == '__main__':
   network = get_threshold_matrix(infilename_data, threshold)
   measures_of_network(infilename_data)
   shortest_path(infilename_data)
-  local_eff(infilename_data)
+
