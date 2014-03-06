@@ -107,8 +107,8 @@ def local_effic(input_mtx):
 				neighborhood_i = G.neighbors(node_i)
 				for node_j in neighborhood_i:
 					for node_h in neighborhood_i:
-						if node_j != node_i:
-							hiwi +=1./nx.shortest_path_length(G,node_j,node_i)			
+						if node_j != node_h:   #?
+							hiwi +=1./nx.shortest_path_length(G,node_j,node_h)			
 				A = G.degree(node_i) * (G.degree(node_i) -1.)					
 				local_effic +=hiwi / A				
 				g.write('%d\t%f\t%f\n' % ( (node_i+1), R, (hiwi/A) ) )
@@ -121,6 +121,31 @@ def local_effic(input_mtx):
 			f.write("%f\t%f\n" % ( R, local_effic))
 	f.close()
 	g.close()
+
+
+def global_effic(input_mtx): 
+	R = 0
+	f = open(input_mtx[:-4]+'_global_efficiency.dat','w')
+	g = open(input_mtx[:-4]+'_node_global_efficiency.dat','w')
+	for i in range(0,101):
+		R = float(i)/100
+		G = get_threshold_matrix(input_mtx,R)
+		global_eff = 0.
+		for node_i in G:
+			sum_inverse_dist = 0.
+			for node_j in G:
+				if node_i != node_j:
+					if nx.has_path(G, node_i, node_j) == True:
+						sum_inverse_dist += 1. / nx.shortest_path_length(G, node_i, node_j)
+			A = sum_inverse_dist / nx.number_of_nodes(G)  # ?
+			g.write('%d\t%f\t%f\n' % ((node_i+1), R, A))
+			global_eff += sum_inverse_dist / (nx.number_of_nodes(G) - 1.) 
+		g.write("\n")
+		global_eff = global_eff / nx.number_of_nodes(G)
+		f.write("%f\t%f\n" % (R, global_eff))
+	f.close()  
+	g.close()  
+
 
 
 
@@ -139,3 +164,4 @@ if __name__ == '__main__':
   degree_dist(infilename_data)
   single_degrees(infilename_data)
   local_effic(infilename_data)		
+  global_effic(infilename_data)	
