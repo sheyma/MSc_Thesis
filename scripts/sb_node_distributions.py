@@ -11,14 +11,14 @@ import sys
 # (note : degree = number of links connected to a node)
 # find degree distributions (P_k : degree of single node over all nodes)
 
-def get_threshold_matrix(input_mtx, r):
+def get_threshold_matrix(input_mtx,R):
   A = np.transpose(np.loadtxt(input_mtx, unpack=True)) 
   B = np.zeros((len(A),len(A)))
 
   for row in range(len(A)):
     for item in range(len(A)):
       if row != item:
-        if A[row,item] >= r:
+        if A[row,item] >= R:
           B[row,item] = 1
         else:
           B[row,item] = 0
@@ -51,6 +51,25 @@ def node_cc(input_mtx):   # cluster coefficient of each node
 			f.write("%d\t%f\t%f\n" % (node+1, R, nx.clustering(G,node)))
 		f.write("\n")
 	f.close()
+
+
+
+def nodes_of_comp(input_mtx):
+	R =0
+	f = open(input_mtx[:-4]+'_nodes_comp_.dat','w')
+	f.write('node\tr(thre.)\tcount\n')
+	for i in range(0,101):
+		R = float(i)/100
+		G = get_threshold_matrix(input_mtx,R)
+		comps = nx.connected_component_subgraphs(G)
+		count = 0
+		for graph in comps:
+			count +=1
+			liste = graph.nodes()
+			for node in liste:
+				f.write("%d\t%f\t%d\n" % (node,R,count))
+		f.write("\n")
+	f.close
 
 def single_degrees(input_mtx): #degree (links) of each node
 	R = 0
@@ -147,21 +166,115 @@ def global_effic(input_mtx):
 	g.close()  
 
 
+def small_worldness(input_mtx):
+	R = 0
+	f = open(input_mtx[:-4]+'_small_worldness.dat','w')
+	g = open(input_mtx[:-4]+'_cc_trans_ER.dat','w')	
+	g.write('r(thre.)\t\cc_A\tcc_ER\ttran_A\ttran_ER\n')	
+	for i in range(0,101):
+		R = float(i)/100
+		G = get_threshold_matrix(input_mtx, R)
+		ER_graph = nx.erdos_renyi_graph(nx.number_of_nodes(G), nx.density(G))
+		# erdos-renyi, binomial random graph generator ...(N,D:density)	
+		cluster = nx.average_clustering(G)   # clustering coef. of whole network
+		ER_cluster = nx.average_clustering(ER_graph)	#cc of random graph
+		
+		transi = nx.transitivity(G)
+		ER_transi = nx.transitivity(ER_graph)
+	
+		g.write("%f\t%f\t%f\t%f\t%f\n" % (R,cluster,ER_cluster,transi,ER_transi ))
+		
+		f.write("%f\t%f\t%f" % (R, cluster, ER_cluster))
+		components = nx.connected_component_subgraphs(G)
+		ER_components = nx.connected_component_subgraphs(ER_graph)
+
+		values = []
+		ER_values = []
+		for i in range(len(components)):
+			if nx.number_of_nodes(components[i]) > 1:
+				values.append(nx.average_shortest_path_length(components[i]))
+		for i in range(len(ER_components)):
+			if nx.number_of_nodes(ER_components[i]) > 1:
+				ER_values.append(nx.average_shortest_path_length(ER_components[i]))
+		if len(values) == 0:
+			f.write("\t0.")
+		else:
+			f.write("\t%f" % (sum(values)/len(values))) # pathlenght
+
+		if len(ER_values) == 0:
+			f.write("\t0.")
+		else:
+			f.write("\t%f" % (sum(ER_values)/len(ER_values)))
+
+		f.write("\t%f\t%f" % (transi, ER_transi))  
+
+		if (ER_cluster*sum(values)*len(values)*sum(ER_values)*len(ER_values)) >0 :
+			S_WS = (cluster/ER_cluster) / ((sum(values)/len(values)) / (sum(ER_values)/len(ER_values)))  
+		else:
+			S_WS = 0.
+		if (ER_transi*sum(values)*len(values)*sum(ER_values)*len(ER_values)) >0 :
+			S_Delta = (transi/ER_transi) / ((sum(values)/len(values)) / (sum(ER_values)/len(ER_values)))
+		else:
+			S_Delta = 0.
+
+		f.write("\t%f\t%f" % (S_WS, S_Delta)) # S_WS ~ small worldness 
+		f.write("\n")
+
+	f.close() 
+	g.close()	 
+  #print "1:threshold 2:cluster-coefficient 3:random-cluster-coefficient 4:shortest-pathlength 5:random-shortest-pathlength 6:transitivity 7:random-transitivity 8:S-Watts-Strogatz 9:S-transitivity" 
+
+  
+def binomialCoefficient(n, k):
+    from math import factorial
+    return factorial(n) // (factorial(k) * factorial(n - k))
+  
+def motifs(input_mtx):
+	from math import factorial
+	R = 0
+	f = open(input_mtx[:-4]+'_motifs.dat','w')
+	for i in range(0,101):
+		R = float(i)/100
+		G = get_threshold_matrix(input_mtx, R)
+		tri_dict = nx.triangles(G)   #number of triangles around nodes in G
+		summe = 0
+		for node in tri_dict:
+			summe += tri_dict[node] # summing up all triangle numbers over nodes
+
+		N = nx.number_of_nodes(G)
+		ratio = summe / (3. * binomialCoefficient(N,3)) # ratio to porential tria.
+
+		transi = nx.transitivity(G)
+		if transi > 0:
+			triads = summe / transi 	# triads
+			ratio_triads = triads / (3 * binomialCoefficient(N,3)) #ratio to pot.
+		else:
+			triads = 0.
+			ratio_triads = 0.
+
+    #print 'threshold: %f, number of triangles: %f, ratio: %f, triads: %f, ratio: %f' %(threshold, summe/3, ratio, triads, ratio_triads)
+    		f.write("%f\t%d\t%f\t%f\t%f\n" % (R, summe/3, ratio, triads, ratio_triads))
+	f.close()
+  #print "1:threshold 2:#triangles 3:ratio-to-potential-triangles 4:triads 5:ratio-to-potential-triads"
+  
 
 
 if __name__ == '__main__':
   usage = 'Usage: %s correlation_matrix threshold' % sys.argv[0]
   try:
     infilename_data = sys.argv[1]
-    value = sys.argv[2]
+    #value = sys.argv[2]
   except:
     print usage; sys.exit(1)
 
   ###manual choice of the threshold value
-  threshold = float(value)
-  network = get_threshold_matrix(infilename_data, threshold)
+  #threshold = float(value)
+  #network = get_threshold_matrix(infilename_data, threshold)
   node_cc(infilename_data)
   degree_dist(infilename_data)
   single_degrees(infilename_data)
   local_effic(infilename_data)		
   global_effic(infilename_data)	
+  nodes_of_comp(infilename_data)		
+  small_worldness(infilename_data)
+  motifs(infilename_data)
