@@ -99,13 +99,13 @@ if __name__ == '__main__':
   usage = 'Usage: %s correlation_matrix threshold' % sys.argv[0]
   try:
     infilename_data = sys.argv[1]
-    value = sys.argv[2]
+    #value = sys.argv[2]
   except:
     print usage; sys.exit(1)
 
   ###manual choice of the threshold value
-  threshold = float(value)
-  network = get_threshold_matrix(infilename_data, threshold)
+  #threshold = float(value)
+  #network = get_threshold_matrix(infilename_data, threshold)
   measures_of_network(infilename_data)
   shortest_path(infilename_data)
 
