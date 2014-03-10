@@ -1,7 +1,8 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-# Creating a random network by preserving the degree of test network (e.g. A.txt)
+# Creating a random network by preserving node # and network denstix 
+# use random graph generator : networkx.erdos_renyi_graph(N,density)
 
 
 import networkx as nx
@@ -24,7 +25,9 @@ def random_graph_b(matrix, r):
           B[row,item] = 0
   #print B	   										 # print thresholded new matrix  
   G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded matr.
-  Random_Gb = nx.double_edge_swap(G,nswap=1,max_tries=100000000)				 # random graph
+  N = nx.number_of_nodes(G)							 # number of nodes in G	
+  d = nx.density(G)									 # network density og G
+  Random_Gb = nx.erdos_renyi_graph(N,d)	 # random graph
   return Random_Gb
 
 
