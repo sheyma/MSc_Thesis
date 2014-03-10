@@ -1,7 +1,8 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-# Creating a random network with same density of test network (e.g. A.txt)
+# Creating a random network with same node and link numbers of test network 
+# use networkx.gnm_random_graph(N,L)
 
 
 import networkx as nx

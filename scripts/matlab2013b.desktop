@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Matlab 2013b
+Type=Application
+Categories=Development;Math;Science;
+MimeType=application/matlab
+Exec=matlab2013b
+Terminal=false
+Icon=/opt/MATLAB/R2013b/X11/icons/matlab48c_icon.xpm
+

@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-# Creating a random network by preserving node # and network denstix 
+# Creating a random network by preserving node number and network density of test network 
 # use random graph generator : networkx.erdos_renyi_graph(N,density)
 
 
