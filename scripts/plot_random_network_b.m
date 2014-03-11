@@ -1,29 +1,18 @@
-% plot network measures of test network
-% A_network_measures.dat :
+% plot network measures of the random network
+% A_Random_Gb_network_measures.dat :
 %       threshold, L, Density, components, CC_average, check_sum, sum_ave
-% A_shortest_pathway.dat :
-%       threshold, shortest pahtway
-% A_global_efficiency.dat:
-%       threshold, gloabal efficiency of full network
-% A_local_efficiency.dat :
-%       threshold, local efficiency of full network
-% A_small_worldness.dat : 
-%       1:threshold 2:cluster-coefficient 3:random-cluster-coefficient 
-%       4:shortest-pathlength 5:random-shortest-pathlength 6:transitivity 
-%       7:random-transitivity 8:S-Watts-Strogatz 9:S-transitivity
 
-% single network measures
-Net_mes = load('A_network_measures.dat');
-Shor_pat = load('A_shortest_path.dat');
-Glo_ef = load('A_global_efficiency.dat');
-Loc_ef = load('A_local_efficency.dat');
-SWorld = load('A_small_worldness.dat');
+Net_mes = load('A_Random_Gb_network_measures.dat');
+Shor_pat = load('A_Random_Gb_shortest_path.dat');
+Glo_ef = load('A_Random_Gb_global_efficiency.dat');
+Loc_ef = load('A_Random_Gb_local_efficency.dat');
+SWorld = load('A_Random_Gb_small_worldness.dat');
 
 % network measures as distributions around nodes
-deg_dis = load('A_degree_dist.dat');
-node_CC = load('A_node_cc.dat');
-comp_dist =load('A_nodes_comp_.dat');
-single_de =load('A_single_degrees.dat');
+deg_dis = load('A_Random_Gb_degree_dist.dat');
+node_CC = load('A_Random_Gb_node_cc.dat');
+comp_dist =load('A_Random_Gb_nodes_comp_.dat');
+single_de =load('A_Random_Gb_single_degrees.dat');
 
 figure(1);
 
@@ -80,7 +69,6 @@ set(gca, 'FontSize', 15)
 plot(SWorld(:,1), SWorld(:,7))
 xlabel('r')
 ylabel('Transitivity')
-
 
 figure(2);
 subplot(2,2,1)

@@ -11,9 +11,11 @@
 # does check_sum exercise for degree distribution
 # finds average degree overall network
 # find shortest pathway overall network
-# finds global efficieny of full network
-# finds local efficiency of full network
-# finds Small worldness
+# finds global efficieny of full network and each node
+# finds local efficiency of full network and each node
+# finds Small worldness of full network
+# finds clustering coefficients of each node
+# find connected component of each node
 
 import networkx as nx
 import numpy as np 
@@ -72,6 +74,26 @@ def measures_of_network(input_mtx):
 	# 1.threshold, 2.L, 3.Density, 4.components, 5.CC_average, 6.check_sum, 7.sum_ave
   f.close()
 
+def shortest_path(input_mtx):
+	R = 0
+	f = open(input_mtx[:-4]+'_shortest_path.dat','w')
+	#f.write('r(thre.)\tshorthest_pathlength\n')
+	for i in range(0,101):
+		R = float(i)/100
+		G = get_threshold_matrix(input_mtx,R)
+		Compon = nx.connected_component_subgraphs(G) # components
+		values_2 = []
+		for i in range(len(Compon)):
+			if nx.number_of_nodes(Compon[i])>1:
+				values_2.append(nx.average_shortest_path_length(Compon[i]))
+		
+		if len(values_2) == 0:
+			f.write("%f\t0.\n" % (R))
+
+		else:
+			f.write("%f\t%f\n" % (R, ( sum(values_2)/len(values_2) ) ) )
+			# 1.threshold , 2.shortest pathway
+	f.close()
 
 def degree_dist(input_mtx):			# degree distribution
 	R = 0
@@ -148,26 +170,6 @@ def single_degrees(input_mtx): #degree (links) of each node
 	f.close	
 
 
-def shortest_path(input_mtx):
-	R = 0
-	f = open(input_mtx[:-4]+'_shortest_path.dat','w')
-	#f.write('r(thre.)\tshorthest_pathlength\n')
-	for i in range(0,101):
-		R = float(i)/100
-		G = get_threshold_matrix(input_mtx,R)
-		Compon = nx.connected_component_subgraphs(G) # components
-		values_2 = []
-		for i in range(len(Compon)):
-			if nx.number_of_nodes(Compon[i])>1:
-				values_2.append(nx.average_shortest_path_length(Compon[i]))
-		
-		if len(values_2) == 0:
-			f.write("%f\t0.\n" % (R))
-
-		else:
-			f.write("%f\t%f\n" % (R, ( sum(values_2)/len(values_2) ) ) )
-			# 1.threshold , 2.shortest pathway
-	f.close()
 
 def global_effic(input_mtx): 
 	R = 0
