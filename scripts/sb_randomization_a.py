@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Creating a random network with same node and link numbers of test network 
-# use networkx.gnm_random_graph(N,L)
+# use networkx.gnm_random_graph(N,L)  == method a)
 
 
 import networkx as nx
@@ -10,7 +10,7 @@ import numpy as np
 import sys  
 
 
-# 1. create a random network with method a
+# 1. create a random network 
 
 def random_graph_a(matrix, r):
   A = np.transpose(np.loadtxt(matrix, unpack=True)) 
@@ -26,17 +26,15 @@ def random_graph_a(matrix, r):
   #print B	   										 # print thresholded new matrix  
   G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded matr.
   L = nx.number_of_edges(G) 						 # total number of links: L  
-  N = nx.number_of_nodes(G) 						 # total number of nodes : N
-  #print 'number of links (edges) in G: ' , L
-  #print 'number of nodes in G : ' , N	
+  N = nx.number_of_nodes(G) 						 # total number of nodes : N	
   Random_Ga = nx.gnm_random_graph(N,L)				 # random graph
   return Random_Ga
 
 
 def measures_random_Ga(matrix):
   R = 0
-  f=open(matrix[:-4]+'_Random_Ga.dat','w')
-  f.write('r(thres)\tL\tN\tD(dens.)\tcon_comp\tCC(clus.)\tcheck_sum\tave_degr\n')
+  f=open(matrix[:-4]+'_Random_Ga_network_measures.dat','w')
+  #f.write('r(thres)\tL\tN\tD(dens.)\tcon_comp\tCC(clus.)\tcheck_sum\tave_degr\n')
   for i in range (0,101):
 	R = float(i)/100
 	Random_Ga = random_graph_a(matrix,R)
@@ -64,9 +62,32 @@ def measures_random_Ga(matrix):
 	for item in keys:		
 		check_sum +=float(degree_hist[item])/float(N)
 	
-	f.write("%f\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t\n" %(R,L,N,L/max_edge,Compon,CC,check_sum,ave))	
+	f.write("%f\t%d\t%f\t%f\t%f\t%f\t%f\t\n" %(R,L,L/max_edge,Compon,CC,check_sum,ave))	
+  	#1:threshold 2:L 3:Density 4:connected components 5: clus.coef. 6. check_sum 7:ave
   f.close()
   #L/max_edge : network density, D	
+
+def shortest_path(input_mtx):
+	R = 0
+	f = open(input_mtx[:-4]+'_Random_Ga_shortest_path.dat','w')
+	#f.write('r(thre.)\tshorthest_pathlength\n')
+	for i in range(0,101):
+		R = float(i)/100
+		Random_Ga = random_graph_a(input_mtx,R)
+		Compon = nx.connected_component_subgraphs(Random_Ga) # components
+		values_2 = []
+		for i in range(len(Compon)):
+			if nx.number_of_nodes(Compon[i])>1:
+				values_2.append(nx.average_shortest_path_length(Compon[i]))
+		
+		if len(values_2) == 0:
+			f.write("%f\t0.\n" % (R))
+
+		else:
+			f.write("%f\t%f\n" % (R, ( sum(values_2)/len(values_2) ) ) )
+			# 1.threshold , 2.shortest pathway
+	f.close()
+
 
 
 
@@ -82,5 +103,5 @@ if __name__ == '__main__':
   ###manual choice of the threshold value
   #R = float(input_threshold)
   #random_graph_a(input_matrix, R)
-  measures_random_Ga(input_matrix)
-  #print_adjacency_matrix(network)
+  #measures_random_Ga(input_matrix)
+  shortest_path(input_matrix)
