@@ -1,0 +1,3 @@
+#!/bin/sh
+#print out the date and who has logged in
+date ; who am i ;
