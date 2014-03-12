@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Creating a random network by preserving the degree distribution of test network (e.g. A.txt)
-# use random graph generator : configuration model
+# use nx.configuration_model(degree_seq[integers]) == method c)
 
 import networkx as nx
 from networkx.algorithms import bipartite
@@ -28,21 +28,22 @@ def random_graph_c(matrix, r):
 	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
   	
 	degree_hist = {}
+	
 	for node in G:
 		
 		if G.degree(node) not in degree_hist: # degree dist part
 			degree_hist[G.degree(node)] =1
 		else:
-			degree_hist[G.degree(node)] +=1
+			degree_hist[G.degree(node)] +=1	
 	keys = degree_hist.keys()
 	degrees = range(0,nx.number_of_nodes(G)+1,1)
 	degree_seq = []
 	for item in degrees:
 		if item in keys:
 			degree_seq.append(degree_hist[item])		# degree sequence of nodes	
-	
-	Random_Gc = nx.configuration_model(degree_seq)		# random graph generator #?? is that ok?
-	return Random_Gc
+	Random_Gc_1 = nx.configuration_model(degree_seq)    # returns MULTIGRAPH
+	Random_Gc = nx.Graph(Random_Gc_1)					# convert into graph
+	return Random_Gc 
 
 def measures_random_Gc(matrix):
 	R = 0
@@ -73,9 +74,8 @@ def measures_random_Gc(matrix):
 		keys.sort()
 		for item in keys:
 			check_sum +=float(degree_hist[item])/float(N)
-		Random_Gc_try = nx.Graph(Random_Gc)
-		CC = nx.average_clustering(Random_Gc_try)
-		f.write("%f\t%d\t%f\t%f\t%f\t%f\t%f\t\n" %(R,L,d,Compon,CC,check_sum,ave)) #D ?
+		CC = nx.average_clustering(Random_Gc)
+		f.write("%f\t%d\t%f\t%f\t%f\t%f\t%f\t\n" %(R,L,d,Compon,CC,check_sum,ave)) 
 		#1:threshold 2:L 3:Density 4:connected components 5: clus.coef. 6. check_sum 7:ave
 	f.close()
 
@@ -165,11 +165,11 @@ def small_worldness(input_mtx):
 		ER_graph = nx.erdos_renyi_graph(nx.number_of_nodes(Random_Gc), nx.density(Random_Gc))
 		# erdos-renyi, binomial random graph generator ...(N,D:density)	
 
-		Random_Gc_try = nx.Graph(Random_Gc)  ## ?? Trick		
-		cluster = nx.average_clustering(Random_Gc_try)   # clustering coef. of whole network
+				
+		cluster = nx.average_clustering(Random_Gc)   # clustering coef. of whole network
 		ER_cluster = nx.average_clustering(ER_graph)	#cc of random graph
 		
-		transi = nx.transitivity(Random_Gc_try) ## ?? Trick
+		transi = nx.transitivity(Random_Gc) 
 		ER_transi = nx.transitivity(ER_graph)
 	
 		g.write("%f\t%f\t%f\t%f\t%f\n" % (R,cluster,ER_cluster,transi,ER_transi ))
@@ -250,9 +250,9 @@ def node_cc(input_mtx):   # cluster coefficient of each node
 	for i in range(0,101):
 		R = float(i)/100
 		Random_Gc= random_graph_c(input_mtx,R)
-		Random_Gc_try = nx.Graph(Random_Gc) 		## ?? >> Trick
+		
 		for node in Random_Gc:
-			f.write("%d\t%f\t%f\n" % (node+1, R, nx.clustering(Random_Gc_try,node)))
+			f.write("%d\t%f\t%f\n" % (node+1, R, nx.clustering(Random_Gc,node)))
 			# node, threshold, clustering coefficient of node			
 		#f.write("\n")
 	f.close()
@@ -305,7 +305,8 @@ if __name__ == '__main__':
     #input_threshold = sys.argv[2]
   except:
     print usage; sys.exit(1)
-   
+
+#random_graph_c(input_matrix,float(input_threshold))
 measures_random_Gc(input_matrix)
 shortest_path(input_matrix)
 global_effic(input_matrix)

@@ -315,7 +315,7 @@ if __name__ == '__main__':
     print usage; sys.exit(1)
 
   ###manual choice of the threshold value
-  #R = float(input_threshold)
+  #R = float(input_threshold)  # when you choose R manual, then convert!
   #random_graph_b(input_matrix, R)
   measures_random_Gb(input_matrix)
   shortest_path(input_matrix)

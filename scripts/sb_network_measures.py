@@ -5,11 +5,11 @@
 # in Graph G for many threshold values:
 # finds number of edges(links: L)
 # finds number of nodes, N
-# finds network density D = 2L/(N(N-1))
+# finds network density D = 2L/(N(N-1)) (kappa)
 # finds number of connected components
 # finds CC (clustering coefficient) of whole network
 # does check_sum exercise for degree distribution
-# finds average degree overall network
+# finds average degree overall network (<kappa>)
 # find shortest pathway overall network
 # finds global efficieny of full network and each node
 # finds local efficiency of full network and each node
@@ -63,7 +63,7 @@ def measures_of_network(input_mtx):
 		values.append(G.degree(node))	# average degree part
 	
 	ave=float(sum(values))/float(nx.number_of_nodes(G))	
-	# average degree overall network
+	# average degree overall network <k>
 	
 	keys = degree_hist.keys()
 	keys.sort
