@@ -8,7 +8,7 @@
 # finds network density D = 2L/(N(N-1)) (kappa)
 # finds number of connected components
 # finds CC (clustering coefficient) of whole network
-# does check_sum exercise for degree distribution
+# does check_sum and ave for degree distribution
 # finds average degree overall network (<kappa>)
 # find shortest pathway overall network
 # finds global efficieny of full network and each node

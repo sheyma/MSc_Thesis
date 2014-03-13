@@ -24,7 +24,7 @@ def random_graph_c(matrix, r):
 			  B[row,item] = 1
 			else:
 			  B[row,item] = 0
-		#print B	   								   # print thresholded new matrix  
+		#print B	   								   # print binarized matrix
 	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
   	
 	degree_hist = {}
@@ -45,6 +45,97 @@ def random_graph_c(matrix, r):
 	Random_Gc = nx.Graph(Random_Gc_1)					# convert into graph
 	return Random_Gc 
 
+def random_graph_c_1(matrix, r):
+	A = np.transpose(np.loadtxt(matrix, unpack=True)) 
+	B = np.zeros((len(A),len(A)))
+
+	for row in range(len(A)):
+		for item in range(len(A)):
+		  if row != item:
+			if A[row,item] >= r:
+			  B[row,item] = 1
+			else:
+			  B[row,item] = 0
+		#print B	   								   # print binarized matrix
+	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
+  	
+	degree_hist = {}
+	
+	for node in G:
+		
+		if G.degree(node) not in degree_hist: # degree dist part
+			degree_hist[G.degree(node)] =1
+		else:
+			degree_hist[G.degree(node)] +=1	
+	keys = degree_hist.keys()
+	degrees = range(0,nx.number_of_nodes(G)+1,1)
+	degree_seq = []
+	for item in degrees:
+		if item in keys:
+			degree_seq.append(degree_hist[item])		# degree sequence of nodes	
+	Random_Gc_1 = nx.configuration_model(degree_seq)    # returns MULTIGRAPH
+						# convert into graph
+	return Random_Gc_1 
+
+# compares some basic network properties before and after collapse
+def comparison(matrix):
+	f=open(matrix[:-4]+'CONF_multigraph.dat','w')
+	g=open(matrix[:-4]+'CONF_singlegraph.dat','w')	
+	R = 0
+	for i in range(0,101):
+		R = float(i)/100	
+
+		Random_Gc = random_graph_c(matrix,R)
+		Random_Gc_1 = random_graph_c_1(matrix,R)
+		N = nx.number_of_nodes(Random_Gc)
+		L = nx.number_of_edges(Random_Gc)
+		d = nx.density(Random_Gc)
+		Compon = nx.number_connected_components(Random_Gc)
+		n = nx.number_of_nodes(Random_Gc)
+		L_1 = nx.number_of_edges(Random_Gc)
+		d_1 = nx.density(Random_Gc)
+		Compon_1 = nx.number_connected_components(Random_Gc)
+		
+		
+		check_sum = 0.
+		degree_hist = {}
+		values = []
+
+		cs = 0.
+		degree_h = {}
+		values_1 = []
+		for node in Random_Gc:
+			if Random_Gc.degree(node) not in degree_hist:
+				degree_hist[Random_Gc.degree(node)] = 1
+			else:
+				degree_hist[Random_Gc.degree(node)] +=1
+
+		values.append(Random_Gc.degree(node))
+		ave = float(sum(values))/(nx.number_of_nodes(Random_Gc))
+		keys = degree_hist.keys()
+		keys.sort()
+
+		for item in keys:
+			check_sum +=float(degree_hist[item])/float(N)
+
+		for node in Random_Gc_1:
+			if Random_Gc_1.degree(node) not in degree_h:
+				degree_h[Random_Gc_1.degree(node)] = 1
+			else:
+				degree_h[Random_Gc_1.degree(node)] +=1
+
+		values_1.append(Random_Gc_1.degree(node))
+		ave_1 = float(sum(values_1))/(nx.number_of_nodes(Random_Gc_1))
+
+		keys_1 = degree_h.keys()
+		keys_1.sort()
+		for item in keys_1:
+			cs +=float(degree_h[item])/float(n)
+
+		f.write("%f\t%d\t%f\t%f\t%f\t%f\t\n" %(R,L,d,Compon,check_sum,ave)) 
+		g.write("%f\t%d\t%f\t%f\t%f\t%f\t\n" %(R,L_1,d_1,Compon_1,cs,ave_1))
+	f.close() 
+
 def measures_random_Gc(matrix):
 	R = 0
 	f = open(matrix[:-4]+'_Random_Gc_network_measures.dat', 'w')
@@ -60,6 +151,7 @@ def measures_random_Gc(matrix):
 		check_sum = 0.
 		degree_hist = {}
 		values = []
+
 
 		for node in Random_Gc:
 			if Random_Gc.degree(node) not in degree_hist:
@@ -243,6 +335,69 @@ def degree_dist(input_mtx):			# degree distribution
 		#f.write("\n")
 	f.close()
 
+def compare_degree_dist(input_mtx):			# degree distribution
+	R = 0
+	f = open(input_mtx[:-4]+'CONF_multigraph_dd.dat', 'w')
+	g = open(input_mtx[:-4]+'CONF_singlegraph_dd.dat', 'w')
+	#f.write('node\tr(thre.)\tdeg_hist\tdeg_dist\n')
+	for i in range(0,101):
+		R = float(i)/100
+		Random_Gc = random_graph_c(input_mtx,R)
+		check_sum = 0.
+		degree_hist = {}
+		for node in Random_Gc:
+			if Random_Gc.degree(node) not in degree_hist:	
+				degree_hist[Random_Gc.degree(node)] = 1
+			else:
+				degree_hist[Random_Gc.degree(node)] += 1
+		#degrees = range(0, nx.number_of_nodes(Random_Gc)+1,1)
+		degrees = range(1, nx.number_of_nodes(Random_Gc)+1,1)		
+		keys = degree_hist.keys()	#keys of block
+		keys.sort
+		for item in degrees:
+			if item in keys:
+				P_k=float(degree_hist[item]) / float(nx.number_of_nodes(Random_Gc))
+				check_sum +=P_k				
+				f.write('%d\t%f\t%d\t%f\n' % (item,R,degree_hist[item],P_k))
+				#1.node, 2.threshold, 3.degree hist, 4.degree distribution			
+			else:
+				f.write('%d\t%f\t0\t0.\n' % (item, R))
+		#f.write("\n")
+
+		Random_Gc_1 = random_graph_c_1(input_mtx,R)
+		check_sum1 = 0.
+		degree_hist1 = {}
+		for node in Random_Gc_1:
+			if Random_Gc_1.degree(node) not in degree_hist1:	
+				degree_hist1[Random_Gc_1.degree(node)] = 1
+			else:
+				degree_hist1[Random_Gc_1.degree(node)] += 1
+		#degrees = range(0, nx.number_of_nodes(Random_Gc_1)+1,1)
+		degrees = range(1, nx.number_of_nodes(Random_Gc_1)+1,1)		
+		keys1 = degree_hist1.keys()	#keys of block
+		keys1.sort
+		for item in degrees:
+			if item in keys1:
+				P_k1=float(degree_hist1[item]) / float(nx.number_of_nodes(Random_Gc_1))
+				check_sum1 +=P_k1				
+				g.write('%d\t%f\t%d\t%f\n' % (item,R,degree_hist1[item],P_k1))
+				#1.node, 2.threshold, 3.degree hist, 4.degree distribution			
+			else:
+				g.write('%d\t%f\t0\t0.\n' % (item, R))
+		#f.write("\n")
+
+
+	f.close()
+	g.close()
+
+
+
+
+
+
+
+
+
 def node_cc(input_mtx):   # cluster coefficient of each node
 	R = 0 
 	f = open(input_mtx[:-4]+'_Random_Gc_node_cc.dat','w')			
@@ -307,13 +462,14 @@ if __name__ == '__main__':
     print usage; sys.exit(1)
 
 #random_graph_c(input_matrix,float(input_threshold))
-measures_random_Gc(input_matrix)
-shortest_path(input_matrix)
-global_effic(input_matrix)
-local_effic(input_matrix)
-small_worldness(input_matrix)
+#measures_random_Gc(input_matrix)
+#shortest_path(input_matrix)
+#global_effic(input_matrix)
+#local_effic(input_matrix)
+#small_worldness(input_matrix)
 degree_dist(input_matrix)
-node_cc(input_matrix)
-nodes_of_comp(input_matrix)
-single_degrees(input_matrix)
-
+#node_cc(input_matrix)
+#nodes_of_comp(input_matrix)
+#single_degrees(input_matrix)
+#comparison(input_matrix)
+#compare_degree_dist(input_matrix)
