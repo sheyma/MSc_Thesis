@@ -1,107 +1,139 @@
 % plot network measures of test network
-% A_network_measures.dat :
-%       threshold, L, Density, components, CC_average, check_sum, sum_ave
-% A_shortest_pathway.dat :
-%       threshold, shortest pahtway
-% A_global_efficiency.dat:
-%       threshold, gloabal efficiency of full network
-% A_local_efficiency.dat :
-%       threshold, local efficiency of full network
-% A_small_worldness.dat : 
-%       1:threshold 2:cluster-coefficient 3:random-cluster-coefficient 
-%       4:shortest-pathlength 5:random-shortest-pathlength 6:transitivity 
-%       7:random-transitivity 8:S-Watts-Strogatz 9:S-transitivity
 
-% single network measures
-Net_mes = load('A_network_measures.dat');
-Shor_pat = load('A_shortest_path.dat');
-Glo_ef = load('A_global_efficiency.dat');
-Loc_ef = load('A_local_efficency.dat');
-SWorld = load('A_small_worldness.dat');
+% A_edges_and_density.dat : #1. threshold, 2. edges, 3. density
+% A_degree_ave.dat : #1. threshold, 2. average degree
+% A_cluster_coeffi_ave.dat : #1. threshold, 2. clustering coefficient
+% A_connected_compo.dat : #1. threshold, 2.number of connected components
+% A_shortest_path.dat : # 1.threshold , 2.shortest pathway
+% A_global_efficiency_ave.dat : #1.threshold, 2.global efficieny
+% A_local_efficency_ave.dat : # 1.threshold, 2.local efficiency
+% A_small_worldnes.dat : #1:threshold 2:cluster-coefficient... 
+              %...3:random-cluster-coefficient 4:shortest-pathlength 
+              %...5:random-shortest-pathlength 6:transitivity 
+              %...7:random-transitivity 8:S-Watts-Strogatz 9:S-transitivity
+% A_degree_dist.dat : #1.node, 2.threshold, 3.degree hist, 4.degree distr.
+% A_degree_node.dat : # 1.node, 2.threshold, 3.degree
+% A_connected_compo_node.dat : # 1.node, 2.threshold, 3. connected compon.
+% A_cluster_coeffi_node.dat : # node, threshold, clust. coeffi. of node
+% A_global_efficiency_node.dat : #1.node, 2,threshold, 3.glo. effi.of node
 
-% network measures as distributions around nodes
-deg_dis = load('A_degree_dist.dat');
-node_CC = load('A_node_cc.dat');
-comp_dist =load('A_nodes_comp_.dat');
-single_de =load('A_single_degrees.dat');
+
+% network density and egdes
+Density = load('A_edges_and_density.dat');
+R = Density(:,1);
+D = Density(:,3);
+L = Density(:,2);
 
 figure(1);
+subplot(1,2,1)
+set(gca,'FontSize',20)
+plot(R,D,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Network Density')
+subplot(1,2,2)
+set(gca,'FontSize',20)
+plot(R,L,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Number of Edges [L]')
 
-subplot(3,3,1)
-set(gca, 'FontSize', 15)
-plot(Net_mes(:,1),Net_mes(:,3))
-xlabel('r')
-ylabel('Network Denstiy (D)')
-
-subplot(3,3,2)
-set(gca, 'FontSize', 15)
-plot(Net_mes(:,1), Net_mes(:,7))
-xlabel('r')
-ylabel('Average Degree')
-
-subplot(3,3,3)
-set(gca, 'FontSize', 15)
-plot(Net_mes(:,1), Net_mes(:,5))
-xlabel('r')
-ylabel('Average CC')
-
-subplot(3,3,4)
-set(gca, 'FontSize', 15)
-plot(Net_mes(:,1), Net_mes(:,4))
-xlabel('r')
-ylabel('Connected Components')
-
-subplot(3,3,5)
-set(gca, 'FontSize', 15)
-plot(Shor_pat(:,1), Shor_pat(:,2))
-xlabel('r')
-ylabel('Shortest Pathway')
-
-subplot(3,3,6)
-set(gca, 'FontSize', 15)
-plot(Glo_ef(:,1), Glo_ef(:,2))
-xlabel('r')
-ylabel('Global Efficiency')
-
-subplot(3,3,7)
-set(gca, 'FontSize', 15)
-plot(Loc_ef(:,1), Loc_ef(:,2))
-xlabel('r')
-ylabel('Local Efficiency')
-
-subplot(3,3,8)
-set(gca, 'FontSize', 15)
-plot(SWorld(:,1), SWorld(:,8))
-xlabel('r')
-ylabel('Small Worldness')
-
-subplot(3,3,9)
-set(gca, 'FontSize', 15)
-plot(SWorld(:,1), SWorld(:,7))
-xlabel('r')
-ylabel('Transitivity')
-
+% Average degree
+Degree = load('A_degree_ave.dat');
+R = Degree(:,1);
+Deg_ave = Degree(:,2);
 
 figure(2);
-subplot(2,2,1)
+set(gca,'FontSize',20)
+plot(R,D,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Average Degree')
+
+% Average cluster coefficient
+Coef = load('A_cluster_coeffi_ave.dat');
+R = Coef(:,1);
+cc = Coef(:,2);
+
+figure(3);
+set(gca,'FontSize',20)
+plot(R,cc,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Average Cluster Coefficient')
+
+% Connected Components of Network
+Con_com = load('A_connected_compo.dat');
+R = Con_com(:,1);
+Con_comp = Con_com(:,2);
+
+figure(4);
+set(gca,'FontSize',20)
+plot(R,Con_comp,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Connected Components')
+
+% Shortest Pathway of Network
+S = load('A_shortest_path.dat');
+R = S(:,1);
+shor = S(:,2);
+
+figure(5);
+set(gca,'FontSize',20)
+plot(R,shor,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Shortest Pathway')
+
+% Global Efficiency of Network
+Glo = load('A_global_efficiency_ave.dat');
+R = Glo(:,1);
+Global = Glo(:,2);
+
+figure(6);
+set(gca,'FontSize',20)
+plot(R,Global,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Global Efficiency')
+
+% Local efficiency of Network
+Loc = load('A_local_efficency_ave.dat');
+R = Loc(:,1);
+Local = Loc(:,2);
+
+figure(7);
+set(gca,'FontSize',20)
+plot(R,Local,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Local Efficiency')
+
+% Tansitivity and Small Worldness of Network
+sma = load('A_small_worldness.dat');
+R = sma(:,1);
+small = sma(:,8);
+Trans = sma(:,6);
+figure(8);
+set(gca,'FontSize',20)
+plot(R,Trans,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Transititvity')
+ 
+figure(9)
+set(gca,'FontSize',20)
+plot(R,small,'LineWidth',3)
+xlabel('Threshold [r]')
+ylabel('Small Worldness')
+
+% Degree Distribution
+deg_dis = load('A_degree_dist.dat');
+
+figure(10);
 set(gca, 'FontSize', 15)
 tri = delaunay(deg_dis(:,2),deg_dis(:,1));
-trisurf(tri,deg_dis(:,2),deg_dis(:,1),deg_dis(:,3));
+trisurf(tri,deg_dis(:,2),deg_dis(:,1),deg_dis(:,4));
 colorbar;
 xlabel('r')
 ylabel('Nodes')
 zlabel('Degree Distribution')
 
-subplot(2,2,2)
-set(gca, 'FontSize', 15)
-tri = delaunay(node_CC(:,2),node_CC(:,1));
-trisurf(tri,node_CC(:,2),node_CC(:,1),node_CC(:,3));
-colorbar;
-xlabel('r')
-ylabel('Nodes')
-zlabel('Cluster Coefficients')
-
-subplot(2,2,3)
+% Degrees of single nodes
+single_de = load('A_degree_node.dat');
+figure(11);
 set(gca, 'FontSize', 15)
 tri = delaunay(single_de(:,2),single_de(:,1));
 trisurf(tri,single_de(:,2),single_de(:,1),single_de(:,3));
@@ -110,11 +142,49 @@ xlabel('r')
 ylabel('Nodes')
 zlabel('Degrees of Nodes')
 
-subplot(2,2,4)
+% Connected components of single nodes
+comp_dist = load('A_connected_compo_node.dat');
+
+figure(12);
 set(gca, 'FontSize', 15)
 tri = delaunay(comp_dist(:,2),comp_dist(:,1));
 trisurf(tri,comp_dist(:,2),comp_dist(:,1),comp_dist(:,3));
 colorbar;
 xlabel('r')
 ylabel('Nodes')
-zlabel('Component Dist')
+zlabel('Connected Components')
+
+% clustering coefficient of sigle nodes
+cc_node = load('A_cluster_coeffi_node.dat');
+
+figure(13);
+set(gca, 'FontSize', 15)
+tri = delaunay(cc_node(:,2),cc_node(:,1));
+trisurf(tri,cc_node(:,2),cc_node(:,1),cc_node(:,3));
+colorbar;
+xlabel('r')
+ylabel('Nodes')
+zlabel('Cluster Coefficients')
+
+% global efficiency of single nodes
+glo_node = load('A_global_efficiency_node.dat');
+
+figure(14);
+set(gca, 'FontSize', 15)
+tri = delaunay(glo_node(:,2),glo_node(:,1));
+trisurf(tri,glo_node(:,2),glo_node(:,1),glo_node(:,3));
+colorbar;
+xlabel('r')
+ylabel('Nodes')
+zlabel('Global Efficiency')
+
+% local efficiency of single nodes
+loc_node = load('A_local_efficency_node.dat');
+figure(15);
+set(gca, 'FontSize', 15)
+tri = delaunay(loc_node(:,2),loc_node(:,1));
+trisurf(tri,loc_node(:,2),loc_node(:,1),loc_node(:,3));
+colorbar;
+xlabel('r')
+ylabel('Nodes')
+zlabel('Local Efficiency')
