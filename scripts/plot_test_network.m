@@ -50,7 +50,7 @@ figure(1);
 subplot(1,2,1)
 set(gca,'FontSize',20)
 hold on
-plot(R,D,'k','LineWidth',3)
+plot(R,D,'ok','LineWidth',3)
 plot(R_Ra,D_Ra,'ob','LineWidth',2)
 plot(R_Rb,D_Rb,'og','LineWidth',2)
 plot(R_Rc,D_Rc,'or','LineWidth',2)
@@ -101,7 +101,7 @@ figure(2);
 set(gca,'FontSize',15)
 hold on
 plot(R,Deg_ave,'k','LineWidth',3)
-plot(R_Ra,Deg_ave_Ra,'ob','LineWidth',2)
+plot(R_Ra,Deg_ave_Ra,'ob','LineWidth',4)
 plot(R_Rb,Deg_ave_Rb,'og','LineWidth',2)
 plot(R_Rc,Deg_ave_Rc,'or','LineWidth',2)
 plot(R_Rd,Deg_ave_Rd,'oy','LineWidth',2)
