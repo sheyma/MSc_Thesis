@@ -76,7 +76,7 @@ def get_number_of_edges_and_density(input_mtx):
 	f = open(input_mtx[:-4]+'_Rd_edges_and_density.dat','w')
 	for i in range(10,101):
 		R = float(i)/100
-		print R	
+		#print R	
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		
 		L = nx.number_of_edges(Random_Gd)

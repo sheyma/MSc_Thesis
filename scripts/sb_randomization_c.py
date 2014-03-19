@@ -31,18 +31,20 @@ def get_random_graph_c(matrix, r):
 	
 	for node in G:
 		
+		# G.degrees ?
 		if G.degree(node) not in degree_hist: # degree dist part
 			degree_hist[G.degree(node)] =1
 		else:
 			degree_hist[G.degree(node)] +=1	
 	keys = degree_hist.keys()
-	degrees = range(0,nx.number_of_nodes(G)+1,1)
+	values = degree_hist.values()
 	degree_seq = []
-	for item in degrees:
-		if item in keys:
-			degree_seq.append(degree_hist[item])		# degree sequence of nodes	
-	Random_Gc_1 = nx.configuration_model(degree_seq)    # returns MULTIGRAPH
-	Random_Gc = nx.Graph(Random_Gc_1)					# convert into graph
+	
+
+	for j in range(0,len(keys)):
+		for i in range(0,(values[j])):
+			degree_seq.append(keys[j])
+	Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())   
 	return Random_Gc 
 
 def get_random_graph_c_1(matrix, r):
@@ -181,9 +183,10 @@ def get_number_of_edges_and_density(input_mtx):
 		R = float(i)/100
 		Random_Gc = get_random_graph_c(input_mtx,R)
 		L = nx.number_of_edges(Random_Gc)
+		N = nx.number_of_nodes(Random_Gc)
 		D = nx.density(Random_Gc)
-		f.write("%f\t%d\t%f\n" % (R,L,D))
-		#1. threshold, 2. edges, 3. density
+		f.write("%f\t%d\t%f\t%d\n" % (R,L,D,N))
+		#1. threshold, 2. edges, 3. density, 4. nodes
 	f.close()
 
 # get average clustering coefficient of full network for dif.thre.val.
@@ -284,7 +287,7 @@ def get_global_effic(input_mtx):
 	R = 0
 	f = open(input_mtx[:-4]+'_Rc_global_efficiency_ave.dat','w')
 	g = open(input_mtx[:-4]+'_Rc_global_efficiency_node.dat','w')
-	for i in range(0,71):
+	for i in range(0,101):
 		R = float(i)/100
 		Random_Gc = get_random_graph_c(input_mtx,R)
 		global_eff = 0.
@@ -487,19 +490,19 @@ if __name__ == '__main__':
 
 ###manual choice of the threshold value
 #threshold = float(input_threshold)
-#network = get_random_graph_c(input_name, threshold)
+#get_random_graph_c(input_name, threshold)
 #get_characteristics(input_name, threshold)
 
 get_number_of_edges_and_density(input_name)
 get_average_cluster_coefficient(input_name)	
 get_degrees_ave(input_name)	
 get_connected_components(input_name)		
-#get_local_efficiency(input_name)
-#get_global_effic(input_name)				# change R range!!!
-#get_degree_distribution(input_name)
-#get_node_clustering_coefficient(input_name)
-#get_connected_components_nodes(input_name)
-#get_degrees_node(input_name)  
+get_local_efficiency(input_name)
+get_global_effic(input_name)				# change R range!!!
+get_degree_distribution(input_name)
+get_node_clustering_coefficient(input_name)
+get_connected_components_nodes(input_name)
+get_degrees_node(input_name)  
 get_shortest_pathway(input_name)
-#get_small_worldness(input_name)	
-#get_motifs(input_name)	
+get_small_worldness(input_name)	
+get_motifs(input_name)	

@@ -25,7 +25,7 @@ def get_graph(input_mtx, r):
 
   G=nx.from_numpy_matrix(B,create_using=nx.Graph()) 
   return G
-  #result of function : graph G is to be used in all other functions
+  #result of function : graph G (undirected) is to be used in all other functions
 
 # printing out the adjacency matrix of G
 def get_print_adjacency_matrix(G):
