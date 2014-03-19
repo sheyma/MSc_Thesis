@@ -23,10 +23,16 @@ def get_random_graph_d(input_mtx, r):
 					B[row,item] = 0
 
 	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  #undirected graph G
-	Random_Gd = nx.double_edge_swap(G)  
-	#print nx.adjacency_matrix(Random_Gd)
-	return Random_Gd
-
+	L = nx.number_of_edges(G)	
+	trial = L*(L-1.)/2
+	swap_num = L;
+	if L >2:
+		Random_Gd = nx.double_edge_swap(G,nswap=swap_num,max_tries=trial)
+		return Random_Gd  
+	else:
+		print "No swap possible for R=", float(r), "number of edges", L
+		return G
+	
 # a few characteristic measures of FULL network G with one threshold
 def get_characteristics(filename,R):
 	Random_Gd = get_random_graph_d(filename,R)
@@ -68,9 +74,11 @@ def get_characteristics(filename,R):
 def get_number_of_edges_and_density(input_mtx):
 	R = 0
 	f = open(input_mtx[:-4]+'_Rd_edges_and_density.dat','w')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
+		print R	
 		Random_Gd = get_random_graph_d(input_mtx,R)
+		
 		L = nx.number_of_edges(Random_Gd)
 		D = nx.density(Random_Gd)
 		f.write("%f\t%d\t%f\n" % (R,L,D))
@@ -81,7 +89,7 @@ def get_number_of_edges_and_density(input_mtx):
 def get_average_cluster_coefficient(input_mtx):
 	R = 0
 	f = open(input_mtx[:-4]+'_Rd_cluster_coeffi_ave.dat','w')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		cc = nx.average_clustering(Random_Gd)		
@@ -93,7 +101,7 @@ def get_average_cluster_coefficient(input_mtx):
 def get_degrees_ave(input_mtx):
 	R = 0
 	f = open(input_mtx[:-4]+'_Rd_degree_ave.dat','w')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		N = nx.number_of_nodes(Random_Gd) 
@@ -109,7 +117,7 @@ def get_degrees_ave(input_mtx):
 def get_connected_components(input_mtx):
 	R = 0
 	f = open(input_mtx[:-4]+'_Rd_connected_compo.dat','w')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		compon = nx.number_connected_components(Random_Gd)
@@ -122,7 +130,7 @@ def get_shortest_pathway(input_mtx):
 	R = 0
 	f = open(input_mtx[:-4]+'_Rd_shortest_path.dat','w')
 	#f.write('r(thre.)\tshorthest_pathlength\n')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		Compon = nx.connected_component_subgraphs(Random_Gd) # components
@@ -145,7 +153,7 @@ def get_local_efficiency(input_mtx):
 	f = open(input_mtx[:-4]+'_Rd_local_efficency_ave.dat','w')
 	g = open(input_mtx[:-4]+'_Rd_local_efficency_node.dat','w')
 	#g.write('node\tr(thre.)\tlocal_eff')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		local_effic = 0
@@ -175,7 +183,7 @@ def get_global_effic(input_mtx):
 	R = 0
 	f = open(input_mtx[:-4]+'_Rd_global_efficiency_ave.dat','w')
 	g = open(input_mtx[:-4]+'_Rd_global_efficiency_node.dat','w')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		global_eff = 0.
@@ -201,7 +209,7 @@ def get_degree_distribution(input_mtx):			# degree distribution
 	R = 0
 	f = open(input_mtx[:-4]+'_Rd_degree_dist.dat', 'w')
 	#f.write('node\tr(thre.)\tdeg_hist\tdeg_dist\n')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		check_sum = 0.
@@ -231,7 +239,7 @@ def get_node_clustering_coefficient(input_mtx):   # cluster coefficient of each 
 	R = 0 
 	f = open(input_mtx[:-4]+'_Rd_cluster_coeffi_node.dat','w')			
 	#f.write('node\tr(thre.)\tnode_cc\n')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		for node in Random_Gd:
@@ -245,7 +253,7 @@ def get_connected_components_nodes(input_mtx):		# connected components of nodes
 	R =0
 	f = open(input_mtx[:-4]+'_Rd_connected_compo_node.dat','w')
 	#f.write('node\tr(thre.)\tcount\n')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		comps = nx.connected_component_subgraphs(Random_Gd)
@@ -263,7 +271,7 @@ def get_connected_components_nodes(input_mtx):		# connected components of nodes
 def get_degrees_node(input_mtx): #degree (links) of each node
 	R = 0
 	f = open(input_mtx[:-4]+'_Rd_degree_node.dat','w')	
-	for i in range(20,71):
+	for i in range(10,101):
 		#f.write('node\tr(thre.)\tdegree\n')
 		R = float(i)/100
 		Random_Gd=get_random_graph_d(input_mtx,R)
@@ -279,7 +287,7 @@ def get_small_worldness(input_mtx):
 	f = open(input_mtx[:-4]+'_Rd_small_worldness.dat','w')
 	g = open(input_mtx[:-4]+'_Rd_cc_trans_ER.dat','w')	
 	#g.write('r(thre.)\t\cc_A\tcc_ER\ttran_A\ttran_ER\n')	
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		ER_graph = nx.erdos_renyi_graph(nx.number_of_nodes(Random_Gd), nx.density(Random_Gd))
@@ -342,7 +350,7 @@ def binomialCoefficient(n, k):
 def get_motifs(input_mtx):
 	R = 0
 	f = open(input_mtx[:-4]+'_Rd_motifs.dat','w')
-	for i in range(20,71):
+	for i in range(10,101):
 		R = float(i)/100
 		Random_Gd = get_random_graph_d(input_mtx,R)
 		tri_dict = nx.triangles(Random_Gd)   #number of triangles around nodes in Random_Gd
