@@ -69,79 +69,45 @@ def get_characteristics(filename,R):
 	return 0	
 
 # get L and D for full network for  different threshold values
-def get_number_of_edges_and_density(input_mtx):
+# get average clustering coefficient of full network for dif.thre.val.
+# get average degree of full network for different threshold values
+# get number of connected components of full network for dif.thre.val.
+# get shortest pathway of network
+def get_single_network_measures(input_mtx):
 	R = 0
-	f = open(input_mtx[:-4]+'_Ra_edges_and_density.dat','w')
+	f = open(input_mtx[:-4]+'_Ra_single_network_measures.dat','w')
 	for i in range(0,101):
 		R = float(i)/100
 		Random_Ga = get_random_graph_a(input_mtx,R)
+		N = nx.number_of_nodes(Random_Ga)
 		L = nx.number_of_edges(Random_Ga)
 		D = nx.density(Random_Ga)
-		f.write("%f\t%d\t%f\n" % (R,L,D))
-		#1. threshold, 2. edges, 3. density
-	f.close()
+		cc = nx.average_clustering(Random_Ga)
+		compon = nx.number_connected_components(Random_Ga)
+		Con_sub = nx.connected_component_subgraphs(Random_Ga)		
 
-# get average clustering coefficient of full network for dif.thre.val.
-def get_average_cluster_coefficient(input_mtx):
-	R = 0
-	f = open(input_mtx[:-4]+'_Ra_cluster_coeffi_ave.dat','w')
-	for i in range(0,101):
-		R = float(i)/100
-		Random_Ga = get_random_graph_a(input_mtx,R)
-		cc = nx.average_clustering(Random_Ga)		
-		f.write("%f\t%f\n" % (R,cc))
-		#1. threshold, 2. clustering coefficient
-	f.close()
-
-# get average degree of full network for different threshold values
-def get_degrees_ave(input_mtx):
-	R = 0
-	f = open(input_mtx[:-4]+'_Ra_degree_ave.dat','w')
-	for i in range(0,101):
-		R = float(i)/100
-		Random_Ga = get_random_graph_a(input_mtx,R)
-		N = nx.number_of_nodes(Random_Ga) 
 		values = []
+		values_2 =[]
+
 		for node in Random_Ga:
 			values.append(Random_Ga.degree(node))
-		ave_degree = float(sum(values)) / float(N)			
-		f.write("%f\t%f\n" % (R,ave_degree))
-		#1. threshold, 2. average degree
-	f.close()
+		ave_deg = float(sum(values)) / float(N)
+	
+		f.write("%f\t%d\t%f\t%f\t%f\t%f\t" % (R,L,D,cc,ave_deg,compon))
+		#1. threshold, 2. edges, 3. density 4.clustering coefficient
+		#5. average degree, 6. number of connected components
+	
+		for i in range(len(Con_sub)):
+			if nx.number_of_nodes(Con_sub[i])>1:
+				values_2.append(nx.average_shortest_path_length(Con_sub[i]))
 
-# get number of connected components of full network for dif.thre.val.
-def get_connected_components(input_mtx):
-	R = 0
-	f = open(input_mtx[:-4]+'_Ra_connected_compo.dat','w')
-	for i in range(0,101):
-		R = float(i)/100
-		Random_Ga = get_random_graph_a(input_mtx,R)
-		compon = nx.number_connected_components(Random_Ga)
-		f.write("%f\t%f\n" % (R,compon))
-		#1. threshold, 2.number of connected components
-	f.close()
-
-# get shortest pathway of network
-def get_shortest_pathway(input_mtx):
-	R = 0
-	f = open(input_mtx[:-4]+'_Ra_shortest_path.dat','w')
-	#f.write('r(thre.)\tshorthest_pathlength\n')
-	for i in range(0,101):
-		R = float(i)/100
-		Random_Ga = get_random_graph_a(input_mtx,R)
-		Compon = nx.connected_component_subgraphs(Random_Ga) # components
-		values_2 = []
-		for i in range(len(Compon)):
-			if nx.number_of_nodes(Compon[i])>1:
-				values_2.append(nx.average_shortest_path_length(Compon[i]))
-		
-		if len(values_2) == 0:
-			f.write("%f\t0.\n" % (R))
-
+		if len(values_2)==0:
+			f.write("0.\n")
 		else:
-			f.write("%f\t%f\n" % (R, ( sum(values_2)/len(values_2) ) ) )
-			# 1.threshold , 2.shortest pathway
+			f.write("%f\n" % (sum(values_2)/len(values_2)))
+		#7. shortest pathway
 	f.close()
+
 
 # get local efficiency for full network and single nodes separately
 def get_local_efficiency(input_mtx):
@@ -230,18 +196,21 @@ def get_degree_distribution(input_mtx):			# degree distribution
 		#f.write("\n")
 	f.close()
 
-# get clustering coefficient of each node
-def get_node_clustering_coefficient(input_mtx):   # cluster coefficient of each node
+# get clustering coefficient and degree of each node
+def get_node_cc_and_degree(input_mtx):  
 	R = 0 
-	f = open(input_mtx[:-4]+'_Ra_cluster_coeffi_node.dat','w')			
+	f = open(input_mtx[:-4]+'_Ra_cc_and_degree_node.dat','w')			
 	#f.write('node\tr(thre.)\tnode_cc\n')
 	for i in range(0,101):
 		R = float(i)/100
 		Random_Ga = get_random_graph_a(input_mtx,R)
 		for node in Random_Ga:
-			f.write("%d\t%f\t%f\n" % (node+1, R, nx.clustering(Random_Ga,node)))
-			# node, threshold, clustering coefficient of node			
-		#f.write("\n")
+			cc_node = nx.clustering(Random_Ga,node)
+			deg_node = Random_Ga.degree(node)
+
+			f.write("%d\t%f\t%f\t%f\n" % (node+1, R, cc_node, deg_node))
+			#1. node, 2. threshold, 3. clustering coefficient of node 
+			#4. degree of node			
 	f.close()
 
 # get number of connected components of each node
@@ -262,21 +231,6 @@ def get_connected_components_nodes(input_mtx):		# connected components of nodes
 				# 1.node, 2.threshold, 3. connected components		
 		#f.write("\n")
 	f.close
-
-# get degree of each node
-def get_degrees_node(input_mtx): #degree (links) of each node
-	R = 0
-	f = open(input_mtx[:-4]+'_Ra_degree_node.dat','w')	
-	for i in range(0,101):
-		#f.write('node\tr(thre.)\tdegree\n')
-		R = float(i)/100
-		Random_Ga=get_random_graph_a(input_mtx,R)
-		for node in Random_Ga:
-			degree = Random_Ga.degree(node)
-			f.write('%d\t%f\t%d\n' % ( (node+1), R, degree ) )
-			# 1.node, 2.threshold, 3.degree			
-		#f.write("\n")
-	f.close	
 
 def get_small_worldness(input_mtx):
 	R = 0
@@ -384,17 +338,11 @@ if __name__ == '__main__':
 #threshold = float(value)
 #network = get_graph(input_name, threshold)
 #get_characteristics(network, input_name, threshold)
-
-get_number_of_edges_and_density(input_name)
-get_average_cluster_coefficient(input_name)	
-get_degrees_ave(input_name)	
-get_connected_components(input_name)		
+#get_single_network_measures(input_name)
 get_local_efficiency(input_name)
 get_global_effic(input_name)
 get_degree_distribution(input_name)
-get_node_clustering_coefficient(input_name)
+get_node_cc_and_degree(input_name)  
 get_connected_components_nodes(input_name)
-get_degrees_node(input_name)  
-get_shortest_pathway(input_name)
 get_small_worldness(input_name)	
 get_motifs(input_name)	
