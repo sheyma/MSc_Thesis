@@ -146,7 +146,7 @@ def get_local_efficiency(input_mtx):
 
 			else:
 				g.write('%d\t%f\t%f\n' % ((node_i+1), R, hiwi))
-		g.write("\n")
+		#g.write("\n")
 		local_effic = local_effic / nx.number_of_nodes(Random_Gc)
 		f.write("%f\t%f\n" % ( R, local_effic))
 		# 1.threshold, 2.local efficiency
@@ -172,7 +172,7 @@ def get_global_effic(input_mtx):
 			g.write('%d\t%f\t%f\n' % ((node_i+1), R, A))
 			#1.node, 2,threshold, 3.global efficiency of node
 			global_eff += sum_inverse_dist / (nx.number_of_nodes(Random_Gc) - 1.) 
-		g.write("\n")
+		#g.write("\n")
 		global_eff = global_eff / nx.number_of_nodes(Random_Gc)
 		f.write("%f\t%f\n" % (R, global_eff))
 		#1.threshold, 2.global efficieny
