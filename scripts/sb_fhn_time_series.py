@@ -26,8 +26,8 @@ params = {
 		 'TAU' : 1,	  
 		 'D' : 0,
 		 'v' : 70.0,
-		 'sigma' : 0.005 } 							  # change noise strength
-
+		 'sigma' : 0.005 } 	# change noise strength
+		 
 noise = {'x': 'D * gwn()', 'y': 'D * gwn()'}
 
 C = params['sigma']
@@ -61,20 +61,24 @@ for i in range(len(G)):
 neuronetz.ddeN.hist_from_arrays(dic)
 
 # starting simulation with t=[0,tmax]
-tmax = 50
+tmax = 100
 neuronetz.run(tmax)
 
-sampleSol = neuronetz.ddeN.sample(0,tmax,dt=0.1) #dt= 1 s
-sampleSol_2 = neuronetz.ddeN.sample(0,tmax,dt=1)	 #dt= 10 s 	
+dt = float(sys.argv[3])
+sampleSol = neuronetz.ddeN.sample(0,tmax,dt = dt)
+#sampleSol = neuronetz.ddeN.sample(0,tmax,dt=0.1) #dt= 1 s
+#sampleSol_2 = neuronetz.ddeN.sample(0,tmax,dt=0.25) #dt= 2.5 s 	
+#sampleSol_3 = neuronetz.ddeN.sample(0,tmax, dt=0.5) # dt = 5 s
 adaptiSol = neuronetz.ddeN.sol
 
 t_sample = sampleSol['t']
-t_sample_2 = sampleSol_2['t']
+#t_sample_2 = sampleSol_2['t']
+#t_sample_3 = sampleSol_3['t']
 
 x = {}
 y = {}
 
-print len(G[0])  	# column numbers of matrix G
+print "number of nodes : ", len(G[0])  	# column numbers of matrix G
 
 for i in range(0,len(G[0])):
 	x[i] = sampleSol['x'+str(i)][0:]
@@ -89,57 +93,58 @@ for i, t0 in enumerate(t_sample):
   f.write('\n')
 f.close()
 
-
-pl.subplot(2,2,1)
-for i in range(1):
-  pl.plot(sampleSol['t'],sampleSol['x%s' % i], 'r', label='x,$\Delta$ t = 1 s')
-  pl.plot(sampleSol['t'],sampleSol['y%s' % i],'b',label='y,$\Delta$ t = 1 s')
-  pl.plot(sampleSol_2['t'],sampleSol_2['x%s' % i], 'k', label='x,$\Delta$ t = 10 s')
-  pl.plot(sampleSol_2['t'],sampleSol_2['y%s' % i],'g',label='y,$\Delta$ t = 10 s')
-  
-pl.legend()  
-pl.xlabel('$t$')
-pl.ylabel('$x_1,y_1$')
-
-pl.subplot(2,2,2)
-pl.plot(sampleSol['x1'],sampleSol['y1'],'r', label='$\Delta$ t = 1 s')
-pl.plot(sampleSol_2['x1'],sampleSol_2['y1'],'k',label='$\Delta$ t = 10 s')
-
+print str(dt)
+pl.plot(sampleSol['t'],sampleSol['x1'], 'r', label=('x, $\Delta$ t =' % (str(dt)))  )
 pl.legend()
-pl.ylabel('$y_1$')
-pl.xlabel('$x_1$')
-
-pl.subplot(2,2,3)
-pl.plot(sampleSol['t'],sampleSol['x1'], 'r', label='x,$\Delta$ t = 1 s')
-pl.plot(adaptiSol['t'],adaptiSol['x1'],'.r',label='x, calculated')
-pl.plot(sampleSol['t'],sampleSol['y1'], 'b', label='y,$\Delta$ t = 1 s')
-pl.plot(adaptiSol['t'],adaptiSol['y1'],'.b', label='x, calculated')
-pl.xlabel('$t$')
-pl.ylabel('$x_1,y_1$')
-pl.legend()
-
-pl.subplot(2,2,4)
-pl.plot(sampleSol['x1'],sampleSol['y1'],'r', label='$\Delta$ t = 1 s')
-pl.plot(adaptiSol['x1'],adaptiSol['y1'],'.r',label='calculated')
-pl.ylabel('$y_1$')
-pl.xlabel('$x_1$')
-pl.legend()
-
 pl.show()
 
 
+# plot for smaller data matrices over different dt's at once
+#pl.subplot(2,3,1)
+#for i in range(1):
+  #pl.plot(sampleSol['t'],sampleSol['x%s' % i], 'r', label='x, $\Delta$ t = 1 s')
+  #pl.plot(sampleSol['t'],sampleSol['y%s' % i],'b',label='y, $\Delta$ t = 1 s')
+  #pl.plot(adaptiSol['t'],adaptiSol['x%s' % i], '.r' )
+#pl.xlabel('$t$')
+#pl.ylabel('$x_1,y_1$')
+#pl.legend()  
 
+#pl.subplot(2,3,2)
+#for i in range(1):
+  #pl.plot(sampleSol_2['t'],sampleSol_2['x%s' % i], 'r', label='x, $\Delta$ t = 2.5 s')
+  #pl.plot(sampleSol_2['t'],sampleSol_2['y%s' % i], 'b', label='y, $\Delta$ t = 2.5 s')
+#pl.xlabel('$t$')
+#pl.ylabel('$x_1,y_1$')
+#pl.legend()  
 
+#pl.subplot(2,3,3)  
+#for i in range(1):
+  #pl.plot(sampleSol_3['t'],sampleSol_3['x%s' % i], 'r', label='x, $\Delta$ t = 5 s')
+  #pl.plot(sampleSol_3['t'],sampleSol_3['y%s' % i], 'b',label='y, $\Delta$ t = 5 s')  
+#pl.xlabel('$t$')
+#pl.ylabel('$x_1,y_1$')
+#pl.legend()  
+  
 
+#pl.subplot(2,3,4)
+#pl.plot(sampleSol['x1'],sampleSol['y1'],'k', label='$\Delta$ t = 1 s')
+#pl.plot(adaptiSol['x1'],adaptiSol['y1'],'ok',label='adaptive')
+#pl.legend()
+#pl.ylabel('$y_1$')
+#pl.xlabel('$x_1$')
 
+#pl.subplot(2,3,5)
+#pl.plot(sampleSol_2['x1'],sampleSol_2['y1'],'k',label='$\Delta$ t = 2.5 s')
+#pl.plot(adaptiSol['x1'],adaptiSol['y1'],'ok',label='adaptive')
+#pl.legend()
+#pl.ylabel('$y_1$')
+#pl.xlabel('$x_1$')
 
+#pl.subplot(2,3,6)
+#pl.plot(adaptiSol['x1'],adaptiSol['y1'],'ok',label='adaptive')
+#pl.plot(sampleSol_3['x1'],sampleSol_3['y1'],'k',label='$\Delta$ t = 5 s')
+#pl.legend()
+#pl.ylabel('$y_1$')
+#pl.xlabel('$x_1$')
 
-
-
-
-
-
-
-
-
-
+#pl.show()
