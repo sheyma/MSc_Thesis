@@ -3,11 +3,9 @@
 
 import numpy as np
 import pylab as pl
-from pylab import *
 import sys
 from pydelay import dde23
 from scipy.optimize import fsolve
-from numpy import ma
 
 #FitzHugh-Naugmo 
 eqns = { 
@@ -21,7 +19,7 @@ params = {
 		 'b': -0.01,
 		 'TAU' : 10,	  
 		 'I' : -2.2,
-		 'D' : 0} 								  # change noise strength
+		 'D' : 0} 		  # change noise strength
 
 noise = {'x': 'D * gwn()', 'y': 'D * gwn()'}
 
@@ -51,7 +49,7 @@ dde.set_sim_params(tfinal)
 
 dde.hist_from_funcs({'x': lambda t: x_int,
 		             'y': lambda t: y_int})	  # initial conditions
-dde.run()								  # run the simulation
+dde.run()						  # run the simulation
 
 sol_samp1 = dde.sample(0, tfinal, 0.1)  		# sampled numerical solution	
 	
@@ -96,16 +94,6 @@ pl.plot(x_range, nullcl_01(x_range), 'b')
 pl.plot(x_range, nullcl_02(x_range), 'k')
 pl.plot(x_int,y_int,'ok')
 
-X,Y = meshgrid( arange(-2,2,0.01),arange(-2,2,0.01) )
-U = nullcl_01(X)
-V = nullcl_02(Y)
-
-#Q = quiver( U, V)
-#qk = quiverkey(Q, 0.5, 0.92, 2, r'$2 \frac{m}{s}$', labelpos='W',
-          #     fontproperties={'weight': 'bold'})
-l,r,b,t = axis()
-dx, dy = r-l, t-b
-#axis([l-0.05*dx, r+0.05*dx, b-0.05*dy, t+0.05*dy])
 
 
 pl.axis([-2.3, 2.3, -1, 1])
