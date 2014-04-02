@@ -338,7 +338,7 @@ if __name__ == '__main__':
 #threshold = float(value)
 #network = get_graph(input_name, threshold)
 #get_characteristics(network, input_name, threshold)
-#get_single_network_measures(input_name)
+get_single_network_measures(input_name)
 get_local_efficiency(input_name)
 get_global_effic(input_name)
 get_degree_distribution(input_name)
