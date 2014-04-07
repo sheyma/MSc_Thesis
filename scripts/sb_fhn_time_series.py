@@ -1,103 +1,147 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python2.7 
+
 # -*- coding: utf-8 -*-
 
+from __future__ import division
 import numpy as np
-import pylab as pl
 import sys
-import math
-import random
-from pydelay import dde23
 from netpy import simnet
+import random
+import numpy as np
+import math
+import os
+import pylab as pl
 
 
-test_mtx = sys.argv[1]
-distance = sys.argv[2]
+gfilename = sys.argv[1]
+dfilename = sys.argv[2]
 
-G = np.loadtxt(test_mtx)
-d = np.loadtxt(distance)
+eqns = {r'x{i}': '(y{i} + gamma * x{i} - pow(x{i},3.0)/3.0) * TAU',
 
-eqns = { r'x{i}': '(y{i} + gamma * x{i} - pow(x{i},3.0)/3.0) * TAU',
-         r'y{i}': '- (x{i} - alpha + b * y{i}) / TAU' }
-		
-params = { 
-		 'gamma': 1.0, 
-		 'alpha': 0.9,  
-                 'b': 0.2,
-		 'TAU' : 1,	  
-		 'D' : 0,
-		 'v' : 70.0,
-		 'sigma' : 0.005 } 	# change noise strength
-		 
-noise = {'x': 'D * gwn()', 'y': 'D * gwn()'}
+        r'y{i}': '- (x{i} - alpha + b * y{i}) / TAU'}
 
-C = params['sigma']
+params = { # Fitzhugh-Nagumo parameters...
 
-H = [ [C , 0] , [0 , 0] ]
+        'gamma': 0.9, 
+        'alpha': 0.8,  
+        'b': -0.1,
+        'TAU': 3, 
+	'sigma': 0.5,  
+	'D' : 0,  
+	'v' : 70.0, } # velocity in 0.1 m/s 
 
-# time delay matrix, distance between nodes over velocity
-T_delay = (d)/(params['v'])								
+noise = {'x': 'D * gwn()', 'y': 'D * gwn()'} 
 
-max_tau = math.ceil(T_delay.max())
 
-coupling = '-{G:.1f}*{H}*{var}(t-{tau})' #??
+G = np.loadtxt(gfilename) # weight matrix
+D_matrix = np.loadtxt(dfilename) 
+C = params['sigma'] 
 
-# initializing the solver
-neuronetz = simnet(eqns, G, H, T_delay, params, coupling, noise)
+H = [ [C, 0],
+
+      [0, 0] ]
+
+
+T  = D_matrix/params['v']
+print "time delay matrix", T
+max_tau = math.ceil(T.max())
+
+
+coupling = '-{G:.6f}*{H}*({self}(t-{tau})-{var})'
+
+neuronetz = simnet(eqns, G, H, T, params, coupling, noise)
 
 random.seed()
 
-# initial conditions for the variables / history 
-thist = np.linspace(0, max_tau, 10)
-xhist = np.zeros(len(thist))
-yhist = np.zeros(len(thist)) + 0.5
+ 
+thist = np.linspace(0, max_tau, 10000)
 
-# importing initial conditions in dictionary
+xhist = np.zeros(len(thist)) 
+
+yhist = np.zeros(len(thist)) 
+
 dic = {'t' : thist}
-for i in range(len(G)):
-	dic['x'+str(i)] = xhist
-	dic['y'+str(i)] = yhist
 
-# history function from dictionary of arrays
+for i in range(len(G)):
+
+  if i==1:
+    dic['x'+str(i)] = xhist-1.5
+    dic['y'+str(i)] = yhist-0.5
+  else:
+    dic['x'+str(i)] = xhist+2
+    dic['y'+str(i)] = yhist-0.5
+
 neuronetz.ddeN.hist_from_arrays(dic)
 
-# starting simulation with t=[0,tmax]
-tmax = 100
+
+""" Start simulation with t = [0,tmax] """
+
+tmax = 50
 neuronetz.run(tmax)
 
-dt = float(sys.argv[3])
-sampleSol = neuronetz.ddeN.sample(0,tmax,dt = dt)
-#sampleSol = neuronetz.ddeN.sample(0,tmax,dt=0.1) #dt= 1 s
-#sampleSol_2 = neuronetz.ddeN.sample(0,tmax,dt=0.25) #dt= 2.5 s 	
-#sampleSol_3 = neuronetz.ddeN.sample(0,tmax, dt=0.5) # dt = 5 s
-adaptiSol = neuronetz.ddeN.sol
 
-t_sample = sampleSol['t']
-#t_sample_2 = sampleSol_2['t']
-#t_sample_3 = sampleSol_3['t']
+print "FitzHugh-Nagumo"
+print "variables : " , neuronetz.ddeN.vars
+print "equations : ", neuronetz.ddeN.eqns
+print "parameters : ", neuronetz.params
+print "noise : ", neuronetz.noise
+print "delays : ", neuronetz.ddeN.delays
 
+sol_samp1 = neuronetz.ddeN.sample(0, dt=0.1)
+
+t = sol_samp1['t'][0:]
 x = {}
 y = {}
 
-print "number of nodes : ", len(G[0])  	# column numbers of matrix G
-
 for i in range(0,len(G[0])):
-	x[i] = sampleSol['x'+str(i)][0:]
-	y[i] = sampleSol['y'+str(i)][0:]
+  x[i] = sol_samp1['x'+str(i)][0:]
+  y[i] = sol_samp1['y'+str(i)][0:]
+  
+#f = open('deneme.dat','w')	
 
-f = open(test_mtx[:-4]+'_sigma='+str(params['sigma']),'w')
+#for i, t0 in enumerate(t):	
+	#f.write("%s\t" % (t0))
+	#f.write("%.5f\t" % (sol_samp1['x'][i]) )
+	#f.write("%.5f\t" % (sol_samp1['y'][i]))
+	#f.write("\n")
+#f.close()
 
-for i, t0 in enumerate(t_sample):
-  f.write('%s\t' % (t0))
-  for j in range(0,len(x)):
-     f.write('%.2f\t%.2f\t' % (float(x[j][i]), float(y[j][i]) ))
-  f.write('\n')
-f.close()
+print len(sol_samp1['t'][0:])
+pl.subplot(221)
+pl.plot(sol_samp1['t'],sol_samp1['x1'],'r')
+pl.plot(sol_samp1['t'],sol_samp1['y1'], 'b')
+#pl.plot(sol_calc['t'],sol_calc['x'],'or')
+#pl.plot(sol_calc['t'],sol_calc['y'],'ob')
+pl.xlabel('$t$')
+pl.ylabel('$x_1,y_1$')
 
-print str(dt)
-pl.plot(sampleSol['t'],sampleSol['x1'], 'r', label=('x, $\Delta$ t =' % (str(dt)))  )
-pl.legend()
+pl.subplot(222)
+pl.plot(sol_samp1['x1'],sol_samp1['y1'], 'r')
+pl.plot(sol_samp1['x1'][0],sol_samp1['y1'][0], 'or')
+#pl.plot(sol_calc['x'],sol_calc['y'],'or')
+#pl.plot(x_range, nullcl_01(x_range), 'b')
+#pl.plot(x_range, nullcl_02(x_range), 'k')
+#pl.plot(x_int,y_int,'ok')
+
+#pl.axis([-2.3, 2.3, -1, 1])
+pl.xlabel('$x_1$')
+pl.ylabel('$y_1$')
+
+pl.subplot(223)
+pl.plot(sol_samp1['t'],sol_samp1['x2'],'r')
+pl.plot(sol_samp1['t'],sol_samp1['y2'], 'b')
+#pl.plot(sol_calc['t'],sol_calc['x'],'or')
+#pl.plot(sol_calc['t'],sol_calc['y'],'ob')
+pl.xlabel('$t$')
+pl.ylabel('$x_2,y_2$')
+
+pl.subplot(224)
+pl.plot(sol_samp1['x2'],sol_samp1['y2'], 'r')
+pl.plot(sol_samp1['x2'][0],sol_samp1['y2'][0], 'or')
+pl.xlabel('$x_2$')
+pl.ylabel('$y_2$')
+
 pl.show()
-
 
 # plot for smaller data matrices over different dt's at once
 #pl.subplot(2,3,1)
