@@ -5,3 +5,60 @@ date ; whoami ;
 #define variables
 FRUIT=peach
 echo $FRUIT
+
+#uuencode converts binary file to ASCII data
+if uuencode $HOME/devel/MSc_Thesis/scripts/A.txt A.txt > $HOME/devel/MSc_Thesis/A.uu;
+	then 
+	echo "Encoded A.txt to A.uu"
+else
+	echo "Error in encoding A.txt"
+fi
+
+if [ -d /home/sheyma/devel ]; then
+	PATH="$PATH:/home/sheyma/devel"
+	echo "Variable PATH is appended."
+	echo $PATH
+fi
+
+# testing string variable if it is not empty
+if [ -n "$FRUIT" ]; then
+	echo "Your FRUIT variable is a non-zero string"
+fi
+
+# string comparison
+if [ "$PATH" = "$FRUIT" ]; then
+	echo "variables PATH and FRUIT are equal strings"
+else
+	echo "variables PATH and FRUIT are not equal strings"
+fi
+
+#return value of command; 0 if successful, 1 if failed
+ln -s /home/sheyma/devel/MSc_Thesis/ /usr/contrib/bin
+if [ $? -eq 0 ] ; then
+	echo "command was successful"
+else
+	echo "command was failed"	
+	#exit : exiting the scpript if used
+fi	
+
+#compound expression
+if [ -z "$PATH" ] && [ -d /home/sheyma/devel ]; then
+	PATH=/home/sheyma/devel
+fi
+
+#negating expression
+if [ ! -d /home/sheyma/devel ]; then
+	mkdir /home/sheyma/devel
+fi
+
+#case statement
+FRUIT=kiwi
+case "$FRUIT" in
+	apple) echo "Apple pie is quite tasty" ;;
+	banana) echo "I like banana nut bread" ;;
+	kiwi) echo "New Zealand is famous for kiwi" ;;
+esac
+	
+
+
+
