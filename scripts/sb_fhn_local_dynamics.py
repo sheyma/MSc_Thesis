@@ -31,7 +31,7 @@ eqns = {r'x' : '(y + gamma*x - pow(x,3)/3.0) * TAU ',
 
 params = {'gamma' : 0.9, #0.9
 	  'alpha' : 0.89, #1.9
-	  'TAU' : 3.25,
+	  'TAU' : 4,
 	  'b' : 0.1
 	  }
 
@@ -61,7 +61,7 @@ tfinal =50
 
 dde.set_sim_params(tfinal)
 
-dde.hist_from_funcs( {'x': lambda t : 0.9 , 'y': lambda t: 1 })
+dde.hist_from_funcs( {'x': lambda t : -0.05, 'y': lambda t: -0.75 })
 
 dde.run()
 
@@ -110,6 +110,6 @@ pl.plot(X_int,Y_int, 'ok', linewidth=3)
 pl.axis([-2.3, 2.3, -1.5, 1.5])
 lg = legend()
 lg.draw_frame(False)
-#pl.savefig("GHO08_local_dynamics.eps",format="eps")
+pl.savefig("GHO08_local_dynamics.eps",format="eps")
 #pl.savefig("PAN12_local_dynamics.eps",format="eps")
 pl.show()
