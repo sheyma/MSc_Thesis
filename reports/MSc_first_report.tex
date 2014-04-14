@@ -1,0 +1,131 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{authblk}
+\usepackage{graphicx}
+
+\title{MSc Thesis : Simulation of Brain Functional Connectivity on Emprical and Randomized Complex Networks, \\ 1st Report}
+\author[1]{\c{S}eyma Bayrak \thanks{seyma.bayrak@st.ovgu.de}}
+\author[ ]{\\ Advisers: Philipp H\"{o}vel, Vesna Vuksanovi\'c}
+\affil[1]{\footnotesize{Integrative Neuroscience MSc, Otto von Guericke University, Magdeburg}}
+
+
+
+\date{14 Apr 2014}
+\begin{document}
+   \maketitle
+   
+
+	\section{Randomization Methods and Measures of Randomized Networks}	
+	
+The randomized networks were constructed with four different graph theory methods in  \textit{Python}. Given a major test matrix derived from BOLD signals, initially the matrix was converted into its corresponding functional brain network and the characteristic measurements of that test network were statistically calculated by using graph theory methods. Then, the randomization methods builded the new networks by preserving some of those original network measures such as keeping the degree distribution or network density the same. The purpose is to understand the conditions that distinguish original network topologies from that of randomly constructed networks.  
+
+The first randomization method (\textit{networkx.gnm$\_$random$\_$graph}) keeps the same number of nodes and links as in the test network, second randomization method (\textit{networkx.erdos$\_$renyi$\_$graph}) preserves the number of nodes and the network density,  the third method (\textit{nx.configuration$\_$model}) holds the same degree distribution, and the forth method (\textit{nx.double$\_$edge$\_$swap}) preserves the degree distribution but this time by swapping the edges between the links. 
+	
+This section aims to indicate the network topologies of the BOLD-fMRI obtained empirical network and all four randomly builded networks grapghically. For simplicity, the random networks are mentioned as \textit{Ra, Rb, Rc, Rd} with respect to the described order in previous paragraph. 	
+	
+\subsection{Average Network Density}
+
+The denstiy of a network (\textit{D}) is given by the following equation,
+
+\begin{equation}
+D = \frac{2L}{N(N-1)}
+\end{equation}	
+
+where \textit{L} is the set of all links and \textit{N} is the set of all nodes in the network. It implies basically the ratio between number of total edges and maximum number of possible edges, ${N \choose 2} $.
+	
+\begin{figure}[h!]
+	
+	\centering
+	\includegraphics[width=0.9\textwidth]{Degree_Average.eps}
+	\caption{Average degree of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+	
+\subsection{Average Clustering Coefficient}
+
+The average clustering coefficient (\textit{C}) of network is calculated through the clustering coefficients of single nodes ($C_i$).
+
+\begin{equation}
+C = \frac{1}{n} \sum\limits_{i\epsilon N}C_i = \frac{1}{n}\sum\limits_{i\epsilon N} \frac{2t_i}{k_i(k_i -1)}
+\end{equation} 
+
+where $t_i$ is the number of triangles (triplets) around node $i$, $k_i$ is the degree (number of links connected to the node) of node $i$ (Watts and Strogatz, 1998). Clustering coefficient is a measure of segregation, how the single nodes in a graph cluster together.	
+
+\begin{figure}[h!]
+	
+	\centering
+	\includegraphics[width=0.9\textwidth]{Clustering_Coefficient.eps}
+	\caption{Average clustering coefficient of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+\newpage
+
+\subsection{Connected Components}
+
+The connected components of an indirected graph indicates the number of of subgraphs in overall network. Subgraph can be imagined as a connected group of vertices which has no connection to any other subgraph. In order to visualize subgraphs mathematicaly, let us define number of edges $L$ of graph $G$ in terms of three subgraphs of $G$: $L_G = L_{G_1}\cup L_{G_2}\cup L_{G_3}$. 
+
+\begin{figure}[h!]
+	
+	\centering
+	\includegraphics[width=0.9\textwidth]{Connected_Components_Average.eps}
+	\caption{Number of connected components of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+\newpage
+
+\subsection{Transitivity}
+	Transitivity is a similar measure to clustering coefficient, this property is strongly related to the number of triangles ($t_i$) around a node. If a node has links to two other nodes, transivity inquires whether those two other nodes are also connected to each other.
+	
+\begin{equation}
+ T = \frac{\sum\limits_{i \epsilon N} 2 t_i}{\sum\limits_{i \epsilon N}k_i (k_i - 1)}
+\end{equation}	
+
+Transitivity is defined only for the whole network rather than single nodes. The related transitivity measure of networks can be seen in Figure 4. 
+
+\begin{figure}[h!]
+	
+	\centering
+	\includegraphics[width=0.9\textwidth]{Transitivity.eps}
+	\caption{Transitivity of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+\newpage
+
+\subsection{Shortest Pathway}
+Shortest pathway is a measure of integration in the network. It corresponds to the shortest path length between two nodes, and if the network is weighted, shortest pathway is is the way on which the sum of the weights along the edges between two nodes is minimized.  
+
+\begin{equation}
+d_{ij} = \sum\limits_{a_{uv} \epsilon g_{i\leftrightarrow j} } a_{uv}
+\end{equation}
+where $g_{i\leftrightarrow j}$ is the shortest path between nodes $i$ and $j$. $d_{ij}$ is assumed to be $\infty$ for disconnected pairs.
+
+
+\begin{figure}[h!]
+	
+	\centering
+	\includegraphics[width=0.9\textwidth]{Shortest_Pathway.eps}
+	\caption{Shortest pathway of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
