@@ -1,7 +1,21 @@
 \documentclass[12pt]{article}
+\usepackage{geometry}
+\geometry{
+ a4paper,
+ total={210mm,297mm},
+ left=40mm,
+ right=20mm,
+ top=35mm,
+ bottom=35mm, }
+
+
 \usepackage[utf8]{inputenc}
 \usepackage{authblk}
 \usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{amsmath}
+
+
 
 \title{MSc Thesis : Simulation of Brain Functional Connectivity on Emprical and Randomized Complex Networks, \\ 1st Report}
 \author[1]{\c{S}eyma Bayrak \thanks{seyma.bayrak@st.ovgu.de}}
@@ -22,24 +36,51 @@ The randomized networks were constructed with four different graph theory method
 The first randomization method (\textit{networkx.gnm$\_$random$\_$graph}) keeps the same number of nodes and links as in the test network, second randomization method (\textit{networkx.erdos$\_$renyi$\_$graph}) preserves the number of nodes and the network density,  the third method (\textit{nx.configuration$\_$model}) holds the same degree distribution, and the forth method (\textit{nx.double$\_$edge$\_$swap}) preserves the degree distribution but this time by swapping the edges between the links. 
 	
 This section aims to indicate the network topologies of the BOLD-fMRI obtained empirical network and all four randomly builded networks grapghically. For simplicity, the random networks are mentioned as \textit{Ra, Rb, Rc, Rd} with respect to the described order in previous paragraph. 	
-	
-\subsection{Average Network Density}
 
-The denstiy of a network (\textit{D}) is given by the following equation,
+\subsection{Average Degree}
+
+Degree (denoted by $k_i$) is simply the number of edges connected to the node $i$. Average degree of a network (denoted by $<k>$) indicates the ratio of total number of edges to total number of nodes in a graph.
+ 
+\begin{equation}
+<k> = \frac{2L}{N}
+\end{equation} 
+ 
+ where \textit{L} is the set of all links (edges) and \textit{N} is the set of all nodes (vertices) in the network. In order not to count each link twice, the total number of edges is divided by $\frac{N}{2}$ instead of $N$. 
+ 
+\begin{figure}[h!]
+	
+	\centering
+	\includegraphics[width=0.8\textwidth]{Degree_Average.eps}
+	\caption{Average degree of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+Degree is one of the statistical tools to measure the centrality of network. Once the degree of a node calculated in terms of its local dynamics, we can estimate how "central" the node is. The higher the average degree is, the more interaction the nodes have. 
+
+Increasing threshold ($r$) value diminishes number of edges (those weaker than $r$) in graph as presented in Figure 1. Each network tends to have less $<k>$ values with increasing $r$ inverse sigmoidally. However, the randomized network constructed by configuration model ($Rc$) stays on lower $<k>$ values in between $r=0$ and $r=0.6$ compared to the other networks.  Meanwhile, as long as the total node numbers, total edge numbers and networks density are all preserved, the average degree remains the same. Average degree measures of networks $Ra$, $Rb$, $Rd$ lie exactly on that of the test network. 
+	
+\newpage
+
+\subsection{Network Density}
+
+The denstiy of a network (\textit{D}) is given by the following equation.
 
 \begin{equation}
 D = \frac{2L}{N(N-1)}
 \end{equation}	
 
-where \textit{L} is the set of all links and \textit{N} is the set of all nodes in the network. It implies basically the ratio between number of total edges and maximum number of possible edges, ${N \choose 2} $.
+The formula above describes the density basically as the ratio between number of total edges and maximum number of possible edges, ${N \choose 2} $.
 	
 \begin{figure}[h!]
 	
 	\centering
-	\includegraphics[width=0.9\textwidth]{Degree_Average.eps}
-	\caption{Average degree of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+	\includegraphics[width=0.8\textwidth]{Network_Density.eps}
+	\caption{The density of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
 \end{figure}
-	
+
+Figure 1 and 2 seem to have same inverse sigmoidal pattern as expected. The network density can be thought as a probabilitiy over all possible nodes, this is why it lies between 0 and 1. All the networks seem to be densly connected at lower $r$ values.
+ 
+\newpage
+
 \subsection{Average Clustering Coefficient}
 
 The average clustering coefficient (\textit{C}) of network is calculated through the clustering coefficients of single nodes ($C_i$).
@@ -48,7 +89,7 @@ The average clustering coefficient (\textit{C}) of network is calculated through
 C = \frac{1}{n} \sum\limits_{i\epsilon N}C_i = \frac{1}{n}\sum\limits_{i\epsilon N} \frac{2t_i}{k_i(k_i -1)}
 \end{equation} 
 
-where $t_i$ is the number of triangles (triplets) around node $i$, $k_i$ is the degree (number of links connected to the node) of node $i$ (Watts and Strogatz, 1998). Clustering coefficient is a measure of segregation, how the single nodes in a graph cluster together.	
+where $t_i$ is the number of triangles (triplets) around node $i$, $k_i$ is the degree (number of links connected to the node) of node $i$ (Watts and Strogatz, 1998). Clustering coefficient is a measure of segregation, it reveals how the single nodes in a graph cluster together.
 
 \begin{figure}[h!]
 	
@@ -57,11 +98,13 @@ where $t_i$ is the number of triangles (triplets) around node $i$, $k_i$ is the 
 	\caption{Average clustering coefficient of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
 \end{figure}
 
+Clustering coefficient is formulated as the ratio of $t_i$ over all possible edges of the node $i$; ${k_i \choose 2} $. Since this resembles the probability, all $C$ values are between 0 and 1. Figure 3 shows that at lower threshold, the nodes tend to cluster more due to higher number of existing edges. The empirically obtained test network has slightly different clustering coefficient between $r=0.4$ and $r=0.9$. The actual brain functional network seems to be higher clustered than our randomized networks.	
+
 \newpage
 
 \subsection{Connected Components}
 
-The connected components of an indirected graph indicates the number of of subgraphs in overall network. Subgraph can be imagined as a connected group of vertices which has no connection to any other subgraph. In order to visualize subgraphs mathematicaly, let us define number of edges $L$ of graph $G$ in terms of three subgraphs of $G$: $L_G = L_{G_1}\cup L_{G_2}\cup L_{G_3}$. 
+The connected components of an indirected graph indicates the number of of subgraphs in overall network. Subgraph can be imagined as a connected group of vertices which has globally no connection to any other subgraph. In order to visualize subgraphs algebraically, let us define number of edges $L$ of graph $G$ in terms of three subgraphs of $G$: $L_G = L_{G_1}\cup L_{G_2}\cup L_{G_3}$. 
 
 \begin{figure}[h!]
 	
@@ -70,16 +113,20 @@ The connected components of an indirected graph indicates the number of of subgr
 	\caption{Number of connected components of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
 \end{figure}
 
+There is no subgraph at lower threshold values in any network almost up to $r=0.65$. At lower $r$ values, the nodes in the network is expected to be connected high densely, it is mostly possible to visit any node in the network through the others. At higher $r$ levels, the nodes become more separated as the subgraphs arise. At $r>0.92$ all nodes can be featured as single node subgraph.  
+
+
 \newpage
 
+
 \subsection{Transitivity}
-	Transitivity is a similar measure to clustering coefficient, this property is strongly related to the number of triangles ($t_i$) around a node. If a node has links to two other nodes, transivity inquires whether those two other nodes are also connected to each other.
+	Transitivity is a similar measure to the clustering coefficient, it is also a measure for the segregation in the network. The mean clustering coefficient is normalized individually for each node [RUB10]. The corresponding equation represents the transitivity of a network (Newman, 2003),
 	
 \begin{equation}
  T = \frac{\sum\limits_{i \epsilon N} 2 t_i}{\sum\limits_{i \epsilon N}k_i (k_i - 1)}
 \end{equation}	
 
-Transitivity is defined only for the whole network rather than single nodes. The related transitivity measure of networks can be seen in Figure 4. 
+If a node has links to two other nodes, transivity inquires whether those two other nodes are also connected to each other. Transitivity is defined only for the whole network rather than single nodes. 
 
 \begin{figure}[h!]
 	
@@ -88,10 +135,12 @@ Transitivity is defined only for the whole network rather than single nodes. The
 	\caption{Transitivity of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
 \end{figure}
 
+The transitivity tendency of the randomly builded networks is analogous to the their clustering coefficiencies' behavior with varying $r$, whereas transitivity of the test network stays distant from its clustering coefficiency measure. One can assume that the transitivity may get bigger while the nodes have less edges (in contrary to clustering coefficient).
+
 \newpage
 
 \subsection{Shortest Pathway}
-Shortest pathway is a measure of integration in the network. It corresponds to the shortest path length between two nodes, and if the network is weighted, shortest pathway is is the way on which the sum of the weights along the edges between two nodes is minimized.  
+Shortest pathway is a measure of integration in the network, opposite to the segregation measures. It corresponds to the shortest path length between two nodes, and if the network is weighted, shortest pathway is is the path on which the sum of the weights along the edges between two nodes is minimized.  
 
 \begin{equation}
 d_{ij} = \sum\limits_{a_{uv} \epsilon g_{i\leftrightarrow j} } a_{uv}
@@ -106,26 +155,330 @@ where $g_{i\leftrightarrow j}$ is the shortest path between nodes $i$ and $j$. $
 	\caption{Shortest pathway of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
 \end{figure}
 
+The test network seems to be less segregated than the randomized networks in general. Interestingly, the networks behave mostly segregated while $r<0.95$ rather than $r=1$. At threshold values just around 1, all the nodes are assumed to be disconnected, there is not any contribution to the $d_{ij}$. Below $r<0.95$, there is poor number of nodes connected along the long pathways, so $d_{ij}$ could be reasonably larger. 
+
+\newpage
+
+\subsection{Global Efficiency}
+The global efficiency is measured as the average of the inverse shortest pathway (Latora and Marchiori, 2001);
+
+\begin{equation}
+E = \frac{1}{n}\sum\limits_{i \epsilon N} E_i = \frac{1}{n}\sum\limits_{i \epsilon N} \frac{\sum\limits_{j \epsilon N, j\neq i}d_{ij}^{-1}}{n-1 }
+\end{equation}
+
+where $E_i$ is the global efficiency of node, $d_{ij}$ is the shortest pathway between nodes $i$ and $j$. As seen from the equation, global efficiency becomes larger with smaller shortest pathways between nodes. The global efficiency is a measure of the integration in the network. It reveals the strength of connections in a network. Global efficiency measure the ability of a network to transmit information at the global level (Latora and Marchiori, 2001, 2003).
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Global_Efficiency_Average.eps}
+	\caption{Global efficiencies of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+Due to smaller $d_{ij}$ at lower threshold values, global efficiency stays in larger values demonstrating strognly connected nodes. When the nodes begin to disconnect at larger threshold, then $E$ decays toward zero.
+
+\newpage
+
+\subsection{Local Efficiency}
+The local efficiency is measured as the average of inverse shortest pathways between nodes in neighborhood of a specific node (Latora and Marchiori, 2001);
+
+\begin{equation}
+E_{loc} = \frac{1}{n}\sum\limits_{i \epsilon N} E_{loc,i} = \frac{1}{n}\sum\limits_{i \epsilon N} \frac{\sum\limits_{j,h \epsilon N, j\neq i} a_{ij} a_{ih}[d_{jh}(N_i)]^{-1}}{k_i(k_i - 1) }
+\end{equation}
+
+where $E_{loc,i}$ is the local efficiency of node $i$, $d_{jh}(N_i)$ is the shortest pathway between nodes $j$ and $h$, which are located in neigborhood of node $i$. Local efficiency measure the ability of a network to transmit information at the local level (Latora and Marchiori, 2001, 2003).
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Local_Efficiency_Average.eps}
+	\caption{Local efficiencies of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+The test network seems to have low global efficiency in range of $r=0.5$ and $r=0.8$ in Figure 7, whereas it has high local efficiency in the same threshold range in Figure 8. The potency of the information transmit may tend to act oppositely in local and global ranges. 
+
+
+\newpage
+
+\subsection{Small Worldness}
+
+A small world network is both higly segregated and integrated, a measure of small worldness was proposed to capture this effect in a single statistic (Humpries and Gurney,2008).
+
+\begin{equation}
+S = \frac{C/C_{rand}}{L/L_{rand}}
+\end{equation}
+ 
+ where $C$ and $C_{rand}$ are clustering coefficients, $L$ and $L_{rand}$ are characteristic path lenghts of the original and random network respectively. 
+
+\begin{equation}
+L = \frac{1}{n}\sum\limits_{i \epsilon N} L_i = \frac{1}{n}\sum\limits_{i \epsilon N} \frac{\sum\limits_{j \epsilon N, j \neq i }d_{ij}}{n-1 } 
+\end{equation}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Small_Worldness.eps}
+	\caption{Small worldness of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+Figure 3 representing cluster coefficients show that the test network has larger $C$ than the randomly constructed networks. The characteristic pathway is truely proportional with the shortest pathway. Figure 6 gives a hint that test network tend to have smaller $d_{ij}$, indicating smaller characteristic pathway for it. Hence the division in equation 8 results in such an $S$ value, much larger 1.
+
+ Our randomized networks cannot be equally segregated and integrated as seen in Figure 9. However, there seems to be specific $r$ values at which the test network is both segregated and integrated well.  
+
+\newpage
+
+\subsection{Degree Distribution}
+Degree distribution of a network reflects the probability ($P$) of a node to have a given number of degree ($k$). The degree distribution of a graph is useful to characterize its structure. Degree distribution revelas the resilience of a graph. 
+
+\begin{equation}
+ P(k) = \sum\limits_{k' \geq k} p(k')
+\end{equation}
+
+where $p(k')$ is the probability of a node having degree $k'$ (Barabasi and Albert, 1999). As it seen from the equation above, the $P(k)$ is the 
+cumulative degree distribution. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{Degree_Distribution.eps}
+	\caption{Heat maps of degree distributions of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+\newpage
+
+\subsection{Clustering Coefficient of Nodes}
+
+The clustering coefficient of each node is measured as ratio between number of triangles around a node and all possible edge connections of that node ${k_i \choose 2} $ (Watts and Stogatz, 1998); 
+
+\begin{equation}
+C_i =  \frac{2t_i}{k_i(k_i -1)}
+\end{equation}
+
+As the number of triangles around a node increased, $C_i$ becomes larger indicating more segregated nodes in the network.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{Clustering_Coefficient_Node.eps}
+	\caption{Heat maps of clustering coefficient distributions of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+\newpage
+
+\subsection{Connected Components of Nodes}
+Connected components of nodes tells us how many connections a single node in any subgraph in its isolated neighborhood has. It implies how many other nodes we can reach through that single node. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{Connected_Components_Nodes.eps}
+	\caption{Heat maps of connected component distributions of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+\newpage
+
+\subsection{Global Efficiencies of Nodes}
+Global efficiency of single node can be expressed with the following equation as described previously; 
+
+\begin{equation}
+ E_i =  \frac{\sum\limits_{j \epsilon N, j\neq i}d_{ij}^{-1}}{n-1 }
+\end{equation}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{Global_Efficiency_Nodes.eps}
+	\caption{Heat maps of global efficiency distributions of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+\newpage 
+
+\subsection{Local Efficiency of Nodes}
+
+\begin{equation}
+ E_{loc,i} = \frac{\sum\limits_{j,h \epsilon N, j\neq i} a_{ij} a_{ih}[d_{jh}(N_i)]^{-1}}{k_i(k_i - 1) }
+\end{equation}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{Local_Efficiency_Nodes.eps}
+	\caption{Heat maps of local efficiency distributions of the test network (\textit{A\_ aal.txt}) and the randomized networks. Note that \textit{Rc} does not go far below threshold $0.25$.}
+\end{figure}
+
+\newpage
+
+\section{FitzHugh-Nagumo Model Dynamics in [PAN12] and [GHO08]}
+
+Section 2 analyzes the FitzHugh-Nagumo dynamics with two different models in [PAN12] and [GHO08] papers as isolated and coupled versions of attractor and inhibitor. The local dynamics in both papers are initially presented, then the effects of possible couplings are analyzed. 
+
+\subsection{FHN Model in [PAN12]}
+
+\subsubsection{Local Dynamics}
+
+This assignment investigates the local dynamics of the FHN model in [PAN12]. Neither of the activator and inhibitor variables includes any coupling parameter for the simplicity at the beginning. We can consider a single node having activator and inhibitor variables isolated from other nodes in the bigger network. 
+   
+\begin{subequations} \begin{align} \varepsilon  \dot{x} = x - \frac{x^3}{3} -y   \label{eqn: frobenius 6}\\  \dot{y} = x+a \label{eqn: frobenius 7}   \end{align} 
+\end{subequations}
+
+where $x$ is activator variable, $y$ is the inhibitor variable, $\varepsilon$ denotes the time constant accelerating $x$ , and $a$ is the threshold parameter. 
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{PAN12_local_dynamics.eps}
+	\caption{The local dynamics with the parameters $a=1.3$ and $\varepsilon = 0.01$. The time evolution shows a rapid excitation and less stronger rapid inhibition at very beginning, later on both $x$ and $y$ stays constant. The state space plot on the right shows the pattern of $x$ and $y$ together with the nullclines. $x$ values evolve faster than $y$.}
+\end{figure}
+
+\subsubsection{Global Dynamics with Mutual Coupling and Time Delays}
+
+Now we can consider two nodes influencing each other through a mutual coupling and time delay. The nodes are not isolated from the bigger network.
+
+\begin{subequations} \begin{align} \varepsilon  \dot{x_1} = x_1 - \frac{x_1^3}{3} -y_1  + C [x_2(t-\tau_2^C)-x_1(t)] \label{eqn: frobenius 10}\\  \dot{y_1} = x_1+a \label{eqn: frobenius 11}  \\ \varepsilon  \dot{x_2} = x_2 - \frac{x_2^3}{3} -y_2  + C [x_1(t-\tau_1^C)-x_2(t)] \label{eqn: frobenius 12}  \\  \dot{y_2} = x_2+a \label{eqn: frobenius 13} 
+\end{align} 
+\end{subequations}
+
+where $C$ is the mutual coupling constant, $\tau^C$ is the time delays, and subindices $1$ and $2$ are for two nodes. The time delays must not be necessarily same, however, this assignment keeps both $\tau^C$ at the same value.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{PAN12_global_dynamics_C.eps}
+		\caption{The global dynamics of the two nodes with the parameters $a=1.3$ and $\varepsilon = 0.01$, $C=0.5$ and $\tau^C= 3.0$.}
+\end{figure}
+
+ The time evolution shows a rapid excitatory and less stronger rapid inhibitory behaviors of the nodes as the subsequent oscillation over time. The mutual coupling ($C$) let the $x$ and $y$ variables to oscillate instead of decaying on constant values as in Figure 15. The state space plot indicates a round trip over the nullclines, the change in $x$ is faster than $y$ as seen in excitation and inhibition peaks on time evolution plot.
+ 
+\subsubsection{Global Dynamics with Mutual Coupling, Self Coupling and Time Delays}
+
+This part investigates the complete FHN model given in [PAN12].
+
+\begin{subequations} \begin{align} \varepsilon  \dot{x_1} = x_1 - \frac{x_1^3}{3} -y_1  + C [x_2(t-\tau_2^C)-x_1(t)] + K(x_1(t-\tau_1^K) - x_1(t)) \label{eqn: frobenius 14}\\  \dot{y_1} = x_1+a \label{eqn: frobenius 15}  \\ \varepsilon  \dot{x_2} = x_2 - \frac{x_2^3}{3} -y_2  + C [x_1(t-\tau_1^C)-x_2(t)] + K(x_2(t-\tau_1^K) - x_2(t)) \label{eqn: frobenius 16}  \\  \dot{y_2} = x_2+a \label{eqn: frobenius 17} 
+\end{align} 
+\end{subequations}
+
+where $K$ is the strength of self coupling of the nodes and $\tau^K$ values are the time delays required for the self coupling, both nodes are assumed to have both self coupling delays for simplicity.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth, height=8cm]{PAN12_global_dynamics_C_K.eps}
+		\caption{The global dynamics of the two nodes with the parameters $a=1.3$ and $\varepsilon = 0.01$, $C=0.5$, $\tau^C= 3.0$, $K=0.1$, $\tau^K= 3.0$.}
+\end{figure}
+
+The mutual coupling constitutes the oscillatory behavior of excitation and inhibition at a higher frequency as seen in time evolution plot in Figure 17 compared to Figure 16. The phase space changes only slightly.
+
+\subsection{FHN Model in [GHO08]}
+
+\subsubsection{Local Dynamics}
+
+\begin{subequations}
+ \begin{align}\dot{x} = \tau (y + \gamma x - \frac{x^3}{3})  \label{eqn: frobenius 17}\\  \dot{y} = -\frac{1}{\tau} (x - \alpha + b y) \label{eqn: frobenius 18}   \end{align} 
+\end{subequations}
+
+where $x$ is activator variable, $y$ is the inhibitor variable, $\tau$ denotes the time constant accelerating $x$, and $\gamma$, $\alpha$, $b$ are the parameters. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth, height=8cm]{GHO08_local_dynamics.eps}
+		\caption{The local dynamics of one single isolated node with the parameters $\alpha = 0.89$, $\gamma=0.9$, $b=0.1$ and $\tau = 4$.}
+\end{figure}
+
+The time evolution of $x$ and $y$ starts with rapid increase but both decay over time with small amplituded oscillations and even become constant over longer time. 
+
+\subsubsection{Global Dynamics with Mutual Coupling and Time Delays}
+
+\begin{subequations}
+ \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x_1^3}{3}) + C [x_2(t-\tau_2^C)-x_1(t)] \label{eqn: frobenius 19}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1) \label{eqn: frobenius 20} \\ \dot{x_2}=tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_2^C)-x_2(t)] \label{eqn: frobenius 21} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + by_2) \label{eqn: frobenius 22}\end{align} 
+\end{subequations}
+
+where $C$ is the mutual coupling constant, $\tau^C$ is the time delays of mutual coupling, and subindices $1$ and $2$ are for two nodes. 
+
+\newpage
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth, height=8cm]{GHO08_global_dynamics_C.eps}
+		\caption{The global dynamics of two nodes with the parameters $\alpha = 0.89$, $\gamma=0.9$, $b=0.1$, $\tau = 4$, $C=5$ and mutual coupling delays $\tau_1^C=\tau_2^C=\tau^C=3$.}
+\end{figure}
+
+The non-zero coupling strength initiates the oscillatory behavior of $x$ and $y$ now. 
+
+\subsubsection{Global Dynamics with Mutual Coupling, Self Coupling and Time Delays}
+
+\begin{subequations}
+ \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x_1^3}{3}) + C [x_2(t-\tau_2^C)-x_1(t)] + K(x_1(t-\tau_1^K) - x_1(t)) \label{eqn: frobenius 19}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1) \label{eqn: frobenius 20} \\ \dot{x_2}=tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_2^C)-x_2(t)]+ K(x_2(t-\tau_2^K) - x_2(t)) \label{eqn: frobenius 21} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + by_2) \label{eqn: frobenius 22}\end{align} 
+\end{subequations}
+
+\newpage
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\textwidth, height=9cm]{GHO08_global_dynamics_C_K.eps}
+		\caption{The global dynamics of two nodes with the parameters $\alpha = 0.89$, $\gamma=0.9$, $b=0.1$, $\tau = 4$, $C=5$, mutual coupling delays $\tau_1^C=\tau_2^C=\tau^C=3$, $K=4$, and self coupling delays $\tau_1^K=\tau_2^K=\tau^K=3$ .}
+\end{figure}
+
+The mutual coupling adds up new $x$ and $y$ oscillations to the system.
+
+\section{An Overlook to the Adaptive Solution and the Sample Solution of Time Delayed Differental Equations}
+
+In this section I would like to simulate FHN model given in [VUK13] for two simple nodes $i,j={1,2}$ with given distance matrix $d_{ij}$ via adaptive step size method and sampling solution method. The model for the neural dynamics in [VUK13] is expressed as below.
+
+\begin{equation}
+ \dot{u}_i=g(u_i,v_i)-c \sum_{j=1}^N  f_{ij} u_j(t-\Delta t_{ij})+n_u
+\end{equation}
+\begin{equation}
+ \dot{v}_i=h(u_i,v_i)+n_v
+\end{equation}
+
+where $c$ is coupling strength, $f_{ij}$ is the connectivity matrix, $\Delta t_{ij}$ is time delay due to finite signal propagation velocity between nodes, $n_u$ is the noise factor. $\Delta t_{ij}$ is calculated as $\Delta t_{ij}=\frac{d_{ij}}{\nu}$, distance matrix divided by velocity. 
+
+
+The functions $g$ and $v$ are modeled very similar to FitzHugh-Nagumo model introduced in [GHO08]:
+\begin{equation}
+ \dot{u}=g(u,v)=\tau(v+\gamma u - \frac{u^3}{3})
+\end{equation}
+\begin{equation}
+ \dot{v}=h(u,v)=-\frac{1}{\tau}(u- \alpha +bv-I)
+\end{equation}
+
+where $I$ is magnitude of an external stimulus, which is assumed to be 0. 
+
+The connectivity and distance matrices only for two nodes are introduced as the following;
+
+\[
+\textbf{$f_{ij}$}=
+\left[ {\begin{array}{cc }
+0.0000  &  5,6731.10^{-1} \\
+5,6731.10^{-1} &  0.0000  \\
+
+\end{array} } \right]
+\]
 
 
 
+\[
+\textbf{$d_{ij}$}=
+\left[ {\begin{array}{cc }
+0.0000  &  85,5102 \\
+85,5102 &  0.0000  \\
 
+\end{array} } \right]
+\]
 
+The purpose is to run our simulation $(fhn\_time\_series.py)$ to investigate the sampling rate effect on the reliability of data by comparing it to the real numerical solution method, namely adaptive step size method.
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\textwidth, height=9cm]{fhn_adapti.eps}
+		\caption{The simulation on top has $dt=0.1$ sampling rate and it lies perfectly on the numerical solutions marked by the dots. The sampling rate for the simulation below is $dt=1$, and it does not match well with the numerical solution.}
+\end{figure}
 
+\subsection{Simulation of FHN time series in [VUK13]}
 
+The bigger picture of [VUK13] notations..
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth, height=9cm]{FHN_time_series_C_small.eps}
+		\caption{Sampling rate is $dt=0.1$, and $C=0.01$}
+\end{figure}
 
-
-
-
-
-
-
-
-
-
-
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth, height=9cm]{FHN_time_series_C_big.eps}
+		\caption{Sampling rate is $dt=0.1$, and $C=4$}
+\end{figure}
 
 
 \end{document}
