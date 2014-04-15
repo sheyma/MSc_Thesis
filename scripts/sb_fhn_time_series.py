@@ -172,7 +172,8 @@ pl.plot(sol_adap['t'][10573:10758],sol_adap['x0'][10573:10758],'.r',linewidth=0.
 pl.plot(sol_adap['t'][10573:10758],sol_adap['y0'][10573:10758],'.b',linewidth=0.05)
 pl.xlabel('$t$')
 pl.ylabel('$x_1,y_1$')
-	      
+
+#pl.savefig("fhn_time_series_adapti.eps",format="eps")
 pl.show()
 	      
 #pl.subplot(221)
