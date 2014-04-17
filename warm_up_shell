@@ -58,7 +58,60 @@ case "$FRUIT" in
 	banana) echo "I like banana nut bread" ;;
 	kiwi) echo "New Zealand is famous for kiwi" ;;
 esac
-	
 
+# while loop
+x=0
+while [ $x -lt 10 ]
+do
+  echo $x
+  x=`echo "$x + 1" | bc`
+done
+  
+# nesting while loops
+x=0
+while [ "$x" -lt 10 ];
+do
+  y="$x"
+  while [ "$y" -ge 0 ];
+  do
+    echo "$y \c"
+    y=`echo "$y -1" | bc`
+  done
+  echo
+  x=`echo "$x + 1" | bc`
+done
 
+#validating user input
+# RESPONSE=
+# while [ -z "$RESPONSE" ];
+# do
+#   echo "Enter the name of a directory where your files are located:\c "
+#   read RESPONSE	
+#   if [ ! -d "$RESPONSE" ] ; then
+#     echo "ERROR: Please enter a directory pathname."
+#     RESPONSE=
+#   fi
+# done
+ 
+#until loop
+x=1
+until [ $x -ge 10 ]
+do 
+  echo $x
+  x=`echo "$x + 1" | bc`
+done
 
+echo
+
+#for loop
+for i in 0 1 2 3 4 5 6 7 8 9
+do
+  echo $i
+done
+
+echo $HOME
+for FILE in $HOME/devel/MSc_Thesis/scripts/*eps*
+do
+  cp $FILE ${HOME}/devel/MSc_Thesis/reports
+  #chmod a+r ${HOME}/devel/MSc_Thesis/reports/${FILE}  # ASK to RUDI
+done
