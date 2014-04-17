@@ -26,7 +26,7 @@ def get_random_graph_c(matrix, r):
 			  B[row,item] = 0
 		#print B	   								   # print binarized matrix
 	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
-  	
+  	# G is now non-directed graph
 	degree_hist = {}
 	
 	for node in G:
@@ -41,7 +41,12 @@ def get_random_graph_c(matrix, r):
 	for j in range(0,len(keys)):
 		for i in range(0,(values[j])):
 			degree_seq.append(keys[j])
-	Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())   
+
+	#Random_Gc = nx.generators.degree_seq.havel_hakimi_graph(degree_seq)
+	Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())
+	#Random_Gc = Random_Gc.remove_edges_from(Random_Gc.selfloop_edges())
+	
+
 	return Random_Gc 
 
 
@@ -353,10 +358,10 @@ if __name__ == '__main__':
 #get_characteristics(input_name, threshold)
 
 get_single_network_measures(input_name)
-get_local_efficiency(input_name)
-get_global_effic(input_name)
-get_degree_distribution(input_name)
-get_node_cc_and_degree(input_name)  
-get_connected_components_nodes(input_name)
-get_small_worldness(input_name)	
-get_motifs(input_name)	
+#get_local_efficiency(input_name)
+#get_global_effic(input_name)
+#get_degree_distribution(input_name)
+#get_node_cc_and_degree(input_name)  
+#get_connected_components_nodes(input_name)
+#get_small_worldness(input_name)	
+#get_motifs(input_name)	
