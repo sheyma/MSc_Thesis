@@ -25,7 +25,7 @@ for i in range(0,(len(deg_dis))):
 	cn = nodes[i]
 	cn_dst_degree = deg_dis[i]
 	start_k = i+1
-	for j in range(0 , cn_dst_degree):
+	for j in range( G.degree([cn]).values()[0], cn_dst_degree):
 		print cn, "add", j, G.degree([cn]).values()[0]
 		# select get a random node from available_nodes
 		for k in range(start_k, (len(deg_dis))):
