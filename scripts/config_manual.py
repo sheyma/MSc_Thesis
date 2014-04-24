@@ -5,9 +5,8 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as pl
 
-
-nodes = ['A','B','C','D']
-deg_dis = np.array([3,2,1,2])
+nodes = ['A','B','C','D','E','F']
+deg_dis = np.array([1,3,2,2,1,1])
 
 G = nx.Graph()
 G.add_nodes_from(nodes)
