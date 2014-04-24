@@ -3,6 +3,7 @@
 
 import networkx as nx
 import numpy as np
+import matplotlib.pyplot as pl
 
 
 nodes = ['A','B','C','D']
@@ -38,3 +39,8 @@ for i in range(0,(len(deg_dis))):
 
 for i in range(0,(len(deg_dis))):
 	print nodes[i], G.degree([nodes[i]]).values()[0], deg_dis[i]
+
+pos = nx.shell_layout(G)
+nx.draw(G, pos)
+
+pl.show()
