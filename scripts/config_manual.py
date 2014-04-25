@@ -7,6 +7,7 @@ import matplotlib.pyplot as pl
 
 nodes = ['A','B','C','D','E','F']
 deg_dis = np.array([1,3,2,2,1,1])
+nodis = dictionary = dict(zip(nodes, deg_dis))
 
 G = nx.Graph()
 G.add_nodes_from(nodes)
@@ -19,22 +20,28 @@ for j in nodes:
 for i in range(0,(len(deg_dis))):
 	print nodes[i], G.degree([nodes[i]]).values()[0], deg_dis[i]
 
-#available_nodes = nodes
 
 for i in range(0,(len(deg_dis))):
 	cn = nodes[i]
 	cn_dst_degree = deg_dis[i]
-	start_k = i+1
+	
+	avlbl_nodes = nodes[i+1:]
+	print "xxxx", avlbl_nodes
+	for node in avlbl_nodes:
+		print "what about", node, G.degree([node]).values()[0], nodis[node]
+		if G.degree([node]).values()[0] >= nodis[node]:
+			print "remove", node
+			avlbl_nodes.remove(node)
+	print "yyyy", avlbl_nodes
+	
 	for j in range( G.degree([cn]).values()[0], cn_dst_degree):
-		print cn, "add", j, G.degree([cn]).values()[0]
-		# select get a random node from available_nodes
-		for k in range(start_k, (len(deg_dis))):
-			print cn, "try", nodes[k]
-			if G.degree([nodes[k]]).values()[0] < deg_dis[k]:
-				print cn, "got", nodes[k]
-				G.add_edge(cn , nodes[k])
-				start_k += 1
-				break
+		# just select the first available one
+		wtf = 0
+		addnode = avlbl_nodes[0]
+		avlbl_nodes.remove(addnode)
+		print "add", cn , addnode
+		G.add_edge(cn , addnode)
+
 
 for i in range(0,(len(deg_dis))):
 	print nodes[i], G.degree([nodes[i]]).values()[0], deg_dis[i]
