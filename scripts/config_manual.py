@@ -37,7 +37,11 @@ for i in range(0,(len(deg_dis))):
 	print "yyyy", avlbl_nodes
 	
 	for j in range( G.degree([cn]).values()[0], cn_dst_degree):
-		wtf = rnd.randint(0,len(avlbl_nodes) - 1)
+		max_rnd = len(avlbl_nodes) - 1
+		if max_rnd < 0:
+			print "FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK, can't solve"
+			break
+		wtf = rnd.randint(0, max_rnd)
 		addnode = avlbl_nodes[wtf]
 		avlbl_nodes.remove(addnode)
 		print "add", cn , addnode
