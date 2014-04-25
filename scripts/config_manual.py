@@ -18,25 +18,27 @@ print G.edges()
 
 for j in nodes:
 	print j	
-for i in range(0,(len(deg_dis))):
+for i in range(0,(len(nodes))):
 	print nodes[i], G.degree([nodes[i]]).values()[0], deg_dis[i]
 
 
-for i in range(0,(len(deg_dis))):
+for i in range(0,(len(nodes))):
 	cn = nodes[i]
+	cn_degree = G.degree([cn]).values()[0]
 	cn_dst_degree = deg_dis[i]
 	
+	# we maintain a list of available nodes
 	avlbl_nodes = nodes[i+1:]
-	print "xxxx", avlbl_nodes
-	# we have iterate over a _copy_ of the avlbl_nodes when we want toremove elements
+	print "try ", cn, avlbl_nodes
+	# we have to iterate over a _copy_ of the avlbl_nodes when we modify it
 	for node in list(avlbl_nodes):
-		print "what about", node, G.degree([node]).values()[0], nodis[node]
 		if G.degree([node]).values()[0] >= nodis[node]:
-			print "remove", node
+			print "remove full node", node
 			avlbl_nodes.remove(node)
-	print "yyyy", avlbl_nodes
+	print "free neighbours", cn, avlbl_nodes
 	
-	for j in range( G.degree([cn]).values()[0], cn_dst_degree):
+	# now solve the free degree of current node
+	for j in range( cn_degree, cn_dst_degree):
 		max_rnd = len(avlbl_nodes) - 1
 		if max_rnd < 0:
 			print "FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK, can't solve"
@@ -44,11 +46,11 @@ for i in range(0,(len(deg_dis))):
 		wtf = rnd.randint(0, max_rnd)
 		addnode = avlbl_nodes[wtf]
 		avlbl_nodes.remove(addnode)
-		print "add", cn , addnode
+		print "connect", cn , addnode
 		G.add_edge(cn , addnode)
 
 
-for i in range(0,(len(deg_dis))):
+for i in range(0,(len(nodes))):
 	print nodes[i], G.degree([nodes[i]]).values()[0], deg_dis[i]
 
 pos = nx.shell_layout(G)
