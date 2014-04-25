@@ -66,8 +66,10 @@ def get_characteristics(filename,R):
 	print 'Network density: ', D
 
 	print 'Average network degree: ', ave_degree 
+	print 'Assortativity : ', nx.degree_assortativity_coefficient(Random_Ga)
 	return 0	
 
+# Single (Average) Network Measures : 
 # get L and D for full network for  different threshold values
 # get average clustering coefficient of full network for dif.thre.val.
 # get average degree of full network for different threshold values
@@ -85,7 +87,7 @@ def get_single_network_measures(input_mtx):
 		cc = nx.average_clustering(Random_Ga)
 		compon = nx.number_connected_components(Random_Ga)
 		Con_sub = nx.connected_component_subgraphs(Random_Ga)		
-
+	      
 		values = []
 		values_2 =[]
 
@@ -106,9 +108,32 @@ def get_single_network_measures(input_mtx):
 		else:
 			f.write("%f\n" % (sum(values_2)/len(values_2)))
 		#7. shortest pathway
+		
 	f.close()
 
 
+# assortativity
+def get_assort(input_mtx):
+	R = 0.09
+	f = open(input_mtx[:-4]+'_Ra_assortativity.dat','w')
+	Random_Ga = get_random_graph_a(input_mtx,R)
+	N = nx.number_of_nodes(Random_Ga)
+	L = nx.number_of_edges(Random_Ga)
+	A = 0
+	B = 0
+	C = 0
+	D = 0
+	for node_i in Random_Ga:
+	  for node_j in Random_Ga:
+	     k_i = Random_Ga.degree(node_i)
+	     k_j = Random_Ga.degree(node_j)
+	     A += float(  k_i * k_j)
+	     B +=float(0.5 * (k_i+k_j))
+	     C += float(0.5 * (pow(k_i,2) + pow(k_j,2)))
+	     D += float(0.5 * k_i + k_j) 
+	print "L : " , L
+	print A, pow(B,2), C, pow(D,2) 
+	
 # get local efficiency for full network and single nodes separately
 def get_local_efficiency(input_mtx):
 	R = 0
@@ -330,19 +355,20 @@ if __name__ == '__main__':
   usage = 'Usage: %s correlation_matrix threshold' % sys.argv[0]
   try:
     input_name = sys.argv[1]
-    #input_threshold = sys.argv[2]
+    input_threshold = sys.argv[2]
   except:
     print usage; sys.exit(1)
 
 ###manual choice of the threshold value
-#threshold = float(value)
-#network = get_graph(input_name, threshold)
-#get_characteristics(network, input_name, threshold)
-get_single_network_measures(input_name)
-get_local_efficiency(input_name)
-get_global_effic(input_name)
-get_degree_distribution(input_name)
-get_node_cc_and_degree(input_name)  
-get_connected_components_nodes(input_name)
-get_small_worldness(input_name)	
-get_motifs(input_name)	
+threshold = float(input_threshold)
+network = get_random_graph_a(input_name, threshold)
+get_characteristics(input_name, threshold)
+#get_single_network_measures(input_name)
+#get_local_efficiency(input_name)
+#get_global_effic(input_name)
+#get_degree_distribution(input_name)
+#get_node_cc_and_degree(input_name)  
+#get_connected_components_nodes(input_name)
+#get_small_worldness(input_name)	
+#get_motifs(input_name)	
+get_assort(input_name)
