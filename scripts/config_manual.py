@@ -4,6 +4,7 @@
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as pl
+import random as rnd
 
 nodes = ['A','B','C','D','E','F']
 deg_dis = np.array([1,3,2,2,1,1])
@@ -35,9 +36,8 @@ for i in range(0,(len(deg_dis))):
 	print "yyyy", avlbl_nodes
 	
 	for j in range( G.degree([cn]).values()[0], cn_dst_degree):
-		# just select the first available one
-		wtf = 0
-		addnode = avlbl_nodes[0]
+		wtf = rnd.randint(0,len(avlbl_nodes) - 1)
+		addnode = avlbl_nodes[wtf]
 		avlbl_nodes.remove(addnode)
 		print "add", cn , addnode
 		G.add_edge(cn , addnode)
