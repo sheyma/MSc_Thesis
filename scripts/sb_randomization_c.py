@@ -5,9 +5,11 @@
 # use nx.configuration_model(degree_seq[integers]) == method c)
 
 import networkx as nx
-from networkx.algorithms import bipartite
+#from networkx.algorithms import bipartite
 import numpy as np
 from math import factorial 
+import matplotlib.pyplot as pl
+import random as rnd
 import sys  
 
 
@@ -28,6 +30,7 @@ def get_random_graph_c(matrix, r):
 	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
   	# G is now non-directed graph
 	degree_hist = {}
+	  
 	
 	for node in G:
 		if G.degree(node) not in degree_hist: # degree dist part
@@ -41,13 +44,70 @@ def get_random_graph_c(matrix, r):
 	for j in range(0,len(keys)):
 		for i in range(0,(values[j])):
 			degree_seq.append(keys[j])
-
-	#Random_Gc = nx.generators.degree_seq.havel_hakimi_graph(degree_seq)
-	Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())
-	#Random_Gc = Random_Gc.remove_edges_from(Random_Gc.selfloop_edges())
+		
+	#Random_Gc = nx.random_degree_sequence_graph(degree_seq,tries=100)
+	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())
 	
+	nodes = G.nodes()
+	deg_dis = degree_seq
+	nodis = dictionary = dict(zip(nodes, deg_dis))
 
-	return Random_Gc 
+
+	while 1:
+		broken = 0
+		Random_Gc= nx.Graph()
+		Random_Gc.add_nodes_from(nodes)
+		for i in range(0,(len(nodes))):
+			cn = nodes[i]
+			cn_degree = Random_Gc.degree([cn]).values()[0]
+			cn_dst_degree = deg_dis[i]
+			
+			# we maintain a list of available nodes
+			avlbl_nodes = nodes[i+1:]
+			#print "try ", cn, avlbl_nodes
+			# we have to iterate over a _copy_ of the avlbl_nodes when we modify it
+			for node in list(avlbl_nodes):
+				if Random_Gc.degree([node]).values()[0] >= nodis[node]:
+					#print "remove full node", node
+					avlbl_nodes.remove(node)
+			#print "free neighbours", cn, avlbl_nodes
+			
+			# now solve the free degree of current node
+			for j in range( cn_degree, cn_dst_degree):
+				max_rnd = len(avlbl_nodes) - 1
+				if max_rnd < 0:
+					#print "FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK, can't solve"
+					broken = 1
+					break
+				wtf = rnd.randint(0, max_rnd)
+				addnode = avlbl_nodes[wtf]
+				avlbl_nodes.remove(addnode)
+				#print "connect", cn , addnode
+				Random_Gc.add_edge(cn , addnode)
+			if broken == 1:
+				break
+		if broken == 0:
+			break
+
+
+	for i in range(0,(len(nodes))):
+		print nodes[i], Random_Gc.degree([nodes[i]]).values()[0], deg_dis[i]
+
+
+	print "number of nodes in G ", nx.number_of_nodes(G)
+	print "number of edges in G ", nx.number_of_edges(G)
+	
+	
+	
+	print "number of nodes in Random_Gc ", nx.number_of_nodes(Random_Gc)
+	print "number of edges in Random_Gc ", nx.number_of_edges(Random_Gc)
+	
+	
+	pos = nx.shell_layout(Random_Gc)
+	nx.draw(Random_Gc, pos)
+
+	pl.show()
+	return Random_Gc
 
 
 # a few characteristic measures of FULL network G with one threshold
@@ -348,16 +408,16 @@ if __name__ == '__main__':
   usage = 'Usage: %s correlation_matrix threshold' % sys.argv[0]
   try:
     input_name = sys.argv[1]
-    #input_threshold = sys.argv[2]
+    input_threshold = sys.argv[2]
   except:
     print usage; sys.exit(1)
 
 ###manual choice of the threshold value
-#threshold = float(input_threshold)
-#get_random_graph_c(input_name, threshold)
+threshold = float(input_threshold)
+get_random_graph_c(input_name, threshold)
 #get_characteristics(input_name, threshold)
 
-get_single_network_measures(input_name)
+#get_single_network_measures(input_name)
 #get_local_efficiency(input_name)
 #get_global_effic(input_name)
 #get_degree_distribution(input_name)
