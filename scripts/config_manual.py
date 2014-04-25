@@ -28,7 +28,8 @@ for i in range(0,(len(deg_dis))):
 	
 	avlbl_nodes = nodes[i+1:]
 	print "xxxx", avlbl_nodes
-	for node in avlbl_nodes:
+	# we have iterate over a _copy_ of the avlbl_nodes when we want toremove elements
+	for node in list(avlbl_nodes):
 		print "what about", node, G.degree([node]).values()[0], nodis[node]
 		if G.degree([node]).values()[0] >= nodis[node]:
 			print "remove", node
