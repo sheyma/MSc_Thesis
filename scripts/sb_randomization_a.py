@@ -66,7 +66,6 @@ def get_characteristics(filename,R):
 	print 'Network density: ', D
 
 	print 'Average network degree: ', ave_degree 
-	print 'Assortativity : ', nx.degree_assortativity_coefficient(Random_Ga)
 	return 0	
 
 # Single (Average) Network Measures : 
@@ -112,28 +111,35 @@ def get_single_network_measures(input_mtx):
 	f.close()
 
 
-# assortativity
-def get_assort(input_mtx):
-	R = 0.09
+
+# Assortativity coefficient of network (Newman, 2002)	
+def get_assortativity(input_mtx, degrees=None):
+	R = 0
 	f = open(input_mtx[:-4]+'_Ra_assortativity.dat','w')
-	Random_Ga = get_random_graph_a(input_mtx,R)
-	N = nx.number_of_nodes(Random_Ga)
-	L = nx.number_of_edges(Random_Ga)
-	A = 0
-	B = 0
-	C = 0
-	D = 0
-	for node_i in Random_Ga:
-	  for node_j in Random_Ga:
-	     k_i = Random_Ga.degree(node_i)
-	     k_j = Random_Ga.degree(node_j)
-	     A += float(  k_i * k_j)
-	     B +=float(0.5 * (k_i+k_j))
-	     C += float(0.5 * (pow(k_i,2) + pow(k_j,2)))
-	     D += float(0.5 * k_i + k_j) 
-	print "L : " , L
-	print A, pow(B,2), C, pow(D,2) 
-	
+	for i in  range(0,100): #range(0,101):
+		R = float(i)/100
+		G = get_random_graph_a(input_mtx,R)
+		
+		degrees = G.degree()
+		m = float(nx.number_of_edges(G))
+		num1, num2, den1 = 0, 0, 0
+		for source, target in G.edges():
+			
+			num1 += degrees[source] * degrees[target]
+			num2 += degrees[source] + degrees[target]
+			den1 += degrees[source] **2 + degrees[target] **2
+		if m!=0:
+			num1 /= m
+			den1 /= 2*m
+			num2 = (num2 / (2*m)) ** 2
+			#assort_coeff_1 = nx.degree_assortativity_coefficient(G)
+			#print 'Assortativity : ', assort_coeff_1 
+			if ((den1-num2)!=0):
+				assort_coeff = (num1 - num2) / (den1 - num2)
+				f.write("%f\t%f\n" % (R,assort_coeff))
+			#print "Assortativity manual :", assort_coeff
+	f.close()
+		
 # get local efficiency for full network and single nodes separately
 def get_local_efficiency(input_mtx):
 	R = 0
@@ -355,15 +361,16 @@ if __name__ == '__main__':
   usage = 'Usage: %s correlation_matrix threshold' % sys.argv[0]
   try:
     input_name = sys.argv[1]
-    input_threshold = sys.argv[2]
+    #input_threshold = sys.argv[2]
   except:
     print usage; sys.exit(1)
 
 ###manual choice of the threshold value
-threshold = float(input_threshold)
-network = get_random_graph_a(input_name, threshold)
-get_characteristics(input_name, threshold)
+#threshold = float(input_threshold)
+#network = get_random_graph_a(input_name, threshold)
+#get_characteristics(input_name, threshold)
 #get_single_network_measures(input_name)
+get_assortativity(input_name)
 #get_local_efficiency(input_name)
 #get_global_effic(input_name)
 #get_degree_distribution(input_name)
@@ -371,4 +378,4 @@ get_characteristics(input_name, threshold)
 #get_connected_components_nodes(input_name)
 #get_small_worldness(input_name)	
 #get_motifs(input_name)	
-get_assort(input_name)
+
