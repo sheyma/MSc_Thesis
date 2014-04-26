@@ -12,11 +12,47 @@ import matplotlib.pyplot as pl
 import random as rnd
 import sys  
 
+# create a random network with method a
+def get_random_graph_a(matrix, r):
+  A = np.transpose(np.loadtxt(matrix, unpack=True))
+  B = np.zeros((len(A),len(A)))
 
-# 1. create a random network with method c
+  for row in range(len(A)):
+    for item in range(len(A)):
+      if row != item:
+        if A[row,item] >= r:
+          B[row,item] = 1
+        else:
+          B[row,item] = 0
+  #print B	   										 # print thresholded new matrix
+  G=nx.from_numpy_matrix(B,create_using=nx.Graph())
+  L = nx.number_of_edges(G) 						 # total number of links: L
+  N = nx.number_of_nodes(G) 						 # total number of nodes : N
+  Random_Ga = nx.gnm_random_graph(N,L)				 # random graph
+  return Random_Ga
 
+# 1. create a random network with method b
+def get_random_graph_b(matrix, r):
+  A = np.transpose(np.loadtxt(matrix, unpack=True))
+  B = np.zeros((len(A),len(A)))
+
+  for row in range(len(A)):
+    for item in range(len(A)):
+      if row != item:
+        if A[row,item] >= r:
+          B[row,item] = 1
+        else:
+          B[row,item] = 0
+  #print B	   										 # print thresholded new matrix
+  G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded matr.
+  N = nx.number_of_nodes(G)							 # number of nodes in G	
+  d = nx.density(G)									 # network density of G
+  Random_Gb = nx.erdos_renyi_graph(N,d)	 # random graph
+  return Random_Gb
+
+# create a random network with method c
 def get_random_graph_c(matrix, r):
-	A = np.transpose(np.loadtxt(matrix, unpack=True)) 
+	A = np.transpose(np.loadtxt(matrix, unpack=True))
 	B = np.zeros((len(A),len(A)))
 
 	for row in range(len(A)):
@@ -28,9 +64,9 @@ def get_random_graph_c(matrix, r):
 			  B[row,item] = 0
 		#print B	   								   # print binarized matrix
 	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
-  	# G is now non-directed graph
+	# G is now non-directed graph
 	degree_hist = {}
-	  
+	
 	
 	for node in G:
 		if G.degree(node) not in degree_hist: # degree dist part
@@ -54,11 +90,32 @@ def get_random_graph_c(matrix, r):
 	#pl.show()
 	
 	return Random_Gc
-	
-	
+
+# create a random network with method d
+def get_random_graph_d(input_mtx, r):
+	A = np.transpose(np.loadtxt(input_mtx, unpack=True))
+	B = np.zeros((len(A),len(A)))
+
+	for row in range(len(A)):
+		for item in range(len(A)):
+			if row != item:
+				if A[row,item] >= r:
+					B[row,item] = 1
+				else:
+					B[row,item] = 0
+
+	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  #undirected graph G
+	L = nx.number_of_edges(G)	
+	trial = L*(L-1.)/2
+	swap_num = L;
+	if L >2:
+		Random_Gd = nx.double_edge_swap(G,nswap=swap_num,max_tries=trial)
+		return Random_Gd
+	else:
+		print "No swap possible for R=", float(r), "number of edges", L
+		return G
 
 
-	
 
 # a few characteristic measures of FULL network G with one threshold
 def get_characteristics(Random_Gc, thr, input_name):
