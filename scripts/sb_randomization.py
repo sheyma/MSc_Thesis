@@ -159,7 +159,7 @@ def get_characteristics(Random_Gc, thr, input_name):
 # get number of connected components of full network for dif.thre.val.
 # get shortest pathway of network
 def get_single_network_measures(Random_Gc, thr, input_name):
-	f = open(input_name[:-4]+'_Rc_single_network_measures.dat','w')
+	f = open(out_prfx + 'single_network_measures.dat','w')
 	N = nx.number_of_nodes(Random_Gc)
 	L = nx.number_of_edges(Random_Gc)
 	D = nx.density(Random_Gc)
@@ -190,7 +190,7 @@ def get_single_network_measures(Random_Gc, thr, input_name):
 	f.close()
 
 def get_assortativity(Random_Gc, thr, input_name):
-	f = open(input_name[:-4]+'_Rc_assortativity.dat','w')
+	f = open(out_prfx + 'assortativity.dat','w')
 	
 	print "get_assortativity", thr
 	degrees = Random_Gc.degree()
@@ -216,8 +216,8 @@ def get_assortativity(Random_Gc, thr, input_name):
 
 # get local efficiency for full network and single nodes separately
 def get_local_efficiency(Random_Gc, thr, input_name):
-	f = open(input_name[:-4]+'_Rc_local_efficency_ave.dat','w')
-	g = open(input_name[:-4]+'_Rc_local_efficency_node.dat','w')
+	f = open(out_prfx + 'local_efficency_ave.dat','w')
+	g = open(out_prfx + 'local_efficency_node.dat','w')
 	#g.write('node\tr(thre.)\tlocal_eff')
 	local_effic = 0
 	for node_i in Random_Gc:
@@ -243,8 +243,8 @@ def get_local_efficiency(Random_Gc, thr, input_name):
 
 # get global efficiency for full network and single nodes separately
 def get_global_effic(Random_Gc, thr, input_name):
-	f = open(input_name[:-4]+'_Rc_global_efficiency_ave.dat','w')
-	g = open(input_name[:-4]+'_Rc_global_efficiency_node.dat','w')
+	f = open(out_prfx + 'global_efficiency_ave.dat','w')
+	g = open(out_prfx + 'global_efficiency_node.dat','w')
 	global_eff = 0.
 	for node_i in Random_Gc:
 		sum_inverse_dist = 0.
@@ -265,7 +265,7 @@ def get_global_effic(Random_Gc, thr, input_name):
 
 # get degree distribution P(k)
 def get_degree_distribution(Random_Gc, thr, input_name):
-	f = open(input_name[:-4]+'_Rc_degree_dist.dat', 'w')
+	f = open(out_prfx + 'degree_dist.dat', 'w')
 	#f.write('node\tr(thre.)\tdeg_hist\tdeg_dist\n')
 	check_sum = 0.
 	degree_hist = {}
@@ -291,7 +291,7 @@ def get_degree_distribution(Random_Gc, thr, input_name):
 
 # get clustering coefficient and degree of each node
 def get_node_cc_and_degree(Random_Gc, thr, input_name):
-	f = open(input_name[:-4]+'_Rc_cc_and_degree_node.dat','w')	
+	f = open(out_prfx + 'cc_and_degree_node.dat','w')
 	#f.write('node\tr(thre.)\tnode_cc\n')
 	for node in Random_Gc:
 		cc_node = nx.clustering(Random_Gc,node)
@@ -304,7 +304,7 @@ def get_node_cc_and_degree(Random_Gc, thr, input_name):
 
 # get number of connected components of each node
 def get_connected_components_nodes(Random_Gc, thr, input_name):
-	f = open(input_name[:-4]+'_Rc_connected_compo_node.dat','w')
+	f = open(out_prfx + 'connected_compo_node.dat','w')
 	#f.write('node\tr(thre.)\tcount\n')
 	comps = nx.connected_component_subgraphs(Random_Gc)
 	count = 0
@@ -318,8 +318,8 @@ def get_connected_components_nodes(Random_Gc, thr, input_name):
 	f.close
 
 def get_small_worldness(Random_Gc, thr, input_name):
-	f = open(input_name[:-4]+'_Rc_small_worldness.dat','w')
-	g = open(input_name[:-4]+'_Rc_cc_trans_ER.dat','w')	
+	f = open(out_prfx + 'small_worldness.dat','w')
+	g = open(out_prfx + 'cc_trans_ER.dat','w')
 	#g.write('r(thre.)\t\cc_A\tcc_ER\ttran_A\ttran_ER\n')
 	ER_graph = nx.erdos_renyi_graph(nx.number_of_nodes(Random_Gc), nx.density(Random_Gc))
 	# erdos-renyi, binomial random graph generator ...(N,D:density)	
@@ -379,7 +379,7 @@ def binomialCoefficient(n, k):
     return factorial(n) // (factorial(k) * factorial(n - k))
   
 def get_motifs(Random_Gc, thr, input_name):
-	f = open(input_name[:-4]+'_Rc_motifs.dat','w')
+	f = open(out_prfx + 'motifs.dat', 'w')
 	tri_dict = nx.triangles(Random_Gc)   #number of triangles around nodes in Random_Gc
 	summe = 0
 	for node in tri_dict:
@@ -418,6 +418,8 @@ random_graph_methods = {
 	"c" : get_random_graph_c,
 	"d" : get_random_graph_d,
 }
+
+out_prfx = input_name[:-4]+'_R'+method+'_'
 
 for i in range(0, 101):
 	thr = float(i) / 100.0
