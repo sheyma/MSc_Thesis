@@ -158,7 +158,7 @@ def get_characteristics(G, thr, input_name):
 # get average degree of full network for different threshold values
 # get number of connected components of full network for dif.thre.val.
 # get shortest pathway of network
-def get_single_network_measures(G, thr, input_name):
+def get_single_network_measures(G, thr):
 	f = open(out_prfx + 'single_network_measures.dat','w')
 	N = nx.number_of_nodes(G)
 	L = nx.number_of_edges(G)
@@ -189,7 +189,7 @@ def get_single_network_measures(G, thr, input_name):
 	#7. shortest pathway
 	f.close()
 
-def get_assortativity(G, thr, input_name):
+def get_assortativity(G, thr):
 	f = open(out_prfx + 'assortativity.dat','w')
 	
 	print "get_assortativity", thr
@@ -215,7 +215,7 @@ def get_assortativity(G, thr, input_name):
 
 
 # get local efficiency for full network and single nodes separately
-def get_local_efficiency(G, thr, input_name):
+def get_local_efficiency(G, thr):
 	f = open(out_prfx + 'local_efficency_ave.dat','w')
 	g = open(out_prfx + 'local_efficency_node.dat','w')
 	#g.write('node\tr(thre.)\tlocal_eff')
@@ -242,7 +242,7 @@ def get_local_efficiency(G, thr, input_name):
 	g.close()
 
 # get global efficiency for full network and single nodes separately
-def get_global_effic(G, thr, input_name):
+def get_global_effic(G, thr):
 	f = open(out_prfx + 'global_efficiency_ave.dat','w')
 	g = open(out_prfx + 'global_efficiency_node.dat','w')
 	global_eff = 0.
@@ -264,7 +264,7 @@ def get_global_effic(G, thr, input_name):
 	g.close() 
 
 # get degree distribution P(k)
-def get_degree_distribution(G, thr, input_name):
+def get_degree_distribution(G, thr):
 	f = open(out_prfx + 'degree_dist.dat', 'w')
 	#f.write('node\tr(thre.)\tdeg_hist\tdeg_dist\n')
 	check_sum = 0.
@@ -290,7 +290,7 @@ def get_degree_distribution(G, thr, input_name):
 	f.close()
 
 # get clustering coefficient and degree of each node
-def get_node_cc_and_degree(G, thr, input_name):
+def get_node_cc_and_degree(G, thr):
 	f = open(out_prfx + 'cc_and_degree_node.dat','w')
 	#f.write('node\tr(thre.)\tnode_cc\n')
 	for node in G:
@@ -303,7 +303,7 @@ def get_node_cc_and_degree(G, thr, input_name):
 	f.close()
 
 # get number of connected components of each node
-def get_connected_components_nodes(G, thr, input_name):
+def get_connected_components_nodes(G, thr):
 	f = open(out_prfx + 'connected_compo_node.dat','w')
 	#f.write('node\tr(thre.)\tcount\n')
 	comps = nx.connected_component_subgraphs(G)
@@ -317,7 +317,7 @@ def get_connected_components_nodes(G, thr, input_name):
 	#f.write("\n")
 	f.close
 
-def get_small_worldness(G, thr, input_name):
+def get_small_worldness(G, thr):
 	f = open(out_prfx + 'small_worldness.dat','w')
 	g = open(out_prfx + 'cc_trans_ER.dat','w')
 	#g.write('r(thre.)\t\cc_A\tcc_ER\ttran_A\ttran_ER\n')
@@ -378,7 +378,7 @@ def get_small_worldness(G, thr, input_name):
 def binomialCoefficient(n, k):
     return factorial(n) // (factorial(k) * factorial(n - k))
   
-def get_motifs(G, thr, input_name):
+def get_motifs(G, thr):
 	f = open(out_prfx + 'motifs.dat', 'w')
 	tri_dict = nx.triangles(G)   #number of triangles around nodes in G
 	summe = 0
@@ -432,12 +432,12 @@ for i in range(0, 101):
 		continue
 		
 	get_characteristics(Random_G, thr, input_name)
-	get_single_network_measures(Random_G, thr, input_name)
-	get_assortativity(Random_G, thr, input_name)
-	get_local_efficiency(Random_G, thr, input_name)
-	get_global_effic(Random_G, thr, input_name)
-	get_degree_distribution(Random_G, thr, input_name)
-	get_node_cc_and_degree(Random_G, thr, input_name)
-	get_connected_components_nodes(Random_G, thr, input_name)
-	get_small_worldness(Random_G, thr, input_name)
-	get_motifs(Random_G, thr, input_name)
+	get_single_network_measures(Random_G, thr)
+	get_assortativity(Random_G, thr)
+	get_local_efficiency(Random_G, thr)
+	get_global_effic(Random_G, thr)
+	get_degree_distribution(Random_G, thr)
+	get_node_cc_and_degree(Random_G, thr)
+	get_connected_components_nodes(Random_G, thr)
+	get_small_worldness(Random_G, thr)
+	get_motifs(Random_G, thr)
