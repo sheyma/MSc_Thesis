@@ -44,71 +44,19 @@ def get_random_graph_c(matrix, r):
 	for j in range(0,len(keys)):
 		for i in range(0,(values[j])):
 			degree_seq.append(keys[j])
-		
-	#Random_Gc = nx.random_degree_sequence_graph(degree_seq,tries=100)
-	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())
 	
-	nodes = G.nodes()
-	deg_dis = degree_seq
-	nodis = dictionary = dict(zip(nodes, deg_dis))
-
-
-	while 1:
-		broken = 0
-		Random_Gc= nx.Graph()
-		Random_Gc.add_nodes_from(nodes)
-		for i in range(0,(len(nodes))):
-			cn = nodes[i]
-			cn_degree = Random_Gc.degree([cn]).values()[0]
-			cn_dst_degree = deg_dis[i]
-			
-			# we maintain a list of available nodes
-			avlbl_nodes = nodes[i+1:]
-			#print "try ", cn, avlbl_nodes
-			# we have to iterate over a _copy_ of the avlbl_nodes when we modify it
-			for node in list(avlbl_nodes):
-				if Random_Gc.degree([node]).values()[0] >= nodis[node]:
-					#print "remove full node", node
-					avlbl_nodes.remove(node)
-			#print "free neighbours", cn, avlbl_nodes
-			
-			# now solve the free degree of current node
-			for j in range( cn_degree, cn_dst_degree):
-				max_rnd = len(avlbl_nodes) - 1
-				if max_rnd < 0:
-					#print "FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK, can't solve"
-					broken = 1
-					break
-				wtf = rnd.randint(0, max_rnd)
-				addnode = avlbl_nodes[wtf]
-				avlbl_nodes.remove(addnode)
-				#print "connect", cn , addnode
-				Random_Gc.add_edge(cn , addnode)
-			if broken == 1:
-				break
-		if broken == 0:
-			break
-
-
-	for i in range(0,(len(nodes))):
-		print nodes[i], Random_Gc.degree([nodes[i]]).values()[0], deg_dis[i]
-
-
-	print "number of nodes in G ", nx.number_of_nodes(G)
-	print "number of edges in G ", nx.number_of_edges(G)
-	
-	
-	
-	print "number of nodes in Random_Gc ", nx.number_of_nodes(Random_Gc)
-	print "number of edges in Random_Gc ", nx.number_of_edges(Random_Gc)
-	
-	
+	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())	
+	Random_Gc = nx.random_degree_sequence_graph(degree_seq,tries=100)
 	pos = nx.shell_layout(Random_Gc)
 	nx.draw(Random_Gc, pos)
-
-	pl.show()
+	#pl.show()
+	
 	return Random_Gc
+	
+	
 
+
+	
 
 # a few characteristic measures of FULL network G with one threshold
 def get_characteristics(filename,R):
@@ -186,6 +134,34 @@ def get_single_network_measures(input_mtx):
 			f.write("%f\n" % (sum(values_2)/len(values_2)))
 		#7. shortest pathway
 	f.close()
+
+def get_assortativity(input_mtx, degrees=None):
+	R = 0
+	f = open(input_mtx[:-4]+'_Rc_assortativity.dat','w')
+	for i in range(0,101):
+		R = float(i)/100
+		print R
+		Random_Gc = get_random_graph_c(input_mtx,R)
+		degrees = Random_Gc.degree()
+		m = float(nx.number_of_edges(Random_Gc))
+		num1, num2, den1 = 0, 0, 0
+		for source, target in Random_Gc.edges():
+			
+			num1 += degrees[source] * degrees[target]
+			num2 += degrees[source] + degrees[target]
+			den1 += degrees[source] **2 + degrees[target] **2
+		if m!=0:
+			num1 /= m
+			den1 /= 2*m
+			num2 = (num2 / (2*m)) ** 2
+			#assort_coeff_1 = nx.degree_assortativity_coefficient(G)
+			#print 'Assortativity : ', assort_coeff_1 
+			if ((den1-num2)!=0):
+				assort_coeff = (num1 - num2) / (den1 - num2)
+				f.write("%f\t%f\n" % (R,assort_coeff))
+			#print "Assortativity manual :", assort_coeff
+	f.close()
+
 
 # get local efficiency for full network and single nodes separately
 def get_local_efficiency(input_mtx):
@@ -408,16 +384,16 @@ if __name__ == '__main__':
   usage = 'Usage: %s correlation_matrix threshold' % sys.argv[0]
   try:
     input_name = sys.argv[1]
-    input_threshold = sys.argv[2]
+    #input_threshold = sys.argv[2]
   except:
     print usage; sys.exit(1)
 
 ###manual choice of the threshold value
-threshold = float(input_threshold)
-get_random_graph_c(input_name, threshold)
+#threshold = float(input_threshold)
+#get_random_graph_c(input_name, threshold)
 #get_characteristics(input_name, threshold)
-
 #get_single_network_measures(input_name)
+get_assortativity(input_name)
 #get_local_efficiency(input_name)
 #get_global_effic(input_name)
 #get_degree_distribution(input_name)
