@@ -403,13 +403,13 @@ def get_motifs(Random_Gc, thr, input_name):
 
 
 if __name__ == '__main__':
-  
-  usage = 'Usage: %s correlation_matrix threshold' % sys.argv[0]
-  try:
-    input_name = sys.argv[1]
-    #input_threshold = sys.argv[2]
-  except:
-    print usage; sys.exit(1)
+	usage = 'Usage: %s correlation_matrix threshold' % sys.argv[0]
+	try:
+		input_name = sys.argv[1]
+		#input_threshold = sys.argv[2]
+	except:
+		print usage
+		sys.exit(1)
 
 for i in range(0, 101):
 	thr = float(i) / 100.0
