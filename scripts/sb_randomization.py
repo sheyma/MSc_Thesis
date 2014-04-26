@@ -421,6 +421,7 @@ random_graph_methods = {
 	"d" : get_random_graph_d,
 }
 
+# global variable contains the prefix used for output files
 out_prfx = input_name[:-4]+'_R'+method+'_'
 
 # remove old out files if exist
@@ -438,7 +439,7 @@ for i in range(0, 101):
 		print "couldn't find a random graph"
 		continue
 		
-	get_characteristics(Random_G, thr, input_name)
+	#get_characteristics(Random_G, thr, input_name)
 	get_single_network_measures(Random_G, thr)
 	get_assortativity(Random_G, thr)
 	get_local_efficiency(Random_G, thr)
