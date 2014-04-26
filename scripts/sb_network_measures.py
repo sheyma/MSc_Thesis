@@ -119,7 +119,35 @@ def get_single_network_measures(input_mtx):
 
 	f.close()
 
-
+# assortativity coefficient of network, Newman 2002
+def get_assortativity(input_mtx, degrees=None):
+	R = 0
+	f = open(input_mtx[:-4]+'_assortativity.dat','w')
+	for i in  range(0,100): #range(0,101):
+		R = float(i)/100
+		G = get_graph(input_mtx,R)
+		
+		degrees = G.degree()
+		m = float(nx.number_of_edges(G))
+		num1, num2, den1 = 0, 0, 0
+		for source, target in G.edges():
+			
+			num1 += degrees[source] * degrees[target]
+			num2 += degrees[source] + degrees[target]
+			den1 += degrees[source] **2 + degrees[target] **2
+		if m!=0:
+			num1 /= m
+			den1 /= 2*m
+			num2 = (num2 / (2*m)) ** 2
+			#assort_coeff_1 = nx.degree_assortativity_coefficient(G)
+			#print 'Assortativity : ', assort_coeff_1 
+			if ((den1-num2)!=0):
+				assort_coeff = (num1 - num2) / (den1 - num2)
+				f.write("%f\t%f\n" % (R,assort_coeff))
+			#print "Assortativity manual :", assort_coeff
+	f.close()
+	
+	
 # get local efficiency for full network and single nodes separately
 def get_local_efficiency(input_mtx):
 	R = 0
@@ -349,11 +377,12 @@ if __name__ == '__main__':
 #get_print_adjacency_matrix(network)
 #get_export_adjacency_matrix(network, input_name, threshold)
 #get_characteristics(network, input_name, threshold)
-get_single_network_measures(input_name)
-get_local_efficiency(input_name)
-get_global_effic(input_name)
-get_degree_distribution(input_name)
-get_node_cc_and_degree(input_name)  
-get_connected_components_nodes(input_name)
-get_small_worldness(input_name)	
-get_motifs(input_name)	
+get_assortativity(input_name)
+#get_single_network_measures(input_name)
+#get_local_efficiency(input_name)
+#get_global_effic(input_name)
+#get_degree_distribution(input_name)
+#get_node_cc_and_degree(input_name)  
+#get_connected_components_nodes(input_name)
+#get_small_worldness(input_name)	
+#get_motifs(input_name)	
