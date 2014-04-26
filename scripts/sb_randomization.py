@@ -11,6 +11,8 @@ from math import factorial
 import matplotlib.pyplot as pl
 import random as rnd
 import sys  
+import glob
+import os
 
 # create a random network with method a
 def get_random_graph_a(matrix, r):
@@ -159,7 +161,7 @@ def get_characteristics(G, thr, input_name):
 # get number of connected components of full network for dif.thre.val.
 # get shortest pathway of network
 def get_single_network_measures(G, thr):
-	f = open(out_prfx + 'single_network_measures.dat','w')
+	f = open(out_prfx + 'single_network_measures.dat', 'a')
 	N = nx.number_of_nodes(G)
 	L = nx.number_of_edges(G)
 	D = nx.density(G)
@@ -190,7 +192,7 @@ def get_single_network_measures(G, thr):
 	f.close()
 
 def get_assortativity(G, thr):
-	f = open(out_prfx + 'assortativity.dat','w')
+	f = open(out_prfx + 'assortativity.dat', 'a')
 	
 	print "get_assortativity", thr
 	degrees = G.degree()
@@ -216,8 +218,8 @@ def get_assortativity(G, thr):
 
 # get local efficiency for full network and single nodes separately
 def get_local_efficiency(G, thr):
-	f = open(out_prfx + 'local_efficency_ave.dat','w')
-	g = open(out_prfx + 'local_efficency_node.dat','w')
+	f = open(out_prfx + 'local_efficency_ave.dat', 'a')
+	g = open(out_prfx + 'local_efficency_node.dat', 'a')
 	#g.write('node\tr(thre.)\tlocal_eff')
 	local_effic = 0
 	for node_i in G:
@@ -243,8 +245,8 @@ def get_local_efficiency(G, thr):
 
 # get global efficiency for full network and single nodes separately
 def get_global_effic(G, thr):
-	f = open(out_prfx + 'global_efficiency_ave.dat','w')
-	g = open(out_prfx + 'global_efficiency_node.dat','w')
+	f = open(out_prfx + 'global_efficiency_ave.dat', 'a')
+	g = open(out_prfx + 'global_efficiency_node.dat', 'a')
 	global_eff = 0.
 	for node_i in G:
 		sum_inverse_dist = 0.
@@ -265,7 +267,7 @@ def get_global_effic(G, thr):
 
 # get degree distribution P(k)
 def get_degree_distribution(G, thr):
-	f = open(out_prfx + 'degree_dist.dat', 'w')
+	f = open(out_prfx + 'degree_dist.dat', 'a')
 	#f.write('node\tr(thre.)\tdeg_hist\tdeg_dist\n')
 	check_sum = 0.
 	degree_hist = {}
@@ -291,7 +293,7 @@ def get_degree_distribution(G, thr):
 
 # get clustering coefficient and degree of each node
 def get_node_cc_and_degree(G, thr):
-	f = open(out_prfx + 'cc_and_degree_node.dat','w')
+	f = open(out_prfx + 'cc_and_degree_node.dat', 'a')
 	#f.write('node\tr(thre.)\tnode_cc\n')
 	for node in G:
 		cc_node = nx.clustering(G,node)
@@ -304,7 +306,7 @@ def get_node_cc_and_degree(G, thr):
 
 # get number of connected components of each node
 def get_connected_components_nodes(G, thr):
-	f = open(out_prfx + 'connected_compo_node.dat','w')
+	f = open(out_prfx + 'connected_compo_node.dat', 'a')
 	#f.write('node\tr(thre.)\tcount\n')
 	comps = nx.connected_component_subgraphs(G)
 	count = 0
@@ -318,8 +320,8 @@ def get_connected_components_nodes(G, thr):
 	f.close
 
 def get_small_worldness(G, thr):
-	f = open(out_prfx + 'small_worldness.dat','w')
-	g = open(out_prfx + 'cc_trans_ER.dat','w')
+	f = open(out_prfx + 'small_worldness.dat', 'a')
+	g = open(out_prfx + 'cc_trans_ER.dat', 'a')
 	#g.write('r(thre.)\t\cc_A\tcc_ER\ttran_A\ttran_ER\n')
 	ER_graph = nx.erdos_renyi_graph(nx.number_of_nodes(G), nx.density(G))
 	# erdos-renyi, binomial random graph generator ...(N,D:density)	
@@ -379,7 +381,7 @@ def binomialCoefficient(n, k):
     return factorial(n) // (factorial(k) * factorial(n - k))
   
 def get_motifs(G, thr):
-	f = open(out_prfx + 'motifs.dat', 'w')
+	f = open(out_prfx + 'motifs.dat', 'a')
 	tri_dict = nx.triangles(G)   #number of triangles around nodes in G
 	summe = 0
 	for node in tri_dict:
@@ -420,6 +422,11 @@ random_graph_methods = {
 }
 
 out_prfx = input_name[:-4]+'_R'+method+'_'
+
+# remove old out files if exist
+filelist = glob.glob(out_prfx + "*.dat")
+for f in filelist:
+	os.remove(f)
 
 for i in range(0, 101):
 	thr = float(i) / 100.0
