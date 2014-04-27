@@ -421,6 +421,10 @@ random_graph_methods = {
 	"d" : get_random_graph_d,
 }
 
+if not method in random_graph_methods:
+	print "unknown method", method
+	sys.exit(1)
+
 # global variable contains the prefix used for output files
 out_prfx = input_name[:-4]+'_R'+method+'_'
 
@@ -438,7 +442,7 @@ for i in range(0, 101):
 	except:
 		print "couldn't find a random graph", method, sys.exc_info()[0]
 		continue
-		
+	
 	#get_characteristics(Random_G, thr, input_name)
 	get_single_network_measures(Random_G, thr)
 	get_assortativity(Random_G, thr)
