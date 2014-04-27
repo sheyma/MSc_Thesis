@@ -436,7 +436,7 @@ for i in range(0, 101):
 		#Random_G = nx.random_degree_sequence_graph([1,1],tries=100)
 		Random_G = random_graph_methods[method](input_name, thr)
 	except:
-		print "couldn't find a random graph"
+		print "couldn't find a random graph", method, sys.exc_info()[0]
 		continue
 		
 	#get_characteristics(Random_G, thr, input_name)
