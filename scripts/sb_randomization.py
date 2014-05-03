@@ -14,6 +14,11 @@ import sys
 import glob
 import os
 
+# increase recursion limit for our recursive random_graph function
+sys.setrecursionlimit(10000)
+# global debug variable
+deep = 0
+
 # create a random network with method a
 def get_random_graph_a(matrix, r):
   A = np.transpose(np.loadtxt(matrix, unpack=True))
@@ -117,6 +122,101 @@ def get_random_graph_d(input_mtx, r):
 		print "No swap possible for R=", float(r), "number of edges", L
 		return G
 
+
+def get_todo(G, nodis):
+	nodes = G.nodes()
+	#nodes.sort()
+	for n in nodes:
+		if G.degree([n]).values()[0] < nodis[n]:
+			return n
+	return (-324)
+
+def available_nodes(G, nodis, cn, avl):
+	for n in nx.non_neighbors(G, cn):
+		if G.degree([n]).values()[0] < nodis[n]:
+			avl.append(n)
+	avl.sort()
+	return len(avl)
+
+## return -1 not solvable
+##         0 ready
+def random_graph(G, nodis):
+	global deep
+	deep += 1
+	cn = get_todo(G, nodis)
+	if cn == (-324):
+		deep -= 1
+		return 0
+	
+	avl = list()
+	ret = available_nodes(G, nodis, cn, avl)
+	#print "go", cn, deep, ret
+	if ret <= 0:
+		deep -= 1
+		return -1
+
+	rnd.shuffle(avl)
+	for n in avl:
+		G.add_edge(cn, n)
+		ret = random_graph(G, nodis)
+		if ret >= 0:
+			deep -= 1
+			return 0
+		G.remove_edge(cn, n)
+	deep -= 1
+	return -1
+
+# create a random network with method c
+def get_random_graph_e(matrix, r):
+	A = np.transpose(np.loadtxt(matrix, unpack=True))
+	B = np.zeros((len(A),len(A)))
+	global deep
+
+	for row in range(len(A)):
+		for item in range(len(A)):
+		  if row != item:
+			if A[row,item] >= r:
+			  B[row,item] = 1
+			else:
+			  B[row,item] = 0
+		#print B	   								   # print binarized matrix
+	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
+	# G is now non-directed graph
+	degree_hist = {}
+	
+	print "L", nx.number_of_edges(G)
+	
+	
+	for node in G:
+		if G.degree(node) not in degree_hist: # degree dist part
+			degree_hist[G.degree(node)] =1
+		else:
+			degree_hist[G.degree(node)] +=1
+	keys = degree_hist.keys()
+	values = degree_hist.values()
+	degree_seq = []
+	
+	for j in range(0,len(keys)):
+		for i in range(0,(values[j])):
+			degree_seq.append(keys[j])
+	
+	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())	
+	
+	nodes = G.nodes()
+	G_rand = nx.Graph()
+	
+	G_rand.add_nodes_from(nodes)
+	nodis = dict(zip(nodes, degree_seq))
+	
+	print "bla", len(G_rand.nodes()), len(G_rand.edges())
+	deep = 0
+	ret = random_graph(G_rand, nodis)
+	print "ret", ret, len(G_rand.nodes()), len(G_rand.edges())
+	#pos = nx.shell_layout(Random_Gc)
+	#nx.draw(Random_Gc, pos)
+	#pl.show()
+	
+	return G_rand
 
 
 # a few characteristic measures of FULL network G with one threshold
@@ -419,6 +519,7 @@ random_graph_methods = {
 	"b" : get_random_graph_b,
 	"c" : get_random_graph_c,
 	"d" : get_random_graph_d,
+	"e" : get_random_graph_e,
 }
 
 if not method in random_graph_methods:
