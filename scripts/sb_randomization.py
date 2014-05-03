@@ -19,19 +19,22 @@ sys.setrecursionlimit(10000)
 # global debug variable
 deep = 0
 
-# create a random network with method a
-def get_random_graph_a(matrix, r):
-  A = np.transpose(np.loadtxt(matrix, unpack=True))
-  B = np.zeros((len(A),len(A)))
+def load_matrix(file):
+	return np.transpose(np.loadtxt(file, unpack=True))
 
-  for row in range(len(A)):
-    for item in range(len(A)):
-      if row != item:
-        if A[row,item] >= r:
-          B[row,item] = 1
-        else:
-          B[row,item] = 0
-  #print B	   										 # print thresholded new matrix
+def threshold_matrix(A, r):
+	B = np.zeros((len(A),len(A)))
+	for row in range(len(A)):
+		for item in range(len(A)):
+			if row != item:
+				if A[row,item] >= r:
+					B[row,item] = 1
+				else:
+					B[row,item] = 0
+	return B
+
+# create a random network with method a
+def get_random_graph_a(B):
   G=nx.from_numpy_matrix(B,create_using=nx.Graph())
   L = nx.number_of_edges(G) 						 # total number of links: L
   N = nx.number_of_nodes(G) 						 # total number of nodes : N
@@ -39,18 +42,7 @@ def get_random_graph_a(matrix, r):
   return Random_Ga
 
 # 1. create a random network with method b
-def get_random_graph_b(matrix, r):
-  A = np.transpose(np.loadtxt(matrix, unpack=True))
-  B = np.zeros((len(A),len(A)))
-
-  for row in range(len(A)):
-    for item in range(len(A)):
-      if row != item:
-        if A[row,item] >= r:
-          B[row,item] = 1
-        else:
-          B[row,item] = 0
-  #print B	   										 # print thresholded new matrix
+def get_random_graph_b(B):
   G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded matr.
   N = nx.number_of_nodes(G)							 # number of nodes in G	
   d = nx.density(G)									 # network density of G
@@ -58,18 +50,7 @@ def get_random_graph_b(matrix, r):
   return Random_Gb
 
 # create a random network with method c
-def get_random_graph_c(matrix, r):
-	A = np.transpose(np.loadtxt(matrix, unpack=True))
-	B = np.zeros((len(A),len(A)))
-
-	for row in range(len(A)):
-		for item in range(len(A)):
-		  if row != item:
-			if A[row,item] >= r:
-			  B[row,item] = 1
-			else:
-			  B[row,item] = 0
-		#print B	   								   # print binarized matrix
+def get_random_graph_c(B):
 	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
 	# G is now non-directed graph
 	degree_hist = {}
@@ -99,18 +80,7 @@ def get_random_graph_c(matrix, r):
 	return Random_Gc
 
 # create a random network with method d
-def get_random_graph_d(input_mtx, r):
-	A = np.transpose(np.loadtxt(input_mtx, unpack=True))
-	B = np.zeros((len(A),len(A)))
-
-	for row in range(len(A)):
-		for item in range(len(A)):
-			if row != item:
-				if A[row,item] >= r:
-					B[row,item] = 1
-				else:
-					B[row,item] = 0
-
+def get_random_graph_d(B):
 	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  #undirected graph G
 	L = nx.number_of_edges(G)	
 	trial = L*(L-1.)/2
@@ -119,7 +89,7 @@ def get_random_graph_d(input_mtx, r):
 		Random_Gd = nx.double_edge_swap(G,nswap=swap_num,max_tries=trial)
 		return Random_Gd
 	else:
-		print "No swap possible for R=", float(r), "number of edges", L
+		print "No swap possible for number of edges", L
 		return G
 
 
@@ -167,19 +137,8 @@ def random_graph(G, nodis):
 	return -1
 
 # create a random network with method c
-def get_random_graph_e(matrix, r):
-	A = np.transpose(np.loadtxt(matrix, unpack=True))
-	B = np.zeros((len(A),len(A)))
+def get_random_graph_e(B):
 	global deep
-
-	for row in range(len(A)):
-		for item in range(len(A)):
-		  if row != item:
-			if A[row,item] >= r:
-			  B[row,item] = 1
-			else:
-			  B[row,item] = 0
-		#print B	   								   # print binarized matrix
 	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
 	# G is now non-directed graph
 	degree_hist = {}
@@ -534,12 +493,17 @@ filelist = glob.glob(out_prfx + "*.dat")
 for f in filelist:
 	os.remove(f)
 
+data_matrix = load_matrix(input_name)
+
 for i in range(0, 101):
 	thr = float(i) / 100.0
 	print "loop", i, thr
+	
+	A = threshold_matrix(data_matrix, thr)
+	
 	try:
 		#Random_G = nx.random_degree_sequence_graph([1,1],tries=100)
-		Random_G = random_graph_methods[method](input_name, thr)
+		Random_G = random_graph_methods[method](A)
 	except:
 		print "couldn't find a random graph", method, sys.exc_info()[0]
 		continue
