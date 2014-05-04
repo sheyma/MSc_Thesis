@@ -35,26 +35,24 @@ def threshold_matrix(A, r):
 
 # create a random network with method a
 def get_random_graph_a(B):
-  G = nx.from_numpy_matrix(B)
-  L = nx.number_of_edges(G) 						 # total number of links: L
-  N = nx.number_of_nodes(G) 						 # total number of nodes : N
-  Random_Ga = nx.gnm_random_graph(N,L)				 # random graph
-  return Random_Ga
+	G = nx.from_numpy_matrix(B)
+	L = nx.number_of_edges(G)
+	N = nx.number_of_nodes(G)
+	RG = nx.gnm_random_graph(N, L)
+	return RG
 
-# 1. create a random network with method b
+# create a random network with method b
 def get_random_graph_b(B):
-  G = nx.from_numpy_matrix(B)
-  N = nx.number_of_nodes(G)							 # number of nodes in G	
-  d = nx.density(G)									 # network density of G
-  Random_Gb = nx.erdos_renyi_graph(N,d)	 # random graph
-  return Random_Gb
+	G = nx.from_numpy_matrix(B)
+	N = nx.number_of_nodes(G)
+	d = nx.density(G)
+	RG = nx.erdos_renyi_graph(N,d)
+	return RG
 
 # create a random network with method c
 def get_random_graph_c(B):
 	G = nx.from_numpy_matrix(B)
-	# G is now non-directed graph
 	degree_hist = {}
-	
 	
 	for node in G:
 		if G.degree(node) not in degree_hist: # degree dist part
@@ -71,13 +69,13 @@ def get_random_graph_c(B):
 	
 	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())	
 	
-	Random_Gc = nx.random_degree_sequence_graph(degree_seq,tries=100)
+	RG = nx.random_degree_sequence_graph(degree_seq,tries=100)
 	
 	#pos = nx.shell_layout(Random_Gc)
 	#nx.draw(Random_Gc, pos)
 	#pl.show()
 	
-	return Random_Gc
+	return RG
 
 # create a random network with method d
 def get_random_graph_d(B):
@@ -91,7 +89,6 @@ def get_random_graph_d(B):
 	else:
 		print "No swap possible for number of edges", L
 		return G
-
 
 def get_todo(G, nodis):
 	nodes = G.nodes()
@@ -140,7 +137,6 @@ def random_graph(G, nodis):
 def get_random_graph_e(B):
 	global deep
 	G = nx.from_numpy_matrix(B)
-	# G is now non-directed graph
 	degree_hist = {}
 	
 	print "L", nx.number_of_edges(G)
@@ -162,20 +158,20 @@ def get_random_graph_e(B):
 	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())	
 	
 	nodes = G.nodes()
-	G_rand = nx.Graph()
+	GR = nx.Graph()
 	
-	G_rand.add_nodes_from(nodes)
+	GR.add_nodes_from(nodes)
 	nodis = dict(zip(nodes, degree_seq))
 	
-	print "bla", len(G_rand.nodes()), len(G_rand.edges())
+	print "bla", len(GR.nodes()), len(GR.edges())
 	deep = 0
-	ret = random_graph(G_rand, nodis)
-	print "ret", ret, len(G_rand.nodes()), len(G_rand.edges())
+	ret = random_graph(GR, nodis)
+	print "ret", ret, len(GR.nodes()), len(GR.edges())
 	#pos = nx.shell_layout(Random_Gc)
 	#nx.draw(Random_Gc, pos)
 	#pl.show()
 	
-	return G_rand
+	return GR
 
 
 # a few characteristic measures of FULL network G with one threshold
