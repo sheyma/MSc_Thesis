@@ -35,7 +35,7 @@ def threshold_matrix(A, r):
 
 # create a random network with method a
 def get_random_graph_a(B):
-  G=nx.from_numpy_matrix(B,create_using=nx.Graph())
+  G = nx.from_numpy_matrix(B)
   L = nx.number_of_edges(G) 						 # total number of links: L
   N = nx.number_of_nodes(G) 						 # total number of nodes : N
   Random_Ga = nx.gnm_random_graph(N,L)				 # random graph
@@ -43,7 +43,7 @@ def get_random_graph_a(B):
 
 # 1. create a random network with method b
 def get_random_graph_b(B):
-  G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded matr.
+  G = nx.from_numpy_matrix(B)
   N = nx.number_of_nodes(G)							 # number of nodes in G	
   d = nx.density(G)									 # network density of G
   Random_Gb = nx.erdos_renyi_graph(N,d)	 # random graph
@@ -51,7 +51,7 @@ def get_random_graph_b(B):
 
 # create a random network with method c
 def get_random_graph_c(B):
-	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
+	G = nx.from_numpy_matrix(B)
 	# G is now non-directed graph
 	degree_hist = {}
 	
@@ -81,7 +81,7 @@ def get_random_graph_c(B):
 
 # create a random network with method d
 def get_random_graph_d(B):
-	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  #undirected graph G
+	G = nx.from_numpy_matrix(B)
 	L = nx.number_of_edges(G)	
 	trial = L*(L-1.)/2
 	swap_num = L;
@@ -139,7 +139,7 @@ def random_graph(G, nodis):
 # create a random network with method c
 def get_random_graph_e(B):
 	global deep
-	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
+	G = nx.from_numpy_matrix(B)
 	# G is now non-directed graph
 	degree_hist = {}
 	
