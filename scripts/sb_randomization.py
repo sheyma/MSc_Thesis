@@ -57,25 +57,8 @@ def get_random_graph_b(B):
 # create a random network with method c
 def get_random_graph_c(B):
 	G = nx.from_numpy_matrix(B)
-	degree_hist = {}
-	
-	for node in G:
-		if G.degree(node) not in degree_hist: # degree dist part
-			degree_hist[G.degree(node)] =1
-		else:
-			degree_hist[G.degree(node)] +=1
-	keys = degree_hist.keys()
-	values = degree_hist.values()
-	degree_seq = []
-	
-	for j in range(0,len(keys)):
-		for i in range(0,(values[j])):
-			degree_seq.append(keys[j])
-	
-	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())	
-	
+	degree_seq = nx.degree(G).values()
 	RG = nx.random_degree_sequence_graph(degree_seq,tries=100)
-	
 	return RG
 
 # create a random network with method d
@@ -138,25 +121,7 @@ def random_graph(G, nodis):
 def get_random_graph_e(B):
 	global deep
 	G = nx.from_numpy_matrix(B)
-	degree_hist = {}
-	
-	print "L", nx.number_of_edges(G)
-	
-	
-	for node in G:
-		if G.degree(node) not in degree_hist: # degree dist part
-			degree_hist[G.degree(node)] =1
-		else:
-			degree_hist[G.degree(node)] +=1
-	keys = degree_hist.keys()
-	values = degree_hist.values()
-	degree_seq = []
-	
-	for j in range(0,len(keys)):
-		for i in range(0,(values[j])):
-			degree_seq.append(keys[j])
-	
-	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())	
+	degree_seq = nx.degree(G).values()
 	
 	nodes = G.nodes()
 	GR = nx.Graph()
