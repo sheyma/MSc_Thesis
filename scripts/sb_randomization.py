@@ -20,17 +20,15 @@ sys.setrecursionlimit(10000)
 deep = 0
 
 def load_matrix(file):
-	return np.transpose(np.loadtxt(file, unpack=True))
+	A = np.loadtxt(file, unpack=True)
+	return np.transpose(A)
 
 def threshold_matrix(A, r):
-	B = np.zeros((len(A),len(A)))
-	for row in range(len(A)):
-		for item in range(len(A)):
-			if row != item:
-				if A[row,item] >= r:
-					B[row,item] = 1
-				else:
-					B[row,item] = 0
+	B = np.zeros(A.shape)
+	for row in range(A.shape[0]):
+		for col in range(A.shape[1]):
+			if row != col and A[row, col] >= r:
+				B[row, col] = 1
 	return B
 
 def plot_graph(G):
