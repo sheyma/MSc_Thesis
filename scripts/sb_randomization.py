@@ -21,7 +21,11 @@ deep = 0
 
 def load_matrix(file):
 	A = np.loadtxt(file, unpack=True)
-	return np.transpose(A)
+	AT = np.transpose(A)
+	if A.shape[0] != A.shape[1] or not (A == AT).all():
+		print "error: loaded matrix is not symmetric"
+		raise ValueError
+	return AT
 
 def threshold_matrix(A, r):
 	B = np.zeros(A.shape)
