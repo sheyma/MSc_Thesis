@@ -33,6 +33,11 @@ def threshold_matrix(A, r):
 					B[row,item] = 0
 	return B
 
+def plot_graph(G):
+	pos = nx.shell_layout(G)
+	nx.draw(G, pos)
+	#pl.show()
+
 # create a random network with method a
 def get_random_graph_a(B):
 	G = nx.from_numpy_matrix(B)
@@ -70,10 +75,6 @@ def get_random_graph_c(B):
 	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())	
 	
 	RG = nx.random_degree_sequence_graph(degree_seq,tries=100)
-	
-	#pos = nx.shell_layout(Random_Gc)
-	#nx.draw(Random_Gc, pos)
-	#pl.show()
 	
 	return RG
 
@@ -167,9 +168,6 @@ def get_random_graph_e(B):
 	deep = 0
 	ret = random_graph(GR, nodis)
 	print "ret", ret, len(GR.nodes()), len(GR.edges())
-	#pos = nx.shell_layout(Random_Gc)
-	#nx.draw(Random_Gc, pos)
-	#pl.show()
 	
 	return GR
 
@@ -504,6 +502,7 @@ for i in range(0, 101):
 		print "couldn't find a random graph", method, sys.exc_info()[0]
 		continue
 	
+	#plot_graph(Random_G)
 	#get_characteristics(Random_G, thr, input_name)
 	get_single_network_measures(Random_G, thr)
 	get_assortativity(Random_G, thr)
