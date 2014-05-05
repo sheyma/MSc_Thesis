@@ -18,208 +18,179 @@
 %                                of each node, 4. degree of node
 
 % Network Density
-random_G = ('abcd');
-color='gbyr';
-test_network = load('A_aal_single_network_measures.dat');
+random_G = ('0abfdc');
+color='kmbcyr'; type = '-*o+*o';
 input_name = 'A_aal_single_network_measures.dat';
 fig = figure(1);
 hold on
-set(gca,'FontSize',30)
-plot(test_network(:,1),test_network(:,3),'k','LineWidth',5)
+set(gca,'FontSize',25)
 for i =1:length(random_G)
     a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
     A=load(a);
-    if color(i)=='g'
-        plot(A(:,1),A(:,3),strcat(color(i),'^'),'LineWidth',6) 
-    else
-        plot(A(:,1),A(:,3),strcat(color(i),'o'),'LineWidth',5)
-    end
+    plot(A(:,1),A(:,3),strcat(color(i),type(i)),'LineWidth',3)   
 end
-legend('Test Network', 'Ra','Rb','Rc','Rd')
+legend('Test Network', 'Ra','Rb','Rf','Rd','Rc')
 legend('boxoff')
-xlabel('Threshold [r]','FontSize',35)
-ylabel('Network Density','FontSize',35)
+set(legend,'FontSize',14)
+xlabel('Threshold [r]')
+ylabel('Network Density')
 hold off
-set(fig, 'units', 'inches','position',[10 10 30 20]) 
+set(fig, 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Network_Density.eps','eps2c')
-
-
+%saveas(gcf,'Network_Density.eps','eps2c')
 
 % Network Clustering Coefficient
 figure(2);
 hold on
-set(gca,'FontSize',30)
-plot(test_network(:,1),test_network(:,4),'k','LineWidth',5)
+set(gca,'FontSize',25)
 for i =1:length(random_G)
     a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
     A=load(a);
-    plot(A(:,1),A(:,4),strcat(color(i),'o'),'LineWidth',5)    
+    plot(A(:,1),A(:,4),strcat(color(i),type(i)),'LineWidth',3)    
 end
-legend('Test Network', 'Ra','Rb','Rc','Rd')
+legend('Test Network', 'Ra','Rb','Rf','Rd','Rc') 
 legend('boxoff')
-xlabel('Threshold [r]','FontSize',35)
-ylabel('Clustering Coefficient','FontSize',35)
+set(legend,'FontSize',14)
+xlabel('Threshold [r]')
+ylabel('Clustering Coefficient')
 hold off
-set(figure(2), 'units', 'inches','position',[10 10 30 20]) 
+set(figure(2), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Clustering_Coefficient.eps','eps2c')
+%saveas(gcf,'Clustering_Coefficient.eps','eps2c')
 
 
 % Average degree of network
 figure(3);
 hold on
-set(gca,'FontSize',30)
-plot(test_network(:,1),test_network(:,5),'k','LineWidth',5)
+set(gca,'FontSize',25)
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
-    if color(i) == 'g'
-        plot(A(:,1),A(:,5),strcat(color(i),'^'),'LineWidth',6)  
-    else
-        plot(A(:,1),A(:,5),strcat(color(i),'o'),'LineWidth',5)
-    end        
+    plot(A(:,1),A(:,5),strcat(color(i),type(i)),'LineWidth',3)  
+    
+          
 end
-legend('Test Network', 'Ra','Rb','Rc','Rd')
+legend('Test Network', 'Ra','Rb','Rf','Rd','Rc') 
 legend('boxoff')
-xlabel('Threshold [r]','FontSize',35)
-ylabel('Average Degree, <k>','FontSize',35)
+set(legend,'FontSize',14)
+xlabel('Threshold [r]')
+ylabel('Average Degree, <k>')
 hold off
-set(figure(3), 'units', 'inches','position',[10 10 30 20]) 
+set(figure(3), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Degree_Average.eps','eps2c')
+%saveas(gcf,'Degree_Average.eps','eps2c')
  
 % Number of Connected Components
 figure(4);
 hold on
-set(gca,'FontSize',30)
-plot(test_network(:,1),test_network(:,6),'k','LineWidth',5)
+set(gca,'FontSize',25)
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
-    if color(i) == 'g'
-        plot(A(:,1),A(:,6),strcat(color(i),'^'),'LineWidth',6)  
-    else
-        plot(A(:,1),A(:,6),strcat(color(i),'o'),'LineWidth',5)
-    end    
+    plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
 end
-legend('Test Network', 'Ra','Rb','Rc','Rd','Location','NorthWest')
+legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]','FontSize',35)
-ylabel('Average Connected Components','FontSize',35)
+xlabel('Threshold [r]')
+ylabel('Average Connected Components')
 hold off
-set(figure(4), 'units', 'inches','position',[10 10 30 20]) 
+set(figure(4), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Connected_Components_Average.eps','eps2c')
+%saveas(gcf,'Connected_Components_Average.eps','eps2c')
 
 % Shortest Pathway
 figure(5);
 hold on
-set(gca,'FontSize',30)
-plot(test_network(:,1),test_network(:,7),'k','LineWidth',5)
+set(gca,'FontSize',25)
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
-    if color(i) == 'g'
-        plot(A(:,1),A(:,7),strcat(color(i),'^'),'LineWidth',6)  
-    else
-        plot(A(:,1),A(:,7),strcat(color(i),'o'),'LineWidth',5)
-    end   
+    plot(A(:,1),A(:,7),strcat(color(i),type(i)),'LineWidth',3) 
 end
-legend('Test Network', 'Ra','Rb','Rc','Rd')
+legend('Test Network', 'Ra','Rb','Rf','Rc','Location','NorthWest')
+set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]','FontSize',35)
-ylabel('Shortest Pathway','FontSize',35)
+xlabel('Threshold [r]')
+ylabel('Shortest Pathway')
 hold off
-set(figure(5), 'units', 'inches','position',[10 10 30 20]) 
+set(figure(5), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Shortest_Pathway.eps','eps2c')
+%saveas(gcf,'Shortest_Pathway.eps','eps2c')
  
 % Small Worldness
 input_name_2 = 'A_aal_small_worldness.dat';
-SM = load('A_aal_small_worldness.dat');
 figure(6);
-set(gca,'FontSize',30)
-plot(SM(:,1),SM(:,8),'k','LineWidth',5)
+set(gca,'FontSize',25)
 hold on
 for i = 1:length(random_G)
     A =load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
-    if color(i) == 'g'
-        plot(A(:,1),A(:,8),strcat(color(i),'^'),'LineWidth',6)  
-    else
-        plot(A(:,1),A(:,8),strcat(color(i),'o'),'LineWidth',5)
-    end 
+    plot(A(:,1),A(:,8),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('Test Network', 'Ra','Rb','Rc','Rd')
+legend('Test Network', 'Ra','Rb','Rf','Rc','Location','NorthWest')
+set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]','FontSize',35)
-ylabel('Small Worldness','FontSize',35)
+xlabel('Threshold [r]')
+ylabel('Small Worldness')
 hold off
-set(figure(6), 'units', 'inches','position',[10 10 30 20]) 
+set(figure(6), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Small_Worldness.eps','eps2c')
+%saveas(gcf,'Small_Worldness.eps','eps2c')
 
 % Transitivity
 figure(7);
-set(gca,'FontSize',30)
-plot(SM(:,1),SM(:,6),'k','LineWidth',5)
+set(gca,'FontSize',25)
 hold on
 for i = 1:length(random_G)
     a = strcat(input_name_2(1:2),'R',random_G(i),input_name_2(2:end));
     A = load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
-    plot(A(:,1),A(:,6),strcat(color(i),'o'),'LineWidth',5)
+    plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('Test Network', 'Ra','Rb','Rc','Rd')
+legend('Test Network', 'Ra','Rb','Rf','Rc','Location','SouthWest')
+set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]','FontSize',35)
-ylabel('Transitivity','FontSize',35)
+xlabel('Threshold [r]')
+ylabel('Transitivity')
 hold off
-set(figure(7), 'units', 'inches','position',[10 10 30 20]) 
+set(figure(7), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Transitivity.eps','eps2c')
+%saveas(gcf,'Transitivity.eps','eps2c')
 
 % Global Efficiency of Network
 input_name_3 = 'A_aal_global_efficiency_ave.dat';
-GE = load('A_aal_global_efficiency_ave.dat');
 figure(8);
-set(gca,'FontSize',30)
-plot(GE(:,1),GE(:,2),'k','LineWidth',5)
+set(gca,'FontSize',25)
 hold on
 for i = 1:length(random_G)
     a = strcat(input_name_3(1:6),'R',random_G(i),input_name_3(6:end));
     A = load(a);
-    if color(i) == 'g'
-        plot(A(:,1),A(:,2),strcat(color(i),'^'),'LineWidth',6)  
-    else
-        plot(A(:,1),A(:,2),strcat(color(i),'o'),'LineWidth',5)
-    end 
+    plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('Test Network', 'Ra','Rb','Rc','Rd')
+legend('Test Network', 'Ra','Rb','Rf','Rc','Location','SouthWest')
+set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]','FontSize',35)
-ylabel('Average Global Efficiency','FontSize',35)
+xlabel('Threshold [r]')
+ylabel('Average Global Efficiency')
 hold off
-set(figure(8), 'units', 'inches','position',[10 10 30 20]) 
+set(figure(8), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Global_Efficiency_Average.eps','eps2c')
+%saveas(gcf,'Global_Efficiency_Average.eps','eps2c')
 
 % Local efficiency of Network
 input_name_4 = 'A_aal_local_efficiency_ave.dat';
-LE = load('A_aal_local_efficency_ave.dat');
 figure(9);
-set(gca,'FontSize',30)
-plot(LE(:,1),LE(:,2),'k','LineWidth',5)
+set(gca,'FontSize',25)
 hold on
 for i = 1:length(random_G)
-   
     A =load(strcat(input_name_4(1:6),'R',random_G(i),'_local_efficency_ave.dat'));
-    plot(A(:,1),A(:,2),strcat(color(i),'o'),'LineWidth',5)
+    plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('Test Network', 'Ra', 'Rb','Rc','Rd')
+legend('Test Network', 'Ra','Rb','Rf','Rc','Location','SouthWest')
+set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]','FontSize',35)
-ylabel('Local Efficiency','FontSize',35)
+xlabel('Threshold [r]')
+ylabel('Local Efficiency')
 hold off
-set(figure(9), 'units', 'inches','position',[10 10 30 20]) 
+set(figure(9), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Local_Efficiency_Average.eps','eps2c')
+%saveas(gcf,'Local_Efficiency_Average.eps','eps2c')
 
 % DISTRIBUTIONS
 % Global efficiency of nodes
