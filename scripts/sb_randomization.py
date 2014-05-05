@@ -70,7 +70,8 @@ def get_random_graph_c(B):
 
 # create a random network with method f
 # networkx.generators.degree_seq.havel_hakimi_graph : 
-# random graph with given degree sequence, check assortativity!
+# random graph with given degree sequence, check assortativity:
+# connecting the node of highest degree to other nodes of highest degree
 def get_random_graph_f(B):
 	G = nx.from_numpy_matrix(B)
 	degree_seq = nx.degree(G).values()
@@ -453,6 +454,7 @@ if __name__ == '__main__':
 
 # assign the metdhod abbreviations to the methhods
 random_graph_methods = {
+	"0" : threshold_matrix,
 	"a" : get_random_graph_a,
 	"b" : get_random_graph_b,
 	"c" : get_random_graph_c,
@@ -481,13 +483,17 @@ for i in range(0, 101):
 	
 	A = threshold_matrix(data_matrix, thr)
 	
-	try:
-		#Random_G = nx.random_degree_sequence_graph([1,1],tries=100)
-		Random_G = random_graph_methods[method](A)
-	except:
-		print "couldn't find a random graph", method, sys.exc_info()[0]
-		continue
-	
+	if method=='0':
+		Random_G = nx.from_numpy_matrix(A)
+	else:
+		
+		try:
+			#Random_G = nx.random_degree_sequence_graph([1,1],tries=100)
+			Random_G = random_graph_methods[method](A)
+		except:
+			print "couldn't find a random graph", method, sys.exc_info()[0]
+			continue
+		
 	#plot_graph(Random_G)
 	#get_characteristics(Random_G, thr, input_name)
 	get_single_network_measures(Random_G, thr)
