@@ -1,8 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-# Creating a random network by preserving the degree distribution of test network (e.g. A.txt)
-# use nx.configuration_model(degree_seq[integers]) == method c)
+# Creating a random network by different methhods
 
 import networkx as nx
 #from networkx.algorithms import bipartite
@@ -19,6 +18,7 @@ sys.setrecursionlimit(10000)
 # global debug variable
 deep = 0
 
+# check the loaded matrix if it it is symmetric
 def load_matrix(file):
 	A = np.loadtxt(file, unpack=True)
 	AT = np.transpose(A)
@@ -27,6 +27,7 @@ def load_matrix(file):
 		raise ValueError
 	return AT
 
+# create adjacency matrix, ones and zeros according to r
 def threshold_matrix(A, r):
 	B = np.zeros(A.shape)
 	for row in range(A.shape[0]):
@@ -40,7 +41,8 @@ def plot_graph(G):
 	nx.draw(G, pos)
 	#pl.show()
 
-# create a random network with method a
+# create a random network with method a:
+# networkx.gnm_random_graph : random graph with given N and L
 def get_random_graph_a(B):
 	G = nx.from_numpy_matrix(B)
 	L = nx.number_of_edges(G)
@@ -48,7 +50,8 @@ def get_random_graph_a(B):
 	RG = nx.gnm_random_graph(N, L)
 	return RG
 
-# create a random network with method b
+# create a random network with method b:
+# networkx.erdos_renyi_graph : random graph with given N and d
 def get_random_graph_b(B):
 	G = nx.from_numpy_matrix(B)
 	N = nx.number_of_nodes(G)
@@ -57,13 +60,25 @@ def get_random_graph_b(B):
 	return RG
 
 # create a random network with method c
+# networkx.random_degree_sequence_graph : 
+# random graph with given degree sequence
 def get_random_graph_c(B):
 	G = nx.from_numpy_matrix(B)
 	degree_seq = nx.degree(G).values()
 	RG = nx.random_degree_sequence_graph(degree_seq,tries=100)
 	return RG
 
-# create a random network with method d
+# create a random network with method f
+# networkx.generators.degree_seq.havel_hakimi_graph : 
+# random graph with given degree sequence, check assortativity!
+def get_random_graph_f(B):
+	G = nx.from_numpy_matrix(B)
+	degree_seq = nx.degree(G).values()
+	RG = nx.generators.degree_seq.havel_hakimi_graph(degree_seq)
+	return RG
+	
+# create a random network with method d:
+# networkx.double_edge_swap : random graph by swaping two edges 
 def get_random_graph_d(B):
 	G = nx.from_numpy_matrix(B)
 	L = nx.number_of_edges(G)	
@@ -119,7 +134,8 @@ def random_graph(G, nodis):
 	deep -= 1
 	return -1
 
-# create a random network with method c
+# create a random network with method e
+# manual random graph creator when degree sequence given
 def get_random_graph_e(B):
 	global deep
 	G = nx.from_numpy_matrix(B)
@@ -211,10 +227,11 @@ def get_single_network_measures(G, thr):
 	#7. shortest pathway
 	f.close()
 
+# assortativity coefficient of full network
 def get_assortativity(G, thr):
 	f = open(out_prfx + 'assortativity.dat', 'a')
 	
-	print "get_assortativity", thr
+	#print "get_assortativity", thr
 	degrees = G.degree()
 	m = float(nx.number_of_edges(G))
 	num1, num2, den1 = 0, 0, 0
@@ -227,12 +244,11 @@ def get_assortativity(G, thr):
 		num1 /= m
 		den1 /= 2*m
 		num2 = (num2 / (2*m)) ** 2
-		#assort_coeff_1 = nx.degree_assortativity_coefficient(G)
-		#print 'Assortativity : ', assort_coeff_1 
 		if ((den1-num2)!=0):
 			assort_coeff = (num1 - num2) / (den1 - num2)
 			f.write("%f\t%f\n" % (thr, assort_coeff))
-		#print "Assortativity manual :", assort_coeff
+		else:
+			assort_coeff = float('NaN')
 	f.close()
 
 
@@ -423,7 +439,8 @@ def get_motifs(G, thr):
 
 
 
-
+# method : corresponding randomization abbreviation
+# input_name : given data matrix
 if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
@@ -434,12 +451,14 @@ if __name__ == '__main__':
 		print usage
 		sys.exit(1)
 
+# assign the metdhod abbreviations to the methhods
 random_graph_methods = {
 	"a" : get_random_graph_a,
 	"b" : get_random_graph_b,
 	"c" : get_random_graph_c,
 	"d" : get_random_graph_d,
 	"e" : get_random_graph_e,
+	"f" : get_random_graph_f,
 }
 
 if not method in random_graph_methods:
