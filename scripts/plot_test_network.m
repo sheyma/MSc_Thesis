@@ -40,7 +40,7 @@ ylabel('Network Density')
 hold off
 set(fig, 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Network_Density.eps','eps2c')
+saveas(gcf,'Network_Density.eps','eps2c')
 
 % Network Clustering Coefficient
 figure(2);
@@ -59,7 +59,7 @@ ylabel('Clustering Coefficient')
 hold off
 set(figure(2), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Clustering_Coefficient.eps','eps2c')
+saveas(gcf,'Clustering_Coefficient.eps','eps2c')
 
 
 % Average degree of network
@@ -80,7 +80,7 @@ ylabel('Average Degree, <k>')
 hold off
 set(figure(3), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Degree_Average.eps','eps2c')
+saveas(gcf,'Degree_Average.eps','eps2c')
  
 % Number of Connected Components
 figure(4);
@@ -98,7 +98,7 @@ ylabel('Average Connected Components')
 hold off
 set(figure(4), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Connected_Components_Average.eps','eps2c')
+saveas(gcf,'Connected_Components_Average.eps','eps2c')
 
 % Shortest Pathway
 figure(5);
@@ -116,7 +116,7 @@ ylabel('Shortest Pathway')
 hold off
 set(figure(5), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Shortest_Pathway.eps','eps2c')
+saveas(gcf,'Shortest_Pathway.eps','eps2c')
  
 % Small Worldness
 input_name_2 = 'A_aal_small_worldness.dat';
@@ -135,7 +135,7 @@ ylabel('Small Worldness')
 hold off
 set(figure(6), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Small_Worldness.eps','eps2c')
+saveas(gcf,'Small_Worldness.eps','eps2c')
 
 % Transitivity
 figure(7);
@@ -154,7 +154,7 @@ ylabel('Transitivity')
 hold off
 set(figure(7), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Transitivity.eps','eps2c')
+saveas(gcf,'Transitivity.eps','eps2c')
 
 % Global Efficiency of Network
 input_name_3 = 'A_aal_global_efficiency_ave.dat';
@@ -174,7 +174,7 @@ ylabel('Average Global Efficiency')
 hold off
 set(figure(8), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Global_Efficiency_Average.eps','eps2c')
+saveas(gcf,'Global_Efficiency_Average.eps','eps2c')
 
 % Local efficiency of Network
 input_name_4 = 'A_aal_local_efficiency_ave.dat';
@@ -193,7 +193,7 @@ ylabel('Local Efficiency')
 hold off
 set(figure(9), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Local_Efficiency_Average.eps','eps2c')
+saveas(gcf,'Local_Efficiency_Average.eps','eps2c')
 
 % Assortativity coefficient of network
 in_name_5 = 'A_aal_assortativity.dat';
@@ -212,7 +212,7 @@ ylabel('Assortativity')
 hold off
 set(figure(10), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Assortativity.eps','eps2c')
+saveas(gcf,'Assortativity.eps','eps2c')
 
 % DISTRIBUTIONS
 % Global efficiency of nodes
@@ -266,7 +266,7 @@ for j = 1:length(random_G)
 end
 set(figure(11), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Global_Efficiency_Nodes.eps','eps2c')
+saveas(gcf,'Global_Efficiency_Nodes.eps','eps2c')
 
 %Local efficiency of nodes
 in_name_6 = 'A_aal_local_efficency_node.dat';
@@ -319,7 +319,7 @@ for j = 1:length(random_G)
 end
 set(figure(12), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Local_Efficiency_Nodes.eps','eps2c')
+saveas(gcf,'Local_Efficiency_Nodes.eps','eps2c')
 
 
 % Connected Components of Nodes
@@ -341,7 +341,9 @@ for j = 1:length(random_G)
         end
         n=(1:90);
         m=(0:0.01:1);
-        imagesc(n,m,z)
+        % Apply a logarithmic colorbar
+        log_plot = imagesc(n,m,log10(z));
+        colorbar_log([10^(0) 10^2])
         h=colorbar; set(h,'fontsize',15);
         set(gca,'YTick',[0 0.25 0.50 0.75 1])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
@@ -350,7 +352,9 @@ for j = 1:length(random_G)
         for k = 1:76
             c(k,:) = z_( 90*(k-1)+1 : 90*k )';
         end
-        imagesc((1:1:90),(0.25:0.01:1),c)
+        % Apply a logarithmic colorbar
+        log_plot = imagesc((1:1:90),(0.25:0.01:1),log10(c));
+        colorbar_log([10^(0) 10^2])
         h=colorbar; set(h,'fontsize',15);
         set(gca,'YTick',[0.25 0.45 0.65 0.85])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))    
@@ -359,7 +363,9 @@ for j = 1:length(random_G)
         for k = 1:42
             c(k,:) = z_( 90*(k-1+5)+1 : 90*(k+5) )';
         end
-        imagesc((1:1:90),(0.59:0.01:1),c)
+        % Apply a logarithmic colorbar
+        log_plot = imagesc((1:1:90),(0.59:0.01:1),log10(c));
+        colorbar_log([10^(0) 10^2])
         h=colorbar; set(h,'fontsize',15);
         set(gca,'YTick',[0.6 0.68 0.80 0.92 1.00])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
@@ -372,7 +378,7 @@ for j = 1:length(random_G)
 end
 set(figure(13), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Connected_Components_Nodes.eps','eps2c')
+saveas(gcf,'Connected_Components_Nodes.eps','eps2c')
 
 % Degree Distribution
 in_name_8 = 'A_aal_degree_dist.dat';
@@ -393,25 +399,35 @@ for j = 1:length(random_G)
         end
         n=(1:90);
         m=(0:0.01:1);
-        imagesc(log10(n),log10(m),log10(z))
+        
+        % Apply a logarithmic colorbar
+        log_plot = imagesc(n,m,log10(z));
+        colorbar_log([10^(0) 10^1])
         h=colorbar; set(h,'fontsize',15);
-        %set(gca,'YTick',[0 0.25 0.50 0.75 1])
+
+        set(gca,'YTick',[0 0.25 0.50 0.75 1])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
+
     elseif random_G(j)=='d'
         c = zeros(76,90);
         for k = 1:76
             c(k,:) = z_( 90*(k-1)+1 : 90*k )';
         end
-        imagesc((1:1:90),(0.25:0.01:1),c)
+        % Apply a logarithmic colorbar
+        log_plot = imagesc((1:1:90),(0.25:0.01:1),log10(c));
+        colorbar_log([10^(0) 10^1])
         h=colorbar; set(h,'fontsize',15);
         set(gca,'YTick',[0.25 0.45 0.65 0.85])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))    
+   
     elseif random_G(j) == 'c'
         c = zeros(42,90);
         for k = 1:42
             c(k,:) = z_( 90*(k-1+5)+1 : 90*(k+5) )';
         end
-        imagesc((1:1:90),(0.59:0.01:1),c)
+         % Apply a logarithmic colorbar
+        log_plot = imagesc((1:1:90),(0.59:0.01:1),log10(c));
+        colorbar_log([10^(0) 10^1])
         h=colorbar; set(h,'fontsize',15);
         set(gca,'YTick',[0.6 0.68 0.80 0.92 1.00])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
@@ -424,7 +440,7 @@ for j = 1:length(random_G)
 end
 set(figure(14), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Degree_Distribution.eps','eps2c')
+saveas(gcf,'Degree_Distribution.eps','eps2c')
 
 
 
@@ -478,5 +494,5 @@ for j = 1:length(random_G)
 end
 set(figure(15), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Clustering_Coefficient_Node.eps','eps2c')
+saveas(gcf,'Clustering_Coefficient_Node.eps','eps2c')
 
