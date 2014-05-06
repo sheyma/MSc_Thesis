@@ -18,13 +18,13 @@ sys.setrecursionlimit(10000)
 # global debug variable
 deep = 0
 
-# check the loaded matrix if it it is symmetric
+# check the loaded matrix if it is symmetric
 def load_matrix(file):
 	A = np.loadtxt(file, unpack=True)
 	AT = np.transpose(A)
-	if A.shape[0] != A.shape[1] or not (A == AT).all():
-		print "error: loaded matrix is not symmetric"
-		raise ValueError
+#	if A.shape[0] != A.shape[1] or not (A == AT).all():
+#		print "error: loaded matrix is not symmetric"
+#		raise ValueError
 	return AT
 
 # create adjacency matrix, ones and zeros according to r
@@ -41,6 +41,22 @@ def plot_graph(G):
 	nx.draw(G, pos)
 	#pl.show()
 
+def print_adjacency_matrix(B):			
+	G = nx.from_numpy_matrix(B)
+	print nx.adjacency_matrix(G)
+
+
+def export_adjacency_matrix(B, input_mtx, r):		# save adjacency matrix
+	G = nx.from_numpy_matrix(B)
+	hiwi = nx.adjacency_matrix(G)
+	f = open(input_mtx[:-4]+'_ADJ_thr_'+str(r)+'.dat','w')
+	for i in range(len(hiwi)):
+		for j in range(len(hiwi)):
+			f.write("%d\t" % (hiwi[i,j]))
+		f.write("\n")
+	f.close()		
+	    
+	
 # create a random network with method a:
 # networkx.gnm_random_graph : random graph with given N and L
 def get_random_graph_a(B):
@@ -156,7 +172,7 @@ def get_random_graph_e(B):
 	return GR
 
 
-# a few characteristic measures of FULL network G with one threshold
+# a few characteristic measures of FULL network G with one GIVEN threshold
 def get_characteristics(G, thr, input_name):
 	N = nx.number_of_nodes(G)		#total number of nodes : N
 	L = nx.number_of_edges(G)  		#total number of links : L
@@ -471,9 +487,9 @@ if not method in random_graph_methods:
 out_prfx = input_name[:-4]+'_R'+method+'_'
 
 # remove old out files if exist
-filelist = glob.glob(out_prfx + "*.dat")
-for f in filelist:
-	os.remove(f)
+#filelist = glob.glob(out_prfx + "*.dat")
+#for f in filelist:
+#	os.remove(f)
 
 data_matrix = load_matrix(input_name)
 
@@ -495,13 +511,15 @@ for i in range(0, 101):
 			continue
 		
 	#plot_graph(Random_G)
+	print_adjacency_matrix(A)
+	export_adjacency_matrix(A, input_name, thr)
 	#get_characteristics(Random_G, thr, input_name)
-	get_single_network_measures(Random_G, thr)
-	get_assortativity(Random_G, thr)
-	get_local_efficiency(Random_G, thr)
-	get_global_effic(Random_G, thr)
-	get_degree_distribution(Random_G, thr)
-	get_node_cc_and_degree(Random_G, thr)
-	get_connected_components_nodes(Random_G, thr)
-	get_small_worldness(Random_G, thr)
-	get_motifs(Random_G, thr)
+	#get_single_network_measures(Random_G, thr)
+	#get_assortativity(Random_G, thr)
+	#get_local_efficiency(Random_G, thr)
+	#get_global_effic(Random_G, thr)
+	#get_degree_distribution(Random_G, thr)
+	#get_node_cc_and_degree(Random_G, thr)
+	#get_connected_components_nodes(Random_G, thr)
+	#get_small_worldness(Random_G, thr)
+	#get_motifs(Random_G, thr)
