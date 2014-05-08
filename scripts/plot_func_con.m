@@ -87,6 +87,7 @@ figure(4);
 hold on
 set(gca,'FontSize',25)
 for i =1:length(random_G)
+    strcat(input_name(1:6),'R',random_G(i),input_name(6:end))
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
 end
