@@ -32,9 +32,9 @@ for i =1:length(random_G)
     A=load(a);
     plot(A(:,1),A(:,3),strcat(color(i),type(i)),'LineWidth',3)   
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc')
+legend('R0', 'Ra','Rb','Rf','Rd','Rc')
 legend('boxoff')
-set(legend,'FontSize',14)
+%%set(legend,'FontSize',14)
 xlabel('Threshold [r]')
 ylabel('Network Density')
 hold off
@@ -51,9 +51,9 @@ for i =1:length(random_G)
     A=load(a);
     plot(A(:,1),A(:,4),strcat(color(i),type(i)),'LineWidth',3)    
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc') 
+legend('R0', 'Ra','Rb','Rf','Rd','Rc') 
 legend('boxoff')
-set(legend,'FontSize',14)
+%%set(legend,'FontSize',14)
 xlabel('Threshold [r]')
 ylabel('Clustering Coefficient')
 hold off
@@ -72,9 +72,9 @@ for i =1:length(random_G)
     
           
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc') 
+legend('R0', 'Ra','Rb','Rf','Rd','Rc') 
 legend('boxoff')
-set(legend,'FontSize',14)
+%%set(legend,'FontSize',14)
 xlabel('Threshold [r]')
 ylabel('Average Degree, <k>')
 hold off
@@ -83,6 +83,8 @@ set(gcf, 'PaperPositionMode','auto')
 saveas(gcf,'Degree_Average.eps','eps2c')
  
 % Number of Connected Components
+
+
 figure(4);
 hold on
 set(gca,'FontSize',25)
@@ -91,15 +93,72 @@ for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+%%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Threshold [r]')
 ylabel('Average Connected Components')
 hold off
 set(figure(4), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Connected_Components_Average.eps','eps2c')
+%saveas(gcf,'Connected_Components_Average.eps','eps2c')
+
+
+
+
+
+
+%%%%%%%%%%%%%%%
+random_G = ('0abfdc');
+color='kmbcyr'; type = '-*o+*o';
+input_name = 'A_single_network_measures.dat';
+figure(4);
+hold on
+set(gca,'FontSize',25)
+for i =1:length(random_G)
+    strcat(input_name(1:2),'R',random_G(i),input_name(2:end))
+    A=load(strcat(input_name(1:2),'R',random_G(i),input_name(2:end)));
+    plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
+end
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+%%set(legend,'FontSize',14)
+legend('boxoff')
+xlabel('Threshold [r]')
+ylabel('Average Connected Components')
+hold off
+set(figure(4), 'units', 'inches','position',[5 4 10 7]) 
+set(gcf, 'PaperPositionMode','auto')
+%saveas(gcf,'Connected_Components_Average_A_txt.eps','eps2c')
+
+% Transitivity
+input_name_2 = 'A_small_worldness.dat';
+figure(7);
+set(gca,'FontSize',25)
+hold on
+for i = 1:length(random_G)
+    a = strcat(input_name_2(1:2),'R',random_G(i),input_name_2(2:end));
+    A = load(strcat(input_name_2(1:2),'R',random_G(i),input_name_2(2:end)));
+    plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)
+end
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+%%set(legend,'FontSize',14)
+legend('boxoff')
+xlabel('Threshold [r]')
+ylabel('Transitivity')
+hold off
+set(figure(7), 'units', 'inches','position',[5 4 10 7]) 
+set(gcf, 'PaperPositionMode','auto')
+%saveas(gcf,'Transitivity_A_txt.eps','eps2c')
+
+
+%%%%%%%%%%%%%%
+
+
+
+
+
+
+
 
 % Shortest Pathway
 figure(5);
@@ -109,8 +168,8 @@ for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,7),strcat(color(i),type(i)),'LineWidth',3) 
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+%%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Threshold [r]')
 ylabel('Shortest Pathway')
@@ -128,8 +187,8 @@ for i = 1:length(random_G)
     A =load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
     plot(A(:,1),A(:,8),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+%%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Threshold [r]')
 ylabel('Small Worldness')
@@ -147,8 +206,8 @@ for i = 1:length(random_G)
     A = load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+%%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Threshold [r]')
 ylabel('Transitivity')
@@ -167,8 +226,8 @@ for i = 1:length(random_G)
     A = load(a);
     plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+%%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Threshold [r]')
 ylabel('Average Global Efficiency')
@@ -186,8 +245,8 @@ for i = 1:length(random_G)
     A =load(strcat(input_name_4(1:6),'R',random_G(i),'_local_efficency_ave.dat'));
     plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+%%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Threshold [r]')
 ylabel('Local Efficiency')
@@ -205,8 +264,8 @@ for i = 1:length(random_G)
     A = load(strcat(in_name_5(1:6),'R',random_G(i),in_name_5(6:end)));
     plot(A(:,1),A(:,2),strcat(color(i),type(i)), 'Linewidth', 3)
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+%%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Threshold [r]')
 ylabel('Assortativity')
