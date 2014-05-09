@@ -1,8 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-# Creating a random network by preserving the degree distribution of test network (e.g. A.txt)
-# use nx.configuration_model(degree_seq[integers]) == method c)
+# Creating a random network by different methhods
 
 import networkx as nx
 #from networkx.algorithms import bipartite
@@ -19,99 +18,86 @@ sys.setrecursionlimit(10000)
 # global debug variable
 deep = 0
 
-# create a random network with method a
-def get_random_graph_a(matrix, r):
-  A = np.transpose(np.loadtxt(matrix, unpack=True))
-  B = np.zeros((len(A),len(A)))
+# check the loaded matrix if it is symmetric
+def load_matrix(file):
+	A = np.loadtxt(file, unpack=True)
+	AT = np.transpose(A)
+#	if A.shape[0] != A.shape[1] or not (A == AT).all():
+#		print "error: loaded matrix is not symmetric"
+#		raise ValueError
+	return AT
 
-  for row in range(len(A)):
-    for item in range(len(A)):
-      if row != item:
-        if A[row,item] >= r:
-          B[row,item] = 1
-        else:
-          B[row,item] = 0
-  #print B	   										 # print thresholded new matrix
-  G=nx.from_numpy_matrix(B,create_using=nx.Graph())
-  L = nx.number_of_edges(G) 						 # total number of links: L
-  N = nx.number_of_nodes(G) 						 # total number of nodes : N
-  Random_Ga = nx.gnm_random_graph(N,L)				 # random graph
-  return Random_Ga
+# create adjacency matrix, ones and zeros according to r
+def threshold_matrix(A, r):
+	B = np.zeros(A.shape)
+	for row in range(A.shape[0]):
+		for col in range(A.shape[1]):
+			if row != col and A[row, col] >= r:
+				B[row, col] = 1
+	return B
 
-# 1. create a random network with method b
-def get_random_graph_b(matrix, r):
-  A = np.transpose(np.loadtxt(matrix, unpack=True))
-  B = np.zeros((len(A),len(A)))
+def plot_graph(G):
+	pos = nx.shell_layout(G)
+	nx.draw(G, pos)
+	#pl.show()
 
-  for row in range(len(A)):
-    for item in range(len(A)):
-      if row != item:
-        if A[row,item] >= r:
-          B[row,item] = 1
-        else:
-          B[row,item] = 0
-  #print B	   										 # print thresholded new matrix
-  G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded matr.
-  N = nx.number_of_nodes(G)							 # number of nodes in G	
-  d = nx.density(G)									 # network density of G
-  Random_Gb = nx.erdos_renyi_graph(N,d)	 # random graph
-  return Random_Gb
+def print_adjacency_matrix(B):			
+	G = nx.from_numpy_matrix(B)
+	print nx.adjacency_matrix(G)
+
+
+def export_adjacency_matrix(B, input_mtx, r):		# save adjacency matrix
+	G = nx.from_numpy_matrix(B)
+	hiwi = nx.adjacency_matrix(G)
+	f = open(input_mtx[:-4]+'_ADJ_thr_'+str(r)+'.dat','w')
+	for i in range(len(hiwi)):
+		for j in range(len(hiwi)):
+			f.write("%d\t" % (hiwi[i,j]))
+		f.write("\n")
+	f.close()		
+	    
+	
+# create a random network with method a:
+# networkx.gnm_random_graph : random graph with given N and L
+def get_random_graph_a(B):
+	G = nx.from_numpy_matrix(B)
+	L = nx.number_of_edges(G)
+	N = nx.number_of_nodes(G)
+	RG = nx.gnm_random_graph(N, L)
+	return RG
+
+# create a random network with method b:
+# networkx.erdos_renyi_graph : random graph with given N and d
+def get_random_graph_b(B):
+	G = nx.from_numpy_matrix(B)
+	N = nx.number_of_nodes(G)
+	d = nx.density(G)
+	RG = nx.erdos_renyi_graph(N,d)
+	return RG
 
 # create a random network with method c
-def get_random_graph_c(matrix, r):
-	A = np.transpose(np.loadtxt(matrix, unpack=True))
-	B = np.zeros((len(A),len(A)))
+# networkx.random_degree_sequence_graph : 
+# random graph with given degree sequence
+def get_random_graph_c(B):
+	G = nx.from_numpy_matrix(B)
+	degree_seq = nx.degree(G).values()
+	RG = nx.random_degree_sequence_graph(degree_seq,tries=100)
+	return RG
 
-	for row in range(len(A)):
-		for item in range(len(A)):
-		  if row != item:
-			if A[row,item] >= r:
-			  B[row,item] = 1
-			else:
-			  B[row,item] = 0
-		#print B	   								   # print binarized matrix
-	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
-	# G is now non-directed graph
-	degree_hist = {}
+# create a random network with method f
+# networkx.generators.degree_seq.havel_hakimi_graph : 
+# random graph with given degree sequence, check assortativity:
+# connecting the node of highest degree to other nodes of highest degree
+def get_random_graph_f(B):
+	G = nx.from_numpy_matrix(B)
+	degree_seq = nx.degree(G).values()
+	RG = nx.generators.degree_seq.havel_hakimi_graph(degree_seq)
+	return RG
 	
-	
-	for node in G:
-		if G.degree(node) not in degree_hist: # degree dist part
-			degree_hist[G.degree(node)] =1
-		else:
-			degree_hist[G.degree(node)] +=1
-	keys = degree_hist.keys()
-	values = degree_hist.values()
-	degree_seq = []
-	
-	for j in range(0,len(keys)):
-		for i in range(0,(values[j])):
-			degree_seq.append(keys[j])
-	
-	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())	
-	
-	Random_Gc = nx.random_degree_sequence_graph(degree_seq,tries=100)
-	
-	#pos = nx.shell_layout(Random_Gc)
-	#nx.draw(Random_Gc, pos)
-	#pl.show()
-	
-	return Random_Gc
-
-# create a random network with method d
-def get_random_graph_d(input_mtx, r):
-	A = np.transpose(np.loadtxt(input_mtx, unpack=True))
-	B = np.zeros((len(A),len(A)))
-
-	for row in range(len(A)):
-		for item in range(len(A)):
-			if row != item:
-				if A[row,item] >= r:
-					B[row,item] = 1
-				else:
-					B[row,item] = 0
-
-	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  #undirected graph G
+# create a random network with method d:
+# networkx.double_edge_swap : random graph by swaping two edges 
+def get_random_graph_d(B):
+	G = nx.from_numpy_matrix(B)
 	L = nx.number_of_edges(G)	
 	trial = L*(L-1.)/2
 	swap_num = L;
@@ -119,9 +105,8 @@ def get_random_graph_d(input_mtx, r):
 		Random_Gd = nx.double_edge_swap(G,nswap=swap_num,max_tries=trial)
 		return Random_Gd
 	else:
-		print "No swap possible for R=", float(r), "number of edges", L
+		print "No swap possible for number of edges", L
 		return G
-
 
 def get_todo(G, nodis):
 	nodes = G.nodes()
@@ -166,60 +151,28 @@ def random_graph(G, nodis):
 	deep -= 1
 	return -1
 
-# create a random network with method c
-def get_random_graph_e(matrix, r):
-	A = np.transpose(np.loadtxt(matrix, unpack=True))
-	B = np.zeros((len(A),len(A)))
+# create a random network with method e
+# manual random graph creator when degree sequence given
+def get_random_graph_e(B):
 	global deep
-
-	for row in range(len(A)):
-		for item in range(len(A)):
-		  if row != item:
-			if A[row,item] >= r:
-			  B[row,item] = 1
-			else:
-			  B[row,item] = 0
-		#print B	   								   # print binarized matrix
-	G=nx.from_numpy_matrix(B,create_using=nx.Graph())  # create graph of thresolded A
-	# G is now non-directed graph
-	degree_hist = {}
-	
-	print "L", nx.number_of_edges(G)
-	
-	
-	for node in G:
-		if G.degree(node) not in degree_hist: # degree dist part
-			degree_hist[G.degree(node)] =1
-		else:
-			degree_hist[G.degree(node)] +=1
-	keys = degree_hist.keys()
-	values = degree_hist.values()
-	degree_seq = []
-	
-	for j in range(0,len(keys)):
-		for i in range(0,(values[j])):
-			degree_seq.append(keys[j])
-	
-	#Random_Gc = nx.configuration_model(degree_seq,create_using=nx.Graph())	
+	G = nx.from_numpy_matrix(B)
+	degree_seq = nx.degree(G).values()
 	
 	nodes = G.nodes()
-	G_rand = nx.Graph()
+	GR = nx.Graph()
 	
-	G_rand.add_nodes_from(nodes)
+	GR.add_nodes_from(nodes)
 	nodis = dict(zip(nodes, degree_seq))
 	
-	print "bla", len(G_rand.nodes()), len(G_rand.edges())
+	print "bla", len(GR.nodes()), len(GR.edges())
 	deep = 0
-	ret = random_graph(G_rand, nodis)
-	print "ret", ret, len(G_rand.nodes()), len(G_rand.edges())
-	#pos = nx.shell_layout(Random_Gc)
-	#nx.draw(Random_Gc, pos)
-	#pl.show()
+	ret = random_graph(GR, nodis)
+	print "ret", ret, len(GR.nodes()), len(GR.edges())
 	
-	return G_rand
+	return GR
 
 
-# a few characteristic measures of FULL network G with one threshold
+# a few characteristic measures of FULL network G with one GIVEN threshold
 def get_characteristics(G, thr, input_name):
 	N = nx.number_of_nodes(G)		#total number of nodes : N
 	L = nx.number_of_edges(G)  		#total number of links : L
@@ -291,10 +244,11 @@ def get_single_network_measures(G, thr):
 	#7. shortest pathway
 	f.close()
 
+# assortativity coefficient of full network
 def get_assortativity(G, thr):
 	f = open(out_prfx + 'assortativity.dat', 'a')
 	
-	print "get_assortativity", thr
+	#print "get_assortativity", thr
 	degrees = G.degree()
 	m = float(nx.number_of_edges(G))
 	num1, num2, den1 = 0, 0, 0
@@ -307,12 +261,11 @@ def get_assortativity(G, thr):
 		num1 /= m
 		den1 /= 2*m
 		num2 = (num2 / (2*m)) ** 2
-		#assort_coeff_1 = nx.degree_assortativity_coefficient(G)
-		#print 'Assortativity : ', assort_coeff_1 
 		if ((den1-num2)!=0):
 			assort_coeff = (num1 - num2) / (den1 - num2)
 			f.write("%f\t%f\n" % (thr, assort_coeff))
-		#print "Assortativity manual :", assort_coeff
+		else:
+			assort_coeff = float('NaN')
 	f.close()
 
 
@@ -503,7 +456,8 @@ def get_motifs(G, thr):
 
 
 
-
+# method : corresponding randomization abbreviation
+# input_name : given data matrix
 if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
@@ -514,12 +468,15 @@ if __name__ == '__main__':
 		print usage
 		sys.exit(1)
 
+# assign the metdhod abbreviations to the methhods
 random_graph_methods = {
+	"0" : nx.from_numpy_matrix,
 	"a" : get_random_graph_a,
 	"b" : get_random_graph_b,
 	"c" : get_random_graph_c,
 	"d" : get_random_graph_d,
 	"e" : get_random_graph_e,
+	"f" : get_random_graph_f,
 }
 
 if not method in random_graph_methods:
@@ -530,20 +487,27 @@ if not method in random_graph_methods:
 out_prfx = input_name[:-4]+'_R'+method+'_'
 
 # remove old out files if exist
-filelist = glob.glob(out_prfx + "*.dat")
-for f in filelist:
-	os.remove(f)
+#filelist = glob.glob(out_prfx + "*.dat")
+#for f in filelist:
+#	os.remove(f)
+
+data_matrix = load_matrix(input_name)
 
 for i in range(0, 101):
 	thr = float(i) / 100.0
 	print "loop", i, thr
+	
+	A = threshold_matrix(data_matrix, thr)
+	
 	try:
-		#Random_G = nx.random_degree_sequence_graph([1,1],tries=100)
-		Random_G = random_graph_methods[method](input_name, thr)
+		Random_G = random_graph_methods[method](A)
 	except:
 		print "couldn't find a random graph", method, sys.exc_info()[0]
 		continue
 	
+	#plot_graph(Random_G)
+	#print_adjacency_matrix(A)
+	#export_adjacency_matrix(A, input_name, thr)
 	#get_characteristics(Random_G, thr, input_name)
 	get_single_network_measures(Random_G, thr)
 	get_assortativity(Random_G, thr)
