@@ -32,9 +32,9 @@ for i =1:length(random_G)
     A=load(a);
     plot(A(:,1),A(:,3),strcat(color(i),type(i)),'LineWidth',3)   
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc')
+legend('R0', 'Ra','Rb','Rf','Rd','Rc')
 legend('boxoff')
-set(legend,'FontSize',14)
+%set(legend,'FontSize',14)
 xlabel('Probability [p]')
 ylabel('Network Density')
 hold off
@@ -51,10 +51,10 @@ for i =1:length(random_G)
     A=load(a);
     plot(A(:,1),A(:,4),strcat(color(i),type(i)),'LineWidth',3)    
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc') 
+legend('R0', 'Ra','Rb','Rf','Rd','Rc') 
 legend('boxoff')
-set(legend,'FontSize',14)
-% xlabel('Probability [p]')
+%set(legend,'FontSize',14)
+xlabel('Probability [p]')
 ylabel('Clustering Coefficient')
 hold off
 set(figure(2), 'units', 'inches','position',[5 4 10 7]) 
@@ -72,9 +72,9 @@ for i =1:length(random_G)
     
           
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc') 
+legend('R0', 'Ra','Rb','Rf','Rd','Rc') 
 legend('boxoff')
-set(legend,'FontSize',14)
+%set(legend,'FontSize',14)
 xlabel('Probability [p]')
 ylabel('Average Degree, <k>')
 hold off
@@ -90,8 +90,8 @@ for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
 ylabel('Average Connected Components')
@@ -108,8 +108,8 @@ for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,7),strcat(color(i),type(i)),'LineWidth',3) 
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
 ylabel('Shortest Pathway')
@@ -127,8 +127,8 @@ for i = 1:length(random_G)
     A =load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
     plot(A(:,1),A(:,8),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
 ylabel('Small Worldness')
@@ -146,8 +146,8 @@ for i = 1:length(random_G)
     A = load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
 ylabel('Transitivity')
@@ -166,8 +166,8 @@ for i = 1:length(random_G)
     A = load(a);
     plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
 ylabel('Average Global Efficiency')
@@ -185,8 +185,8 @@ for i = 1:length(random_G)
     A =load(strcat(input_name_4(1:6),'R',random_G(i),'_local_efficency_ave.dat'));
     plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
 ylabel('Local Efficiency')
@@ -204,8 +204,8 @@ for i = 1:length(random_G)
     A = load(strcat(in_name_5(1:6),'R',random_G(i),in_name_5(6:end)));
     plot(A(:,1),A(:,2),strcat(color(i),type(i)), 'Linewidth', 3)
 end
-legend('Test Network', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
-set(legend,'FontSize',14)
+legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+%set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
 ylabel('Assortativity')
