@@ -11,11 +11,14 @@ global itaus itauf itauo ialpha Eo dt
 
 ch_int = 0;         % 0: Euler, 1: ode45
 
-dt  = 0.001;        % (s)
+
+dt = 0.01;
+%dt  = 0.001;        % (s)      %use this one!
 t0  = (0:dt:T)';
 n_t = length(t0);
 
-t_min = 20;  %%% to discard first 20 sec of the simulaton 
+t_min = 1; % not use this!
+%t_min = 20;  %%% to discard first 20 sec of the simulaton 
 n_min = round(t_min/dt);
 
 r_max = max(r);
