@@ -74,9 +74,44 @@ def calcBOLD(simfile):
 	n_Tvec = len(Tvec) 
 	# dt of time vector
 	dt_Tvec = Tvec[1] - Tvec[0] 
-	print (np.shape(simout)[1] -1 ) /2
-	#print dt_Tvec
+	# total number of excitators: u's 
+	N = (np.shape(simout)[1] -1 ) /2
+	# extract time series of u's from simout
+	timeseries = np.zeros((n_Tvec, N))
+	print "size of timeseries : ", np.shape(timeseries)
 	
+	#f = open(simfile[:-4]+'timeseries.dat','w')
+	for row in range(0,N):
+		timeseries[:,[row]] = simout[:,[2*row +1]]
+		#f.write("%d\t" % (timeseries[:,[row]]))
+	np.savetxt(simfile[:-4] + '_timeseries.dat',timeseries)
+	#f.close()	
+	print (timeseries)
 		
 input_name = sys.argv[1]	
 calcBOLD(input_name)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
