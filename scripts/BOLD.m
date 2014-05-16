@@ -9,19 +9,19 @@ function [b] = BOLD(T,r)
 
 global itaus itauf itauo ialpha Eo dt
 
-ch_int = 0;         % 0: Euler, 1: ode45
+ch_int = 1;         % 0: Euler, 1: ode45
 
 
 dt = 0.01;
 %dt  = 0.001;        % (s)      %use this one!
 t0  = (0:dt:T)';
-n_t = length(t0);
+n_t = length(t0)
 
 t_min = 1; % not use this!
 %t_min = 20;  %%% to discard first 20 sec of the simulaton 
-n_min = round(t_min/dt);
+n_min = round(t_min/dt)
 
-r_max = max(r);
+r_max = max(r)
 
 % BOLD model parameters
 
@@ -50,7 +50,7 @@ if ch_int == 0
     
     % Euler method
 
-    t      = t0;
+    t      = t0
     x      = zeros(n_t,4);
     x(1,:) = x0;
     for n = 1:n_t-1;
@@ -59,7 +59,8 @@ if ch_int == 0
         x(n+1,3) = x(n,3) + dt*itauo*(x(n,2)-x(n,3)^ialpha);
         x(n+1,4) = x(n,4) + dt*itauo*(x(n,2)*(1-(1-Eo)^(1/x(n,2)))/Eo - (x(n,3)^ialpha)*x(n,4)/x(n,3));
     end
-
+    format long 
+    x
 else
         
     %opt = odeset('RelTol',1e-12,'AbsTol',1e-12);
@@ -78,7 +79,7 @@ b  = 100/Eo*vo*( k1.*(1-q) + k2*(1-q./v) + k3*(1-v) );
 clear x;
 
 
-
+display(n_t)
 
 
 
