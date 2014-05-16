@@ -11,22 +11,22 @@ def BOLD(T,r):
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
 	
-	taus   =  0.65;    
-	tauf   = 0.41;    
-	tauo   =  0.98;    
-	alpha  =  0.32;
-
-
 	params = {
-	'itaus' : float(1/taus),
-	'itauf' : float(1/tauf),
-	'itauo' : float(1/tauo),
-	'ialpha' : float(1/alpha),
-	'Eo' : 0.34,
-	'dt' : 0.01
-	 #'dt' : 0.001  # use this one !!
-	}
+			'taus'   : 0.65,    
+			'tauf'   : 0.41,   
+			'tauo'   :  0.98,    
+			'alpha'  :  0.32,
+			'dt' : 0.01,	 ## change it to 0.001
+			'Eo' : 0.34
+			}
 
+	itaus = float(1/params['taus'])
+	itauf = float(1/params['tauf'])
+	itauo = float(1/params['tauo'])
+	ialpha = float(1/params['alpha'])
+	dt = float(params['dt'])    
+	Eo = float(params['Eo'])
+	
 	vo     = 0.02;
 	k1     = 7 * params['Eo'] 
 	k2     = 2; 
@@ -38,36 +38,22 @@ def BOLD(T,r):
 	
 	n_t = len(t0)
 	
+	t_min = 1		#t_min = 20 #use this one!
 
-	
-	t_min = 1
-	#t_min = 20 #use this one!
 	n_min = round(t_min / params['dt'])
 
 	r_max = max(r)
-
-	print "n_t: ", n_t , "n_min:" , n_min, "r_max", r_max
+	# initial conditions
 	x0 = np.array([0 , 1, 1, 1])
 
 	if ch_int==0:
-
-		t = t0
-		print "t0",t0 ,"shape t : " , np.shape(t)
+		
+		# Euler's Method
+		
+		t = t0		
 		x = np.zeros((n_t,4))
-		print "shpe x: " , np.shape(x)
-		print "r : " , r
 		x[0,:] = x0
-		print "x[0,:] : "  , x[0,:]
 		for n in range(0,n_t-1):
-			
-			dt = params['dt'] 
-			itaus = float(params['itaus'])
-			itauf = float(params['itauf'])
-			itauo = float(params['itauo'])
-			ialpha = float(params['ialpha'])
-			Eo = float(params['Eo'])
-			
-			#print "n" , n
 			x[n+1 , 0] = x[n ,0] + dt * (r[n] - itaus * x[n,0] - itauf * (x[n,1] -float(1.0))) 
 			x[n+1 , 1] = x[n, 1] + dt * x[n,0]
 			x[n+1 , 2] = x[n, 2] + dt * itauo * (x[n, 1] - pow(x[n, 2] , ialpha))
@@ -75,7 +61,10 @@ def BOLD(T,r):
 			
 		print x
 		
-	
+		t_new = t[n_min -1 : -1]
+		t_new = np.append(t_new , t[-1])
+		
+		print np.shape(t_new)
 
 
 def calcBOLD(simfile):
