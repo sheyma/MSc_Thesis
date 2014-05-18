@@ -9,7 +9,7 @@ function [b] = BOLD(T,r)
 
 global itaus itauf itauo ialpha Eo dt
 
-ch_int = 1;         % 0: Euler, 1: ode45
+ch_int = 0;         % 0: Euler, 1: ode45
 
 
 dt = 0.01;
