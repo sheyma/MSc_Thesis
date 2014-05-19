@@ -27,7 +27,7 @@ function b = calcBOLD(simfile)
     timeseries(:,roi) = simoutput(:,2*roi);
   end
 
-  %save([simfile(1:end-4),'_timeseries.mat'],'timeseries','tvec')
+  save([simfile(1:end-4),'_timeseries2.mat'],'timeseries','tvec')
   %load([simfile(1:end-4),'_timeseries.mat'])
   
   %% plot sample time series     
@@ -71,6 +71,7 @@ function b = calcBOLD(simfile)
   end
   
   %% filter below 0.25Hz:
+
 
   f_c=0.25;
   dtt=0.001; % Resolution of the BOLD signal (here 1 millisecond).
