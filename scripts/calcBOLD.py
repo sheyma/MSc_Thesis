@@ -4,6 +4,7 @@
 
 import numpy as np
 import sys
+import math 
 import pylab as pl
 	  
 def BOLD(T,r):
@@ -27,10 +28,10 @@ def BOLD(T,r):
 	dt = float(params['dt'])    
 	Eo = float(params['Eo'])
 	
-	vo     = 0.02;
-	k1     = 7 * params['Eo'] 
-	k2     = 2; 
-	k3     = 2 * params['Eo']-0.2
+	vo     = float(0.02);
+	k1     = float(7) * params['Eo'] 
+	k2     = float(2); 
+	k3     = 2 * params['Eo']-float(0.2)
 
 	ch_int = 0
 
@@ -58,13 +59,14 @@ def BOLD(T,r):
 			x[n+1 , 1] = x[n, 1] + dt * x[n,0]
 			x[n+1 , 2] = x[n, 2] + dt * itauo * (x[n, 1] - pow(x[n, 2] , ialpha))
 			x[n+1 , 3] = x[n, 3] + dt * itauo * ( x[n, 1] * (1.-pow((1- Eo),(1./x[n,1])))/Eo - pow(x[n,2],ialpha) * x[n,3] / x[n,2])
-			
-		print x
 		
-		t_new = t[n_min -1 : -1]
-		t_new = np.append(t_new , t[-1])
-		
-		print np.shape(t_new)
+        t_new = t[n_min -1 :]
+	s     = x[n_min -1 : , 0]
+	fi    = x[n_min -1 : , 1]
+	v     = x[n_min -1 : , 2]
+	q     = x[n_min -1 : , 3]
+	b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
+	return b  
 
 
 def calcBOLD(simfile):
@@ -85,9 +87,10 @@ def calcBOLD(simfile):
 	print "size of timeseries : ", np.shape(timeseries)
 	for row in range(0,N):
 		timeseries[:,[row]] = simout[:,[2*row +1]]
-	# store timeseries as .dat
-	np.savetxt(simfile[:-4] + '_timeseries.dat',timeseries)	
-	print (timeseries)
+	# store timeseries and time as .dat
+	timeseries_app = np.c_[Tvec , timeseries]
+	np.savetxt(simfile[:-4] + '_timeseries.dat', timeseries_app)	
+	# 1st column is time vector, others are u series
 	
 	# plotting time series in a specific time interval
 	t_start = 600;
@@ -101,7 +104,25 @@ def calcBOLD(simfile):
 	#pl.show()
 
 	# apply Balloon Windkessel model in fuction BOLD
-	BOLD(10,timeseries[:,[0]])
+	Bold_signal = {}
+	# define simulation time for BOLD
+	T = 10.0
+	
+	
+	for col in range(0, N):
+		Bold_signal[col] = BOLD(T, timeseries[:,[col]])
+		# count the number of NaN 's in simulated BOLD
+		count_nan = 0
+		for key,value in enumerate(Bold_signal[col]):
+			if value == float('nan'):
+				count_nan += 1
+				#print "u_N , key, value : "
+				#print col,key,Bold_signal[key][col] 
+		if count_nan > 0:
+			print "u_N, nu. of NaNs:", col, count_nan
+			
+		
+		
 		
 input_name = sys.argv[1]	
 calcBOLD(input_name)
