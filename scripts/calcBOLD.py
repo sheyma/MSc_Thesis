@@ -6,6 +6,7 @@ import numpy as np
 import sys
 import math 
 import pylab as pl
+from scipy.signal import butter	  
 	  
 def BOLD(T,r):
 	
@@ -59,7 +60,7 @@ def BOLD(T,r):
 			x[n+1 , 1] = x[n, 1] + dt * x[n,0]
 			x[n+1 , 2] = x[n, 2] + dt * itauo * (x[n, 1] - pow(x[n, 2] , ialpha))
 			x[n+1 , 3] = x[n, 3] + dt * itauo * ( x[n, 1] * (1.-pow((1- Eo),(1./x[n,1])))/Eo - pow(x[n,2],ialpha) * x[n,3] / x[n,2])
-		
+	# discard first n_min points	
         t_new = t[n_min -1 :]
 	s     = x[n_min -1 : , 0]
 	fi    = x[n_min -1 : , 1]
@@ -103,12 +104,10 @@ def calcBOLD(simfile):
 	pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
 
-	# apply Balloon Windkessel model in fuction BOLD
-	Bold_signal = {}
 	# define simulation time for BOLD
 	T = 10.0
-	
-	
+	# apply Balloon Windkessel model in fuction BOLD
+	Bold_signal = {}
 	for col in range(0, N):
 		Bold_signal[col] = BOLD(T, timeseries[:,[col]])
 		# count the number of NaN 's in simulated BOLD
@@ -121,8 +120,22 @@ def calcBOLD(simfile):
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", col, count_nan
 			
-		
-		
+	# filtering below 0.25 Hz 
+	f_c = 0.25  
+	# resolution of BOLD signal : dtt [second]
+	dtt = 0.001  
+	# length of one u series after subjected to BOLD 
+	n_T = len(np.array(Bold_signal[1]))
+	# Low pass filtering the BOLD signal
+	Bold_filt = np.zeros((n_T , N))
+	# sampling frequency
+	f_s = 1/dtt
+	# Nyquist frequency
+	f_n = f_s /2
+	# Butterworth filter
+	#b , a = butter(5, f_c/f_n , btype = 'low')########
+	b , a = butter(5, 1 , btype = 'low')
+	print b, a 
 		
 input_name = sys.argv[1]	
 calcBOLD(input_name)
