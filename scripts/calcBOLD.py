@@ -6,7 +6,7 @@ import numpy as np
 import sys
 import math 
 import pylab as pl
-from scipy.signal import butter	  
+from scipy.signal import butter, filtfilt	  
 	  
 def BOLD(T,r):
 	
@@ -120,22 +120,30 @@ def calcBOLD(simfile):
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", col, count_nan
 			
-	# filtering below 0.25 Hz 
+	# filtering below 0.25 Hz = cut-off frequency
 	f_c = 0.25  
 	# resolution of BOLD signal : dtt [second]
 	dtt = 0.001  
 	# length of one u series after subjected to BOLD 
 	n_T = len(np.array(Bold_signal[1]))
-	# Low pass filtering the BOLD signal
-	Bold_filt = np.zeros((n_T , N))
 	# sampling frequency
 	f_s = 1/dtt
 	# Nyquist frequency
 	f_n = f_s /2
 	# Butterworth filter
 	#b , a = butter(5, f_c/f_n , btype = 'low')########
-	b , a = butter(5, 1 , btype = 'low')
-	print b, a 
+	b , a = butter(5, 0.5 , btype = 'lowpass', analog=False)
+	#print b,a
+	
+	# Low pass filtering the BOLD signal
+	Bold_filt = np.zeros((n_T , N))
+		
+	for col in range(0, N):
+		
+		Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col])
+		if col == 2:
+			
+			print "column" , col+1 , Bold_filt[:, col]
 		
 input_name = sys.argv[1]	
 calcBOLD(input_name)
