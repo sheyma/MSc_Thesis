@@ -85,8 +85,9 @@ function b = calcBOLD(simfile)
 
   % Calculate variables for Butterworth lowpass filter of order 5 
   % with cut off frequency f_c/f_N
-  [Bs,As] = butter(5,f_c/f_N,'low')
-
+  %[Bs,As] = butter(5,f_c/f_N,'low')
+  [Bs,As] = butter(5, 0.5,'low')
+  
   size(BOLD_filt)
 
   for n = 1:N
