@@ -78,8 +78,6 @@ q  = x(n_min:end,4);
 b  = 100/Eo*vo*( k1.*(1-q) + k2*(1-q./v) + k3*(1-v) );
 clear x;
 
-length(r)
-n_t
 display(n_t)
 
 
