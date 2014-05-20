@@ -143,8 +143,17 @@ def calcBOLD(simfile):
 	ds = 0.1  # use 2.5!!
 	index = np.arange(0, n_T, int(ds/dtt))
 	down_Bold_filt = Bold_filt[index , :]
+	
+	# Cut first and last seconds (distorted from filtering)
 	len_Bold = np.shape(down_Bold_filt)[0]
-	print len_Bold
+	nFramesToKeep = 4   #   use 260!
+	limit_down = int( math.floor( len_Bold - nFramesToKeep )/2 )
+	limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 ) 
+	indice = np.arange(limit_down-1, limit_up-1  , 1) 
+	#print indice
+	# cut rows from down sampled Bold
+	cut_Bold_filt = down_Bold_filt[indice, :]
+	print np.corrcoef(np.matrix('5 6 5 ; 6 5 7'))
 		
 input_name = sys.argv[1]	
 calcBOLD(input_name)

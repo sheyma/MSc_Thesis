@@ -105,9 +105,10 @@ function b = calcBOLD(simfile)
   lenBold = size(down_bds,1)
   
   %% Cutting first and last seconds (distorted from filtering) and keep the middle:
-  nFramesToKeep = 2;
+  nFramesToKeep = 4;
   %nFramesToKeep = 260; %use this !
   bds = down_bds(floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1,:);
+  floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1
   size(bds)  
   %save([simfile(1:end-4),'_bds.mat'],'bds')
 
