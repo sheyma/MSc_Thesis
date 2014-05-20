@@ -137,13 +137,14 @@ def calcBOLD(simfile):
 	
 	# Low pass filtering the BOLD signal
 	Bold_filt = np.zeros((n_T , N))
-		
 	for col in range(0, N):
-		
 		Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col])
-		if col == 2:
-			
-			print "column" , col+1 , Bold_filt[:, col]
+	# Downsampling : select one point at each 'ds' [ms]
+	ds = 0.1  # use 2.5!!
+	index = np.arange(0, n_T, int(ds/dtt))
+	down_Bold_filt = Bold_filt[index , :]
+	len_Bold = np.shape(down_Bold_filt)[0]
+	print len_Bold
 		
 input_name = sys.argv[1]	
 calcBOLD(input_name)
