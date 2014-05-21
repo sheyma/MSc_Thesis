@@ -45,17 +45,6 @@ def print_adjacency_matrix(B):
 	G = nx.from_numpy_matrix(B)
 	print nx.adjacency_matrix(G)
 
-
-def export_adjacency_matrix(B, input_mtx, r):		# save adjacency matrix
-	G = nx.from_numpy_matrix(B)
-	hiwi = nx.adjacency_matrix(G)
-	f = open(input_mtx[:-4]+'_ADJ_thr_'+str(r)+'.dat','w')
-	for i in range(len(hiwi)):
-		for j in range(len(hiwi)):
-			f.write("%d\t" % (hiwi[i,j]))
-		f.write("\n")
-	f.close()		
-	    
 	
 # create a random network with method a:
 # networkx.gnm_random_graph : random graph with given N and L
@@ -102,8 +91,8 @@ def get_random_graph_d(B):
 	trial = L*(L-1.)/2
 	swap_num = L;
 	if L >2:
-		Random_Gd = nx.double_edge_swap(G,nswap=swap_num,max_tries=trial)
-		return Random_Gd
+		RG = nx.double_edge_swap(G,nswap=swap_num,max_tries=trial)
+		return RG
 	else:
 		print "No swap possible for number of edges", L
 		return G
@@ -172,6 +161,17 @@ def get_random_graph_e(B):
 	return GR
 
 
+def export_adjacency_matrix(graph , method, input_mtx, r):		# save adjacency matrix
+	print graph
+	hiwi = nx.adjacency_matrix(graph)
+	f = open(input_mtx[:-4] + '_' + method + '_ADJ_thr_'+str(r)+'.dat','w')
+	for i in range(len(hiwi)):
+		for j in range(len(hiwi)):
+			f.write("%d\t" % (hiwi[i,j]))
+		f.write("\n")
+	f.close()		
+	
+	
 # a few characteristic measures of FULL network G with one GIVEN threshold
 def get_characteristics(G, thr, input_name):
 	N = nx.number_of_nodes(G)		#total number of nodes : N
@@ -493,7 +493,7 @@ out_prfx = input_name[:-4]+'_R'+method+'_'
 
 data_matrix = load_matrix(input_name)
 
-for i in range(0, 101):
+for i in range(5, 84):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
@@ -507,14 +507,14 @@ for i in range(0, 101):
 	
 	#plot_graph(Random_G)
 	#print_adjacency_matrix(A)
-	#export_adjacency_matrix(A, input_name, thr)
+	export_adjacency_matrix(Random_G, method, input_name, thr)
 	#get_characteristics(Random_G, thr, input_name)
-	get_single_network_measures(Random_G, thr)
-	get_assortativity(Random_G, thr)
-	get_local_efficiency(Random_G, thr)
-	get_global_effic(Random_G, thr)
-	get_degree_distribution(Random_G, thr)
-	get_node_cc_and_degree(Random_G, thr)
-	get_connected_components_nodes(Random_G, thr)
-	get_small_worldness(Random_G, thr)
-	get_motifs(Random_G, thr)
+	#get_single_network_measures(Random_G, thr)
+	#get_assortativity(Random_G, thr)
+	#get_local_efficiency(Random_G, thr)
+	#get_global_effic(Random_G, thr)
+	#get_degree_distribution(Random_G, thr)
+	#get_node_cc_and_degree(Random_G, thr)
+	#get_connected_components_nodes(Random_G, thr)
+	#get_small_worldness(Random_G, thr)
+	#get_motifs(Random_G, thr)
