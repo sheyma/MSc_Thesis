@@ -8,6 +8,7 @@ import math
 import pylab as pl
 from scipy.signal import butter, filtfilt
 import scipy 
+import scipy.integrate as integ
 	  
 def BOLD(T,r):
 	
@@ -35,7 +36,7 @@ def BOLD(T,r):
 	k2     = float(2); 
 	k3     = 2 * params['Eo']-float(0.2)
 
-	ch_int = 0
+	ch_int = 1
 
 	t0 = np.array(np.arange(0,(T+params['dt']),params['dt']))
 	
@@ -62,12 +63,36 @@ def BOLD(T,r):
 			x[n+1 , 2] = x[n, 2] + dt * itauo * (x[n, 1] - pow(x[n, 2] , ialpha))
 			x[n+1 , 3] = x[n, 3] + dt * itauo * ( x[n, 1] * (1.-pow((1- Eo),(1./x[n,1])))/Eo - pow(x[n,2],ialpha) * x[n,3] / x[n,2])
 	# discard first n_min points	
-        t_new = t[n_min -1 :]
-	s     = x[n_min -1 : , 0]
-	fi    = x[n_min -1 : , 1]
-	v     = x[n_min -1 : , 2]
-	q     = x[n_min -1 : , 3]
-	b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
+		t_new = t[n_min -1 :]
+		s     = x[n_min -1 : , 0]
+		fi    = x[n_min -1 : , 1]
+		v     = x[n_min -1 : , 2]
+		q     = x[n_min -1 : , 3]
+		b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
+	
+	else:	
+		def Bold_eqns(x,t):
+			dxdt = np.zeros_like(x)
+			print  ' %.7f' % ( r[6])
+			dxdt[0] = r[0] - itaus*x[0] - itauf * (x[1] - float(1.0) )
+			dxdt[1] = x[0]
+			dxdt[2] = itauo * ( x[1] - pow(x[2] , ialpha) )
+			dxdt[3] = itauo * ( x[1] * (1.-pow((1- Eo),(1./x[1])))/Eo - pow(x[2],ialpha) * x[3] / x[2])
+			
+			return dxdt
+		
+		init_con = [0 , 1, 1, 1]
+		sol = integ.odeint(Bold_eqns, init_con, t0)
+		
+		t_new = t0[n_min -1 :]
+		s     = sol[n_min -1 :,0]
+		fi    = sol[n_min -1 :,1]
+		v     = sol[n_min -1 :,2]
+		q     = sol[n_min -1 :,3]
+		b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
+	
+		#print sol[:,0]
+	
 	return b  
 
 
@@ -163,7 +188,7 @@ def calcBOLD(simfile):
 	fig = pl.figure(2)
 	pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])
 	pl.colorbar
-	pl.show()
+	#pl.show()
 		
 input_name = sys.argv[1]	
 calcBOLD(input_name)
