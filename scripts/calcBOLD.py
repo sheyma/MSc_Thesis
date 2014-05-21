@@ -161,7 +161,8 @@ def calcBOLD(simfile):
 	np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
 	
 	fig = pl.figure(2)
-	pl.imshow(simcorr, extent=[-1 , 1 , -1 , 1])
+	pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])
+	pl.colorbar
 	pl.show()
 		
 input_name = sys.argv[1]	
