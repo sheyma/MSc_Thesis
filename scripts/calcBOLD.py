@@ -6,7 +6,8 @@ import numpy as np
 import sys
 import math 
 import pylab as pl
-from scipy.signal import butter, filtfilt	  
+from scipy.signal import butter, filtfilt
+import scipy 
 	  
 def BOLD(T,r):
 	
@@ -105,7 +106,7 @@ def calcBOLD(simfile):
 	#pl.show()
 
 	# define simulation time for BOLD
-	T = 10.0
+	T = 10.0		# use this :  T = 700.0 [s]
 	# apply Balloon Windkessel model in fuction BOLD
 	Bold_signal = {}
 	for col in range(0, N):
@@ -153,7 +154,15 @@ def calcBOLD(simfile):
 	#print indice
 	# cut rows from down sampled Bold
 	cut_Bold_filt = down_Bold_filt[indice, :]
-	print np.corrcoef(np.matrix('5 6 5 ; 6 5 7'))
+	print cut_Bold_filt
+	# find correlation coefficient matrix 
+	simcorr = scipy.corrcoef(np.transpose(cut_Bold_filt))
+	print simcorr
+	np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
+	
+	fig = pl.figure(2)
+	pl.imshow(simcorr, extent=[-1 , 1 , -1 , 1])
+	pl.show()
 		
 input_name = sys.argv[1]	
 calcBOLD(input_name)
