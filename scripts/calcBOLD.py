@@ -15,6 +15,7 @@ def BOLD(T,r):
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
 	
+	
 	params = {
 			'taus'   : 0.65,    
 			'tauf'   : 0.41,   
@@ -42,11 +43,13 @@ def BOLD(T,r):
 	
 	n_t = len(t0)
 	
+	
 	t_min = 1		#t_min = 20 #use this one!
 
 	n_min = round(t_min / params['dt'])
 
 	r_max = max(r)
+
 	# initial conditions
 	x0 = np.array([0 , 1, 1, 1])
 
@@ -62,6 +65,7 @@ def BOLD(T,r):
 			x[n+1 , 1] = x[n, 1] + dt * x[n,0]
 			x[n+1 , 2] = x[n, 2] + dt * itauo * (x[n, 1] - pow(x[n, 2] , ialpha))
 			x[n+1 , 3] = x[n, 3] + dt * itauo * ( x[n, 1] * (1.-pow((1- Eo),(1./x[n,1])))/Eo - pow(x[n,2],ialpha) * x[n,3] / x[n,2])
+	
 	# discard first n_min points	
 		t_new = t[n_min -1 :]
 		s     = x[n_min -1 : , 0]
@@ -69,11 +73,12 @@ def BOLD(T,r):
 		v     = x[n_min -1 : , 2]
 		q     = x[n_min -1 : , 3]
 		b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
+		
 	
 	else:	
 		def Bold_eqns(x,t):
 			dxdt = np.zeros_like(x)
-			print  ' %.7f' % ( r[6])
+			#### check rrrrrr index!
 			dxdt[0] = r[0] - itaus*x[0] - itauf * (x[1] - float(1.0) )
 			dxdt[1] = x[0]
 			dxdt[2] = itauo * ( x[1] - pow(x[2] , ialpha) )
@@ -81,19 +86,20 @@ def BOLD(T,r):
 			
 			return dxdt
 		
-		init_con = [0 , 1, 1, 1]
+		init_con = [0. , 1.0, 1.0, 1.0]
 		sol = integ.odeint(Bold_eqns, init_con, t0)
+		print np.shape(sol)
+		np.savetxt('test_bin_ode.dat', sol)
 		
-		t_new = t0[n_min -1 :]
-		s     = sol[n_min -1 :,0]
-		fi    = sol[n_min -1 :,1]
-		v     = sol[n_min -1 :,2]
-		q     = sol[n_min -1 :,3]
-		b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
+		#t_new = t0[n_min -1 :]
+		#s     = sol[n_min -1 :,0]
+		#fi    = sol[n_min -1 :,1]
+		#v     = sol[n_min -1 :,2]
+		#q     = sol[n_min -1 :,3]
+		#b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
 	
 		#print sol[:,0]
-	
-	return b  
+	return 1
 
 
 def calcBOLD(simfile):
@@ -136,6 +142,7 @@ def calcBOLD(simfile):
 	Bold_signal = {}
 	for col in range(0, N):
 		Bold_signal[col] = BOLD(T, timeseries[:,[col]])
+		print "timeseries vector used in bOLD function", timeseries[:,col]
 		# count the number of NaN 's in simulated BOLD
 		count_nan = 0
 		for key,value in enumerate(Bold_signal[col]):
@@ -179,10 +186,10 @@ def calcBOLD(simfile):
 	#print indice
 	# cut rows from down sampled Bold
 	cut_Bold_filt = down_Bold_filt[indice, :]
-	print cut_Bold_filt
+	#print cut_Bold_filt
 	# find correlation coefficient matrix 
 	simcorr = scipy.corrcoef(np.transpose(cut_Bold_filt))
-	print simcorr
+	#print simcorr
 	np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
 	
 	fig = pl.figure(2)
@@ -191,11 +198,10 @@ def calcBOLD(simfile):
 	#pl.show()
 		
 input_name = sys.argv[1]	
-calcBOLD(input_name)
-
-
-
-
+#calcBOLD(input_name)
+R = np.transpose(np.loadtxt(input_name, unpack=True))
+T =10.0
+BOLD(T , R)
 
 
 
