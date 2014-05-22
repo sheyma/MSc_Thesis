@@ -62,7 +62,10 @@ function b = calcBOLD(simfile)
  
   for roi = 1:N 
     boldsignal{roi} = BOLD(T,timeseries(:,roi));
-    disp(roi)
+    a = timeseries(:,1)
+    
+    save test_bin.dat a -ASCII
+    
     % verify that there is no errors in the BOLD results
     nans = size(find(isnan(boldsignal{roi})),1);
     if nans > 0
