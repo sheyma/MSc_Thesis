@@ -12,9 +12,12 @@ import scipy.integrate as integ
 	  
 def BOLD(T,r):
 	
+	
+
+	
+	
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
-	
 	
 	params = {
 			'taus'   : 0.65,    
@@ -36,60 +39,94 @@ def BOLD(T,r):
 	k1     = float(7) * params['Eo'] 
 	k2     = float(2); 
 	k3     = 2 * params['Eo']-float(0.2)
-
+	
 	ch_int = 1
 
 	t0 = np.array(np.arange(0,(T+params['dt']),params['dt']))
 	
 	n_t = len(t0)
 	
-	
 	t_min = 1		#t_min = 20 #use this one!
 
 	n_min = round(t_min / params['dt'])
 
-	r_max = max(r)
-
-	# initial conditions
+	r_max = np.amax(r)
+	
+	# initial conditions	
+	
 	x0 = np.array([0 , 1, 1, 1])
-
+	
 	if ch_int==0:
 		
 		# Euler's Method
 		
-		t = t0		
+		t = t0	
+	
 		x = np.zeros((n_t,4))
+		
 		x[0,:] = x0
 		for n in range(0,n_t-1):
 			x[n+1 , 0] = x[n ,0] + dt * (r[n] - itaus * x[n,0] - itauf * (x[n,1] -float(1.0))) 
 			x[n+1 , 1] = x[n, 1] + dt * x[n,0]
 			x[n+1 , 2] = x[n, 2] + dt * itauo * (x[n, 1] - pow(x[n, 2] , ialpha))
 			x[n+1 , 3] = x[n, 3] + dt * itauo * ( x[n, 1] * (1.-pow((1- Eo),(1./x[n,1])))/Eo - pow(x[n,2],ialpha) * x[n,3] / x[n,2])
-	
+		
 	# discard first n_min points	
 		t_new = t[n_min -1 :]
 		s     = x[n_min -1 : , 0]
 		fi    = x[n_min -1 : , 1]
 		v     = x[n_min -1 : , 2]
 		q     = x[n_min -1 : , 3]
-		b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
-		
+		b= 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
+	#return b	
 	
 	else:	
+	
+		
+	
+	
 		def Bold_eqns(x,t):
-			dxdt = np.zeros_like(x)
-			#### check rrrrrr index!
-			dxdt[0] = r[0] - itaus*x[0] - itauf * (x[1] - float(1.0) )
-			dxdt[1] = x[0]
-			dxdt[2] = itauo * ( x[1] - pow(x[2] , ialpha) )
-			dxdt[3] = itauo * ( x[1] * (1.-pow((1- Eo),(1./x[1])))/Eo - pow(x[2],ialpha) * x[3] / x[2])
 			
+			dxdt = np.zeros((n_t , 4))
+			
+			 
+			#print dxdt[4]
+			
+			for i in range(0, n_t)
+			
+				dxdt[0] = r[i] - itaus*x[0] - itauf * (x[1] - float(1.0) )
+				dxdt[1] = x[0]
+				dxdt[2] = itauo * ( x[1] - pow(x[2] , ialpha) )
+				dxdt[3] = itauo * ( x[1] * (1.-pow((1- Eo),(1./x[1])))/Eo - pow(x[2],ialpha) * x[3] / x[2])
+	      
+		
+			return dxdt
+			
+			#for i in range(0, n_t):
+				#dxdt[0]  = r
+
+		
+		
+				#dxdt[0] = r[i] - itaus*x[0] - itauf * (x[1] - float(1.0) )
+				#dxdt[1] = x[0]
+				#dxdt[2] = itauo * ( x[1] - pow(x[2] , ialpha) )
+				#dxdt[3] = itauo * ( x[1] * (1.-pow((1- Eo),(1./x[1])))/Eo - pow(x[2],ialpha) * x[3] / x[2])
+	      
+				#print "r(i) is" , r[i] , "dxdt is " , dxdt[0]
+				
+			
+			#
+			
+			#print dxdt[1]
 			return dxdt
 		
 		init_con = [0. , 1.0, 1.0, 1.0]
+		#init_con = [0. ] 
 		sol = integ.odeint(Bold_eqns, init_con, t0)
-		print np.shape(sol)
-		np.savetxt('test_bin_ode.dat', sol)
+		
+		print sol
+		
+		#np.savetxt('test_bin_ode.dat', sol)
 		
 		#t_new = t0[n_min -1 :]
 		#s     = sol[n_min -1 :,0]
@@ -99,8 +136,8 @@ def BOLD(T,r):
 		#b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
 	
 		#print sol[:,0]
-	return 1
-
+	
+	return 1 
 
 def calcBOLD(simfile):
 	print "input huge time series u's and v's: ", simfile 
@@ -201,8 +238,7 @@ input_name = sys.argv[1]
 #calcBOLD(input_name)
 R = np.transpose(np.loadtxt(input_name, unpack=True))
 T =10.0
-BOLD(T , R)
-
+BOLD(T , R[:, 0])
 
 
 
