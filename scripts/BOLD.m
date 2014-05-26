@@ -15,7 +15,7 @@ ch_int = 0;         % 0: Euler, 1: ode45
 dt = 0.01;
 %dt  = 0.001;        % (s)      %use this one!
 t0  = (0:dt:T)';
-n_t = length(t0)
+n_t = length(t0) ;
 
 t_min = 1; % not use this!
 %t_min = 20;  %%% to discard first 20 sec of the simulaton 
@@ -50,7 +50,7 @@ if ch_int == 0
     
     % Euler method
 
-    t      = t0
+    t      = t0;
     x      = zeros(n_t,4);
     x(1,:) = x0;
     for n = 1:n_t-1;
@@ -61,6 +61,7 @@ if ch_int == 0
     end
     format long 
     x
+    
 else
         
     %opt = odeset('RelTol',1e-12,'AbsTol',1e-12);
