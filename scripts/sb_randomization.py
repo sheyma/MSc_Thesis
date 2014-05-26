@@ -162,15 +162,15 @@ def get_random_graph_e(B):
 
 
 def export_adjacency_matrix(graph , method, input_mtx, r):		# save adjacency matrix
-	print graph
+	#print graph
 	hiwi = nx.adjacency_matrix(graph)
-	f = open(input_mtx[:-4] + '_' + method + '_ADJ_thr_'+str(r)+'.dat','w')
+	f = open(input_mtx[:-4] + '_' + method + '_ADJ_thr_'+str('%.2f' % (r))+'.dat','w')
 	for i in range(len(hiwi)):
 		for j in range(len(hiwi)):
 			f.write("%d\t" % (hiwi[i,j]))
 		f.write("\n")
 	f.close()		
-	
+	#print str('%.2f' % (r))
 	
 # a few characteristic measures of FULL network G with one GIVEN threshold
 def get_characteristics(G, thr, input_name):
