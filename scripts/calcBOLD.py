@@ -83,14 +83,14 @@ def BOLD(T,r):
 	else:	
 	
 		
-	
+		# how to solve Bold equations with python odeint ???
 	
 		def Bold_eqns(x,t):
 			
 			dxdt = np.zeros((n_t , 4))
 			
 			 
-			#print dxdt[4]
+			
 			
 			for i in range(0, n_t)
 			
@@ -139,100 +139,100 @@ def BOLD(T,r):
 	
 	return 1 
 
-def calcBOLD(simfile):
-	print "input huge time series u's and v's: ", simfile 
-	# load simfile as numpy matrix
-	simout = np.transpose(np.loadtxt(simfile, unpack=True))
-	# extract first column of simout as time vector
-	Tvec = simout[:,[0]]
-	# length of time time vector
-	n_Tvec = len(Tvec) 
-	# dt of time vector
-	dt_Tvec = Tvec[1] - Tvec[0] 
-	# total number of excitators: u's 
-	N = (np.shape(simout)[1] -1 ) /2
+#def calcBOLD(simfile):
+	#print "input huge time series u's and v's: ", simfile 
+	## load simfile as numpy matrix
+	#simout = np.transpose(np.loadtxt(simfile, unpack=True))
+	## extract first column of simout as time vector
+	#Tvec = simout[:,[0]]
+	## length of time time vector
+	#n_Tvec = len(Tvec) 
+	## dt of time vector
+	#dt_Tvec = Tvec[1] - Tvec[0] 
+	## total number of excitators: u's 
+	#N = (np.shape(simout)[1] -1 ) /2
 	
-	# extract time series of u's from simout
-	timeseries = np.zeros((n_Tvec, N))
-	print "size of timeseries : ", np.shape(timeseries)
-	for row in range(0,N):
-		timeseries[:,[row]] = simout[:,[2*row +1]]
-	# store timeseries and time as .dat
-	timeseries_app = np.c_[Tvec , timeseries]
-	np.savetxt(simfile[:-4] + '_timeseries.dat', timeseries_app)	
-	# 1st column is time vector, others are u series
+	## extract time series of u's from simout
+	#timeseries = np.zeros((n_Tvec, N))
+	#print "size of timeseries : ", np.shape(timeseries)
+	#for row in range(0,N):
+		#timeseries[:,[row]] = simout[:,[2*row +1]]
+	## store timeseries and time as .dat
+	#timeseries_app = np.c_[Tvec , timeseries]
+	#np.savetxt(simfile[:-4] + '_timeseries.dat', timeseries_app)	
+	## 1st column is time vector, others are u series
 	
-	# plotting time series in a specific time interval
-	t_start = 600;
-	t_range = 400;
+	## plotting time series in a specific time interval
+	#t_start = 600;
+	#t_range = 400;
 	
-	fig = pl.figure(1)
-	pl.plot(timeseries[t_start : (t_start + t_range) , :])
-	pl.xlabel('t [ms]')
-	pl.ylabel('$u_i(t)$')
-	pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
-	#pl.show()
+	#fig = pl.figure(1)
+	#pl.plot(timeseries[t_start : (t_start + t_range) , :])
+	#pl.xlabel('t [ms]')
+	#pl.ylabel('$u_i(t)$')
+	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
+	##pl.show()
 
-	# define simulation time for BOLD
-	T = 10.0		# use this :  T = 700.0 [s]
-	# apply Balloon Windkessel model in fuction BOLD
-	Bold_signal = {}
-	for col in range(0, N):
-		Bold_signal[col] = BOLD(T, timeseries[:,[col]])
-		print "timeseries vector used in bOLD function", timeseries[:,col]
-		# count the number of NaN 's in simulated BOLD
-		count_nan = 0
-		for key,value in enumerate(Bold_signal[col]):
-			if value == float('nan'):
-				count_nan += 1
-				#print "u_N , key, value : "
-				#print col,key,Bold_signal[key][col] 
-		if count_nan > 0:
-			print "u_N, nu. of NaNs:", col, count_nan
+	## define simulation time for BOLD
+	#T = 10.0		# use this :  T = 700.0 [s]
+	## apply Balloon Windkessel model in fuction BOLD
+	#Bold_signal = {}
+	#for col in range(0, N):
+		#Bold_signal[col] = BOLD(T, timeseries[:,[col]])
+		#print "timeseries vector used in bOLD function", timeseries[:,col]
+		## count the number of NaN 's in simulated BOLD
+		#count_nan = 0
+		#for key,value in enumerate(Bold_signal[col]):
+			#if value == float('nan'):
+				#count_nan += 1
+				##print "u_N , key, value : "
+				##print col,key,Bold_signal[key][col] 
+		#if count_nan > 0:
+			#print "u_N, nu. of NaNs:", col, count_nan
 			
-	# filtering below 0.25 Hz = cut-off frequency
-	f_c = 0.25  
-	# resolution of BOLD signal : dtt [second]
-	dtt = 0.001  
-	# length of one u series after subjected to BOLD 
-	n_T = len(np.array(Bold_signal[1]))
-	# sampling frequency
-	f_s = 1/dtt
-	# Nyquist frequency
-	f_n = f_s /2
-	# Butterworth filter
-	#b , a = butter(5, f_c/f_n , btype = 'low')########
-	b , a = butter(5, 0.5 , btype = 'lowpass', analog=False)
-	#print b,a
+	## filtering below 0.25 Hz = cut-off frequency
+	#f_c = 0.25  
+	## resolution of BOLD signal : dtt [second]
+	#dtt = 0.001  
+	## length of one u series after subjected to BOLD 
+	#n_T = len(np.array(Bold_signal[1]))
+	## sampling frequency
+	#f_s = 1/dtt
+	## Nyquist frequency
+	#f_n = f_s /2
+	## Butterworth filter
+	##b , a = butter(5, f_c/f_n , btype = 'low')########
+	#b , a = butter(5, 0.5 , btype = 'lowpass', analog=False)
+	##print b,a
 	
-	# Low pass filtering the BOLD signal
-	Bold_filt = np.zeros((n_T , N))
-	for col in range(0, N):
-		Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col])
-	# Downsampling : select one point at each 'ds' [ms]
-	ds = 0.1  # use 2.5!!
-	index = np.arange(0, n_T, int(ds/dtt))
-	down_Bold_filt = Bold_filt[index , :]
+	## Low pass filtering the BOLD signal
+	#Bold_filt = np.zeros((n_T , N))
+	#for col in range(0, N):
+		#Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col])
+	## Downsampling : select one point at each 'ds' [ms]
+	#ds = 0.1  # use 2.5!!
+	#index = np.arange(0, n_T, int(ds/dtt))
+	#down_Bold_filt = Bold_filt[index , :]
 	
-	# Cut first and last seconds (distorted from filtering)
-	len_Bold = np.shape(down_Bold_filt)[0]
-	nFramesToKeep = 4   #   use 260!
-	limit_down = int( math.floor( len_Bold - nFramesToKeep )/2 )
-	limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 ) 
-	indice = np.arange(limit_down-1, limit_up-1  , 1) 
-	#print indice
-	# cut rows from down sampled Bold
-	cut_Bold_filt = down_Bold_filt[indice, :]
-	#print cut_Bold_filt
-	# find correlation coefficient matrix 
-	simcorr = scipy.corrcoef(np.transpose(cut_Bold_filt))
-	#print simcorr
-	np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
+	## Cut first and last seconds (distorted from filtering)
+	#len_Bold = np.shape(down_Bold_filt)[0]
+	#nFramesToKeep = 4   #   use 260!
+	#limit_down = int( math.floor( len_Bold - nFramesToKeep )/2 )
+	#limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 ) 
+	#indice = np.arange(limit_down-1, limit_up-1  , 1) 
+	##print indice
+	## cut rows from down sampled Bold
+	#cut_Bold_filt = down_Bold_filt[indice, :]
+	##print cut_Bold_filt
+	## find correlation coefficient matrix 
+	#simcorr = scipy.corrcoef(np.transpose(cut_Bold_filt))
+	##print simcorr
+	#np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
 	
-	fig = pl.figure(2)
-	pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])
-	pl.colorbar
-	#pl.show()
+	#fig = pl.figure(2)
+	#pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])
+	#pl.colorbar
+	##pl.show()
 		
 input_name = sys.argv[1]	
 #calcBOLD(input_name)
