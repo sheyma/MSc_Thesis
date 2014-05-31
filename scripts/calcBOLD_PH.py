@@ -12,20 +12,24 @@ import scipy.integrate as integ
 from scipy.integrate import odeint
 import time  
 
-
 def Bold_eqns(X, t, itaus, itauf, itauo, ialpha, Eo, r, T, dt):
 	x0, x1, x2, x3 = X
-	print "t : " ,t, "dt :" , dt , "r_index :" ,[min(round(t*1000),(T-dt)*1000)]
+	tmp = r[r_t <= t]	
+	r_index = len(tmp)-1
+	if r_index < (len(r) - 1) and (r_t[r_index+1] - t) < (t - r_t[r_index]):
+		r_index += 1
+
+	print "t : " ,t,  "r_index :", r_index, "r[n] " , r[r_index] 
 	
 	file_dbg_Bold_eqns.write("%f\t%f\t%f\n" % (
-		t , min(round(t*1000),(T-dt)*1000),
-		r[min(round(t*1000),(T-dt)*1000)])    )
+		t , r_index,
+		r[r_index]) )
 
 	
 	if (t % 1) < 0.0001:
 	  t_now = time.time()
 	  print 'seconds: %f => minutes %f to simulate %.1f time units of %f' % ((t_now-t_start),(t_now-t_start)/60., t, T)
-	return [r[min(round(t*1000),(T-dt)*1000)] - itaus*x0 - itauf * (x1 - float(1.0) ),
+	return [r[r_index] - itaus*x0 - itauf * (x1 - float(1.0) ),
 		x0,
 		itauo * ( x1 - pow(x2 , ialpha) ),
 		itauo * ( x1 * (1.-pow((1.- Eo),(1./x1)))/Eo - pow(x2,ialpha) * x3 / x2)]	
@@ -38,7 +42,7 @@ params = {
 	'tauf'   : 0.41,   
 	'tauo'   :  0.98,    
 	'alpha'  :  0.32,
-	'dt' : 0.01, #dt = 0.001
+	'dt' : 0.001, #dt = 0.001
 	'Eo' : 0.34
 	}
 
@@ -55,18 +59,28 @@ k3     = 2 * params['Eo']-float(0.2)
 
 init_con = [0., 1.0, 1.0, 1.0]
 
+T = 90
 print "reading data..."
+
+
 input_name = sys.argv[1]
 R = np.loadtxt(input_name, unpack=True)
+# extract time array from R 
+r_t = R[0,:]
 r = R[1,:]
-#R = np.transpose(np.loadtxt(input_name, unpack=True))
-#r = R[:,1]
+
+# find maximum of time in R
+r_t_max = np.amax(r_t)   # 99.9
+print "max time in r : ",  r_t_max 
+
+if r_t_max < T:
+	print "simulation time T is greater than r-dimension !!!"
+	sys.exit(1)
 
 t_now = time.time()
 print 'seconds: %f => minutes %f to read the data' % ((t_now-t_start),(t_now-t_start)/60.)
 
-# T = 300.0
-T = 10.0
+
 N = T/params['dt']
 t = np.linspace(0, T-params['dt'], N)
 
@@ -86,4 +100,4 @@ pl.xlabel('t')
 pl.ylabel('BOLD signal')
 pl.plot(t,b[:],'g-') 
 
-#pl.show()
+pl.show()

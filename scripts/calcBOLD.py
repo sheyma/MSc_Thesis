@@ -10,11 +10,7 @@ from scipy.signal import butter, filtfilt
 import scipy 
 import scipy.integrate as integ
 	  
-def BOLD(T,r):
-	
-	
-
-	
+def BOLD_euler(T,r):
 	
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
@@ -24,7 +20,7 @@ def BOLD(T,r):
 			'tauf'   : 0.41,   
 			'tauo'   :  0.98,    
 			'alpha'  :  0.32,
-			'dt' : 0.01,	 ## change it to 0.001
+			'dt' : 0.1,	 ## change it to 0.001
 			'Eo' : 0.34
 			}
 
@@ -40,105 +36,56 @@ def BOLD(T,r):
 	k2     = float(2); 
 	k3     = 2 * params['Eo']-float(0.2)
 	
-	ch_int = 1
-
+	# initial conditions	
+	x_init = np.array([0 , 1, 1, 1])
+	
+	# create a time array
 	t0 = np.array(np.arange(0,(T+params['dt']),params['dt']))
-	
 	n_t = len(t0)
-	
 	t_min = 1		#t_min = 20 #use this one!
 
 	n_min = round(t_min / params['dt'])
-
+	
+	#r = np.transpose(r)
 	r_max = np.amax(r)
+
+	print r
 	
-	# initial conditions	
+	# Euler's Method
 	
-	x0 = np.array([0 , 1, 1, 1])
+	t = t0	
+
+	x = np.zeros((n_t,4))
 	
-	if ch_int==0:
-		
-		# Euler's Method
-		
-		t = t0	
-	
-		x = np.zeros((n_t,4))
-		
-		x[0,:] = x0
-		for n in range(0,n_t-1):
-			x[n+1 , 0] = x[n ,0] + dt * (r[n] - itaus * x[n,0] - itauf * (x[n,1] -float(1.0))) 
-			x[n+1 , 1] = x[n, 1] + dt * x[n,0]
-			x[n+1 , 2] = x[n, 2] + dt * itauo * (x[n, 1] - pow(x[n, 2] , ialpha))
-			x[n+1 , 3] = x[n, 3] + dt * itauo * ( x[n, 1] * (1.-pow((1- Eo),(1./x[n,1])))/Eo - pow(x[n,2],ialpha) * x[n,3] / x[n,2])
+	x[0,:] = x_init 
+	for n in range(0,n_t-1):
+		print "n is ", n, r[n]
+		x[n+1 , 0] = x[n ,0] + dt * (r[n] - itaus * x[n,0] - itauf * (x[n,1] -float(1.0))) 
+		x[n+1 , 1] = x[n, 1] + dt * x[n,0]
+		x[n+1 , 2] = x[n, 2] + dt * itauo * (x[n, 1] - pow(x[n, 2] , ialpha))
+		x[n+1 , 3] = x[n, 3] + dt * itauo * ( x[n, 1] * (1.-pow((1- Eo),(1./x[n,1])))/Eo - pow(x[n,2],ialpha) * x[n,3] / x[n,2])
 		
 	# discard first n_min points	
-		t_new = t[n_min -1 :]
-		s     = x[n_min -1 : , 0]
-		fi    = x[n_min -1 : , 1]
-		v     = x[n_min -1 : , 2]
-		q     = x[n_min -1 : , 3]
-		b= 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
-	#return b	
+	t_new = t[n_min -1 :]
+	s     = x[n_min -1 : , 0]
+	fi    = x[n_min -1 : , 1]
+	v     = x[n_min -1 : , 2]
+	q     = x[n_min -1 : , 3]
+	b= 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
 	
-	else:	
-	
+	# plot b over time 
+	pl.xlabel('t')
+	pl.ylabel('BOLD signal')
+	pl.plot(t_new,b[:],'g-') 
+	pl.show()
 		
-		# how to solve Bold equations with python odeint ???
+	return b
+
 	
-		def Bold_eqns(x,t):
-			
-			dxdt = np.zeros((n_t , 4))
 			
 			 
-			
-			
-			for i in range(0, n_t)
-			
-				dxdt[0] = r[i] - itaus*x[0] - itauf * (x[1] - float(1.0) )
-				dxdt[1] = x[0]
-				dxdt[2] = itauo * ( x[1] - pow(x[2] , ialpha) )
-				dxdt[3] = itauo * ( x[1] * (1.-pow((1- Eo),(1./x[1])))/Eo - pow(x[2],ialpha) * x[3] / x[2])
-	      
-		
-			return dxdt
-			
-			#for i in range(0, n_t):
-				#dxdt[0]  = r
-
-		
-		
-				#dxdt[0] = r[i] - itaus*x[0] - itauf * (x[1] - float(1.0) )
-				#dxdt[1] = x[0]
-				#dxdt[2] = itauo * ( x[1] - pow(x[2] , ialpha) )
-				#dxdt[3] = itauo * ( x[1] * (1.-pow((1- Eo),(1./x[1])))/Eo - pow(x[2],ialpha) * x[3] / x[2])
-	      
-				#print "r(i) is" , r[i] , "dxdt is " , dxdt[0]
-				
-			
-			#
-			
-			#print dxdt[1]
-			return dxdt
-		
-		init_con = [0. , 1.0, 1.0, 1.0]
-		#init_con = [0. ] 
-		sol = integ.odeint(Bold_eqns, init_con, t0)
-		
-		print sol
-		
-		#np.savetxt('test_bin_ode.dat', sol)
-		
-		#t_new = t0[n_min -1 :]
-		#s     = sol[n_min -1 :,0]
-		#fi    = sol[n_min -1 :,1]
-		#v     = sol[n_min -1 :,2]
-		#q     = sol[n_min -1 :,3]
-		#b = 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
 	
-		#print sol[:,0]
-	
-	return 1 
-
+		
 #def calcBOLD(simfile):
 	#print "input huge time series u's and v's: ", simfile 
 	## load simfile as numpy matrix
@@ -236,17 +183,10 @@ def BOLD(T,r):
 		
 input_name = sys.argv[1]	
 #calcBOLD(input_name)
-R = np.transpose(np.loadtxt(input_name, unpack=True))
-T =10.0
-BOLD(T , R[:, 0])
-
-
-
-
-
-
-
-
+R = np.loadtxt(input_name, unpack=True)
+T =90
+BOLD_euler(T , R[1, :])
+#r_t = R[0,:]
 
 
 
