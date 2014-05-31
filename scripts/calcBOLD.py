@@ -9,52 +9,21 @@ import pylab as pl
 from scipy.signal import butter, filtfilt
 import scipy 
 import scipy.integrate as integ
-	  
+  
+
 def BOLD_euler(T,r):
-	
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
 	
-	params = {
-			'taus'   : 0.65,    
-			'tauf'   : 0.41,   
-			'tauo'   :  0.98,    
-			'alpha'  :  0.32,
-			'dt' : 0.1,	 ## change it to 0.001
-			'Eo' : 0.34
-			}
-
-	itaus = float(1/params['taus'])
-	itauf = float(1/params['tauf'])
-	itauo = float(1/params['tauo'])
-	ialpha = float(1/params['alpha'])
-	dt = float(params['dt'])    
-	Eo = float(params['Eo'])
-	
-	vo     = float(0.02);
-	k1     = float(7) * params['Eo'] 
-	k2     = float(2); 
-	k3     = 2 * params['Eo']-float(0.2)
-	
-	# initial conditions	
-	x_init = np.array([0 , 1, 1, 1])
-	
 	# create a time array
-	t0 = np.array(np.arange(0,(T+params['dt']),params['dt']))
-	n_t = len(t0)
+	t = np.array(np.arange(0,(T+params['dt']),params['dt']))
+	n_t = len(t)
 	t_min = 1		#t_min = 20 #use this one!
 
 	n_min = round(t_min / params['dt'])
 	
-	#r = np.transpose(r)
 	r_max = np.amax(r)
-
-	print r
 	
-	# Euler's Method
-	
-	t = t0	
-
 	x = np.zeros((n_t,4))
 	
 	x[0,:] = x_init 
@@ -180,7 +149,35 @@ def BOLD_euler(T,r):
 	#pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])
 	#pl.colorbar
 	##pl.show()
-		
+
+# here we go 
+
+params = {
+		'taus'   : 0.65,    
+		'tauf'   : 0.41,   
+		'tauo'   :  0.98,    
+		'alpha'  :  0.32,
+		'dt' : 0.1,	 ## change it to 0.001
+		'Eo' : 0.34
+		}
+
+itaus = float(1/params['taus'])
+itauf = float(1/params['tauf'])
+itauo = float(1/params['tauo'])
+ialpha = float(1/params['alpha'])
+dt = float(params['dt'])    
+Eo = float(params['Eo'])
+
+vo     = float(0.02);
+k1     = float(7) * params['Eo'] 
+k2     = float(2); 
+k3     = 2 * params['Eo']-float(0.2)
+
+# initial conditions	
+x_init = np.array([0 , 1, 1, 1])	  
+
+
+	
 input_name = sys.argv[1]	
 #calcBOLD(input_name)
 R = np.loadtxt(input_name, unpack=True)
