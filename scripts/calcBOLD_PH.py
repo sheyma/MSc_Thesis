@@ -12,7 +12,21 @@ import scipy.integrate as integ
 from scipy.integrate import odeint
 import time  
 
-def Bold_eqns(X, t, itaus, itauf, itauo, ialpha, Eo, r, T, dt):
+class Params(object):
+	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo']
+
+def invert_params(params):
+	iparams = Params()
+	iparams.taus = float(1/params.taus)   
+	iparams.tauf = float(1/params.tauf)  
+	iparams.tauo = float(1/params.tauo)    
+	iparams.alpha = float(1/params.alpha)
+	iparams.dt = float(params.dt)
+	iparams.Eo = float(params.Eo)
+	return iparams
+
+def Bold_eqns(X, t, T, r, iparams):
+	
 	x0, x1, x2, x3 = X
 	tmp = r[r_t <= t]	
 	r_index = len(tmp)-1
@@ -29,33 +43,28 @@ def Bold_eqns(X, t, itaus, itauf, itauo, ialpha, Eo, r, T, dt):
 	if (t % 1) < 0.0001:
 	  t_now = time.time()
 	  print 'seconds: %f => minutes %f to simulate %.1f time units of %f' % ((t_now-t_start),(t_now-t_start)/60., t, T)
-	return [r[r_index] - itaus*x0 - itauf * (x1 - float(1.0) ),
+	return [r[r_index] - iparams.taus * x0 - iparams.tauf * (x1 - float(1.0) ),
 		x0,
-		itauo * ( x1 - pow(x2 , ialpha) ),
-		itauo * ( x1 * (1.-pow((1.- Eo),(1./x1)))/Eo - pow(x2,ialpha) * x3 / x2)]	
+		iparams.tauo * ( x1 - pow(x2 , iparams.alpha) ),
+		iparams.tauo * ( x1 * (1.-pow((1.- iparams.Eo),(1./x1)))/iparams.Eo - pow(x2, iparams.alpha) * x3 / x2)]	
 
 
 t_start = time.time()
 
-params = {
-	'taus'   : 0.65,    
-	'tauf'   : 0.41,   
-	'tauo'   :  0.98,    
-	'alpha'  :  0.32,
-	'dt' : 0.001, #dt = 0.001
-	'Eo' : 0.34
-	}
+params = Params()
+params.taus = 0.65
+params.tauf = 0.41
+params.tauo = 0.98
+params.alpha  = 0.32
+params.dt = 0.001
+params.Eo = 0.34
 
-itaus = float(1/params['taus'])
-itauf = float(1/params['tauf'])
-itauo = float(1/params['tauo'])
-ialpha = float(1/params['alpha'])
-dt = float(params['dt'])    
-Eo = float(params['Eo'])
+iparams = invert_params(params)
+
 vo     = float(0.02);
-k1     = float(7) * params['Eo'] 
+k1     = float(7) * params.Eo 
 k2     = float(2); 
-k3     = 2 * params['Eo']-float(0.2)
+k3     = 2 * params.Eo-float(0.2)
 
 init_con = [0., 1.0, 1.0, 1.0]
 
@@ -81,17 +90,17 @@ t_now = time.time()
 print 'seconds: %f => minutes %f to read the data' % ((t_now-t_start),(t_now-t_start)/60.)
 
 
-N = T/params['dt']
-t = np.linspace(0, T-params['dt'], N)
+N = T/params.dt
+t = np.linspace(0, T-params.dt, N)
 
 print "starting BOLD calculation..."
 file_dbg_Bold_eqns = open('r_index_ode.dat','w')
 
-sol = odeint(Bold_eqns, init_con[:], t, args=(itaus, itauf, itauo, ialpha, Eo, r, T, params['dt']))
+sol = odeint(Bold_eqns, init_con[:], t, args=(T, r, iparams))
 
 file_dbg_Bold_eqns.close()
 
-b = 100/Eo * vo * ( k1 * (1-sol[:,3]) + k2 * (1-sol[:,3]/sol[:,2]) + k3 * (1-sol[:,2]) )
+b = 100/iparams.Eo * vo * ( k1 * (1-sol[:,3]) + k2 * (1-sol[:,3]/sol[:,2]) + k3 * (1-sol[:,2]) )
 #print b
 t_now = time.time()
 print 'seconds: %f => minutes %f to simulate' % ((t_now-t_start),(t_now-t_start)/60.)
