@@ -188,6 +188,7 @@ solution = neuronetz.ddeN.sample(0, dt=0.1)
 
 
 
+
 t = solution['t']
 
 #print only last 10% of time series

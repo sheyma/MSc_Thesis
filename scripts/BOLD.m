@@ -1,3 +1,5 @@
+
+
 function [b] = BOLD(T,r)
 
 % The Hemodynamic model with one simplified neural activity
@@ -15,7 +17,7 @@ dt  = 0.001;        % (s)
 t0  = (0:dt:T)';
 n_t = length(t0);
 
-t_min = 20;  %%% to discard first 20 sec of the simulaton 
+t_min = 1;  %%% t_min=20 to discard first 20 sec of the simulaton 
 n_min = round(t_min/dt);
 
 r_max = max(r);

@@ -31,7 +31,7 @@ class simnet:
         self.eqnsN = neteqns(self.G, self.H, self.T, self.eqns, params=self.params, coupling=self.coupling)
         self.noiseN = netnoise(self.eqnsN, self.noise)
 
-        print >> sys.stderr, 'Gleichungen fuers ganze Netz:' #Debug
+        print >> sys.stderr, 'Gleichungen fuers ganze Netz:'
         print >> sys.stderr, self.eqnsN  #Debug
         print >> sys.stderr, 'Noise fuers ganze Netz:'
         print >> sys.stderr, self.noiseN #Debug
@@ -96,24 +96,11 @@ class simnet:
         """Jetzt das ganze Netz.
         """
         self.ddeN.set_sim_params(tfinal=tmax)
-        print "hello noch mal"
         self.ddeN.run()
-        
-        print "simulation has finished!"
-        
-        
-        self.adaptive_sol = self.ddeN.sol   # self adaptive solutions
-        
-        print "start sampling..."
 
         """Zeitserien mit linearer Zeit speichern.
         """
-        #self.sol = self.ddeN.sol_spl(np.linspace(0,tmax,550000))
-        
-        self.spline_sol = self.ddeN.sol_spl(np.linspace(0,tmax,5500000))
-        #self.sol = self.ddeN.sol_spl(np.linspace(0,tmax,10000))  # simulations 10000
-        self.sol = self.ddeN.sol
-        
+        self.sol = self.ddeN.sol_spl(np.linspace(0,tmax,10000))
 
 class msf:
     """Nützliches, um die MSF auszurechnen.
@@ -962,4 +949,6 @@ if __name__ == '__main__':
                   np.average([ netzwerk.closeness(i)
                                for i in range(netzwerk.dim) ])))
 """
+
+
 

@@ -10,6 +10,7 @@ from scipy.signal import butter, filtfilt
 import scipy
 import scipy.integrate as integ
 from scipy.integrate import odeint
+import time
 
 
 class Params(object):
@@ -25,7 +26,11 @@ def invert_params(params):
 def bold_euler(T, r, iparams, x_init):
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
+	
 	dt = iparams.dt
+	
+	#dt = float(T) / len(r)
+	
 	
 	# create a time array
 	t = np.array(np.arange(0,(T+iparams.dt),iparams.dt))
@@ -40,7 +45,7 @@ def bold_euler(T, r, iparams, x_init):
 	
 	x[0,:] = x_init
 	for n in range(0,n_t-1):
-		print "n is ", n, r[n]
+		print "n is: ", n , "r[n] is ",  r[n]
 		x[n+1 , 0] = x[n ,0] + dt * (r[n] - iparams.taus * x[n,0] - iparams.tauf * (x[n,1] -float(1.0)))
 		x[n+1 , 1] = x[n, 1] + dt * x[n,0]
 		x[n+1 , 2] = x[n, 2] + dt * iparams.tauo * (x[n, 1] - pow(x[n, 2] , iparams.alpha))
@@ -59,6 +64,8 @@ def bold_euler(T, r, iparams, x_init):
 	pl.ylabel('BOLD signal')
 	pl.plot(t_new,b[:],'g-')
 	pl.show()
+	
+	print "dt is : " , dt
 		
 	return b
 
@@ -72,9 +79,9 @@ def bold_ode_eqns(X, t, T, r, iparams):
 
 	print "t : " ,t,  "r_index :", r_index, "r[n] " , r[r_index]
 	
-	if (t % 1) < 0.0001:
-		t_now = time.time()
-		print 'seconds: %f => minutes %f to simulate %.1f time units of %f' % ((t_now-t_start),(t_now-t_start)/60., t, T)
+	#if (t % 1) < 0.0001:
+		#t_now = time.time()
+		#print 'seconds: %f => minutes %f to simulate %.1f time units of %f' % ((t_now-t_start),(t_now-t_start)/60., t, T)
 	return [r[r_index] - iparams.taus * x0 - iparams.tauf * (x1 - float(1.0) ),
 		x0,
 		iparams.tauo * ( x1 - pow(x2 , iparams.alpha) ),
@@ -205,7 +212,7 @@ params.taus = 0.65
 params.tauf = 0.41
 params.tauo = 0.98
 params.alpha  = 0.32
-params.dt = 0.1  # check it!!!
+params.dt = 0.001  # check it!!!
 params.Eo = 0.34
 params.vo = 0.02;
 params.k1 = 7.0 * params.Eo
@@ -224,7 +231,7 @@ input_name = sys.argv[1]
 print "reading data..."
 R = np.loadtxt(input_name, unpack=True)
 
-T =90
+T =700.0
 bold_euler(T , R[1, :], iparams, x_init)
 
 r_t = R[0,:]
