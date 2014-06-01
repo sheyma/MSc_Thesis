@@ -41,14 +41,14 @@ def bold_ode_eqns(X, t, T, r, iparams):
 		iparams.tauo * ( x1 * (1.-pow((1.- iparams.Eo),(1./x1)))/iparams.Eo - pow(x2, iparams.alpha) * x3 / x2)]	
 
 
-def bold_ode(T, r, iparams):
+def bold_ode(T, r, iparams, x_init):
 
 	N = T/iparams.dt
 	t = np.linspace(0, T-iparams.dt, N)
 
 	print "starting BOLD calculation..."
 
-	sol = odeint(bold_ode_eqns, init_con[:], t, args=(T, r, iparams))
+	sol = odeint(bold_ode_eqns, x_init, t, args=(T, r, iparams))
 
 	b = 100/iparams.Eo * iparams.vo * ( iparams.k1 * (1-sol[:,3]) + iparams.k2 * (1-sol[:,3]/sol[:,2]) + iparams.k3 * (1-sol[:,2]) )
 	
@@ -75,7 +75,7 @@ params.k3 = 2.0 * params.Eo - 0.2
 
 iparams = invert_params(params)
 
-init_con = [0., 1.0, 1.0, 1.0]
+x_init = [0., 1.0, 1.0, 1.0]
 
 T = 90
 print "reading data..."
@@ -98,7 +98,7 @@ if r_t_max < T:
 t_now = time.time()
 print 'seconds: %f => minutes %f to read the data' % ((t_now-t_start),(t_now-t_start)/60.)
 
-bold_ode( T, r, iparams)
+bold_ode( T, r, iparams, x_init)
 
 #print b
 t_now = time.time()
