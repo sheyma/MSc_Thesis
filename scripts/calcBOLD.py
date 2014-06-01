@@ -10,17 +10,31 @@ from scipy.signal import butter, filtfilt
 import scipy 
 import scipy.integrate as integ
   
+class Params(object):
+	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo']
 
-def BOLD_euler(T,r):
+def invert_params(params):
+	iparams = Params()
+	iparams.taus = float(1/params.taus)   
+	iparams.tauf = float(1/params.tauf)  
+	iparams.tauo = float(1/params.tauo)    
+	iparams.alpha = float(1/params.alpha)
+	iparams.dt = float(params.dt)
+	iparams.Eo = float(params.Eo)
+	return iparams
+
+
+def BOLD_euler(T, r, iparams ):
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
+	dt = iparams.dt
 	
 	# create a time array
-	t = np.array(np.arange(0,(T+params['dt']),params['dt']))
+	t = np.array(np.arange(0,(T+iparams.dt),iparams.dt))
 	n_t = len(t)
 	t_min = 1		#t_min = 20 #use this one!
 
-	n_min = round(t_min / params['dt'])
+	n_min = round(t_min / iparams.dt)
 	
 	r_max = np.amax(r)
 	
@@ -29,10 +43,10 @@ def BOLD_euler(T,r):
 	x[0,:] = x_init 
 	for n in range(0,n_t-1):
 		print "n is ", n, r[n]
-		x[n+1 , 0] = x[n ,0] + dt * (r[n] - itaus * x[n,0] - itauf * (x[n,1] -float(1.0))) 
+		x[n+1 , 0] = x[n ,0] + dt * (r[n] - iparams.taus * x[n,0] - iparams.tauf * (x[n,1] -float(1.0))) 
 		x[n+1 , 1] = x[n, 1] + dt * x[n,0]
-		x[n+1 , 2] = x[n, 2] + dt * itauo * (x[n, 1] - pow(x[n, 2] , ialpha))
-		x[n+1 , 3] = x[n, 3] + dt * itauo * ( x[n, 1] * (1.-pow((1- Eo),(1./x[n,1])))/Eo - pow(x[n,2],ialpha) * x[n,3] / x[n,2])
+		x[n+1 , 2] = x[n, 2] + dt * iparams.tauo * (x[n, 1] - pow(x[n, 2] , iparams.alpha))
+		x[n+1 , 3] = x[n, 3] + dt * iparams.tauo * ( x[n, 1] * (1.-pow((1- iparams.Eo),(1./x[n,1])))/iparams.Eo - pow(x[n,2],iparams.alpha) * x[n,3] / x[n,2])
 		
 	# discard first n_min points	
 	t_new = t[n_min -1 :]
@@ -40,7 +54,7 @@ def BOLD_euler(T,r):
 	fi    = x[n_min -1 : , 1]
 	v     = x[n_min -1 : , 2]
 	q     = x[n_min -1 : , 3]
-	b= 100/Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
+	b= 100/iparams.Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
 	
 	# plot b over time 
 	pl.xlabel('t')
@@ -152,26 +166,20 @@ def BOLD_euler(T,r):
 
 # here we go 
 
-params = {
-		'taus'   : 0.65,    
-		'tauf'   : 0.41,   
-		'tauo'   :  0.98,    
-		'alpha'  :  0.32,
-		'dt' : 0.1,	 ## change it to 0.001
-		'Eo' : 0.34
-		}
+params = Params()
+params.taus = 0.65
+params.tauf = 0.41
+params.tauo = 0.98
+params.alpha  = 0.32
+params.dt = 0.1  # check it!!!
+params.Eo = 0.34
 
-itaus = float(1/params['taus'])
-itauf = float(1/params['tauf'])
-itauo = float(1/params['tauo'])
-ialpha = float(1/params['alpha'])
-dt = float(params['dt'])    
-Eo = float(params['Eo'])
+iparams = invert_params(params)
 
 vo     = float(0.02);
-k1     = float(7) * params['Eo'] 
+k1     = float(7) * params.Eo 
 k2     = float(2); 
-k3     = 2 * params['Eo']-float(0.2)
+k3     = 2 * params.Eo-float(0.2)
 
 # initial conditions	
 x_init = np.array([0 , 1, 1, 1])	  
@@ -182,7 +190,7 @@ input_name = sys.argv[1]
 #calcBOLD(input_name)
 R = np.loadtxt(input_name, unpack=True)
 T =90
-BOLD_euler(T , R[1, :])
+BOLD_euler(T , R[1, :], iparams)
 #r_t = R[0,:]
 
 
