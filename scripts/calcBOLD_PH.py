@@ -1,16 +1,16 @@
-#!/usr/bin/python2.7 
+#!/usr/bin/python2.7
 
 # -*- coding: utf-8 -*-
 
 import numpy as np
 import sys
-import math 
+import math
 import pylab as pl
 from scipy.signal import butter, filtfilt
-import scipy 
+import scipy
 import scipy.integrate as integ
 from scipy.integrate import odeint
-import time  
+import time
 
 class Params(object):
 	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo', 'vo', 'k1', 'k2', 'k3']
@@ -30,7 +30,7 @@ def bold_ode_eqns(X, t, T, r, iparams):
 	if r_index < (len(r) - 1) and (r_t[r_index+1] - t) < (t - r_t[r_index]):
 		r_index += 1
 
-	print "t : " ,t,  "r_index :", r_index, "r[n] " , r[r_index] 
+	print "t : " ,t,  "r_index :", r_index, "r[n] " , r[r_index]
 	
 	if (t % 1) < 0.0001:
 		t_now = time.time()
@@ -42,7 +42,7 @@ def bold_ode_eqns(X, t, T, r, iparams):
 
 
 def bold_ode(T, r, iparams):
-    
+
 	N = T/iparams.dt
 	t = np.linspace(0, T-iparams.dt, N)
 
@@ -54,7 +54,7 @@ def bold_ode(T, r, iparams):
 	
 	pl.xlabel('t')
 	pl.ylabel('BOLD signal')
-	pl.plot(t,b[:],'g-') 
+	pl.plot(t,b[:],'g-')
 	pl.show()
 
 	return b
@@ -69,7 +69,7 @@ params.alpha  = 0.32
 params.dt = 0.001
 params.Eo = 0.34
 params.vo = 0.02;
-params.k1 = 7.0 * params.Eo 
+params.k1 = 7.0 * params.Eo
 params.k2 = 2.0
 params.k3 = 2.0 * params.Eo - 0.2
 
@@ -83,13 +83,13 @@ print "reading data..."
 
 input_name = sys.argv[1]
 R = np.loadtxt(input_name, unpack=True)
-# extract time array from R 
+# extract time array from R
 r_t = R[0,:]
 r = R[1,:]
 
 # find maximum of time in R
 r_t_max = np.amax(r_t)   # 99.9
-print "max time in r : ",  r_t_max 
+print "max time in r : ",  r_t_max
 
 if r_t_max < T:
 	print "simulation time T is greater than r-dimension !!!"

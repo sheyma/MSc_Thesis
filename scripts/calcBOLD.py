@@ -1,15 +1,15 @@
-#!/usr/bin/python2.7 
+#!/usr/bin/python2.7
 
 # -*- coding: utf-8 -*-
 
 import numpy as np
 import sys
-import math 
+import math
 import pylab as pl
 from scipy.signal import butter, filtfilt
-import scipy 
+import scipy
 import scipy.integrate as integ
-  
+
 class Params(object):
 	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo', 'vo', 'k1', 'k2', 'k3']
 
@@ -36,10 +36,10 @@ def bold_euler(T, r, iparams ):
 	
 	x = np.zeros((n_t,4))
 	
-	x[0,:] = x_init 
+	x[0,:] = x_init
 	for n in range(0,n_t-1):
 		print "n is ", n, r[n]
-		x[n+1 , 0] = x[n ,0] + dt * (r[n] - iparams.taus * x[n,0] - iparams.tauf * (x[n,1] -float(1.0))) 
+		x[n+1 , 0] = x[n ,0] + dt * (r[n] - iparams.taus * x[n,0] - iparams.tauf * (x[n,1] -float(1.0)))
 		x[n+1 , 1] = x[n, 1] + dt * x[n,0]
 		x[n+1 , 2] = x[n, 2] + dt * iparams.tauo * (x[n, 1] - pow(x[n, 2] , iparams.alpha))
 		x[n+1 , 3] = x[n, 3] + dt * iparams.tauo * ( x[n, 1] * (1.-pow((1- iparams.Eo),(1./x[n,1])))/iparams.Eo - pow(x[n,2],iparams.alpha) * x[n,3] / x[n,2])
@@ -52,30 +52,30 @@ def bold_euler(T, r, iparams ):
 	q     = x[n_min -1 : , 3]
 	b= 100/iparams.Eo * iparams.vo * ( iparams.k1 * (1-q) + iparams.k2 * (1-q/v) + iparams.k3 * (1-v) )
 	
-	# plot b over time 
+	# plot b over time
 	pl.xlabel('t')
 	pl.ylabel('BOLD signal')
-	pl.plot(t_new,b[:],'g-') 
+	pl.plot(t_new,b[:],'g-')
 	pl.show()
 		
 	return b
 
 	
 			
-			 
+			
 	
 		
 #def calcBOLD(simfile):
-	#print "input huge time series u's and v's: ", simfile 
+	#print "input huge time series u's and v's: ", simfile
 	## load simfile as numpy matrix
 	#simout = np.transpose(np.loadtxt(simfile, unpack=True))
 	## extract first column of simout as time vector
 	#Tvec = simout[:,[0]]
 	## length of time time vector
-	#n_Tvec = len(Tvec) 
+	#n_Tvec = len(Tvec)
 	## dt of time vector
-	#dt_Tvec = Tvec[1] - Tvec[0] 
-	## total number of excitators: u's 
+	#dt_Tvec = Tvec[1] - Tvec[0]
+	## total number of excitators: u's
 	#N = (np.shape(simout)[1] -1 ) /2
 	
 	## extract time series of u's from simout
@@ -112,15 +112,15 @@ def bold_euler(T, r, iparams ):
 			#if value == float('nan'):
 				#count_nan += 1
 				##print "u_N , key, value : "
-				##print col,key,Bold_signal[key][col] 
+				##print col,key,Bold_signal[key][col]
 		#if count_nan > 0:
 			#print "u_N, nu. of NaNs:", col, count_nan
 			
 	## filtering below 0.25 Hz = cut-off frequency
-	#f_c = 0.25  
+	#f_c = 0.25
 	## resolution of BOLD signal : dtt [second]
-	#dtt = 0.001  
-	## length of one u series after subjected to BOLD 
+	#dtt = 0.001
+	## length of one u series after subjected to BOLD
 	#n_T = len(np.array(Bold_signal[1]))
 	## sampling frequency
 	#f_s = 1/dtt
@@ -144,13 +144,13 @@ def bold_euler(T, r, iparams ):
 	#len_Bold = np.shape(down_Bold_filt)[0]
 	#nFramesToKeep = 4   #   use 260!
 	#limit_down = int( math.floor( len_Bold - nFramesToKeep )/2 )
-	#limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 ) 
-	#indice = np.arange(limit_down-1, limit_up-1  , 1) 
+	#limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 )
+	#indice = np.arange(limit_down-1, limit_up-1  , 1)
 	##print indice
 	## cut rows from down sampled Bold
 	#cut_Bold_filt = down_Bold_filt[indice, :]
 	##print cut_Bold_filt
-	## find correlation coefficient matrix 
+	## find correlation coefficient matrix
 	#simcorr = scipy.corrcoef(np.transpose(cut_Bold_filt))
 	##print simcorr
 	#np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
@@ -160,7 +160,7 @@ def bold_euler(T, r, iparams ):
 	#pl.colorbar
 	##pl.show()
 
-# here we go 
+# here we go
 
 params = Params()
 params.taus = 0.65
@@ -177,7 +177,7 @@ params.k3 = 2.0 * params.Eo - 0.2
 iparams = invert_params(params)
 
 # initial conditions	
-x_init = np.array([0 , 1, 1, 1])	  
+x_init = np.array([0 , 1, 1, 1])	
 
 
 
