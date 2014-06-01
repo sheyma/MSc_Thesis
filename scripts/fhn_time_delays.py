@@ -3,28 +3,20 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
-
 import numpy as np
-
 import sys
-
 from netpy import simnet
-
 import random
-
 import numpy as np
-
 import math
 import os
-
+import pylab as pl
 
 #gfilename = 'allzeros.dat'
 #dfilename = 'allzeros.dat'
 
 #gfilename = 'NKI705197sc.dat'
 #dfilename = 'pathdistance_zeros.dat'
-
-
 
 gfilename = sys.argv[1]
 dfilename = sys.argv[2]
@@ -38,7 +30,7 @@ eqns = {r'x{i}': '(y{i} + gamma * x{i} - pow(x{i},3.0)/3.0) * TAU',
         r'y{i}': '- (x{i} - alpha + b * y{i}) / TAU'}
 
 #for parameter in range(1, 10):
-	#params[sigma] = parameter * 0.01
+#params[sigma] = parameter * 0.01
 
 
 params = { # Fitzhugh-Nagumo parameters...
@@ -84,7 +76,6 @@ print 'H', H
 """Delay-Matrix. """
 
 #simple version: all delay identical => specily 'tau' in params-array
-
 #T = params['tau'] * np.ones_like(G)
 
 
@@ -110,12 +101,11 @@ max_tau = math.ceil(T.max())
 
 #diffusive coupling: \dot var_i = ... (var_j - var_i)
 
-#coupling = '+{G:.12f}*{H}*({var}-{self})'
+#coupling = '+{G:.12f}*{H}*({var}-{selfpy})'
 
 #direct coupling: \dot var_i = ... var_j
 
 coupling = '-{G:.1f}*{H}*{var}(t-{tau})'
-
 
 
 """Let's go """
@@ -188,7 +178,6 @@ solution = neuronetz.ddeN.sample(0, dt=0.1)
 
 
 
-
 t = solution['t']
 
 #print only last 10% of time series
@@ -244,5 +233,39 @@ f.close()
 
 print "done!"
 
+pl.subplot(221)
+pl.plot(solution['t'],solution['x0'],'r')
+pl.plot(solution['t'],solution['y0'], 'b')
+#pl.plot(sol_calc['t'],sol_calc['x'],'or')
+#pl.plot(sol_calc['t'],sol_calc['y'],'ob')
+pl.xlabel('$t$')
+pl.ylabel('$x_1,y_1$')
 
+pl.subplot(222)
+pl.plot(solution['x0'],solution['y0'], 'r')
+pl.plot(solution['x0'][0],solution['y0'][0], 'or')
+#pl.plot(sol_calc['x'],sol_calc['y'],'or')
+#pl.plot(x_range, nullcl_01(x_range), 'b')
+#pl.plot(x_range, nullcl_02(x_range), 'k')
+#pl.plot(x_int,y_int,'ok')
+
+#pl.axis([-2.3, 2.3, -1, 1])
+pl.xlabel('$x_1$')
+pl.ylabel('$y_1$')
+
+pl.subplot(223)
+pl.plot(solution['t'],solution['x1'],'r')
+pl.plot(solution['t'],solution['y1'], 'b')
+#pl.plot(sol_calc['t'],sol_calc['x'],'or')
+#pl.plot(sol_calc['t'],sol_calc['y'],'ob')
+pl.xlabel('$t$')
+pl.ylabel('$x_2,y_2$')
+
+pl.subplot(224)
+pl.plot(solution['x1'],solution['y1'], 'r')
+pl.plot(solution['x1'][0],solution['y1'][0], 'or')
+pl.xlabel('$x_2$')
+pl.ylabel('$y_2$')
+
+#pl.show()
 
