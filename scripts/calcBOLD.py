@@ -9,6 +9,8 @@ import pylab as pl
 from scipy.signal import butter, filtfilt
 import scipy
 import scipy.integrate as integ
+from scipy.integrate import odeint
+
 
 class Params(object):
 	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo', 'vo', 'k1', 'k2', 'k3']
@@ -60,6 +62,42 @@ def bold_euler(T, r, iparams, x_init):
 		
 	return b
 
+def bold_ode_eqns(X, t, T, r, iparams):
+	
+	x0, x1, x2, x3 = X
+	tmp = r[r_t <= t]	
+	r_index = len(tmp)-1
+	if r_index < (len(r) - 1) and (r_t[r_index+1] - t) < (t - r_t[r_index]):
+		r_index += 1
+
+	print "t : " ,t,  "r_index :", r_index, "r[n] " , r[r_index]
+	
+	if (t % 1) < 0.0001:
+		t_now = time.time()
+		print 'seconds: %f => minutes %f to simulate %.1f time units of %f' % ((t_now-t_start),(t_now-t_start)/60., t, T)
+	return [r[r_index] - iparams.taus * x0 - iparams.tauf * (x1 - float(1.0) ),
+		x0,
+		iparams.tauo * ( x1 - pow(x2 , iparams.alpha) ),
+		iparams.tauo * ( x1 * (1.-pow((1.- iparams.Eo),(1./x1)))/iparams.Eo - pow(x2, iparams.alpha) * x3 / x2)]	
+
+
+def bold_ode(T, r, iparams, x_init):
+
+	N = T/iparams.dt
+	t = np.linspace(0, T-iparams.dt, N)
+
+	print "starting BOLD calculation..."
+
+	sol = odeint(bold_ode_eqns, x_init, t, args=(T, r, iparams))
+
+	b = 100/iparams.Eo * iparams.vo * ( iparams.k1 * (1-sol[:,3]) + iparams.k2 * (1-sol[:,3]/sol[:,2]) + iparams.k3 * (1-sol[:,2]) )
+	
+	pl.xlabel('t')
+	pl.ylabel('BOLD signal')
+	pl.plot(t,b[:],'g-')
+	pl.show()
+
+	return b
 	
 			
 			
@@ -187,13 +225,10 @@ print "reading data..."
 R = np.loadtxt(input_name, unpack=True)
 
 T =90
-bold_euler(T , R[1, :], iparams, x_init)
-#r_t = R[0,:]
+#bold_euler(T , R[1, :], iparams, x_init)
 
-
-
-
-
+r_t = R[0,:]
+bold_ode(T, R[1,:], iparams, x_init)
 
 
 
