@@ -1,6 +1,6 @@
 % calculate BOLD signal from pydelay/netpy output
 % ###############################################
-%simfile = 'A_small_sigma=0.1_D=0.0_v=70.0_tmax=70000.dat';
+
 function b = calcBOLD(simfile)
 
 	%% simfile should be the output file from the python script
@@ -27,14 +27,14 @@ function b = calcBOLD(simfile)
     timeseries(:,roi) = simoutput(:,2*roi);
   end
 
-  save([simfile(1:end-4),'_timeseries2.mat'],'timeseries','tvec')
+  save([simfile(1:end-4),'_timeseries.mat'],'timeseries','tvec')
   %load([simfile(1:end-4),'_timeseries.mat'])
   
   %% plot sample time series     
   
   % specify plotting interval:
-  minval = 600;             % change this depending on timeseries size
-  range = 400;               % change this too
+  minval = 325000;
+  range = 500;
   h = figure;
   plot(timeseries(minval:minval+range,:));
   xlim([0 range])
@@ -46,8 +46,8 @@ function b = calcBOLD(simfile)
   set(textobj, 'fontsize', 60);
   
   filo = ['sample_',simfile(1:end-4)]; 
-  %print(h,'-depsc2',sprintf('%s.eps',filo));
-  %system(sprintf('ps2pdf -dEPSCrop %s.eps %s.pdf',filo,filo));  
+  print(h,'-depsc2',sprintf('%s.eps',filo));
+  system(sprintf('ps2pdf -dEPSCrop %s.eps %s.pdf',filo,filo));  
   close(h);
   
   %%% apply Balloon Windkessel model in BOLD.m :  
@@ -57,15 +57,11 @@ function b = calcBOLD(simfile)
 	
 	% important: specify here to which time interval the simulated 
 	% time series corresponds:
- % T = 700.0; % in [s] %% use this one originally
- T = 10.0 ; 
- 
+  T = 700.0; % in [s]
+  
   for roi = 1:N 
     boldsignal{roi} = BOLD(T,timeseries(:,roi));
-    a = timeseries(:,1)
-    
-    save test_bin.dat a -ASCII
-    
+    disp(roi)
     % verify that there is no errors in the BOLD results
     nans = size(find(isnan(boldsignal{roi})),1);
     if nans > 0
@@ -74,7 +70,6 @@ function b = calcBOLD(simfile)
   end
   
   %% filter below 0.25Hz:
-
 
   f_c=0.25;
   dtt=0.001; % Resolution of the BOLD signal (here 1 millisecond).
@@ -88,9 +83,8 @@ function b = calcBOLD(simfile)
 
   % Calculate variables for Butterworth lowpass filter of order 5 
   % with cut off frequency f_c/f_N
-  %[Bs,As] = butter(5,f_c/f_N,'low')
-  [Bs,As] = butter(5, 0.5,'low')
-  
+  [Bs,As] = butter(5,f_c/f_N,'low')
+
   size(BOLD_filt)
 
   for n = 1:N
@@ -102,25 +96,22 @@ function b = calcBOLD(simfile)
 
   %% Downsampling: select one point every 'ds' ms to match fmri resolution:
 
-  ds = 0.1;
-  %ds=2.500; %use this 
-  down_bds=BOLD_filt(1:ds/dtt:end,:)
-  lenBold = size(down_bds,1)
+  ds=2.500; 
+  down_bds=BOLD_filt(1:ds/dtt:end,:);
+  lenBold = size(down_bds,1);
   
   %% Cutting first and last seconds (distorted from filtering) and keep the middle:
-  nFramesToKeep = 4;
-  %nFramesToKeep = 260; %use this !
+  nFramesToKeep = 260;
   bds = down_bds(floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1,:);
-  floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1
   size(bds)  
-  %save([simfile(1:end-4),'_bds.mat'],'bds')
+  save([simfile(1:end-4),'_bds.mat'],'bds')
 
   %%
   
   %load([simfile(1:end-4),'_bds.mat'])
 
   simfc = corr(bds);
-  %save([simfile(1:end-4),'_simfc.mat'],'simfc')
+  save([simfile(1:end-4),'_simfc.mat'],'simfc')
   
    % plot simulated functional connectivity
   h = figure;
@@ -133,8 +124,8 @@ function b = calcBOLD(simfile)
   set(textobj, 'fontsize', 60);
 
   filo = ['simfc_',simfile(1:end-4)]; 
-  %print(h,'-depsc2',sprintf('%s.eps',filo));
-  %system(sprintf('ps2pdf -dEPSCrop %s.eps %s.pdf',filo,filo));
+  print(h,'-depsc2',sprintf('%s.eps',filo));
+  system(sprintf('ps2pdf -dEPSCrop %s.eps %s.pdf',filo,filo));
   
 end
 
