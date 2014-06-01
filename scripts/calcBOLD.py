@@ -99,7 +99,7 @@ def bold_ode(T, r, iparams, x_init):
 
 	return b
 	
-			
+		
 			
 	
 		
@@ -225,10 +225,10 @@ print "reading data..."
 R = np.loadtxt(input_name, unpack=True)
 
 T =90
-#bold_euler(T , R[1, :], iparams, x_init)
+bold_euler(T , R[1, :], iparams, x_init)
 
 r_t = R[0,:]
-bold_ode(T, R[1,:], iparams, x_init)
+#bold_ode(T, R[1,:], iparams, x_init)
 
 
 
