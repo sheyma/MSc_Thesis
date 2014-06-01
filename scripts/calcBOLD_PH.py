@@ -35,14 +35,9 @@ def bold_ode_eqns(X, t, T, r, iparams):
 
 	print "t : " ,t,  "r_index :", r_index, "r[n] " , r[r_index] 
 	
-	file_dbg_Bold_eqns.write("%f\t%f\t%f\n" % (
-		t , r_index,
-		r[r_index]) )
-
-	
 	if (t % 1) < 0.0001:
-	  t_now = time.time()
-	  print 'seconds: %f => minutes %f to simulate %.1f time units of %f' % ((t_now-t_start),(t_now-t_start)/60., t, T)
+		t_now = time.time()
+		print 'seconds: %f => minutes %f to simulate %.1f time units of %f' % ((t_now-t_start),(t_now-t_start)/60., t, T)
 	return [r[r_index] - iparams.taus * x0 - iparams.tauf * (x1 - float(1.0) ),
 		x0,
 		iparams.tauo * ( x1 - pow(x2 , iparams.alpha) ),
@@ -50,8 +45,22 @@ def bold_ode_eqns(X, t, T, r, iparams):
 
 
 def bold_ode(T, r, iparams):
-    #todo..
-    return 1
+    
+	N = T/iparams.dt
+	t = np.linspace(0, T-iparams.dt, N)
+
+	print "starting BOLD calculation..."
+
+	sol = odeint(bold_ode_eqns, init_con[:], t, args=(T, r, iparams))
+
+	b = 100/iparams.Eo * vo * ( k1 * (1-sol[:,3]) + k2 * (1-sol[:,3]/sol[:,2]) + k3 * (1-sol[:,2]) )
+	
+	pl.xlabel('t')
+	pl.ylabel('BOLD signal')
+	pl.plot(t,b[:],'g-') 
+	pl.show()
+
+	return b
 
 t_start = time.time()
 
@@ -93,24 +102,9 @@ if r_t_max < T:
 t_now = time.time()
 print 'seconds: %f => minutes %f to read the data' % ((t_now-t_start),(t_now-t_start)/60.)
 
+bold_ode( T, r, iparams)
 
-N = T/params.dt
-t = np.linspace(0, T-params.dt, N)
-
-print "starting BOLD calculation..."
-file_dbg_Bold_eqns = open('r_index_ode.dat','w')
-
-sol = odeint(bold_ode_eqns, init_con[:], t, args=(T, r, iparams))
-
-file_dbg_Bold_eqns.close()
-
-b = 100/iparams.Eo * vo * ( k1 * (1-sol[:,3]) + k2 * (1-sol[:,3]/sol[:,2]) + k3 * (1-sol[:,2]) )
 #print b
 t_now = time.time()
 print 'seconds: %f => minutes %f to simulate' % ((t_now-t_start),(t_now-t_start)/60.)
 
-pl.xlabel('t')
-pl.ylabel('BOLD signal')
-pl.plot(t,b[:],'g-') 
-
-pl.show()
