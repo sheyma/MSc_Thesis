@@ -25,7 +25,7 @@ def invert_params(params):
 	iparams.Eo = float(params.Eo)
 	return iparams
 
-def Bold_eqns(X, t, T, r, iparams):
+def bold_ode_eqns(X, t, T, r, iparams):
 	
 	x0, x1, x2, x3 = X
 	tmp = r[r_t <= t]	
@@ -48,6 +48,10 @@ def Bold_eqns(X, t, T, r, iparams):
 		iparams.tauo * ( x1 - pow(x2 , iparams.alpha) ),
 		iparams.tauo * ( x1 * (1.-pow((1.- iparams.Eo),(1./x1)))/iparams.Eo - pow(x2, iparams.alpha) * x3 / x2)]	
 
+
+def bold_ode(T, r, iparams):
+    #todo..
+    return 1
 
 t_start = time.time()
 
@@ -96,7 +100,7 @@ t = np.linspace(0, T-params.dt, N)
 print "starting BOLD calculation..."
 file_dbg_Bold_eqns = open('r_index_ode.dat','w')
 
-sol = odeint(Bold_eqns, init_con[:], t, args=(T, r, iparams))
+sol = odeint(bold_ode_eqns, init_con[:], t, args=(T, r, iparams))
 
 file_dbg_Bold_eqns.close()
 

@@ -24,7 +24,7 @@ def invert_params(params):
 	return iparams
 
 
-def BOLD_euler(T, r, iparams ):
+def bold_euler(T, r, iparams ):
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
 	dt = iparams.dt
@@ -190,7 +190,7 @@ input_name = sys.argv[1]
 #calcBOLD(input_name)
 R = np.loadtxt(input_name, unpack=True)
 T =90
-BOLD_euler(T , R[1, :], iparams)
+bold_euler(T , R[1, :], iparams)
 #r_t = R[0,:]
 
 
