@@ -30,7 +30,7 @@ eqns = {r'x{i}': '(y{i} + gamma * x{i} - pow(x{i},3.0)/3.0) * TAU',
         r'y{i}': '- (x{i} - alpha + b * y{i}) / TAU'}
 
 #for parameter in range(1, 10):
-#params[sigma] = parameter * 0.01
+	#params[sigma] = parameter * 0.01
 
 
 params = { # Fitzhugh-Nagumo parameters...
@@ -45,9 +45,9 @@ params = { # Fitzhugh-Nagumo parameters...
 
 	'sigma': float(sys.argv[3]),  #float(sys.argv[3]), # 0.1 # 0.005 # global coupling constant
 
-	'D' : float(sys.argv[4]),   # noise # 0.05
+	'D' : float(0.05),   # noise
 
-	'v' : 70.0, # velocity in 0.1 m/s ???
+	'v' : float(sys.argv[4]), # velocity in 0.1 m/s ???
 	#'tau' : 1.0, 
 
 }
@@ -154,7 +154,7 @@ neuronetz.ddeN.hist_from_arrays(dic)
 
 """ Start simulation with t = [0,tmax] """
 
-tmax = 70000
+tmax = 70000   # ??? 
 neuronetz.run(tmax)
 
 
