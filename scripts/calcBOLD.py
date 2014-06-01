@@ -11,18 +11,14 @@ import scipy
 import scipy.integrate as integ
   
 class Params(object):
-	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo']
+	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo', 'vo', 'k1', 'k2', 'k3']
 
 def invert_params(params):
-	iparams = Params()
-	iparams.taus = float(1/params.taus)   
-	iparams.tauf = float(1/params.tauf)  
-	iparams.tauo = float(1/params.tauo)    
-	iparams.alpha = float(1/params.alpha)
-	iparams.dt = float(params.dt)
-	iparams.Eo = float(params.Eo)
-	return iparams
-
+	params.taus = float(1/params.taus)
+	params.tauf = float(1/params.tauf)
+	params.tauo = float(1/params.tauo)
+	params.alpha = float(1/params.alpha)
+	return params
 
 def bold_euler(T, r, iparams ):
 	# T : total simulation time [s]
@@ -54,7 +50,7 @@ def bold_euler(T, r, iparams ):
 	fi    = x[n_min -1 : , 1]
 	v     = x[n_min -1 : , 2]
 	q     = x[n_min -1 : , 3]
-	b= 100/iparams.Eo * vo * ( k1 * (1-q) + k2 * (1-q/v) + k3 * (1-v) )
+	b= 100/iparams.Eo * iparams.vo * ( iparams.k1 * (1-q) + iparams.k2 * (1-q/v) + iparams.k3 * (1-v) )
 	
 	# plot b over time 
 	pl.xlabel('t')
@@ -173,22 +169,23 @@ params.tauo = 0.98
 params.alpha  = 0.32
 params.dt = 0.1  # check it!!!
 params.Eo = 0.34
+params.vo = 0.02;
+params.k1 = 7.0 * params.Eo
+params.k2 = 2.0
+params.k3 = 2.0 * params.Eo - 0.2
 
 iparams = invert_params(params)
-
-vo     = float(0.02);
-k1     = float(7) * params.Eo 
-k2     = float(2); 
-k3     = 2 * params.Eo-float(0.2)
 
 # initial conditions	
 x_init = np.array([0 , 1, 1, 1])	  
 
 
+
 	
 input_name = sys.argv[1]	
-#calcBOLD(input_name)
+print "reading data..."
 R = np.loadtxt(input_name, unpack=True)
+
 T =90
 bold_euler(T , R[1, :], iparams)
 #r_t = R[0,:]
