@@ -61,7 +61,7 @@ def bold_euler(T, r, iparams, x_init):
 	
 	# plot b over time
 	pl.xlabel('t')
-	pl.ylabel('BOLD signal')
+	pl.ylabel('BOLD signal euler')
 	pl.plot(t_new,b[:],'g-')
 	pl.show()
 	
@@ -100,7 +100,7 @@ def bold_ode(T, r, iparams, x_init):
 	b = 100/iparams.Eo * iparams.vo * ( iparams.k1 * (1-sol[:,3]) + iparams.k2 * (1-sol[:,3]/sol[:,2]) + iparams.k3 * (1-sol[:,2]) )
 	
 	pl.xlabel('t')
-	pl.ylabel('BOLD signal')
+	pl.ylabel('BOLD signal ode')
 	pl.plot(t,b[:],'g-')
 	pl.show()
 
@@ -212,7 +212,7 @@ params.taus = 0.65
 params.tauf = 0.41
 params.tauo = 0.98
 params.alpha  = 0.32
-params.dt = 0.001  # check it!!!
+params.dt = 0.01  # check it!!!
 params.Eo = 0.34
 params.vo = 0.02;
 params.k1 = 7.0 * params.Eo
@@ -231,7 +231,8 @@ input_name = sys.argv[1]
 print "reading data..."
 R = np.loadtxt(input_name, unpack=True)
 
-T =700.0
+T = 100
+#T =700.0
 bold_euler(T , R[1, :], iparams, x_init)
 
 r_t = R[0,:]
