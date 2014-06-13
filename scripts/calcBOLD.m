@@ -45,9 +45,9 @@ function b = calcBOLD(simfile)
   set(textobj, 'fontunits', 'points');
   set(textobj, 'fontsize', 60);
   
-  filo = ['sample_',simfile(1:end-4)]; 
-  print(h,'-depsc2',sprintf('%s.eps',filo));
-  system(sprintf('ps2pdf -dEPSCrop %s.eps %s.pdf',filo,filo));  
+  %filo = ['sample_',simfile(1:end-4)]; 
+  %print(h,'-depsc2',sprintf('%s.eps',filo));
+  %system(sprintf('ps2pdf -dEPSCrop %s.eps %s.pdf',filo,filo));  
   close(h);
   
   %%% apply Balloon Windkessel model in BOLD.m :  
@@ -89,7 +89,7 @@ function b = calcBOLD(simfile)
 
   for n = 1:N
     x               = boldsignal{n};
-    BOLD_filt(:,n)  = filtfilt(Bs,As,x); % Apply filter
+    BOLD_filt(:,n)  = filtfilt(Bs,As,x) % Apply filter
     %size(BOLD_filt)
   end
 
