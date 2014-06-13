@@ -45,7 +45,7 @@ def bold_euler(T, r, iparams, x_init):
 	
 	x[0,:] = x_init
 	for n in range(0,n_t-1):
-		print "n is: ", n , "r[n] is ",  r[n]
+		
 		x[n+1 , 0] = x[n ,0] + dt * (r[n] - iparams.taus * x[n,0] - iparams.tauf * (x[n,1] -float(1.0)))
 		x[n+1 , 1] = x[n, 1] + dt * x[n,0]
 		x[n+1 , 2] = x[n, 2] + dt * iparams.tauo * (x[n, 1] - pow(x[n, 2] , iparams.alpha))
@@ -63,9 +63,9 @@ def bold_euler(T, r, iparams, x_init):
 	pl.xlabel('t')
 	pl.ylabel('BOLD signal euler')
 	pl.plot(t_new,b[:],'g-')
-	pl.show()
+	#pl.show()
 	
-	print "dt is : " , dt
+	print "Euler's dt is : " , dt
 		
 	return b
 
@@ -110,88 +110,103 @@ def bold_ode(T, r, iparams, x_init):
 			
 	
 		
-#def calcBOLD(simfile):
-	#print "input huge time series u's and v's: ", simfile
-	## load simfile as numpy matrix
-	#simout = np.transpose(np.loadtxt(simfile, unpack=True))
-	## extract first column of simout as time vector
-	#Tvec = simout[:,[0]]
-	## length of time time vector
-	#n_Tvec = len(Tvec)
-	## dt of time vector
-	#dt_Tvec = Tvec[1] - Tvec[0]
-	## total number of excitators: u's
-	#N = (np.shape(simout)[1] -1 ) /2
+def calcBOLD(simfile):
+	print "input huge time series u's and v's: ", simfile
+	print "reading data ..."
+	# load simfile as numpy matrix
+	simout = np.transpose(np.loadtxt(simfile, unpack=True))
+	# extract first column of simout as time vector
+	Tvec = simout[:,[0]]
+	# length of time time vector
+	n_Tvec = len(Tvec)
+	# dt of time vector
+	dt_Tvec = Tvec[1] - Tvec[0]
+	# total number of excitators: u's
+	N = (np.shape(simout)[1] -1 ) /2
 	
-	## extract time series of u's from simout
-	#timeseries = np.zeros((n_Tvec, N))
-	#print "size of timeseries : ", np.shape(timeseries)
-	#for row in range(0,N):
-		#timeseries[:,[row]] = simout[:,[2*row +1]]
-	## store timeseries and time as .dat
-	#timeseries_app = np.c_[Tvec , timeseries]
-	#np.savetxt(simfile[:-4] + '_timeseries.dat', timeseries_app)	
-	## 1st column is time vector, others are u series
+	# extract time series of u's from simout
+	timeseries = np.zeros((n_Tvec, N))
+	print "size of extracted u-timeseries : ", np.shape(timeseries)
+	for row in range(0,N):
+		timeseries[:,[row]] = simout[:,[2*row +1]]
 	
-	## plotting time series in a specific time interval
-	#t_start = 600;
-	#t_range = 400;
+	np.savetxt(simfile[:-4] + '_timeseries.dat', timeseries)	
 	
-	#fig = pl.figure(1)
-	#pl.plot(timeseries[t_start : (t_start + t_range) , :])
-	#pl.xlabel('t [ms]')
-	#pl.ylabel('$u_i(t)$')
+	# plotting time series in a specific time interval
+	t_start = 325000;
+	t_range = 500;
+	
+	fig = pl.figure(1)
+	pl.plot(timeseries[t_start : (t_start + t_range) , :])
+	pl.xlabel('t [ms]')
+	pl.ylabel('$u_i(t)$')
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
-	##pl.show()
+	#pl.show()
 
-	## define simulation time for BOLD
-	#T = 10.0		# use this :  T = 700.0 [s]
-	## apply Balloon Windkessel model in fuction BOLD
-	#Bold_signal = {}
-	#for col in range(0, N):
-		#Bold_signal[col] = BOLD(T, timeseries[:,[col]])
-		#print "timeseries vector used in bOLD function", timeseries[:,col]
-		## count the number of NaN 's in simulated BOLD
-		#count_nan = 0
-		#for key,value in enumerate(Bold_signal[col]):
-			#if value == float('nan'):
-				#count_nan += 1
-				##print "u_N , key, value : "
-				##print col,key,Bold_signal[key][col]
-		#if count_nan > 0:
-			#print "u_N, nu. of NaNs:", col, count_nan
+	print "Bold-signalling of u-timeseries starts..."
+	# define simulation time for BOLD
+	T = 700.0		
+	# apply Balloon Windkessel model in fuction BOLD
+	
+	Bold_signal = {}
+	for col in range(0, N):
+		Bold_signal[col] = bold_euler(T, timeseries[:,[col]], iparams, x_init)
+		#print "timeseries vector used in BOLD function", timeseries[:,col]
+		#print "BOLD euler signal" , Bold_signal[col]
+		
+		# count the number of NaN 's in simulated BOLD
+		count_nan = 0
+		for key,value in enumerate(Bold_signal[col]):
+			if value == float('nan'):
+				count_nan += 1
+				#print "u_N , key, value : "
+				#print col,key,Bold_signal[key][col]
+		if count_nan > 0:
+			print "u_N, nu. of NaNs:", count_nan
 			
 	## filtering below 0.25 Hz = cut-off frequency
-	#f_c = 0.25
-	## resolution of BOLD signal : dtt [second]
-	#dtt = 0.001
-	## length of one u series after subjected to BOLD
-	#n_T = len(np.array(Bold_signal[1]))
-	## sampling frequency
-	#f_s = 1/dtt
-	## Nyquist frequency
-	#f_n = f_s /2
-	## Butterworth filter
-	##b , a = butter(5, f_c/f_n , btype = 'low')########
+	f_c = 0.25
+	# resolution of BOLD signal : dtt [second]
+	dtt = 0.001
+	# length of one u series after subjected to BOLD
+	n_T = len(np.array(Bold_signal[1]))
+	print "length of one column in Bold_signal : " , n_T
+	# Sampling frequency [Hz]
+	f_s = 1/dtt
+	# Nyquist frequency [Hz]
+	f_n = f_s /2
+	print "Butterworth lowpass filter..."
+	print "sampling freq : " , f_s, "Hz," "   nyquist frequency : ", f_n , "Hz"
+	# Butterworth filter
+	b , a = butter(5, f_c/f_n , btype = 'low')
 	#b , a = butter(5, 0.5 , btype = 'lowpass', analog=False)
-	##print b,a
+	print "b is : " ,b
+	print "a is : " ,a
 	
-	## Low pass filtering the BOLD signal
-	#Bold_filt = np.zeros((n_T , N))
-	#for col in range(0, N):
-		#Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col])
-	## Downsampling : select one point at each 'ds' [ms]
-	#ds = 0.1  # use 2.5!!
-	#index = np.arange(0, n_T, int(ds/dtt))
-	#down_Bold_filt = Bold_filt[index , :]
-	
-	## Cut first and last seconds (distorted from filtering)
-	#len_Bold = np.shape(down_Bold_filt)[0]
-	#nFramesToKeep = 4   #   use 260!
-	#limit_down = int( math.floor( len_Bold - nFramesToKeep )/2 )
-	#limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 )
-	#indice = np.arange(limit_down-1, limit_up-1  , 1)
-	##print indice
+	b = np.array([0.0291, 0.1457, 0.2914, 0.2914, 0.1457, 0.0291]) #*pow(10, -14))
+	b = b * pow(10, -14)
+	print "b now is : ", b
+	# Low pass filtering the BOLD signal
+	Bold_filt = np.zeros((n_T , N))
+	for col in range(0, N):
+		Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col])
+		print Bold_filt[:,col]
+		#print "Boldsignal col " , col , Bold_signal[col]
+	# Downsampling : select one point at each 'ds' [ms]
+	ds = 2.5  # use 2.5!!
+	index = np.arange(0, n_T, int(ds/dtt))
+	down_Bold_filt = Bold_filt[index , :]
+	print np.shape(down_Bold_filt)
+	# Cut first and last seconds (distorted from filtering)
+	len_Bold = np.shape(down_Bold_filt)[0]
+	nFramesToKeep = 260   #   use 260!
+	limit_down = int( math.floor( len_Bold - nFramesToKeep )/2 )
+	limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 )
+	print "limit_down" , limit_down
+	print "limit_up" , limit_up
+	indice = np.arange(limit_down-1, limit_up-1  , 1)
+	print "indice" , indice
+	#print indice
 	## cut rows from down sampled Bold
 	#cut_Bold_filt = down_Bold_filt[indice, :]
 	##print cut_Bold_filt
@@ -203,7 +218,7 @@ def bold_ode(T, r, iparams, x_init):
 	#fig = pl.figure(2)
 	#pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])
 	#pl.colorbar
-	##pl.show()
+	#pl.show()
 
 # here we go
 
@@ -212,7 +227,7 @@ params.taus = 0.65
 params.tauf = 0.41
 params.tauo = 0.98
 params.alpha  = 0.32
-params.dt = 0.01  # check it!!!
+params.dt = 0.001  # check it!!!
 params.Eo = 0.34
 params.vo = 0.02;
 params.k1 = 7.0 * params.Eo
@@ -228,19 +243,30 @@ x_init = np.array([0 , 1, 1, 1])
 
 	
 input_name = sys.argv[1]	
-print "reading data..."
-R = np.loadtxt(input_name, unpack=True)
+#print "reading data..."
+#R = np.loadtxt(input_name, unpack=True)
 
-T = 100
-#T =700.0
-bold_euler(T , R[1, :], iparams, x_init)
+#T = 700.0
 
-r_t = R[0,:]
+#bold_euler(T , R[1, :], iparams, x_init)
+
+#r_t = R[0,:]
 #bold_ode(T, R[1,:], iparams, x_init)
 
+calcBOLD(input_name)
+
+#a =np.array([1.0000   ,-4.9949   , 9.9797,   -9.9695,    4.9797,   -0.9949])
+#b = np.array([0.0291, 0.1457, 0.2914, 0.2914, 0.1457, 0.0291]) #*pow(10, -14))
+#b = b * pow(10, -14)
+#print "a is : " , a
+#print "b now is : ", b
+# Low pass filtering the BOLD signal
+#a = np.array([1 ,3 , 4])
+#b = np.array([0.4 , 0.2 , 0.3 ])
+
+#Bold_filt = scipy.signal.filtfilt( b  , a , np.array([1,2,3,4,5,6,7,8,9,10]), padlen=9  )
+#print Bold_filt
 
 
 
-
-
-
+print "scipy version : ", scipy.__version__

@@ -154,7 +154,8 @@ neuronetz.ddeN.hist_from_arrays(dic)
 
 """ Start simulation with t = [0,tmax] """
 
-tmax = 70000   # ??? 
+#tmax = 45000  # for random network simulation  
+tmax = 70000   # ??? [ 10 ms] 
 neuronetz.run(tmax)
 
 
@@ -174,7 +175,7 @@ series = neuronetz.sol
 
 #sample solution for output starting at t=-max_tau
 
-solution = neuronetz.ddeN.sample(0, dt=0.1)
+solution = neuronetz.ddeN.sample(0,  dt=0.1)
 
 
 
