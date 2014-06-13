@@ -4,7 +4,6 @@
 # Creating a random network by different methhods
 
 import networkx as nx
-#from networkx.algorithms import bipartite
 import numpy as np
 from math import factorial 
 import matplotlib.pyplot as pl
@@ -22,9 +21,15 @@ deep = 0
 def load_matrix(file):
 	A = np.loadtxt(file, unpack=True)
 	AT = np.transpose(A)
-#	if A.shape[0] != A.shape[1] or not (A == AT).all():
-#		print "error: loaded matrix is not symmetric"
-#		raise ValueError
+	#for row in range(A.shape[0]):
+		#for col in range(A.shape[1]):
+			#if A[row , col] != A[col , row]:
+				#print "row and col : ", A[row , col], A[col, row], row , col
+				
+	
+	if A.shape[0] != A.shape[1] or not (A == AT).all():
+		print "error: loaded matrix is not symmetric"
+		raise ValueError
 	return AT
 
 # create adjacency matrix, ones and zeros according to r
@@ -493,7 +498,7 @@ out_prfx = input_name[:-4]+'_R'+method+'_'
 
 data_matrix = load_matrix(input_name)
 
-for i in range(5, 84):
+for i in range(48, 67):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
