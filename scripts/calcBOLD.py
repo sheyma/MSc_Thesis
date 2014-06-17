@@ -11,7 +11,7 @@ import scipy
 import scipy.integrate as integ
 from scipy.integrate import odeint
 import time
-
+import filter_design_coeff
 
 class Params(object):
 	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo', 'vo', 'k1', 'k2', 'k3']
@@ -178,19 +178,19 @@ def calcBOLD(simfile):
 	print "Butterworth lowpass filter..."
 	print "sampling freq : " , f_s, "Hz," "   nyquist frequency : ", f_n , "Hz"
 	# Butterworth filter
-	b , a = butter(5, f_c/f_n , btype = 'low')
+	b , a = filter_design_coeff.butter(5, f_c/f_n , btype = 'low')
 	#b , a = butter(5, 0.5 , btype = 'lowpass', analog=False)
 	print "b is : " ,b
 	print "a is : " ,a
 	
-	b = np.array([0.0291, 0.1457, 0.2914, 0.2914, 0.1457, 0.0291]) #*pow(10, -14))
-	b = b * pow(10, -14)
-	print "b now is : ", b
+	#b = np.array([0.0291, 0.1457, 0.2914, 0.2914, 0.1457, 0.0291]) #*pow(10, -14))
+	#b = b * pow(10, -14)
+	#print "b now is : ", b
 	# Low pass filtering the BOLD signal
 	Bold_filt = np.zeros((n_T , N))
 	for col in range(0, N):
 		Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col])
-		print Bold_filt[:,col]
+		#print Bold_filt[:,col]
 		#print "Boldsignal col " , col , Bold_signal[col]
 	# Downsampling : select one point at each 'ds' [ms]
 	ds = 2.5  # use 2.5!!
@@ -205,8 +205,7 @@ def calcBOLD(simfile):
 	print "limit_down" , limit_down
 	print "limit_up" , limit_up
 	indice = np.arange(limit_down-1, limit_up-1  , 1)
-	print "indice" , indice
-	#print indice
+	#print "indice" , indice
 	## cut rows from down sampled Bold
 	#cut_Bold_filt = down_Bold_filt[indice, :]
 	##print cut_Bold_filt
