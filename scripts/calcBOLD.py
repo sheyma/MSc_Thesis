@@ -252,7 +252,7 @@ input_name = sys.argv[1]
 #r_t = R[0,:]
 #bold_ode(T, R[1,:], iparams, x_init)
 
-calcBOLD(input_name)
+#calcBOLD(input_name)
 
 #a =np.array([1.0000   ,-4.9949   , 9.9797,   -9.9695,    4.9797,   -0.9949])
 #b = np.array([0.0291, 0.1457, 0.2914, 0.2914, 0.1457, 0.0291]) #*pow(10, -14))
