@@ -154,7 +154,7 @@ neuronetz.ddeN.hist_from_arrays(dic)
 
 """ Start simulation with t = [0,tmax] """
 
-tmax = 45000  # for random network simulation  [10 ms]
+tmax = 45000  # for random network simulation  [10 ms] 
 #tmax = 70000   # ??? [ 10 ms] 
 neuronetz.run(tmax)
 
@@ -234,39 +234,39 @@ f.close()
 
 print "done!"
 
-pl.subplot(221)
-pl.plot(solution['t'],solution['x0'],'r')
-pl.plot(solution['t'],solution['y0'], 'b')
-#pl.plot(sol_calc['t'],sol_calc['x'],'or')
-#pl.plot(sol_calc['t'],sol_calc['y'],'ob')
-pl.xlabel('$t$')
-pl.ylabel('$x_1,y_1$')
+#pl.subplot(221)
+#pl.plot(solution['t'],solution['x0'],'r')
+#pl.plot(solution['t'],solution['y0'], 'b')
+##pl.plot(sol_calc['t'],sol_calc['x'],'or')
+##pl.plot(sol_calc['t'],sol_calc['y'],'ob')
+#pl.xlabel('$t$')
+#pl.ylabel('$x_1,y_1$')
 
-pl.subplot(222)
-pl.plot(solution['x0'],solution['y0'], 'r')
-pl.plot(solution['x0'][0],solution['y0'][0], 'or')
-#pl.plot(sol_calc['x'],sol_calc['y'],'or')
-#pl.plot(x_range, nullcl_01(x_range), 'b')
-#pl.plot(x_range, nullcl_02(x_range), 'k')
-#pl.plot(x_int,y_int,'ok')
+#pl.subplot(222)
+#pl.plot(solution['x0'],solution['y0'], 'r')
+#pl.plot(solution['x0'][0],solution['y0'][0], 'or')
+##pl.plot(sol_calc['x'],sol_calc['y'],'or')
+##pl.plot(x_range, nullcl_01(x_range), 'b')
+##pl.plot(x_range, nullcl_02(x_range), 'k')
+##pl.plot(x_int,y_int,'ok')
 
-#pl.axis([-2.3, 2.3, -1, 1])
-pl.xlabel('$x_1$')
-pl.ylabel('$y_1$')
+##pl.axis([-2.3, 2.3, -1, 1])
+#pl.xlabel('$x_1$')
+#pl.ylabel('$y_1$')
 
-pl.subplot(223)
-pl.plot(solution['t'],solution['x1'],'r')
-pl.plot(solution['t'],solution['y1'], 'b')
-#pl.plot(sol_calc['t'],sol_calc['x'],'or')
-#pl.plot(sol_calc['t'],sol_calc['y'],'ob')
-pl.xlabel('$t$')
-pl.ylabel('$x_2,y_2$')
+#pl.subplot(223)
+#pl.plot(solution['t'],solution['x1'],'r')
+#pl.plot(solution['t'],solution['y1'], 'b')
+##pl.plot(sol_calc['t'],sol_calc['x'],'or')
+##pl.plot(sol_calc['t'],sol_calc['y'],'ob')
+#pl.xlabel('$t$')
+#pl.ylabel('$x_2,y_2$')
 
-pl.subplot(224)
-pl.plot(solution['x1'],solution['y1'], 'r')
-pl.plot(solution['x1'][0],solution['y1'][0], 'or')
-pl.xlabel('$x_2$')
-pl.ylabel('$y_2$')
+#pl.subplot(224)
+#pl.plot(solution['x1'],solution['y1'], 'r')
+#pl.plot(solution['x1'][0],solution['y1'][0], 'or')
+#pl.xlabel('$x_2$')
+#pl.ylabel('$y_2$')
 
-#pl.show()
+##pl.show()
 
