@@ -27,7 +27,7 @@ function b = calcBOLD(simfile)
     timeseries(:,roi) = simoutput(:,2*roi);
   end
 
-  save([simfile(1:end-4),'_timeseries.mat'],'timeseries','tvec')
+  %save([simfile(1:end-4),'_timeseries.mat'],'timeseries','tvec')
   %load([simfile(1:end-4),'_timeseries.mat'])
   
   %% plot sample time series     
