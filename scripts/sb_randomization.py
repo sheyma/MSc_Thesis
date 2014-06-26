@@ -75,8 +75,19 @@ def get_random_graph_b(B):
 def get_random_graph_c(B):
 	G = nx.from_numpy_matrix(B)
 	degree_seq = nx.degree(G).values()
-	RG = nx.random_degree_sequence_graph(degree_seq,tries=100)
+	RG = nx.random_degree_sequence_graph(degree_seq,tries=1000)
 	return RG
+
+# create a random network with method c
+# networkx.expected_degree_graph : 
+# random graph with given degree sequence
+def get_random_graph_g(B):
+	G = nx.from_numpy_matrix(B)
+	degree_seq = nx.degree(G).values()
+	RG = nx.expected_degree_graph(degree_seq , seed = None, selfloops=False)
+	return RG
+
+
 
 # create a random network with method f
 # networkx.generators.degree_seq.havel_hakimi_graph : 
@@ -482,6 +493,7 @@ random_graph_methods = {
 	"d" : get_random_graph_d,
 	"e" : get_random_graph_e,
 	"f" : get_random_graph_f,
+	"g" : get_random_graph_g,
 }
 
 if not method in random_graph_methods:
@@ -513,13 +525,13 @@ for i in range(48, 67):
 	#plot_graph(Random_G)
 	#print_adjacency_matrix(A)
 	export_adjacency_matrix(Random_G, method, input_name, thr)
-	#get_characteristics(Random_G, thr, input_name)
-	#get_single_network_measures(Random_G, thr)
-	#get_assortativity(Random_G, thr)
-	#get_local_efficiency(Random_G, thr)
-	#get_global_effic(Random_G, thr)
-	#get_degree_distribution(Random_G, thr)
-	#get_node_cc_and_degree(Random_G, thr)
-	#get_connected_components_nodes(Random_G, thr)
-	#get_small_worldness(Random_G, thr)
+	get_characteristics(Random_G, thr, input_name)
+	get_single_network_measures(Random_G, thr)
+	get_assortativity(Random_G, thr)
+	get_local_efficiency(Random_G, thr)
+	get_global_effic(Random_G, thr)
+	get_degree_distribution(Random_G, thr)
+	get_node_cc_and_degree(Random_G, thr)
+	get_connected_components_nodes(Random_G, thr)
+	get_small_worldness(Random_G, thr)
 	#get_motifs(Random_G, thr)
