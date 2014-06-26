@@ -179,32 +179,28 @@ def calcBOLD(simfile):
 	print "sampling freq : " , f_s, "Hz," "   nyquist frequency : ", f_n , "Hz"
 	# Butterworth filter
 	b , a = filter_design_coeff.butter(5, f_c/f_n , btype = 'low')
-	#b , a = butter(5, 0.5 , btype = 'lowpass', analog=False)
 	print "b is : " ,b
 	print "a is : " ,a
 	
-	#b = np.array([0.0291, 0.1457, 0.2914, 0.2914, 0.1457, 0.0291]) #*pow(10, -14))
-	#b = b * pow(10, -14)
-	#print "b now is : ", b
 	# Low pass filtering the BOLD signal
 	Bold_filt = np.zeros((n_T , N))
 	for col in range(0, N):
 		Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col])
-		#print Bold_filt[:,col]
+		print Bold_filt[:,col]
 		#print "Boldsignal col " , col , Bold_signal[col]
 	# Downsampling : select one point at each 'ds' [ms]
-	ds = 2.5  # use 2.5!!
-	index = np.arange(0, n_T, int(ds/dtt))
-	down_Bold_filt = Bold_filt[index , :]
-	print np.shape(down_Bold_filt)
-	# Cut first and last seconds (distorted from filtering)
-	len_Bold = np.shape(down_Bold_filt)[0]
-	nFramesToKeep = 260   #   use 260!
-	limit_down = int( math.floor( len_Bold - nFramesToKeep )/2 )
-	limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 )
-	print "limit_down" , limit_down
-	print "limit_up" , limit_up
-	indice = np.arange(limit_down-1, limit_up-1  , 1)
+	#ds = 2.5  # use 2.5!!
+	#index = np.arange(0, n_T, int(ds/dtt))
+	#down_Bold_filt = Bold_filt[index , :]
+	#print np.shape(down_Bold_filt)
+	## Cut first and last seconds (distorted from filtering)
+	#len_Bold = np.shape(down_Bold_filt)[0]
+	#nFramesToKeep = 260   #   use 260!
+	#limit_down = int( math.floor( len_Bold - nFramesToKeep )/2 )
+	#limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 )
+	#print "limit_down" , limit_down
+	#print "limit_up" , limit_up
+	#indice = np.arange(limit_down-1, limit_up-1  , 1)
 	#print "indice" , indice
 	## cut rows from down sampled Bold
 	#cut_Bold_filt = down_Bold_filt[indice, :]
@@ -252,7 +248,7 @@ input_name = sys.argv[1]
 #r_t = R[0,:]
 #bold_ode(T, R[1,:], iparams, x_init)
 
-#calcBOLD(input_name)
+calcBOLD(input_name)
 
 #a =np.array([1.0000   ,-4.9949   , 9.9797,   -9.9695,    4.9797,   -0.9949])
 #b = np.array([0.0291, 0.1457, 0.2914, 0.2914, 0.1457, 0.0291]) #*pow(10, -14))
@@ -268,4 +264,4 @@ input_name = sys.argv[1]
 
 
 
-print "scipy version : ", scipy.__version__
+#print "scipy version : ", scipy.__version__
