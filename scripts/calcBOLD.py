@@ -6,7 +6,7 @@ import numpy as np
 import sys
 import math
 import pylab as pl
-from scipy.signal import butter, filtfilt
+from scipy.signal import butter, filtfilt, lfilter
 import scipy
 import scipy.integrate as integ
 from scipy.integrate import odeint
@@ -185,7 +185,8 @@ def calcBOLD(simfile):
 	# Low pass filtering the BOLD signal
 	Bold_filt = np.zeros((n_T , N))
 	for col in range(0, N):
-		Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col])
+		#Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col],axis=-1, padtype='odd', padlen=None )
+		Bold_filt[:, col] = lfilter(b, a, Bold_signal[col], axis=-1, zi=None)
 		print Bold_filt[:,col]
 		#print "Boldsignal col " , col , Bold_signal[col]
 	# Downsampling : select one point at each 'ds' [ms]
