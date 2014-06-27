@@ -21,12 +21,7 @@ deep = 0
 def load_matrix(file):
 	A = np.loadtxt(file, unpack=True)
 	AT = np.transpose(A)
-	#for row in range(A.shape[0]):
-		#for col in range(A.shape[1]):
-			#if A[row , col] != A[col , row]:
-				#print "row and col : ", A[row , col], A[col, row], row , col
-				
-	
+	# check the symmetry				
 	if A.shape[0] != A.shape[1] or not (A == AT).all():
 		print "error: loaded matrix is not symmetric"
 		raise ValueError
@@ -520,7 +515,7 @@ for f in filelist:
 data_matrix = load_matrix(input_name)
 print "input data is loaded! "
 
-for i in range(48, 67):
+for i in range(5, 84):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
