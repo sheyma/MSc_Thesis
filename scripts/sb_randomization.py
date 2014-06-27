@@ -48,8 +48,9 @@ def plot_graph(G):
 
 def print_adjacency_matrix(B):			
 	G = nx.from_numpy_matrix(B)
-	print nx.adjacency_matrix(G)
-
+	hiwi = nx.adjacency_matrix(G)
+	#print nx.adjacency_matrix(G)
+	print hiwi
 	
 # create a random network with method a:
 # networkx.gnm_random_graph : random graph with given N and L
@@ -60,45 +61,6 @@ def get_random_graph_a(B):
 	RG = nx.gnm_random_graph(N, L)
 	return RG
 
-# create a random network with method b:
-# networkx.erdos_renyi_graph : random graph with given N and d
-def get_random_graph_b(B):
-	G = nx.from_numpy_matrix(B)
-	N = nx.number_of_nodes(G)
-	d = nx.density(G)
-	RG = nx.erdos_renyi_graph(N,d)
-	return RG
-
-# create a random network with method c
-# networkx.random_degree_sequence_graph : 
-# random graph with given degree sequence
-def get_random_graph_c(B):
-	G = nx.from_numpy_matrix(B)
-	degree_seq = nx.degree(G).values()
-	RG = nx.random_degree_sequence_graph(degree_seq,tries=1000)
-	return RG
-
-# create a random network with method c
-# networkx.expected_degree_graph : 
-# random graph with given degree sequence
-def get_random_graph_g(B):
-	G = nx.from_numpy_matrix(B)
-	degree_seq = nx.degree(G).values()
-	RG = nx.expected_degree_graph(degree_seq , seed = None, selfloops=False)
-	return RG
-
-
-
-# create a random network with method f
-# networkx.generators.degree_seq.havel_hakimi_graph : 
-# random graph with given degree sequence, check assortativity:
-# connecting the node of highest degree to other nodes of highest degree
-def get_random_graph_f(B):
-	G = nx.from_numpy_matrix(B)
-	degree_seq = nx.degree(G).values()
-	RG = nx.generators.degree_seq.havel_hakimi_graph(degree_seq)
-	return RG
-	
 # create a random network with method d:
 # networkx.double_edge_swap : random graph by swaping two edges 
 def get_random_graph_d(B):
@@ -112,6 +74,52 @@ def get_random_graph_d(B):
 	else:
 		print "No swap possible for number of edges", L
 		return G
+
+# create a random network with method c
+# networkx.expected_degree_graph : 
+# random graph with given degree sequence - a probabilistic approach
+def get_random_graph_g(B):
+	G = nx.from_numpy_matrix(B)
+	degree_seq = nx.degree(G).values()
+	RG = nx.expected_degree_graph(degree_seq, seed=None, selfloops=False)
+ 	return RG
+
+
+
+
+
+
+# create a random network with method b:
+# networkx.erdos_renyi_graph : random graph with given N and d
+def get_random_graph_b(B):
+	G = nx.from_numpy_matrix(B)
+	N = nx.number_of_nodes(G)
+	d = nx.density(G)
+	RG = nx.erdos_renyi_graph(N,d)
+	return RG
+
+# create a random network with method c
+# networkx.random_degree_sequence_graph : 
+# random graph with given degree sequence
+# note : no guarantee to generate a graph
+def get_random_graph_c(B):
+	G = nx.from_numpy_matrix(B)
+	degree_seq = nx.degree(G).values()
+	RG = nx.random_degree_sequence_graph(degree_seq,tries=1000)
+	return RG
+
+
+# create a random network with method f
+# networkx.generators.degree_seq.havel_hakimi_graph : 
+# random graph with given degree sequence, check assortativity:
+# connecting the node of highest degree to other nodes of highest degree
+def get_random_graph_f(B):
+	G = nx.from_numpy_matrix(B)
+	degree_seq = nx.degree(G).values()
+	RG = nx.generators.degree_seq.havel_hakimi_graph(degree_seq)
+	return RG
+	
+
 
 def get_todo(G, nodis):
 	nodes = G.nodes()
@@ -504,11 +512,13 @@ if not method in random_graph_methods:
 out_prfx = input_name[:-4]+'_R'+method+'_'
 
 # remove old out files if exist
-#filelist = glob.glob(out_prfx + "*.dat")
-#for f in filelist:
-#	os.remove(f)
+filelist = glob.glob(out_prfx + "*.dat")
+for f in filelist:
+	os.remove(f)
+
 
 data_matrix = load_matrix(input_name)
+print "input data is loaded! "
 
 for i in range(48, 67):
 	thr = float(i) / 100.0
@@ -525,13 +535,13 @@ for i in range(48, 67):
 	#plot_graph(Random_G)
 	#print_adjacency_matrix(A)
 	export_adjacency_matrix(Random_G, method, input_name, thr)
-	get_characteristics(Random_G, thr, input_name)
-	get_single_network_measures(Random_G, thr)
-	get_assortativity(Random_G, thr)
-	get_local_efficiency(Random_G, thr)
-	get_global_effic(Random_G, thr)
-	get_degree_distribution(Random_G, thr)
-	get_node_cc_and_degree(Random_G, thr)
-	get_connected_components_nodes(Random_G, thr)
-	get_small_worldness(Random_G, thr)
+	#get_characteristics(Random_G, thr, input_name)
+	#get_single_network_measures(Random_G, thr)
+	#get_assortativity(Random_G, thr)
+	#get_local_efficiency(Random_G, thr)
+	#get_global_effic(Random_G, thr)
+	#get_degree_distribution(Random_G, thr)
+	#get_node_cc_and_degree(Random_G, thr)
+	#get_connected_components_nodes(Random_G, thr)
+	#get_small_worldness(Random_G, thr)
 	#get_motifs(Random_G, thr)
