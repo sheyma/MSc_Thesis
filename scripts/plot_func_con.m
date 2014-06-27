@@ -21,7 +21,8 @@
 
 % Network Density
 %random_G = ('0abfdc');
-random_G = ('0abfdc');
+random_G = ('0adcg');
+
 color='kmbcyr'; type = '-*o+*o';
 input_name = 'A_aal_single_network_measures.dat';
 fig = figure(1);
