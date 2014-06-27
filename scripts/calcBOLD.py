@@ -144,7 +144,7 @@ def calcBOLD(simfile):
 	#pl.show()
 
 	print "Bold-signalling of u-timeseries starts..."
-	# define simulation time for BOLD
+	# !!!!!!!!!define simulation time for BOLD
 	T = 700.0		
 	# apply Balloon Windkessel model in fuction BOLD
 	
