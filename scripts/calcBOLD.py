@@ -6,12 +6,13 @@ import numpy as np
 import sys
 import math
 import pylab as pl
-from scipy.signal import butter, filtfilt, lfilter
-import scipy
+#import scipy.signal import butter, filtfilt, lfilter
+from scipy.signal import  butter , filtfilt
 import scipy.integrate as integ
 from scipy.integrate import odeint
 import time
-import filter_design_coeff
+#from sos import tf2sos, sosfilt
+#import filter_design_coeff
 
 class Params(object):
 	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo', 'vo', 'k1', 'k2', 'k3']
@@ -145,7 +146,7 @@ def calcBOLD(simfile):
 
 	print "Bold-signalling of u-timeseries starts..."
 	# !!!!!!!!!define simulation time for BOLD
-	T = 450.0		
+	T = 700.0		
 	# apply Balloon Windkessel model in fuction BOLD
 	
 	Bold_signal = {}
@@ -179,49 +180,73 @@ def calcBOLD(simfile):
 	f_n = f_s /2
 	print "Butterworth lowpass filter..."
 	print "sampling freq : " , f_s, "Hz," "   nyquist frequency : ", f_n , "Hz"
+	
 	# Butterworth filter
-	b , a = filter_design_coeff.butter(5, f_c/f_n , btype = 'low')
-	print "b is : " ,b
-	print "a is : " ,a
+	#b , a = filter_design_coeff.butter(5, f_c/f_n , btype = 'low')
+	b , a = butter(5, float(f_c)/f_n , btype = 'low', analog=0, output='ba')
+	
+	print 'fc/fN' , float(f_c)/f_n 
+	
+	
+	#f = open('Bs_python.dat','w')
+	#for i in range(len(b)):
+		#f.write("%.20f\t" % (b[i]))
+	#f.close()	
+
+	#f = open('As_python.dat','w')
+	#for i in range(len(a)):
+		#f.write("%.20f\t" % (a[i]))
+	#f.close()	
+	
 	
 	# Low pass filtering the BOLD signal
+
 	Bold_filt = np.zeros((n_T , N))
-	for col in range(0,1):
-		print "Bold_signal is , " , Bold_signal[col]
-		print "col is" , col
+
+	f = open('bold_filt_python.dat','w')
 		
-		f = open('bold_signal_deneme.dat','w')
-		for i in range(len(Bold_signal[col])):
-			f.write("%.6f\t" % (Bold_signal[col][i]))
-		f.close()		
+	for col in range(0,N):
+		
+		# for N= 1 : try :
+		#f = open('bold_signal_python.dat','w')
+		#for i in range(len(Bold_signal[col])):
+			#f.write("%.6f\t" % (Bold_signal[col][i]))
+		#f.close()		
+				
+		
+		Bs = (np.loadtxt('Bs_matlab.dat'))
+		As = (np.loadtxt('As_matlab.dat'))
+		
+		a
+		Bold_filt[: , col] = filtfilt(Bs, As, Bold_signal[col])		
 		
 		
-		Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col], padlen=None, padtype='odd')
-		#Bold_filt[:, col] = lfilter(b, a, Bold_signal[col], axis=-1, zi=None)
-		print "filtfilt result is: " , Bold_filt[:,col]
-		pl.plot(Bold_filt[:,col])
-		pl.show()
-		#print "Boldsignal col " , col , Bold_signal[col]
+	print "size(Bold_filt) : " , np.shape(Bold_filt)
+	
+	np.savetxt('bold_filt_python.dat', Bold_filt)
+		
+			
 	# Downsampling : select one point at each 'ds' [ms]
-	#ds = 2.5  # use 2.5!!
-	#index = np.arange(0, n_T, int(ds/dtt))
-	#down_Bold_filt = Bold_filt[index , :]
-	#print np.shape(down_Bold_filt)
-	## Cut first and last seconds (distorted from filtering)
-	#len_Bold = np.shape(down_Bold_filt)[0]
-	#nFramesToKeep = 260   #   use 260!
-	#limit_down = int( math.floor( len_Bold - nFramesToKeep )/2 )
-	#limit_up = int( math.floor( len_Bold + nFramesToKeep )/2 )
-	#print "limit_down" , limit_down
-	#print "limit_up" , limit_up
-	#indice = np.arange(limit_down-1, limit_up-1  , 1)
+	ds = 2.5  # use 2.5!!
+	index = np.arange(0, n_T, int(ds/dtt))
+	down_Bold = Bold_filt[index , :]
+	print "Down_sampled Bold_filt size : " , np.shape(down_Bold)
+	
+	# Cut first and last seconds (distorted from filtering)
+	len_down = np.shape(down_Bold)[0]
+	nFramesToKeep = 260   #   use 260!
+	limit_down = int( math.floor( len_down - nFramesToKeep )/2 )
+	limit_up = int( math.floor( len_down + nFramesToKeep )/2 )
+	print "limit_down" , limit_down
+	print "limit_up" , limit_up
+	indice = np.arange(limit_down-1, limit_up-1  , 1)
 	#print "indice" , indice
-	## cut rows from down sampled Bold
-	#cut_Bold_filt = down_Bold_filt[indice, :]
-	##print cut_Bold_filt
-	## find correlation coefficient matrix
-	#simcorr = scipy.corrcoef(np.transpose(cut_Bold_filt))
-	##print simcorr
+	# cut rows from down sampled Bold
+	cut_Bold = down_Bold[indice, :]
+	print cut_Bold
+	# find correlation coefficient matrix
+	simcorr = scipy.corrcoef(np.transpose(cut_Bold))
+	print simcorr
 	#np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
 	
 	#fig = pl.figure(2)
@@ -267,18 +292,24 @@ calcBOLD(input_name)
 #Bold_filt = scipy.signal.filtfilt( b  , a , np.array([1,2,3,4,5,6,7,8,9,10]), padlen=9  )
 #print Bold_filt
 
-#print "scipy version : ", scipy.__version__
-from scipy.io import loadmat
-from scipy.signal import butter, filtfilt
-from matplotlib.pyplot import plot
 
 
 #input_signal = np.linspace(1, 50 ,50)
 
 #passband = [0.75*2/30, 5.0*2/30]
-#b, a = butter(5, passband, 'bandpass')
+#b, a = sig.butter(5, 0.05, 'lowpass')
 
-#y = filtfilt(b, a, input_signal)
+
+
+#y = sig.filtfilt(b, a, input_signal)
+#y_ma = np.loadtxt('deleted.dat' , unpack=True)
+
+#pl.plot(y)
+#pl.plot(y_ma ,'r')
+#pl.show()
+
+
+
 
 #simout = np.transpose(np.loadtxt(input_name, unpack=True))
 
@@ -289,9 +320,6 @@ from matplotlib.pyplot import plot
 #print "b : " , b
 #print "a :  " , a
 ##print y
-#pl.plot(y)
-#pl.show()
-
 
 
 
