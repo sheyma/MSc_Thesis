@@ -90,6 +90,7 @@ function b = calcBOLD(simfile)
   for n = 1:N
     x               = boldsignal{n};
     BOLD_filt(:,n)  = filtfilt(Bs,As,x) % Apply filter
+    plot(BOLD_filt)
     %size(BOLD_filt)
   end
 

@@ -145,7 +145,7 @@ def calcBOLD(simfile):
 
 	print "Bold-signalling of u-timeseries starts..."
 	# !!!!!!!!!define simulation time for BOLD
-	T = 700.0		
+	T = 450.0		
 	# apply Balloon Windkessel model in fuction BOLD
 	
 	Bold_signal = {}
@@ -163,6 +163,8 @@ def calcBOLD(simfile):
 				#print col,key,Bold_signal[key][col]
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", count_nan
+		
+		
 			
 	## filtering below 0.25 Hz = cut-off frequency
 	f_c = 0.25
@@ -184,10 +186,21 @@ def calcBOLD(simfile):
 	
 	# Low pass filtering the BOLD signal
 	Bold_filt = np.zeros((n_T , N))
-	for col in range(0, N):
-		#Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col],axis=-1, padtype='odd', padlen=None )
-		Bold_filt[:, col] = lfilter(b, a, Bold_signal[col], axis=-1, zi=None)
-		print Bold_filt[:,col]
+	for col in range(0,1):
+		print "Bold_signal is , " , Bold_signal[col]
+		print "col is" , col
+		
+		f = open('bold_signal_deneme.dat','w')
+		for i in range(len(Bold_signal[col])):
+			f.write("%.6f\t" % (Bold_signal[col][i]))
+		f.close()		
+		
+		
+		Bold_filt[:, col] = filtfilt( b  , a , Bold_signal[col], padlen=None, padtype='odd')
+		#Bold_filt[:, col] = lfilter(b, a, Bold_signal[col], axis=-1, zi=None)
+		print "filtfilt result is: " , Bold_filt[:,col]
+		pl.plot(Bold_filt[:,col])
+		pl.show()
 		#print "Boldsignal col " , col , Bold_signal[col]
 	# Downsampling : select one point at each 'ds' [ms]
 	#ds = 2.5  # use 2.5!!
@@ -251,18 +264,37 @@ input_name = sys.argv[1]
 
 calcBOLD(input_name)
 
-#a =np.array([1.0000   ,-4.9949   , 9.9797,   -9.9695,    4.9797,   -0.9949])
-#b = np.array([0.0291, 0.1457, 0.2914, 0.2914, 0.1457, 0.0291]) #*pow(10, -14))
-#b = b * pow(10, -14)
-#print "a is : " , a
-#print "b now is : ", b
-# Low pass filtering the BOLD signal
-#a = np.array([1 ,3 , 4])
-#b = np.array([0.4 , 0.2 , 0.3 ])
-
 #Bold_filt = scipy.signal.filtfilt( b  , a , np.array([1,2,3,4,5,6,7,8,9,10]), padlen=9  )
 #print Bold_filt
 
-
-
 #print "scipy version : ", scipy.__version__
+from scipy.io import loadmat
+from scipy.signal import butter, filtfilt
+from matplotlib.pyplot import plot
+
+
+#input_signal = np.linspace(1, 50 ,50)
+
+#passband = [0.75*2/30, 5.0*2/30]
+#b, a = butter(5, passband, 'bandpass')
+
+#y = filtfilt(b, a, input_signal)
+
+#simout = np.transpose(np.loadtxt(input_name, unpack=True))
+
+
+#from scipy import signal
+#b, a = signal.butter(8, 0.125)
+#y = signal.filtfilt(b, a, simout, padlen=None, padtype='odd')
+#print "b : " , b
+#print "a :  " , a
+##print y
+#pl.plot(y)
+#pl.show()
+
+
+
+
+
+
+
