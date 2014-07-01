@@ -42,12 +42,12 @@ eqns = {
 
 #set the parameters and the delay
 params = { 
-        'alpha': 0.89,
-	'gamma': 0.9,
-        'b': 0.1,
-        'C': 5,
-        'K' : 4,
-        'TAU': 4,
+        'alpha': 0.85,
+		'gamma': 1.0,
+        'b': 0.2,
+        'C': 0.9,
+        'K' : 0,
+        'TAU': 3,
         'tau' : 3 }
 
 
@@ -89,7 +89,7 @@ dde.hist_from_funcs({'x1': lambda t : -0.05 , 'y1': lambda t: -0.75 })
 dde.run()
 
 # sample the solution with sample size dt=0.01 between 170 and 200
-sol = dde.sample(480,tfinal,dt=0.1)
+sol = dde.sample(0,100,dt=0.1)
 
 # plot the solution
 x1 = sol['x1']
@@ -99,18 +99,21 @@ y2 = sol['y2']
 t = sol['t']
 
 fig = pl.figure(num=None, figsize=(14, 6), dpi=100, facecolor='w', edgecolor='k')
-#fig.suptitle('[PAN12] Global Dynamics :  a = '+str(params['a'])+
+#fig.suptitle('FHN - Global Dynamics :  a = '+str(params['a'])+
 	      #r'  $\varepsilon$'+' = '+str(params['eps']) +
 	      #'  C = '+ str(params['C']) +'  '  + r'$\tau^C$= '+
 	      #str(params['tau'])+ '  K = '+ str(params['K']) +'  '  + 
 	      #r'$\tau^K$= '+ str(params['tau']),fontsize=14, fontweight='bold')
-fig.suptitle('[GHO08] Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
+fig.suptitle('FHN - Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
 	      r'  $\gamma$ = '+str(params['gamma']) + ' $ b$ = '+ 
 	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) + 
-	      '  C = '+ str(params['C']) +'  '  + r'$\tau^C$= ' #+
+	      '  C = '+ str(params['C']) +'  '  + r'$\tau^C$= ' +str(params['tau']) #+
 	      #'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
 	      #str(params['tau'])#
 	      , fontsize=14, fontweight='bold')
+
+
+
 	      
 pl.subplot(221)
 pl.plot(t, x1, 'r',label='$x_1(t)$')
@@ -158,6 +161,7 @@ pl.axis([-2.3, 2.3, -1.5, 1.5])
 lg = legend()
 lg.draw_frame(False)
 
+pl.savefig("FHN_global_dynamics_1.eps",format="eps")
 #pl.savefig("GHO08_global_dynamics_C_K.eps",format="eps")
 #pl.savefig("GHO08_global_dynamics_C.eps",format="eps")
 #pl.savefig("PAN12_global_dynamics_C_K.eps",format="eps")
