@@ -1,5 +1,4 @@
 #!/usr/bin/python2.7 
-
 # -*- coding: utf-8 -*-
 
 from __future__ import division
@@ -23,12 +22,12 @@ eqns = {r'x{i}': '(y{i} + gamma * x{i} - pow(x{i},3.0)/3.0) * TAU',
 
 params = { # Fitzhugh-Nagumo parameters...
 
-        'gamma': 0.9, 
-        'alpha': 0.89,  
-        'b': 0.1,
-        'TAU': 4, 
-	'sigma': 4,  
-	'D' : 0,  
+        'gamma': 1.0, 
+        'alpha': 0.85,  
+        'b': 0.2,
+        'TAU': 1.25, 
+	'sigma': 0.9,  
+	'D' : 0.05,  
 	'v' : 70.0, } # velocity in 0.1 m/s 
 
 noise = {'x': 'D * gwn()', 'y': 'D * gwn()'} 
@@ -81,7 +80,7 @@ neuronetz.ddeN.hist_from_arrays(dic)
 
 """ Start simulation with t = [0,tmax] """
 
-tmax = 70000
+tmax = 100
 neuronetz.run(tmax)
 
 
@@ -92,12 +91,12 @@ print "parameters : ", neuronetz.params
 print "noise : ", neuronetz.noise
 print "delays : ", neuronetz.ddeN.delays
 
-sol_samp1 = neuronetz.ddeN.sample(480,500,dt=0.1)
-sol_samp2 = neuronetz.ddeN.sample(480,500,dt=1)
+sol_samp1 = neuronetz.ddeN.sample(0,tmax,dt=0.1)
+sol_samp2 = neuronetz.ddeN.sample(0,tmax,dt=0.1)
 
 
-sol_adap = neuronetz.adaptive_sol
-print (sol_adap['t'][0:10000])
+#sol_adap = neuronetz.adaptive_sol
+#print (sol_adap['t'][0:10000])
 
 
 t = sol_samp1['t'][0:]
@@ -147,7 +146,7 @@ fig = pl.figure(num=None, figsize=(8, 6), dpi=100, facecolor='w', edgecolor='k')
 	      #'  C = '+ str(params['C']) +'  '  + r'$\tau^C$= '+
 	      #str(params['tau'])+ '  K = '+ str(params['K']) +'  '  + 
 	      #r'$\tau^K$= '+ str(params['tau']),fontsize=14, fontweight='bold')
-fig.suptitle('FHN time series :  '+r'$\alpha$ = ' +str(params['alpha'])+
+fig.suptitle('FHN - time series :  '+r'$\alpha$ = ' +str(params['alpha'])+
 	      r'  $\gamma$ = '+str(params['gamma']) + ' $ b$ = '+ 
 	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) +
 	      '  C = ' + str(params['sigma']) +'  '  + r'$\Delta\tau_{ij}$=$d_{ij}/v$'
@@ -158,8 +157,8 @@ fig.suptitle('FHN time series :  '+r'$\alpha$ = ' +str(params['alpha'])+
 pl.subplot(2,1,1)
 pl.plot(sol_samp1['t'],sol_samp1['x0'],'r',label='x(t)')
 pl.plot(sol_samp1['t'],sol_samp1['y0'], 'b',label='y(t)')
-pl.plot(sol_adap['t'][10573:10758],sol_adap['x0'][10573:10758],'.r',linewidth=0.05)
-pl.plot(sol_adap['t'][10573:10758],sol_adap['y0'][10573:10758],'.b',linewidth=0.05)
+#pl.plot(sol_adap['t'][10573:10758],sol_adap['x0'][10573:10758],'.r',linewidth=0.05)
+#pl.plot(sol_adap['t'][10573:10758],sol_adap['y0'][10573:10758],'.b',linewidth=0.05)
 pl.xlabel('$t$')
 pl.ylabel('$x_1,y_1$')
 lg = legend(loc=2)
@@ -168,10 +167,12 @@ lg.draw_frame(False)
 pl.subplot(2,1,2)
 pl.plot(sol_samp2['t'],sol_samp2['x0'],'r')
 pl.plot(sol_samp2['t'],sol_samp2['y0'], 'b')
-pl.plot(sol_adap['t'][10573:10758],sol_adap['x0'][10573:10758],'.r',linewidth=0.05)
-pl.plot(sol_adap['t'][10573:10758],sol_adap['y0'][10573:10758],'.b',linewidth=0.05)
+#pl.plot(sol_adap['t'][10573:10758],sol_adap['x0'][10573:10758],'.r',linewidth=0.05)
+#pl.plot(sol_adap['t'][10573:10758],sol_adap['y0'][10573:10758],'.b',linewidth=0.05)
 pl.xlabel('$t$')
 pl.ylabel('$x_1,y_1$')
+
+pl.savefig("FHN_time_series_1.eps",format="eps")
 
 #pl.savefig("fhn_time_series_adapti.eps",format="eps")
 pl.show()
@@ -195,8 +196,8 @@ pl.show()
 #lg = legend(loc=2)
 #lg.draw_frame(False)
 ##pl.plot(x_int,y_int,'ok')
-
-#pl.axis([-2.3, 2.3, -1, 1])
+#pl.axis([-5, 5, -5 ,5])
+##pl.axis([-2.3, 2.3, -1, 1])
 #pl.xlabel('$x_1$')
 #pl.ylabel('$y_1$')
 
@@ -215,14 +216,12 @@ pl.show()
 #pl.plot(x_range,nullcl_01(x_range),'b', label='$x_{nullcline}$')
 #pl.plot(x_range,nullcl_02(x_range),'k',label='$y_{nullcline}$')
 #pl.plot(X_int[0],Y_int[0], 'ok', linewidth=5)
-#pl.axis([-2.3, 2.3, -1.5, 1.5])
+#pl.axis([-5, 5, -5 ,5])
 #pl.xlabel('$x_2$')
 #pl.ylabel('$y_2$')
 #lg = legend(loc=2)
 #lg.draw_frame(False)
 
-##pl.savefig("FHN_time_series_C_big.eps",format="eps")
-##pl.savefig("FHN_time_series_C_small.eps",format="eps")
+#pl.savefig("FHN_time_series_C_small.eps",format="eps")
 
-pl.show()
 
