@@ -223,7 +223,13 @@ def calcBOLD(simfile):
 		
 	print "size(Bold_filt) : " , np.shape(Bold_filt)
 	
-	np.savetxt('bold_filt_python.dat', Bold_filt)
+	f = open('bold_filt_python.dat','w')
+	for row in range(0, np.shape(Bold_filt)[0]):
+		for col in range(0 , np.shape(Bold_filt)[1]):
+			f.write("%.6f\t" % (Bold_filt[row, col]))
+		f.write("\n")
+	f.close()
+	
 		
 			
 	# Downsampling : select one point at each 'ds' [ms]
@@ -239,15 +245,25 @@ def calcBOLD(simfile):
 	limit_up = int( math.floor( len_down + nFramesToKeep )/2 )
 	print "limit_down" , limit_down
 	print "limit_up" , limit_up
-	indice = np.arange(limit_down-1, limit_up-1  , 1)
+	#indice = np.arange(limit_down-1, limit_up-1  , 1)
 	#print "indice" , indice
 	# cut rows from down sampled Bold
-	cut_Bold = down_Bold[indice, :]
-	print cut_Bold
+	cut_Bold = down_Bold[limit_down : limit_up, :]
+	print "shape of cut_Bold : " , np.shape(cut_Bold)
+	
+	
+	f = open('cut_bold.dat','w')
+	for row in range(0, np.shape(cut_Bold)[0]):
+		for col in range(0 , np.shape(cut_Bold)[1]):
+			f.write("%.6f\t" % (cut_Bold[row, col]))
+		f.write("\n")
+	f.close()
+	
+	
 	# find correlation coefficient matrix
-	simcorr = scipy.corrcoef(np.transpose(cut_Bold))
-	print simcorr
-	#np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
+	#simcorr = scipy.corrcoef(np.transpose(cut_Bold))
+	#print simcorr
+	##np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
 	
 	#fig = pl.figure(2)
 	#pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])

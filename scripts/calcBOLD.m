@@ -89,7 +89,7 @@ function b = calcBOLD(simfile)
 
   for n = 1:N
     x               = boldsignal{n};
-    BOLD_filt(:,n)  = filtfilt(Bs,As,x) % Apply filter
+    BOLD_filt(:,n)  = filtfilt(Bs,As,x); % Apply filter
     plot(BOLD_filt)
     %size(BOLD_filt)
   end
@@ -102,7 +102,7 @@ function b = calcBOLD(simfile)
   lenBold = size(down_bds,1);
   
   %% Cutting first and last seconds (distorted from filtering) and keep the middle:
-  nFramesToKeep = 260;
+  nFramesToKeep = 260; % use 260!!
   bds = down_bds(floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1,:);
   size(bds)  
   save([simfile(1:end-4),'_bds.mat'],'bds')
