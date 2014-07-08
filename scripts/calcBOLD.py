@@ -278,26 +278,28 @@ def correl(bold_input):
 		for j in range(0,col):
 			A = np.corrcoef(bold_input[:,i] , bold_input[:,j])	
 			correl_row = np.append(correl_row, A[0,1])
+		
 		correl_matrix[i,:] = correl_row
 		
 		for j in range(0,col):
 			f.write("%.10f\t" % (correl_matrix[i, j]))
 		f.write("\n")
 	f.close()		
-	
-	
+	print correl_matrix
 	return correl_matrix
 
 
 	
 #np.savetxt('bold_corr_python.dat', correl_matrix, fmt='%.10f', delimiter='\t')
-	
-#bold_input = np.loadtxt('bold_cut_matlab.dat')			
-bold_input = np.loadtxt('A_small_sigma=0.1_D=0.05_v=70.0_tmax=70000.dat')
+		
+bold_input = np.loadtxt('bold_filt_matlab.dat')
 ds = 2.5
 dtt = 0.001
 nFramesToKeep = 260
-correl(bold_input)
+
+down_bold  		= down_sample(bold_input , ds, dtt)
+cut_bold   		= keep_frames(down_bold , nFramesToKeep)
+correl_matrix 	= correl(cut_bold)
 
 
 
