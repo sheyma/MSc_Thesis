@@ -285,9 +285,17 @@ def correl(bold_input):
 			f.write("%.10f\t" % (correl_matrix[i, j]))
 		f.write("\n")
 	f.close()		
-	print correl_matrix
+	
 	return correl_matrix
 
+def image(bold_input):
+	N_col = np.shape(bold_input)[1]
+	extend = (0.5 , N_col+0.5 , 0.5 , N_col+0.5)	
+	pl.imshow(bold_input, interpolation='nearest', extent=extend)
+	pl.colorbar()
+	pl.show()
+	return  
+	
 
 	
 #np.savetxt('bold_corr_python.dat', correl_matrix, fmt='%.10f', delimiter='\t')
@@ -300,18 +308,8 @@ nFramesToKeep = 260
 down_bold  		= down_sample(bold_input , ds, dtt)
 cut_bold   		= keep_frames(down_bold , nFramesToKeep)
 correl_matrix 	= correl(cut_bold)
+image(correl_matrix)
 
-
-
-
-
-#fig = pl.figure(2)
-#pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])
-#pl.colorbar
-#pl.show()
-	
-
-	
 
 # here we go
 
