@@ -7,7 +7,7 @@ import sys
 import math
 import pylab as pl
 #import scipy.signal import butter, filtfilt, lfilter
-from scipy.signal import  butter , filtfilt
+from scipy.signal import  butter , filtfilt 
 import scipy.integrate as integ
 from scipy.integrate import odeint
 import time
@@ -146,7 +146,7 @@ def calcBOLD(simfile):
 
 	print "Bold-signalling of u-timeseries starts..."
 	# !!!!!!!!!define simulation time for BOLD
-	T = 450.0		
+	T = 700.0		
 	# apply Balloon Windkessel model in fuction BOLD
 	
 	Bold_signal = {}
@@ -172,102 +172,126 @@ def calcBOLD(simfile):
 		
 	
 			
-	### filtering below 0.25 Hz = cut-off frequency
-	#f_c = 0.25
-	## resolution of BOLD signal : dtt [second]
-	#dtt = 0.001
-	## length of one u series after subjected to BOLD
-	#n_T = len(np.array(Bold_signal[1]))
+	## filtering below 0.25 Hz = cut-off frequency
+	f_c = 0.25
+	# resolution of BOLD signal : dtt [second]
+	dtt = 0.001
+	# length of one u series after subjected to BOLD
+	n_T = len(np.array(Bold_signal[1]))
 	#print "length of one column in Bold_signal : " , n_T
-	## Sampling frequency [Hz]
-	#f_s = 1/dtt
-	## Nyquist frequency [Hz]
-	#f_n = f_s /2
-	#print "Butterworth lowpass filter..."
-	#print "sampling freq : " , f_s, "Hz," "   nyquist frequency : ", f_n , "Hz"
+	# Sampling frequency [Hz]
+	f_s = 1/dtt
+	# Nyquist frequency [Hz]
+	f_n = f_s /2
+	print "Butterworth lowpass filter..."
+	print "sampling freq : " , f_s, "Hz," "   nyquist frequency : ", f_n , "Hz"
 	
-	## Butterworth filter
-	##b , a = filter_design_coeff.butter(5, f_c/f_n , btype = 'low')
-	##b , a = butter(5, float(f_c)/f_n , btype = 'low', analog=0, output='ba')
+	# Butterworth filter
+	b , a = butter(5, float(f_c)/f_n , btype = 'low', analog=0, output='ba')
 	
-	#print 'fc/fN' , float(f_c)/f_n 
+	print 'fc/fN :' , float(f_c)/f_n 
 	
 	
-	##f = open('Bs_python.dat','w')
-	##for i in range(len(b)):
-		##f.write("%.20f\t" % (b[i]))
-	##f.close()	
+	f = open('Bs_python.dat','w')
+	for i in range(len(b)):
+		f.write("%.20f\t" % (b[i]))
+	f.close()	
 
-	##f = open('As_python.dat','w')
-	##for i in range(len(a)):
-		##f.write("%.20f\t" % (a[i]))
-	##f.close()	
+	f = open('As_python.dat','w')
+	for i in range(len(a)):
+		f.write("%.20f\t" % (a[i]))
+	f.close()	
 	
 	
-	## Low pass filtering the BOLD signal
+	# Low pass filtering the BOLD signal
 
-	#Bold_filt = np.zeros((n_T , N))
+	Bold_filt = np.zeros((n_T , N))
 
-	#Bs = (np.loadtxt('Bs_matlab.dat'))
-	#As = (np.loadtxt('As_matlab.dat'))
+	Bs = (np.loadtxt('Bs_matlab.dat'))
+	As = (np.loadtxt('As_matlab.dat'))
 
-	#f = open('bold_filt_python.dat','w')
-			
-	#for col in range(0,N):
-		
-		
 				
-		#Bold_filt[: , col] = filtfilt(Bs, As, Bold_signal[col])		
+	for col in range(0,N):			
+		Bold_filt[: , col] = filtfilt(Bs, As, Bold_signal[col])		
 		
 		
-	#print "size(Bold_filt) : " , np.shape(Bold_filt)
+	print "size(Bold_filt) : " , np.shape(Bold_filt)
 	
-	#f = open('bold_filt_python.dat','w')
-	#for row in range(0, np.shape(Bold_filt)[0]):
-		#for col in range(0 , np.shape(Bold_filt)[1]):
-			#f.write("%.6f\t" % (Bold_filt[row, col]))
-		#f.write("\n")
-	#f.close()
+	f = open('bold_filt_python.dat','w')
+	for row in range(0, np.shape(Bold_filt)[0]):
+		for col in range(0 , np.shape(Bold_filt)[1]):
+			f.write("%.6f\t" % (Bold_filt[row, col]))
+		f.write("\n")
+	f.close()
 	
-		
-			
-	## Downsampling : select one point at each 'ds' [ms]
-	#ds = 2.5  # use 2.5!!
-	#index = np.arange(0, n_T, int(ds/dtt))
-	#down_Bold = Bold_filt[index , :]
-	#print "Down_sampled Bold_filt size : " , np.shape(down_Bold)
+
+# filtered bold signal should be downsampled
+
+def down_sample(bold_input, ds, dtt):
 	
-	## Cut first and last seconds (distorted from filtering)
-	#len_down = np.shape(down_Bold)[0]
-	#nFramesToKeep = 260   #   use 260!
-	#limit_down = int( math.floor( len_down - nFramesToKeep )/2 )
-	#limit_up = int( math.floor( len_down + nFramesToKeep )/2 )
-	#print "limit_down" , limit_down
-	#print "limit_up" , limit_up
-	##indice = np.arange(limit_down-1, limit_up-1  , 1)
-	##print "indice" , indice
-	## cut rows from down sampled Bold
-	#cut_Bold = down_Bold[limit_down : limit_up, :]
-	#print "shape of cut_Bold : " , np.shape(cut_Bold)
+	n_T = np.shape(bold_input)[0] 
+	index = np.arange(0 , n_T , int(ds/dtt))
+	down_bold = bold_input[index, :]
 	
+	print "Downsampled bold_input size : " , np.shape(down_bold)
+
+	f = open('bold_down_python.dat','w')
+	for row in range(0, np.shape(down_bold)[0]):
+		for col in range(0 , np.shape(down_bold)[1]):
+			f.write("%.6f\t" % (down_bold[row, col]))
+		f.write("\n")
+	f.close()	
 	
-	#f = open('cut_bold.dat','w')
-	#for row in range(0, np.shape(cut_Bold)[0]):
-		#for col in range(0 , np.shape(cut_Bold)[1]):
-			#f.write("%.6f\t" % (cut_Bold[row, col]))
-		#f.write("\n")
-	#f.close()
+	return down_bold
+						
+# cutting from beginning and end
+
+def keep_frames(bold_input, nFramesToKeep):
 	
+	length = np.shape(bold_input)[0]
+	limit_down = int( math.floor( length - nFramesToKeep )/2 )
+	limit_up   = int( math.floor( length + nFramesToKeep )/2 )
+	index = np.arange(limit_down-1, limit_up-1  , 1)
+	cut_bold = bold_input[index, :]
 	
-	## find correlation coefficient matrix
-	##simcorr = scipy.corrcoef(np.transpose(cut_Bold))
-	##print simcorr
-	###np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
+	f = open('bold_cut_python.dat','w')
+	for row in range(0, np.shape(cut_bold)[0]):
+		for col in range(0 , np.shape(cut_bold)[1]):
+			f.write("%.6f\t" % (cut_bold[row, col]))
+		f.write("\n")
+	f.close()
 	
-	##fig = pl.figure(2)
-	##pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])
-	##pl.colorbar
-	##pl.show()
+	return cut_bold
+
+
+#find correlation coefficient matrix
+
+def correl(bold_input):
+	simcorr = np.corrcoef(bold_input)	#(np.transpose(cut_Bold))
+	print simcorr
+	#np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
+	return simcorr
+
+
+	
+
+bold_input = np.loadtxt('bold_cut_matlab.dat')			
+ds = 2.5
+dtt = 0.001
+nFramesToKeep = 260
+correl(bold_input)
+
+
+
+
+
+#fig = pl.figure(2)
+#pl.imshow(simcorr, interpolation='nearest', extent=[0.5, 2.5, 0.5, 2.5])
+#pl.colorbar
+#pl.show()
+	
+
+	
 
 # here we go
 
@@ -302,7 +326,7 @@ input_name = sys.argv[1]
 #r_t = R[0,:]
 #bold_ode(T, R[1,:], iparams, x_init)
 
-calcBOLD(input_name)
+#calcBOLD(input_name)
 
 #Bold_filt = scipy.signal.filtfilt( b  , a , np.array([1,2,3,4,5,6,7,8,9,10]), padlen=9  )
 #print Bold_filt
