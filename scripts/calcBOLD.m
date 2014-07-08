@@ -113,6 +113,8 @@ function b = calcBOLD(simfile)
 
   simfc = corr(bds);
   %save([simfile(1:end-4),'_simfc.mat'],'simfc')
+  dlmwrite('bold_corr_matlab.dat', simfc, 'delimiter','\t', 'precision', '%.10f');
+
   
    % plot simulated functional connectivity
   h = figure;
