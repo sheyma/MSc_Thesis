@@ -103,35 +103,60 @@ def bold_ode(T, r, iparams, x_init):
 	pl.xlabel('t')
 	pl.ylabel('BOLD signal ode')
 	pl.plot(t,b[:],'g-')
-	pl.show()
+	#pl.show()
 
 	return b
 	
 		
-			
+def bold_timeseries(simfile):
 	
-		
-def calcBOLD(simfile):
+	# load simfile as numpy matrix
+	# extract first column of simout as time vector
+	# extract time series of u's from simout
+
 	print "input huge time series u's and v's: ", simfile
 	print "reading data ..."
-	# load simfile as numpy matrix
-	simout = np.transpose(np.loadtxt(simfile, unpack=True))
-	# extract first column of simout as time vector
-	Tvec = simout[:,[0]]
-	# length of time time vector
-	n_Tvec = len(Tvec)
-	# dt of time vector
-	dt_Tvec = Tvec[1] - Tvec[0]
-	# total number of excitators: u's
-	N = (np.shape(simout)[1] -1 ) /2
 	
-	# extract time series of u's from simout
+	simout = np.transpose(np.loadtxt(simfile, unpack=True))
+	Tvec = simout[:,[0]]
+	n_Tvec = len(Tvec) 					# length of time time vector
+	dt_Tvec = Tvec[1] - Tvec[0]			# dt of time vector
+	N = (np.shape(simout)[1] -1 ) /2	# total number of u columns
 	timeseries = np.zeros((n_Tvec, N))
 	print "size of extracted u-timeseries : ", np.shape(timeseries)
 	for row in range(0,N):
 		timeseries[:,[row]] = simout[:,[2*row +1]]
 	
-	np.savetxt(simfile[:-4] + '_timeseries.dat', timeseries)	
+	np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')	
+	return timeseries
+			
+	
+		
+def calcBOLD(timeseries):
+	
+	## load simfile as numpy matrix
+	## extract first column of simout as time vector
+	## extract time series of u's from simout
+
+	#print "input huge time series u's and v's: ", simfile
+	#print "reading data ..."
+	
+	#simout = np.transpose(np.loadtxt(simfile, unpack=True))
+	#Tvec = simout[:,[0]]
+	#n_Tvec = len(Tvec) 					# length of time time vector
+	#dt_Tvec = Tvec[1] - Tvec[0]			# dt of time vector
+	#N = (np.shape(simout)[1] -1 ) /2	# total number of u columns
+	#timeseries = np.zeros((n_Tvec, N))
+	#print "size of extracted u-timeseries : ", np.shape(timeseries)
+	#for row in range(0,N):
+		#timeseries[:,[row]] = simout[:,[2*row +1]]
+	
+	#np.savetxt('bold_timeseries.dat',timeseries,fmt='%.6f',delimiter='\t')	
+	############################
+	
+	
+	N = np.shape(timeseries)[1] # total number of u columns
+	
 	
 	# plotting time series in a specific time interval
 	t_start = 325000;
@@ -300,22 +325,6 @@ def image(bold_input, simfile):
 	return  
 	
 
-	
-#np.savetxt('bold_corr_python.dat', correl_matrix, fmt='%.10f', delimiter='\t')
-input_name = sys.argv[1]	
-bold_input = np.loadtxt('bold_filt_matlab.dat')
-ds = 2.5
-dtt = 0.001
-nFramesToKeep = 260
-
-down_bold  		= down_sample(bold_input , ds, dtt)
-cut_bold   		= keep_frames(down_bold , nFramesToKeep)
-correl_matrix 	= correl(cut_bold)
-image(correl_matrix , input_name)
-
-
-
-
 # here we go
 
 params = Params()
@@ -335,14 +344,27 @@ iparams = invert_params(params)
 # initial conditions	
 x_init = np.array([0 , 1, 1, 1])	
 
+input_name = sys.argv[1]	
 
+timeseries  = 	bold_timeseries(input_name)
+calcBOLD(timeseries)
+
+			#bold_input = np.loadtxt('bold_filt_matlab.dat')
+
+
+			#ds = 2.5
+			#dtt = 0.001
+			#nFramesToKeep = 260
+
+			#down_bold  		= down_sample(bold_input , ds, dtt)
+			#cut_bold   		= keep_frames(down_bold , nFramesToKeep)
+			#correl_matrix 	= correl(cut_bold)
+			#corr_image		= image(correl_matrix , input_name)
 
 	
-input_name = sys.argv[1]	
-#print "reading data..."
 #R = np.loadtxt(input_name, unpack=True)
 
-#T = 700.0
+T = 700.0
 
 #bold_euler(T , R[1, :], iparams, x_init)
 
@@ -351,39 +373,9 @@ input_name = sys.argv[1]
 
 #calcBOLD(input_name)
 
-#Bold_filt = scipy.signal.filtfilt( b  , a , np.array([1,2,3,4,5,6,7,8,9,10]), padlen=9  )
-#print Bold_filt
 
 
-
-#input_signal = np.linspace(1, 50 ,50)
-
-#passband = [0.75*2/30, 5.0*2/30]
-#b, a = sig.butter(5, 0.05, 'lowpass')
-
-
-
-#y = sig.filtfilt(b, a, input_signal)
-#y_ma = np.loadtxt('deleted.dat' , unpack=True)
-
-#pl.plot(y)
-#pl.plot(y_ma ,'r')
-#pl.show()
-
-
-
-
-#simout = np.transpose(np.loadtxt(input_name, unpack=True))
-
-
-#from scipy import signal
-#b, a = signal.butter(8, 0.125)
-#y = signal.filtfilt(b, a, simout, padlen=None, padtype='odd')
-#print "b : " , b
-#print "a :  " , a
-##print y
-
-
+#np.savetxt('bold_corr_python.dat', correl_matrix, fmt='%.10f', delimiter='\t')
 
 
 
