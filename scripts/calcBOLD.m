@@ -26,6 +26,7 @@ function b = calcBOLD(simfile)
   for roi = 1:N
     timeseries(:,roi) = simoutput(:,2*roi);
   end
+  dlmwrite('bold_timeseries_matlab.dat', timeseries, 'delimiter','\t', 'precision', '%.6f');
 
   %save([simfile(1:end-4),'_timeseries.mat'],'timeseries','tvec')
   %load([simfile(1:end-4),'_timeseries.mat'])
