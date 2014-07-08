@@ -112,7 +112,7 @@ function b = calcBOLD(simfile)
   %load([simfile(1:end-4),'_bds.mat'])
 
   simfc = corr(bds);
-  save([simfile(1:end-4),'_simfc.mat'],'simfc')
+  %save([simfile(1:end-4),'_simfc.mat'],'simfc')
   
    % plot simulated functional connectivity
   h = figure;
