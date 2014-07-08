@@ -93,20 +93,20 @@ function b = calcBOLD(simfile)
     plot(BOLD_filt)
     %size(BOLD_filt)
   end
-
+  dlmwrite('bold_filt_matlab.dat', BOLD_filt, 'delimiter','\t', 'precision', '%.6f');  
 
   %% Downsampling: select one point every 'ds' ms to match fmri resolution:
 
   ds=2.500; 
   down_bds=BOLD_filt(1:ds/dtt:end,:);
   lenBold = size(down_bds,1);
+  dlmwrite('bold_down_matlab.dat', down_bds, 'delimiter','\t', 'precision', '%.6f');
   
   %% Cutting first and last seconds (distorted from filtering) and keep the middle:
   nFramesToKeep = 260; % use 260!!
   bds = down_bds(floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1,:);
   size(bds)  
-  save([simfile(1:end-4),'_bds.mat'],'bds')
-
+  dlmwrite('bold_cut_matlab.dat', bds, 'delimiter','\t', 'precision', '%.6f');
   %%
   
   %load([simfile(1:end-4),'_bds.mat'])
