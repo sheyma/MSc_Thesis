@@ -7,7 +7,7 @@ import sys
 import math
 import pylab as pl
 #import scipy.signal import butter, filtfilt, lfilter
-from scipy.signal import  butter , filtfilt 
+from scipy.signal import  butter , filtfilt , correlate2d
 import scipy.integrate as integ
 from scipy.integrate import odeint
 import time
@@ -267,15 +267,33 @@ def keep_frames(bold_input, nFramesToKeep):
 #find correlation coefficient matrix
 
 def correl(bold_input):
-	simcorr = np.corrcoef(bold_input)	#(np.transpose(cut_Bold))
-	print simcorr
-	#np.savetxt(simfile[:-4] + '_simcorr.dat', simcorr)
-	return simcorr
+	
+	col = np.shape(bold_input)[1]
+	correl_matrix = np.zeros((col , col))
+	f = open('bold_corr_python.dat','w')	
+	
+	for i in range(0,col) :
+		correl_row = np.array([])			
+		
+		for j in range(0,col):
+			A = np.corrcoef(bold_input[:,i] , bold_input[:,j])	
+			correl_row = np.append(correl_row, A[0,1])
+		correl_matrix[i,:] = correl_row
+		
+		for j in range(0,col):
+			f.write("%.10f\t" % (correl_matrix[i, j]))
+		f.write("\n")
+	f.close()		
+	
+	
+	return correl_matrix
 
 
 	
-
-bold_input = np.loadtxt('bold_cut_matlab.dat')			
+#np.savetxt('bold_corr_python.dat', correl_matrix, fmt='%.10f', delimiter='\t')
+	
+#bold_input = np.loadtxt('bold_cut_matlab.dat')			
+bold_input = np.loadtxt('A_small_sigma=0.1_D=0.05_v=70.0_tmax=70000.dat')
 ds = 2.5
 dtt = 0.001
 nFramesToKeep = 260
