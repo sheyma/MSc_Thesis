@@ -288,18 +288,21 @@ def correl(bold_input):
 	
 	return correl_matrix
 
-def image(bold_input):
+def image(bold_input, simfile):
 	N_col = np.shape(bold_input)[1]
 	extend = (0.5 , N_col+0.5 , 0.5 , N_col+0.5)	
 	pl.imshow(bold_input, interpolation='nearest', extent=extend)
 	pl.colorbar()
-	pl.show()
+	
+	image_name = simfile[0:-4] + '_CORR.eps'	
+	#pl.savefig(image_name, format="eps")
+	#pl.show()
 	return  
 	
 
 	
 #np.savetxt('bold_corr_python.dat', correl_matrix, fmt='%.10f', delimiter='\t')
-		
+input_name = sys.argv[1]	
 bold_input = np.loadtxt('bold_filt_matlab.dat')
 ds = 2.5
 dtt = 0.001
@@ -308,7 +311,9 @@ nFramesToKeep = 260
 down_bold  		= down_sample(bold_input , ds, dtt)
 cut_bold   		= keep_frames(down_bold , nFramesToKeep)
 correl_matrix 	= correl(cut_bold)
-image(correl_matrix)
+image(correl_matrix , input_name)
+
+
 
 
 # here we go
