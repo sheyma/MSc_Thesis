@@ -6,7 +6,7 @@
 import networkx as nx
 import numpy as np
 from math import factorial 
-import matplotlib.pyplot as pl
+import matplotlib.pyplot as pl	
 import random as rnd
 import sys  
 import glob
