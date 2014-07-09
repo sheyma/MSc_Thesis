@@ -174,7 +174,7 @@ def filter_bold(bold_input):
 	f_n = f_s /2						# [Hz]
 	
 	b , a = butter(Or,float(f_c)/f_n, btype='low',analog=0, output='ba')
-	
+		
 	f = open('Bs_python.dat','w')
 	for i in range(len(b)):
 		f.write("%.20f\t" % (b[i]))
@@ -213,12 +213,7 @@ def down_sample(bold_input, ds, dtt):
 	index = np.arange(0 , n_T , int(ds/dtt))
 	down_bold = bold_input[index, :]
 	
-	f = open('bold_down_python.dat','w')
-	for row in range(0, np.shape(down_bold)[0]):
-		for col in range(0 , np.shape(down_bold)[1]):
-			f.write("%.6f\t" % (down_bold[row, col]))
-		f.write("\n")
-	f.close()	
+	np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
 	
 	return down_bold
 						
@@ -233,12 +228,7 @@ def keep_frames(bold_input, nFramesToKeep):
 	index = np.arange(limit_down-1, limit_up-1  , 1)
 	cut_bold = bold_input[index, :]
 	
-	f = open('bold_cut_python.dat','w')
-	for row in range(0, np.shape(cut_bold)[0]):
-		for col in range(0 , np.shape(cut_bold)[1]):
-			f.write("%.6f\t" % (cut_bold[row, col]))
-		f.write("\n")
-	f.close()
+	np.savetxt('bold_cut_python.dat', cut_bold,'%.6f',delimiter='\t')
 	
 	return cut_bold
 
@@ -248,7 +238,8 @@ def correl(bold_input):
 	
 	col = np.shape(bold_input)[1]
 	correl_matrix = np.zeros((col , col))
-	f = open('bold_corr_python.dat','w')	
+	
+	#f = open('bold_corr_python.dat','w')	
 	
 	for i in range(0,col) :
 		correl_row = np.array([])			
@@ -257,13 +248,10 @@ def correl(bold_input):
 			A = np.corrcoef(bold_input[:,i] , bold_input[:,j])	
 			correl_row = np.append(correl_row, A[0,1])
 		
-		correl_matrix[i,:] = correl_row
-		
-		for j in range(0,col):
-			f.write("%.10f\t" % (correl_matrix[i, j]))
-		f.write("\n")
-	f.close()		
-	
+		correl_matrix[i,:] = correl_row	
+
+	np.savetxt('bold_corr_python.dat', correl_matrix, '%.10f',delimiter='\t')
+
 	return correl_matrix
 
 def image(bold_input, simfile):
@@ -308,24 +296,20 @@ x_init = np.array([0 , 1, 1, 1])	# initial conditions
 input_name = sys.argv[1]	
 
 timeseries  	= 	fhn_timeseries(input_name)
-#bold_signal 	=   calc_bold(timeseries)
-#bold_filt		=   filter_bold(bold_signal)
+bold_signal 	=   calc_bold(timeseries)
+bold_filt		=   filter_bold(bold_signal)
 
 bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
 bold_down  		=   down_sample(bold_filt , ds, dtt)
 bold_cut 		= 	keep_frames(bold_down , nFramesToKeep)
 correl_matrix 	= 	correl(bold_cut)
-
-pl.figure(1)
 corr_image		= 	image(correl_matrix , input_name)
-#pl.show()
-pl.figure(2)
-plot_timeseries(t_start , t_range , timeseries)
-#pl.show()
+fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+
+figure(1)
 
 #######################################
-
 	
 #R = np.loadtxt(input_name, unpack=True)
 #T = 700.0
@@ -333,10 +317,7 @@ plot_timeseries(t_start , t_range , timeseries)
 #bold_euler(T , R[1, :], iparams, x_init)
 
 #r_t = R[0,:]
+
 #bold_ode(T, R[1,:], iparams, x_init)
 
 #np.savetxt('bold_corr_python.dat', correl_matrix, fmt='%.10f', delimiter='\t')
-
-
-
-
