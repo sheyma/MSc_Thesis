@@ -6,13 +6,10 @@ import numpy as np
 import sys
 import math
 import pylab as pl
-#import scipy.signal import butter, filtfilt, lfilter
 from scipy.signal import  butter , filtfilt , correlate2d
 import scipy.integrate as integ
 from scipy.integrate import odeint
 import time
-#from sos import tf2sos, sosfilt
-#import filter_design_coeff
 
 class Params(object):
 	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo', 'vo', 'k1', 'k2', 'k3']
@@ -59,15 +56,7 @@ def bold_euler(T, r, iparams, x_init):
 	v     = x[n_min -1 : , 2]
 	q     = x[n_min -1 : , 3]
 	b= 100/iparams.Eo * iparams.vo * ( iparams.k1 * (1-q) + iparams.k2 * (1-q/v) + iparams.k3 * (1-v) )
-	
-	# plot b over time
-	pl.xlabel('t')
-	pl.ylabel('BOLD signal euler')
-	pl.plot(t_new,b[:],'g-')
-	#pl.show()
-	
-	print "Euler's dt is : " , dt
-		
+			
 	return b
 
 def bold_ode_eqns(X, t, T, r, iparams):
@@ -93,22 +82,15 @@ def bold_ode(T, r, iparams, x_init):
 
 	N = T/iparams.dt
 	t = np.linspace(0, T-iparams.dt, N)
-
-	print "starting BOLD calculation..."
-
+	
 	sol = odeint(bold_ode_eqns, x_init, t, args=(T, r, iparams))
 
 	b = 100/iparams.Eo * iparams.vo * ( iparams.k1 * (1-sol[:,3]) + iparams.k2 * (1-sol[:,3]/sol[:,2]) + iparams.k3 * (1-sol[:,2]) )
 	
-	pl.xlabel('t')
-	pl.ylabel('BOLD signal ode')
-	pl.plot(t,b[:],'g-')
-	#pl.show()
-
 	return b
 	
 		
-def bold_timeseries(simfile):
+def fhn_timeseries(simfile):
 	
 	# load simfile as numpy matrix
 	# extract first column of simout as time vector
@@ -124,43 +106,16 @@ def bold_timeseries(simfile):
 	N = (np.shape(simout)[1] -1 ) /2	# total number of u columns
 	timeseries = np.zeros((n_Tvec, N))
 	print "size of extracted u-timeseries : ", np.shape(timeseries)
+	
 	for row in range(0,N):
 		timeseries[:,[row]] = simout[:,[2*row +1]]
 	
 	np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')	
 	return timeseries
-			
-	
-		
-def calcBOLD(timeseries):
-	
-	## load simfile as numpy matrix
-	## extract first column of simout as time vector
-	## extract time series of u's from simout
 
-	#print "input huge time series u's and v's: ", simfile
-	#print "reading data ..."
-	
-	#simout = np.transpose(np.loadtxt(simfile, unpack=True))
-	#Tvec = simout[:,[0]]
-	#n_Tvec = len(Tvec) 					# length of time time vector
-	#dt_Tvec = Tvec[1] - Tvec[0]			# dt of time vector
-	#N = (np.shape(simout)[1] -1 ) /2	# total number of u columns
-	#timeseries = np.zeros((n_Tvec, N))
-	#print "size of extracted u-timeseries : ", np.shape(timeseries)
-	#for row in range(0,N):
-		#timeseries[:,[row]] = simout[:,[2*row +1]]
-	
-	#np.savetxt('bold_timeseries.dat',timeseries,fmt='%.6f',delimiter='\t')	
-	############################
-	
-	
-	N = np.shape(timeseries)[1] # total number of u columns
-	
-	
-	# plotting time series in a specific time interval
-	t_start = 325000;
-	t_range = 500;
+def plot_timeseries(t_start , t_range , timeseries):
+	# plots the timeseries in a specific time interval
+	# t_range corresponds to time interval
 	
 	fig = pl.figure(1)
 	pl.plot(timeseries[t_start : (t_start + t_range) , :])
@@ -168,25 +123,28 @@ def calcBOLD(timeseries):
 	pl.ylabel('$u_i(t)$')
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
-
+	return			
+			
+def calc_bold(bold_input):
+	
+	# applies Balloon Windkessel model to the timeseries
+	# calculates the simulated bold signal
+	# count the number of NaN 's in simulated bold
+		
+	N = np.shape(timeseries)[1] 	# total number of u columns		
+	T = 700.0						# !!!!!!!!! define simulation time	
 	print "Bold-signalling of u-timeseries starts..."
-	# !!!!!!!!!define simulation time for BOLD
-	T = 700.0		
-	# apply Balloon Windkessel model in fuction BOLD
 	
 	Bold_signal = {}
 	for col in range(0, N):
 		Bold_signal[col] = bold_euler(T, timeseries[:,[col]], iparams, x_init)
-		
-		# count the number of NaN 's in simulated BOLD
-		count_nan = 0
+		#Bold_signal[col] = bold_ode(T, timeseries[:,[col]], iparams, x_init)
+		count_nan = 0				
 		for key,value in enumerate(Bold_signal[col]):
 			if value == float('nan'):
 				count_nan += 1
-				#print "u_N , key, value : "
-				#print col,key,Bold_signal[key][col]
 		if count_nan > 0:
-			print "u_N, nu. of NaNs:", count_nan
+			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
 
 	f = open('bold_signal_python.dat','w')	
 	for row in range( 0, len(Bold_signal[0]) ):
@@ -194,72 +152,63 @@ def calcBOLD(timeseries):
 			f.write('%.6f\t' % ( Bold_signal[key][row] ))
 		f.write('\n')
 	f.close()
-		
-	
 			
-	## filtering below 0.25 Hz = cut-off frequency
+	return Bold_signal
+		
+def filter_bold(bold_input):
+	
+	# Butterworth low pass filtering of the simulated bold signal		
+	# type(bold_input) = <type 'dict'>
+	# f_c : cut-off freq., f_s : sampling freq., f_n : Nyquist freq.
+	# Or : order of filter, dtt [second] : resolution of bold signal
+	 
+	dtt = 0.001	
+	n_T = len(np.array(bold_input[1]))
+	N   = len(bold_input.keys())
+	Or  = 5
 	f_c = 0.25
-	# resolution of BOLD signal : dtt [second]
-	dtt = 0.001
-	# length of one u series after subjected to BOLD
-	n_T = len(np.array(Bold_signal[1]))
-	#print "length of one column in Bold_signal : " , n_T
-	# Sampling frequency [Hz]
 	f_s = 1/dtt
-	# Nyquist frequency [Hz]
 	f_n = f_s /2
-	print "Butterworth lowpass filter..."
-	print "sampling freq : " , f_s, "Hz," "   nyquist frequency : ", f_n , "Hz"
 	
-	# Butterworth filter
-	b , a = butter(5, float(f_c)/f_n , btype = 'low', analog=0, output='ba')
-	
-	print 'fc/fN :' , float(f_c)/f_n 
-	
+	b , a = butter(Or,float(f_c)/f_n, btype='low',analog=0, output='ba')
 	
 	f = open('Bs_python.dat','w')
 	for i in range(len(b)):
 		f.write("%.20f\t" % (b[i]))
 	f.close()	
-
+	
 	f = open('As_python.dat','w')
 	for i in range(len(a)):
 		f.write("%.20f\t" % (a[i]))
 	f.close()	
 	
-	
-	# Low pass filtering the BOLD signal
+	#b = (np.loadtxt('Bs_matlab.dat'))
+	#a = (np.loadtxt('As_matlab.dat'))
 
 	Bold_filt = np.zeros((n_T , N))
-
-	Bs = (np.loadtxt('Bs_matlab.dat'))
-	As = (np.loadtxt('As_matlab.dat'))
-
-				
 	for col in range(0,N):			
-		Bold_filt[: , col] = filtfilt(Bs, As, Bold_signal[col])		
-		
-		
-	print "size(Bold_filt) : " , np.shape(Bold_filt)
+		Bold_filt[: , col] = filtfilt(b, a, bold_input[col])	
 	
-	f = open('bold_filt_python.dat','w')
+	#f = open('bold_filt_matlab_py.dat','w')
+	
+	f = open('bold_filt_python_py.dat','w')
 	for row in range(0, np.shape(Bold_filt)[0]):
 		for col in range(0 , np.shape(Bold_filt)[1]):
 			f.write("%.6f\t" % (Bold_filt[row, col]))
 		f.write("\n")
 	f.close()
+		
+	return Bold_filt
+
 	
-
-# filtered bold signal should be downsampled
-
 def down_sample(bold_input, ds, dtt):
 	
+	# downsampling of the filtered bold signal
+
 	n_T = np.shape(bold_input)[0] 
 	index = np.arange(0 , n_T , int(ds/dtt))
 	down_bold = bold_input[index, :]
 	
-	print "Downsampled bold_input size : " , np.shape(down_bold)
-
 	f = open('bold_down_python.dat','w')
 	for row in range(0, np.shape(down_bold)[0]):
 		for col in range(0 , np.shape(down_bold)[1]):
@@ -269,9 +218,10 @@ def down_sample(bold_input, ds, dtt):
 	
 	return down_bold
 						
-# cutting from beginning and end
-
+						
 def keep_frames(bold_input, nFramesToKeep):
+	
+	# cutting from beginning and end
 	
 	length = np.shape(bold_input)[0]
 	limit_down = int( math.floor( length - nFramesToKeep )/2 )
@@ -288,10 +238,9 @@ def keep_frames(bold_input, nFramesToKeep):
 	
 	return cut_bold
 
-
-#find correlation coefficient matrix
-
 def correl(bold_input):
+	
+	#find correlation coefficient matrix
 	
 	col = np.shape(bold_input)[1]
 	correl_matrix = np.zeros((col , col))
@@ -339,41 +288,45 @@ params.k1 = 7.0 * params.Eo
 params.k2 = 2.0
 params.k3 = 2.0 * params.Eo - 0.2
 
+t_start = 325000;
+t_range = 500;
+ds = 2.5
+dtt = 0.001
+nFramesToKeep = 260
+
 iparams = invert_params(params)
 
-# initial conditions	
-x_init = np.array([0 , 1, 1, 1])	
+x_init = np.array([0 , 1, 1, 1])	# initial conditions	
 
 input_name = sys.argv[1]	
 
-timeseries  = 	bold_timeseries(input_name)
-calcBOLD(timeseries)
+timeseries  	= 	fhn_timeseries(input_name)
+#bold_signal 	=   calc_bold(timeseries)
+#bold_filt		=   filter_bold(bold_signal)
 
-			#bold_input = np.loadtxt('bold_filt_matlab.dat')
+bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
+bold_down  		=   down_sample(bold_filt , ds, dtt)
+bold_cut 		= 	keep_frames(bold_down , nFramesToKeep)
+correl_matrix 	= 	correl(bold_cut)
 
-			#ds = 2.5
-			#dtt = 0.001
-			#nFramesToKeep = 260
+pl.figure(1)
+corr_image		= 	image(correl_matrix , input_name)
+#pl.show()
+pl.figure(2)
+plot_timeseries(t_start , t_range , timeseries)
+#pl.show()
 
-			#down_bold  		= down_sample(bold_input , ds, dtt)
-			#cut_bold   		= keep_frames(down_bold , nFramesToKeep)
-			#correl_matrix 	= correl(cut_bold)
-			#corr_image		= image(correl_matrix , input_name)
+#######################################
 
 	
 #R = np.loadtxt(input_name, unpack=True)
-
-T = 700.0
+#T = 700.0
 
 #bold_euler(T , R[1, :], iparams, x_init)
 
 #r_t = R[0,:]
 #bold_ode(T, R[1,:], iparams, x_init)
-
-#calcBOLD(input_name)
-
-
 
 #np.savetxt('bold_corr_python.dat', correl_matrix, fmt='%.10f', delimiter='\t')
 
