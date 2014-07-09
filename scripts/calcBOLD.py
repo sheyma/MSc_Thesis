@@ -1,6 +1,7 @@
 #!/usr/bin/python2.7
-
 # -*- coding: utf-8 -*-
+
+# calculating BOLD signal from netpy output
 
 import numpy as np
 import sys
@@ -10,6 +11,8 @@ from scipy.signal import  butter , filtfilt , correlate2d
 import scipy.integrate as integ
 from scipy.integrate import odeint
 import time
+
+
 
 class Params(object):
 	__slots__ = ['taus', 'tauf', 'tauo', 'alpha', 'dt', 'Eo', 'vo', 'k1', 'k2', 'k3']
@@ -22,23 +25,21 @@ def invert_params(params):
 	return params
 
 def bold_euler(T, r, iparams, x_init):
+	
+	# Baloon-Windkessel model with Euler's method
+	
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
 	
 	dt = iparams.dt
+	#dt = float(T) / len(r) !!!!!!!!!!!
 	
-	#dt = float(T) / len(r)
-	
-	
-	# create a time array
 	t = np.array(np.arange(0,(T+iparams.dt),iparams.dt))
 	n_t = len(t)
-	t_min = 1		#t_min = 20 #use this one!
+	t_min = 1		#t_min = 20 #use this one!!!!!!
 
 	n_min = round(t_min / iparams.dt)
-	
-	r_max = np.amax(r)
-	
+	r_max = np.amax(r)	
 	x = np.zeros((n_t,4))
 	
 	x[0,:] = x_init
@@ -79,7 +80,9 @@ def bold_ode_eqns(X, t, T, r, iparams):
 
 
 def bold_ode(T, r, iparams, x_init):
-
+	
+	# Balloon-Windkessel model with integrate.odeint
+	
 	N = T/iparams.dt
 	t = np.linspace(0, T-iparams.dt, N)
 	
@@ -94,7 +97,7 @@ def fhn_timeseries(simfile):
 	
 	# load simfile as numpy matrix
 	# extract first column of simout as time vector
-	# extract time series of u's from simout
+	# read u_i time series from simout
 
 	print "input huge time series u's and v's: ", simfile
 	print "reading data ..."
@@ -103,7 +106,7 @@ def fhn_timeseries(simfile):
 	Tvec = simout[:,[0]]
 	n_Tvec = len(Tvec) 					# length of time time vector
 	dt_Tvec = Tvec[1] - Tvec[0]			# dt of time vector
-	N = (np.shape(simout)[1] -1 ) /2	# total number of u columns
+	N = (np.shape(simout)[1] -1 ) /2	# total number of network nodes
 	timeseries = np.zeros((n_Tvec, N))
 	print "size of extracted u-timeseries : ", np.shape(timeseries)
 	
@@ -129,13 +132,13 @@ def calc_bold(bold_input):
 	
 	# applies Balloon Windkessel model to the timeseries
 	# calculates the simulated bold signal
-	# count the number of NaN 's in simulated bold
+	# counts the number of NaN 's in simulated bold (error-check)
 		
 	N = np.shape(timeseries)[1] 	# total number of u columns		
-	T = 700.0						# !!!!!!!!! define simulation time	
+	T = 700.0						# define simulation time !!!!!!!!!	
 	print "Bold-signalling of u-timeseries starts..."
 	
-	Bold_signal = {}
+	Bold_signal = {}				# type(Bold_signal) = <type 'dict'>
 	for col in range(0, N):
 		Bold_signal[col] = bold_euler(T, timeseries[:,[col]], iparams, x_init)
 		#Bold_signal[col] = bold_ode(T, timeseries[:,[col]], iparams, x_init)
@@ -160,15 +163,15 @@ def filter_bold(bold_input):
 	# Butterworth low pass filtering of the simulated bold signal		
 	# type(bold_input) = <type 'dict'>
 	# f_c : cut-off freq., f_s : sampling freq., f_n : Nyquist freq.
-	# Or : order of filter, dtt [second] : resolution of bold signal
+	# Or : order of filter, dtt : resolution of bold signal
 	 
-	dtt = 0.001	
 	n_T = len(np.array(bold_input[1]))
 	N   = len(bold_input.keys())
 	Or  = 5
-	f_c = 0.25
-	f_s = 1/dtt
-	f_n = f_s /2
+	dtt = 0.001							# [second]	
+	f_c = 0.25					 		# [Hz]	
+	f_s = 1/dtt							# [Hz]
+	f_n = f_s /2						# [Hz]
 	
 	b , a = butter(Or,float(f_c)/f_n, btype='low',analog=0, output='ba')
 	
@@ -204,6 +207,7 @@ def filter_bold(bold_input):
 def down_sample(bold_input, ds, dtt):
 	
 	# downsampling of the filtered bold signal
+	# select one point every 'ds' [ms] to match fmri resolution
 
 	n_T = np.shape(bold_input)[0] 
 	index = np.arange(0 , n_T , int(ds/dtt))
@@ -221,7 +225,7 @@ def down_sample(bold_input, ds, dtt):
 						
 def keep_frames(bold_input, nFramesToKeep):
 	
-	# cutting from beginning and end
+	# cutting first and last seconds (distorted from filtering)
 	
 	length = np.shape(bold_input)[0]
 	limit_down = int( math.floor( length - nFramesToKeep )/2 )
@@ -263,6 +267,9 @@ def correl(bold_input):
 	return correl_matrix
 
 def image(bold_input, simfile):
+	
+	# plots simulated functional connectivity
+	
 	N_col = np.shape(bold_input)[1]
 	extend = (0.5 , N_col+0.5 , 0.5 , N_col+0.5)	
 	pl.imshow(bold_input, interpolation='nearest', extent=extend)
