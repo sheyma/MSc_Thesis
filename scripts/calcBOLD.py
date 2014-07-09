@@ -276,7 +276,7 @@ params.taus = 0.65
 params.tauf = 0.41
 params.tauo = 0.98
 params.alpha  = 0.32
-params.dt = 0.001  # check it!!!
+params.dt = 0.001  # check it!!!!!!!
 params.Eo = 0.34
 params.vo = 0.02;
 params.k1 = 7.0 * params.Eo
@@ -295,29 +295,26 @@ x_init = np.array([0 , 1, 1, 1])	# initial conditions
 
 input_name = sys.argv[1]	
 
-timeseries  	= 	fhn_timeseries(input_name)
-bold_signal 	=   calc_bold(timeseries)
-bold_filt		=   filter_bold(bold_signal)
+#timeseries  	= 	fhn_timeseries(input_name)
+#bold_signal 	=   calc_bold(timeseries)
+#bold_filt		=   filter_bold(bold_signal)
 
-bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
+#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
-bold_down  		=   down_sample(bold_filt , ds, dtt)
-bold_cut 		= 	keep_frames(bold_down , nFramesToKeep)
-correl_matrix 	= 	correl(bold_cut)
-corr_image		= 	image(correl_matrix , input_name)
-fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+#bold_down  		=   down_sample(bold_filt , ds, dtt)
+#bold_cut 		= 	keep_frames(bold_down , nFramesToKeep)
+#correl_matrix 	= 	correl(bold_cut)
+#corr_image		= 	image(correl_matrix , input_name)
+#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
-figure(1)
 
 #######################################
 	
-#R = np.loadtxt(input_name, unpack=True)
-#T = 700.0
+R = np.loadtxt(input_name, unpack=True)
+T = 700.0
 
 #bold_euler(T , R[1, :], iparams, x_init)
 
-#r_t = R[0,:]
+r_t = R[0,:]
 
-#bold_ode(T, R[1,:], iparams, x_init)
-
-#np.savetxt('bold_corr_python.dat', correl_matrix, fmt='%.10f', delimiter='\t')
+bold_ode(T, R[1,:], iparams, x_init)
