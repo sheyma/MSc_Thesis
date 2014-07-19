@@ -241,9 +241,7 @@ def correl(bold_input):
 	
 	col = np.shape(bold_input)[1]
 	correl_matrix = np.zeros((col , col))
-	
-	#f = open('bold_corr_python.dat','w')	
-	
+		
 	for i in range(0,col) :
 		correl_row = np.array([])			
 		
@@ -252,7 +250,7 @@ def correl(bold_input):
 			correl_row = np.append(correl_row, A[0,1])
 		
 		correl_matrix[i,:] = correl_row	
-
+	#correl_matrix = np.corrcoef(bold_input)
 	np.savetxt('bold_corr_python.dat', correl_matrix, '%.10f',delimiter='\t')
 
 	return correl_matrix
@@ -262,13 +260,13 @@ def image(bold_input, simfile):
 	# plots simulated functional connectivity
 	
 	N_col = np.shape(bold_input)[1]
-	extend = (0.5 , N_col+0.5 , 0.5 , N_col+0.5)	
+	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
 	pl.imshow(bold_input, interpolation='nearest', extent=extend)
 	pl.colorbar()
 	
 	image_name = simfile[0:-4] + '_CORR.eps'	
 	#pl.savefig(image_name, format="eps")
-	#pl.show()
+	pl.show()
 	return  
 	
 
@@ -317,9 +315,11 @@ else:
 
 #bold_down  		=   down_sample(bold_filt , ds, dtt)
 
-bold_down  = np.loadtxt('bold_down_matlab.dat')
+#bold_down  = np.loadtxt('bold_down_matlab.dat')
 
-bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+
+bold_cut = np.loadtxt('bold_cut_matlab.dat')
 correl_matrix 	= 	correl(bold_cut)
 corr_image		= 	image(correl_matrix , input_name)
 #fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
