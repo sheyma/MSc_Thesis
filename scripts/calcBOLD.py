@@ -310,11 +310,14 @@ input_name = sys.argv[1]
 
 #######################################
 	
-R = np.loadtxt(input_name, unpack=True)
-T = 700.0
+R        = np.loadtxt(input_name, unpack=True)
+dt_input = R[0,:][1] - R[0,:][0]
+# find the total time in [ms] and then convert into [s]
+T        = math.ceil( (R[0,:][-1]) / dt_input /1000 )
+print T
 
 #bold_euler(T , R[1, :], iparams, x_init)
 
-r_t = R[0,:]
+#r_t = R[0,:]
 
-bold_ode(T, R[1,:], iparams, x_init)
+#bold_ode(T, R[1,:], iparams, x_init)
