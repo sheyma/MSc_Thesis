@@ -37,9 +37,10 @@ def bold_euler(T, r, iparams, x_init):
 	
 	t = np.array(np.arange(0,(T+iparams.dt),iparams.dt))
 	n_t = len(t)
-	t_min = 1		#t_min = 20 #use this one!!!!!!
+	# cut BOLD signal from beginning bcs of transient behavior
+	t_min = 20		# [s]
 
-	n_min = round(t_min / iparams.dt)
+	n_min = round(t_min / iparams.dt)   # 2000 points to cut 
 	r_max = np.amax(r)	
 	x = np.zeros((n_t,4))
 	
@@ -306,8 +307,8 @@ else:
 	# loadtxt() can deal with this
 	infile = input_name
 
-#timeseries  	= 	fhn_timeseries(infile)
-#bold_signal 	=   calc_bold(timeseries)
+timeseries  	= 	fhn_timeseries(infile)
+bold_signal 	=   calc_bold(timeseries)
 #bold_filt		=   filter_bold(bold_signal)
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
@@ -315,8 +316,8 @@ else:
 
 
 #bold_down  		=   down_sample(bold_filt , ds, dtt)
-bold_down  = np.loadtxt('bold_down_matlab.dat')
-bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+#bold_down  = np.loadtxt('bold_down_matlab.dat')
+#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 #correl_matrix 	= 	correl(bold_cut)
 #corr_image		= 	image(correl_matrix , input_name)
 #fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
