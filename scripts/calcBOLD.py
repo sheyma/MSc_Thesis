@@ -4,6 +4,7 @@
 # calculating BOLD signal from netpy output
 
 import numpy as np
+import subprocess as sp
 import sys
 import math
 import pylab as pl
@@ -293,9 +294,19 @@ iparams = invert_params(params)
 
 x_init = np.array([0 , 1, 1, 1])	# initial conditions	
 
-input_name = sys.argv[1]	
+input_name = sys.argv[1]
 
-#timeseries  	= 	fhn_timeseries(input_name)
+# handle xz files transparently
+if input_name.endswith(".xz"):
+	# non-portable but we don't want to depend on pyliblzma module
+	xzpipe = sp.Popen(["xzcat", input_name], stdout=sp.PIPE)
+	infile = xzpipe.stdout
+else:
+	# in non-xz case we just use the file name instead of a file object, numpy's
+	# loadtxt() can deal with this
+	infile = input_name
+
+#timeseries  	= 	fhn_timeseries(infile)
 #bold_signal 	=   calc_bold(timeseries)
 #bold_filt		=   filter_bold(bold_signal)
 
@@ -312,8 +323,9 @@ bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
 
 #######################################
-	
-R        = np.loadtxt(input_name, unpack=True)
+
+R = np.loadtxt(infile, unpack=True)
+
 dt_input = R[0,:][1] - R[0,:][0]
 # find the total time in [ms] and then convert into [s]
 T        = math.ceil( (R[0,:][-1]) / dt_input * params.dt )
