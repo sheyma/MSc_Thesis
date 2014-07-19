@@ -31,7 +31,7 @@ def bold_euler(T, r, iparams, x_init):
 	# T : total simulation time [s]
 	# r : neural time series to be simulated
 	
-	dt = iparams.dt
+	dt  = iparams.dt
 	#dt = float(T) / len(r) !!!!!!!!!!!
 	
 	t = np.array(np.arange(0,(T+iparams.dt),iparams.dt))
@@ -218,15 +218,15 @@ def down_sample(bold_input, ds, dtt):
 	return down_bold
 						
 						
-def keep_frames(bold_input, nFramesToKeep):
+def keep_frames(bold_input, cut_percent):
 	
-	# cutting first and last seconds (distorted from filtering)
+	# cut array from beginning and end (distorted from filtering)
 	
-	length = np.shape(bold_input)[0]
-	limit_down = int( math.floor( length - nFramesToKeep )/2 )
-	limit_up   = int( math.floor( length + nFramesToKeep )/2 )
-	index = np.arange(limit_down-1, limit_up-1  , 1)
-	cut_bold = bold_input[index, :]
+	length  = np.shape(bold_input)[0]
+	limit_down = int(math.ceil(length * cut_percent)) 
+	limit_up   = int(length - limit_down)	
+	index      = np.arange(limit_down-1, limit_up-1  , 1)
+	cut_bold   = bold_input[index, :]
 	
 	np.savetxt('bold_cut_python.dat', cut_bold,'%.6f',delimiter='\t')
 	
@@ -276,7 +276,7 @@ params.taus = 0.65
 params.tauf = 0.41
 params.tauo = 0.98
 params.alpha  = 0.32
-params.dt = 0.001  # check it!!!!!!!
+params.dt = 0.001
 params.Eo = 0.34
 params.vo = 0.02;
 params.k1 = 7.0 * params.Eo
@@ -287,7 +287,7 @@ t_start = 325000;
 t_range = 500;
 ds = 2.5
 dtt = 0.001
-nFramesToKeep = 260
+cut_percent = 3.5 / 100
 
 iparams = invert_params(params)
 
@@ -301,8 +301,11 @@ input_name = sys.argv[1]
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
+
+
 #bold_down  		=   down_sample(bold_filt , ds, dtt)
-#bold_cut 		= 	keep_frames(bold_down , nFramesToKeep)
+bold_down  = np.loadtxt('bold_down_matlab.dat')
+bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 #correl_matrix 	= 	correl(bold_cut)
 #corr_image		= 	image(correl_matrix , input_name)
 #fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
@@ -313,8 +316,8 @@ input_name = sys.argv[1]
 R        = np.loadtxt(input_name, unpack=True)
 dt_input = R[0,:][1] - R[0,:][0]
 # find the total time in [ms] and then convert into [s]
-T        = math.ceil( (R[0,:][-1]) / dt_input /1000 )
-print T
+T        = math.ceil( (R[0,:][-1]) / dt_input * params.dt )
+
 
 #bold_euler(T , R[1, :], iparams, x_init)
 
