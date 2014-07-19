@@ -225,9 +225,10 @@ def keep_frames(bold_input, cut_percent):
 	# cut array from beginning and end (distorted from filtering)
 	
 	length  = np.shape(bold_input)[0]
-	limit_down = int(math.ceil(length * cut_percent)) 
-	limit_up   = int(length - limit_down)	
-	index      = np.arange(limit_down-1, limit_up-1  , 1)
+	limit_down = int(math.ceil(length * cut_percent) -1) 
+	limit_up   = int(length - limit_down -1)	
+	index      = np.arange(limit_down, limit_up-2 , 1)
+	print "index : ", index
 	cut_bold   = bold_input[index, :]
 	
 	np.savetxt('bold_cut_python.dat', cut_bold,'%.6f',delimiter='\t')
@@ -289,7 +290,7 @@ t_start = 325000;
 t_range = 500;
 ds = 2.5
 dtt = 0.001
-cut_percent = 3.5 / 100
+cut_percent = float(2) / 100
 
 iparams = invert_params(params)
 
@@ -307,19 +308,20 @@ else:
 	# loadtxt() can deal with this
 	infile = input_name
 
-timeseries  	= 	fhn_timeseries(infile)
-bold_signal 	=   calc_bold(timeseries)
+#timeseries  	= 	fhn_timeseries(infile)
+#bold_signal 	=   calc_bold(timeseries)
 #bold_filt		=   filter_bold(bold_signal)
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
 
-
 #bold_down  		=   down_sample(bold_filt , ds, dtt)
-#bold_down  = np.loadtxt('bold_down_matlab.dat')
-#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
-#correl_matrix 	= 	correl(bold_cut)
-#corr_image		= 	image(correl_matrix , input_name)
+
+bold_down  = np.loadtxt('bold_down_matlab.dat')
+
+bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+correl_matrix 	= 	correl(bold_cut)
+corr_image		= 	image(correl_matrix , input_name)
 #fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
 
