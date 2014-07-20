@@ -177,56 +177,26 @@ series = neuronetz.sol
 
 solution = neuronetz.ddeN.sample(0,  dt=0.1)
 
-
-
-t = solution['t']
-
-#print only last 10% of time series
-
-#tpre = solution['t']
-
-#t = tpre[int(0.9*len(tpre)):]
-
-
-
 print "starting print-out of data..."
 
-
-
-t=solution['t'][0:]
-
-
+t = solution['t'][0:]
 
 x = {}
-
 y = {}
-
-
-
 for i in range(0,len(G[0])):
-
-
-  x[i] =  solution['x'+str(i)][0:]
-
-  y[i] =  solution['y'+str(i)][0:]
+	x[i] =  solution['x'+str(i)][0:]
+	# skip y for now to minimize output
+	# y[i] =  solution['y'+str(i)][0:]
 
 
 f = open(gfilename[:-4]+'_sigma='+str(params['sigma'])+'_D='+str(params['D'])+'_v='+str(params['v'])+'_tmax='+str(tmax)+'.dat', 
 'w')
-#f = open('data.dat', 'w')
-
 
 for i, t0 in enumerate(t):
-
-  f.write('%s\t' % (t0))
-
-  for j in range(0, len(x)):
-
-    f.write('%.2f\t%.2f\t' % (float(x[j][i]), float(y[j][i])))
-
-  f.write('\n')
-
-  
+	f.write('%s' % (t0))
+	for j in range(0, len(x)):
+		f.write('\t%.2f' % (float(x[j][i])))
+	f.write('\n')
 
 f.close()
 
