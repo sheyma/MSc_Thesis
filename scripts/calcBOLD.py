@@ -286,7 +286,7 @@ params.k3 = 2.0 * params.Eo - 0.2
 
 t_start = 325000;
 t_range = 500;
-ds = 2.5
+ds = 2.5  #### NEEDS TO BE CHECKED!
 dtt = 0.001
 cut_percent = float(2) / 100
 
