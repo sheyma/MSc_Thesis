@@ -12,7 +12,6 @@ function b = calcBOLD(simfile)
   toc;
 
 	%% get number of network nodes N and read u_i timeseries from simfile:
-
   tvec = simoutput(:,1);
 
   nt = size(tvec,1)
@@ -58,7 +57,10 @@ function b = calcBOLD(simfile)
 	
 	% important: specify here to which time interval the simulated 
 	% time series corresponds:
-  T =700.0; % in [s]
+  dt_BOLD = 0.001 ;
+  T = round(tvec(end) /dt * dt_BOLD) 
+   
+%T =450.0; % in [s]
   
   for roi = 1:N 
     boldsignal{roi} = BOLD(T,timeseries(:,roi));
@@ -97,15 +99,21 @@ function b = calcBOLD(simfile)
   dlmwrite('bold_filt_matlab.dat', BOLD_filt, 'delimiter','\t', 'precision', '%.6f');  
 
   %% Downsampling: select one point every 'ds' ms to match fmri resolution:
-
+  %BOLD_filt = load('bold_filt_matlab.dat');  
   ds=2.500; 
   down_bds=BOLD_filt(1:ds/dtt:end,:);
   lenBold = size(down_bds,1);
   dlmwrite('bold_down_matlab.dat', down_bds, 'delimiter','\t', 'precision', '%.6f');
   
   %% Cutting first and last seconds (distorted from filtering) and keep the middle:
-  nFramesToKeep = 260; % use 260!!
-  bds = down_bds(floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1,:);
+  cut_percent  = 2/100;
+  limit_down   = ceil(lenBold * cut_percent)
+  limit_up     = ceil(lenBold - limit_down-2)
+  index        = limit_down : limit_up 
+  bds          = down_bds(index, :);
+  %nFramesToKeep = 260; % use 260!!
+  %bds = down_bds(floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1,:);
+  
   size(bds)  
   dlmwrite('bold_cut_matlab.dat', bds, 'delimiter','\t', 'precision', '%.6f');
   %%
