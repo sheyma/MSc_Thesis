@@ -47,6 +47,7 @@ def bold_euler(T, r, iparams, x_init):
 	x[0,:] = x_init
 	for n in range(0,n_t-1):
 		
+		
 		x[n+1 , 0] = x[n ,0] + dt * (r[n] - iparams.taus * x[n,0] - iparams.tauf * (x[n,1] -float(1.0)))
 		x[n+1 , 1] = x[n, 1] + dt * x[n,0]
 		x[n+1 , 2] = x[n, 2] + dt * iparams.tauo * (x[n, 1] - pow(x[n, 2] , iparams.alpha))
@@ -130,14 +131,14 @@ def plot_timeseries(t_start , t_range , timeseries):
 	#pl.show()
 	return			
 			
-def calc_bold(bold_input):
+def calc_bold(bold_input , T):
 	
 	# applies Balloon Windkessel model to the timeseries
 	# calculates the simulated bold signal
 	# counts the number of NaN 's in simulated bold (error-check)
 		
 	N = np.shape(timeseries)[1] 	# total number of u columns		
-	T = 700.0						# define simulation time !!!!!!!!!	
+	
 	print "Bold-signalling of u-timeseries starts..."
 	
 	Bold_signal = {}				# type(Bold_signal) = <type 'dict'>
@@ -306,32 +307,35 @@ else:
 	# loadtxt() can deal with this
 	infile = input_name
 
-#timeseries  	= 	fhn_timeseries(infile)
-#bold_signal 	=   calc_bold(timeseries)
-#bold_filt		=   filter_bold(bold_signal)
-
-#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
-
-
-#bold_down  		=   down_sample(bold_filt , ds, dtt)
-
-#bold_down  = np.loadtxt('bold_down_matlab.dat')
-
-#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
-
-bold_cut = np.loadtxt('bold_cut_matlab.dat')
-correl_matrix 	= 	correl(bold_cut)
-corr_image		= 	image(correl_matrix , input_name)
-#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
-
-
-#######################################
-
 R = np.loadtxt(infile, unpack=True)
 
 dt_input = R[0,:][1] - R[0,:][0]
 # find the total time in [ms] and then convert into [s]
 T        = math.ceil( (R[0,:][-1]) / dt_input * params.dt )
+print "T : " ,T
+
+timeseries  	= 	fhn_timeseries(infile)
+bold_signal 	=   calc_bold(timeseries, T)
+bold_filt		=   filter_bold(bold_signal)
+
+#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
+
+
+bold_down  		=   down_sample(bold_filt , ds, dtt)
+
+#bold_down  = np.loadtxt('bold_down_matlab.dat')
+
+bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+
+##bold_cut = np.loadtxt('bold_cut_matlab.dat')
+correl_matrix 	= 	correl(bold_cut)
+corr_image		= 	image(correl_matrix , input_name)
+
+#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+
+
+#######################################
+
 
 
 #bold_euler(T , R[1, :], iparams, x_init)
