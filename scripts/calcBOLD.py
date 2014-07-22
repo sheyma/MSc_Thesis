@@ -176,7 +176,7 @@ def filter_bold(bold_input):
 	f_s = 1/dtt							# [Hz]
 	f_n = f_s /2						# [Hz]
 	
-	b , a = butter(Or,float(f_c)/f_n, btype='low',analog=0, output='ba')
+	b , a = butter(Or,float(f_c)/f_n, btype='low',analog=False, output='ba')
 		
 	f = open('Bs_python.dat','w')
 	for i in range(len(b)):
@@ -314,22 +314,22 @@ dt_input = R[0,:][1] - R[0,:][0]
 T        = math.ceil( (R[0,:][-1]) / dt_input * params.dt )
 print "T : " ,T
 
-timeseries  	= 	fhn_timeseries(infile)
-bold_signal 	=   calc_bold(timeseries, T)
-bold_filt		=   filter_bold(bold_signal)
+#timeseries  	= 	fhn_timeseries(infile)
+#bold_signal 	=   calc_bold(timeseries, T)
+#bold_filt		=   filter_bold(bold_signal)
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
 
-bold_down  		=   down_sample(bold_filt , ds, dtt)
+#bold_down  		=   down_sample(bold_filt , ds, dtt)
 
 #bold_down  = np.loadtxt('bold_down_matlab.dat')
 
-bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
 ##bold_cut = np.loadtxt('bold_cut_matlab.dat')
-correl_matrix 	= 	correl(bold_cut)
-corr_image		= 	image(correl_matrix , input_name)
+#correl_matrix 	= 	correl(bold_cut)
+#corr_image		= 	image(correl_matrix , input_name)
 
 #fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
