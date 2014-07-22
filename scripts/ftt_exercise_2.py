@@ -1,0 +1,146 @@
+#!/usr/bin/python2.7
+# -*- coding: utf-8 -*-
+
+# calculating BOLD signal from netpy output
+
+import numpy as np
+import subprocess as sp
+import sys
+import math
+import pylab as pl
+from scipy.signal import  butter , filtfilt , correlate2d
+import scipy.integrate as integ
+from scipy.integrate import odeint
+import time
+
+
+v1 = 0.05   #Hz
+v2 = 0.10   #Hz
+
+Fs = 10     #Hz , Sampling frequency
+T = 1.0/Fs	#Hz, Sample time
+tmax = 100  #s, max time of signal run
+
+t = np.arange(0,  tmax , T )  # time array 
+
+x = np.sin(2*math.pi*v1*t) + np.sin(2*math.pi*v2*t) 
+
+#%noise = randn(size(t));
+noise = 0
+X     = x+noise
+
+np.savetxt('sinwave.dat',X,fmt='%.6f',delimiter='\t')
+np.savetxt('sinwave_time.dat',t,fmt='%.6f',delimiter='\t')
+
+N     =  len(x)
+N_pow =  int(pow(2, math.ceil(math.log(N)/math.log(2))))
+
+Xfft  = np.fft.fft(X , n=N_pow) /float(N);
+Xfft  = 2*abs(Xfft[1:N_pow /2 +1]) 
+
+fre   = float(Fs)/2 * np.linspace(0,1, N_pow/2 + 1);
+
+np.savetxt('sinwave_fft.dat',Xfft, fmt='%.6f',delimiter='\t')
+np.savetxt('sinwave_fre.dat',fre, fmt='%.6f',delimiter='\t')
+
+
+Wn    = 0.01   #Hz , cut-off freq 
+[Bs,As] = butter(5, Wn, btype='low',analog=False, output='ba');
+
+X_filt     = filtfilt(Bs,As,X)
+
+np.savetxt('sinwave_filt.dat',X_filt, fmt='%.6f',delimiter='\t')
+
+
+X_filt_fft = np.fft.fft(X_filt, n=N_pow) /float(N)
+X_filt_fft = 2*abs(X_filt_fft[1:N_pow /2 +1])  
+
+np.savetxt('sinwave_filt_fre.dat',X_filt_fft, fmt='%.6f',delimiter='\t')
+
+
+f_c       = 0.25		
+dtt       = 0.001	# (here 1 millisecond)
+f_s       = 1/dtt	# Sampling frequency (Hz)
+f_N       = f_s/2	# Nyquist frequency (Hz)
+
+
+y     = np.loadtxt('bold_signal_matlab.dat')
+y     = y[:,0]
+
+t_y   = np.arange(0, len(y), 1)
+
+np.savetxt('bold_y.dat',y, fmt='%.6f',delimiter='\t')
+np.savetxt('bold_yt.dat',t_y, fmt='%.6f',delimiter='\t')
+
+
+m     = len(y);
+m_pow = int(pow(2, math.ceil(math.log(m)/math.log(2))))
+
+yfft  = np.fft.fft(y , m_pow) /float(m)
+yfft  = 2*abs(yfft[1:m_pow /2 +1])  
+freq  = float(f_s)/2 * np.linspace(0,1, m_pow/2 + 1);
+
+np.savetxt('bold_y_fft.dat',yfft, fmt='%.6f',delimiter='\t')
+np.savetxt('bold_yfre.dat',freq, fmt='%.6f',delimiter='\t')
+
+
+
+[Bs,As] = butter(5, f_c/f_N, btype='low',analog=False, output='ba')
+y_filt  = filtfilt(Bs,As,y)
+y_filt_fft  = np.fft.fft(y_filt , m_pow) /float(m)
+y_filt_fft  = 2*abs(y_filt_fft[1:m_pow /2 +1])  
+
+
+np.savetxt('bold_y_filt.dat',y_filt, fmt='%.6f',delimiter='\t')
+np.savetxt('bold_y_filt_fft.dat',y_filt_fft, fmt='%.6f',delimiter='\t')
+
+
+pl.figure(2)
+pl.subplot(1,2,1)
+pl.plot(t, X_filt)
+pl.ylabel('signal filt')
+pl.xlabel('time [s]')
+pl.axis([0 , 100, -2 , 2])
+pl.subplot(1,2,2)
+pl.plot(fre[1:100], X_filt_fft[1:100])
+pl.ylabel('|signal filt (f)|')
+pl.xlabel('f [Hz]')
+#pl.show()
+
+pl.figure(4)
+pl.subplot(1,2,1)
+pl.plot(t_y/1000, y_filt)
+pl.xlabel('time [s]')
+pl.ylabel('bold signal filt')
+#%axis([0, t(end), 4.9 , 5.4])
+pl.subplot(1,2,2)
+pl.plot(freq[1:50] , y_filt_fft[1:50])
+pl.ylabel('|bold signal filt (f)|')
+pl.xlabel('f [Hz]')
+#pl.show()
+
+pl.figure(3);
+pl.subplot(1,2,1)
+pl.plot(t_y /1000  , y)
+pl.xlabel('time [s]')
+pl.ylabel('bold signal')
+#pl.axis([0, t[-1], 4 , 5.5])
+pl.subplot(1,2,2)
+pl.plot(freq[1:50], yfft[1:50])
+pl.ylabel('|bold signal (f)|')
+pl.xlabel('f [Hz]')
+#pl.show()
+
+pl.figure(1);
+pl.subplot(121)
+pl.plot(t,X)
+pl.subplot
+pl.ylabel('signal')
+pl.xlabel('time [s]')
+pl.subplot(1,2,2)
+pl.plot(fre[1:100] ,Xfft[1:100] )
+pl.ylabel('|signal(f)|')
+pl.xlabel('f [Hz]')
+#pl.show()
+
+
