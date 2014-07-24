@@ -8,6 +8,7 @@ import subprocess as sp
 import sys
 import math
 import pylab as pl
+
 from scipy.signal import  butter , filtfilt , correlate2d
 import scipy.integrate as integ
 from scipy.integrate import odeint
@@ -104,7 +105,7 @@ def fhn_timeseries(simfile):
 
 	print "reading data ..."
 	simout = np.loadtxt(simfile)
-
+	print "shaaaapeeee : " , np.shape(simout)
 	# extract time vector and dt
 	tvec = simout[:,0]
 	dt   = tvec[1] - tvec[0]
@@ -152,14 +153,29 @@ def calc_bold(bold_input , T):
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
 
-	#f = open('bold_signal_python.dat','w')	
-	#for row in range( 0, len(Bold_signal[0]) ):
-		#for key in Bold_signal.iterkeys():
-			#f.write('%.6f\t' % ( Bold_signal[key][row] ))
-		#f.write('\n')
-	#f.close()
+	f = open('bold_signal_python.dat','w')	
+	for row in range( 0, len(Bold_signal[0]) ):
+		for key in Bold_signal.iterkeys():
+			f.write('%.6f\t' % ( Bold_signal[key][row] ))
+		f.write('\n')
+	f.close()
 			
 	return Bold_signal
+
+def plot_bold_signal(T, bold_input):
+	# plots the timeseries in a specific time interval
+	# t_range corresponds to time interval
+
+	time = np.linspace(0, T, np.shape(bold_input)[1])
+	fig = pl.figure(2)
+	for i in range(0, np.shape(bold_input)[0]):
+		pl.plot(time , bold_input[i,:])
+	pl.xlabel('t [s]')
+	pl.ylabel('$bold signal u_i(t)$')
+	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
+	#pl.show()
+	return	
+
 		
 def filter_bold(bold_input):
 	
@@ -259,7 +275,7 @@ def correl(bold_input):
 def image(bold_input, simfile):
 	
 	# plots simulated functional connectivity
-	
+	pl.figure(3)
 	N_col = np.shape(bold_input)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
 	pl.imshow(bold_input, interpolation='nearest', extent=extend)
@@ -297,6 +313,10 @@ x_init = np.array([0 , 1, 1, 1])	# initial conditions
 
 input_name = sys.argv[1]
 
+
+
+
+
 # handle xz files transparently
 if input_name.endswith(".xz"):
 	# non-portable but we don't want to depend on pyliblzma module
@@ -307,31 +327,36 @@ else:
 	# loadtxt() can deal with this
 	infile = input_name
 
+data = np.loadtxt(infile , unpack=True)
+plot_bold_signal(data)
+
+
 # "infile" can only used one time because it might be a pipe"!
 
-[timeseries, T] = fhn_timeseries(infile)
+#[timeseries, T] = fhn_timeseries(infile)
 
-print "T : " , T, " [seconds]"
+#print "T : " , T, " [seconds]"
 
-fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
-bold_signal 	=   calc_bold(timeseries, T)
+#bold_signal 	=   calc_bold(timeseries, T)
 
+#plot_bold_signal(bold_signal)
 
-bold_filt		=   filter_bold(bold_signal)
+#bold_filt		=   filter_bold(bold_signal)
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
 
-bold_down  		=   down_sample(bold_filt , ds, dtt)
+#bold_down  		=   down_sample(bold_filt , ds, dtt)
 
 #bold_down  = np.loadtxt('bold_down_matlab.dat')
 
-bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
 ##bold_cut = np.loadtxt('bold_cut_matlab.dat')
-correl_matrix 	= 	correl(bold_cut)
-corr_image		= 	image(correl_matrix , input_name)
+#correl_matrix 	= 	correl(bold_cut)
+#corr_image		= 	image(correl_matrix , input_name)
 
 pl.show()
 
