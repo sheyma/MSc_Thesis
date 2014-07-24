@@ -287,7 +287,7 @@ params.k3 = 2.0 * params.Eo - 0.2
 
 t_start = 325000;
 t_range = 500;
-ds = 2.5  #### NEEDS TO BE CHECKED!
+ds = 2.3  #### NEEDS TO BE CHECKED!
 dtt = 0.001
 cut_percent = float(2) / 100
 
@@ -314,8 +314,13 @@ dt_input = R[0,:][1] - R[0,:][0]
 T        = math.ceil( (R[0,:][-1]) / dt_input * params.dt )
 print "T : " ,T
 
-#timeseries  	= 	fhn_timeseries(infile)
-#bold_signal 	=   calc_bold(timeseries, T)
+timeseries  	= 	fhn_timeseries(infile)
+
+fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+
+bold_signal 	=   calc_bold(timeseries, T)
+
+
 #bold_filt		=   filter_bold(bold_signal)
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
@@ -331,7 +336,7 @@ print "T : " ,T
 #correl_matrix 	= 	correl(bold_cut)
 #corr_image		= 	image(correl_matrix , input_name)
 
-#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+
 
 
 #######################################
