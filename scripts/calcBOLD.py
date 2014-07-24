@@ -39,9 +39,9 @@ def bold_euler(T, r, iparams, x_init):
 	t = np.array(np.arange(0,(T+iparams.dt),iparams.dt))
 	n_t = len(t)
 	# cut BOLD signal from beginning bcs of transient behavior
-	t_min = 20		# [s]
+	t_min = 0		# [s] CHECK FOR THE SIGNAL 
 
-	n_min = round(t_min / iparams.dt)   # 2000 points to cut 
+	n_min = round(t_min / iparams.dt)   
 	r_max = np.amax(r)	
 	x = np.zeros((n_t,4))
 	
@@ -327,36 +327,32 @@ else:
 	# loadtxt() can deal with this
 	infile = input_name
 
-data = np.loadtxt(infile , unpack=True)
-plot_bold_signal(data)
+
+[timeseries, T] = fhn_timeseries(infile)
+
+print "T : " , T, " [seconds]"
+
+fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+
+bold_signal 	=   calc_bold(timeseries, T)
+
+plot_bold_signal(T, bold_signal)
 
 
-# "infile" can only used one time because it might be a pipe"!
-
-#[timeseries, T] = fhn_timeseries(infile)
-
-#print "T : " , T, " [seconds]"
-
-#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
-
-#bold_signal 	=   calc_bold(timeseries, T)
-
-#plot_bold_signal(bold_signal)
-
-#bold_filt		=   filter_bold(bold_signal)
+bold_filt		=   filter_bold(bold_signal)
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
 
-#bold_down  		=   down_sample(bold_filt , ds, dtt)
+bold_down  		=   down_sample(bold_filt , ds, dtt)
 
 #bold_down  = np.loadtxt('bold_down_matlab.dat')
 
-#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
 ##bold_cut = np.loadtxt('bold_cut_matlab.dat')
-#correl_matrix 	= 	correl(bold_cut)
-#corr_image		= 	image(correl_matrix , input_name)
+correl_matrix 	= 	correl(bold_cut)
+corr_image		= 	image(correl_matrix , input_name)
 
 pl.show()
 
