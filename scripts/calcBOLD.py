@@ -110,7 +110,7 @@ def fhn_timeseries(simfile):
 	dt = tvec[1] - tvec[0]
 	
 	# extract u-columns
-	u_indices = np.arange(1, simout.shape[1] ,2)
+	u_indices = np.arange(1, simout.shape[1] ,1)
 	timeseries = simout[:, u_indices]
 	
 	print "extracted u-timeseries: shape =", timeseries.shape, ", dt = ", dt
