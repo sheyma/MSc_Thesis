@@ -305,18 +305,19 @@ else:
 	# loadtxt() can deal with this
 	infile = input_name
 
-R = np.loadtxt(infile, unpack=True)
+# "infile" can only used one time because it might be a pipe"!
+timeseries = fhn_timeseries(infile)
 
-dt_input = R[0,:][1] - R[0,:][0]
-# find the total time in [ms] and then convert into [s]
-T        = math.ceil( (R[0,:][-1]) / dt_input * params.dt )
-print "T : " ,T
-
-timeseries  	= 	fhn_timeseries(infile)
+# ... thats why the code below is commented out for now. Use timeseries instead!
+#R = np.loadtxt(infile, unpack=True)
+#dt_input = R[0,:][1] - R[0,:][0]
+## find the total time in [ms] and then convert into [s]
+#T        = math.ceil( (R[0,:][-1]) / dt_input * params.dt )
+#print "T : " ,T
 
 fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
-bold_signal 	=   calc_bold(timeseries, T)
+#bold_signal 	=   calc_bold(timeseries, T)
 
 
 #bold_filt		=   filter_bold(bold_signal)
