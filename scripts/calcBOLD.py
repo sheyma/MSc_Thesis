@@ -97,26 +97,24 @@ def bold_ode(T, r, iparams, x_init):
 	
 		
 def fhn_timeseries(simfile):
-	
+
 	# load simfile as numpy matrix
 	# extract first column of simout as time vector
 	# read u_i time series from simout
 
-	print "input huge time series u's and v's: ", simfile
 	print "reading data ..."
+	simout = np.loadtxt(simfile)
+
+	# extract time vector and dt
+	tvec = simout[:,0]
+	dt = tvec[1] - tvec[0]
 	
-	simout = np.transpose(np.loadtxt(simfile, unpack=True))
-	Tvec = simout[:,[0]]
-	n_Tvec = len(Tvec) 					# length of time time vector
-	dt_Tvec = Tvec[1] - Tvec[0]			# dt of time vector
-	N = (np.shape(simout)[1] -1 ) /2	# total number of network nodes
-	timeseries = np.zeros((n_Tvec, N))
-	print "size of extracted u-timeseries : ", np.shape(timeseries)
+	# extract u-columns
+	u_indices = np.arange(1, simout.shape[1] ,1)
+	timeseries = simout[:, u_indices]
 	
-	for row in range(0,N):
-		timeseries[:,[row]] = simout[:,[2*row +1]]
-	
-	np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')	
+	print "extracted u-timeseries: shape =", timeseries.shape, ", dt = ", dt
+	np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.2f',delimiter='\t')
 	return timeseries
 
 def plot_timeseries(t_start , t_range , timeseries):
@@ -307,18 +305,19 @@ else:
 	# loadtxt() can deal with this
 	infile = input_name
 
-R = np.loadtxt(infile, unpack=True)
+# "infile" can only used one time because it might be a pipe"!
+timeseries = fhn_timeseries(infile)
 
-dt_input = R[0,:][1] - R[0,:][0]
-# find the total time in [ms] and then convert into [s]
-T        = math.ceil( (R[0,:][-1]) / dt_input * params.dt )
-print "T : " ,T
-
-timeseries  	= 	fhn_timeseries(infile)
+# ... thats why the code below is commented out for now. Use timeseries instead!
+#R = np.loadtxt(infile, unpack=True)
+#dt_input = R[0,:][1] - R[0,:][0]
+## find the total time in [ms] and then convert into [s]
+#T        = math.ceil( (R[0,:][-1]) / dt_input * params.dt )
+#print "T : " ,T
 
 fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
-bold_signal 	=   calc_bold(timeseries, T)
+#bold_signal 	=   calc_bold(timeseries, T)
 
 
 #bold_filt		=   filter_bold(bold_signal)
