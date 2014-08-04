@@ -108,7 +108,7 @@ var = [] ;
 
   %% Downsampling: select one point every 'ds' ms to match fmri resolution:
   %BOLD_filt = load('bold_filt_matlab.dat');  
-  ds=2.500; 
+  ds=2.300; 
   down_bds=BOLD_filt(1:ds/dtt:end,:);
   lenBold = size(down_bds,1);
   dlmwrite('bold_down_matlab.dat', down_bds, 'delimiter','\t', 'precision', '%.6f');
