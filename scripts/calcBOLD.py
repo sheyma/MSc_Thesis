@@ -112,7 +112,7 @@ def fhn_timeseries(simfile):
 	T    = int(math.ceil( (tvec[-1])  / dt * params.dt ))
 
 	# extract u-columns
-	u_indices = np.arange(1, simout.shape[1] ,2)
+	u_indices = np.arange(1, simout.shape[1] ,1)
 	timeseries = simout[:, u_indices]
 	
 	print "extracted u-timeseries: shape =", timeseries.shape, ", dt = ", dt
@@ -258,7 +258,7 @@ def correl(bold_input):
 def image(bold_input, simfile):
 	
 	# plots simulated functional connectivity
-	pl.figure(3)
+	pl.figure(4)
 	N_col = np.shape(bold_input)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
 	pl.imshow(bold_input, interpolation='nearest', extent=extend)
@@ -309,32 +309,32 @@ else:
 	infile = input_name
 
 
-#[timeseries, T] = fhn_timeseries(infile)
+[timeseries, T] = fhn_timeseries(infile)
 
-#print "T : " , T, " [seconds]"
+print "T : " , T, " [seconds]"
 
-#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
-#bold_signal 	=   calc_bold(timeseries, T)
+bold_signal 	=   calc_bold(timeseries, T)
 
-#plot_bold_signal(T , bold_signal)
+signal_image    =   plot_bold_signal(T , bold_signal)
 
-#bold_filt		=   filter_bold(bold_signal)
+bold_filt		=   filter_bold(bold_signal)
 
-bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
+filt_image		=   plot_bold_filt(bold_filt)
 
-#plot_bold_filt(bold_filt)
+bold_down  		=   down_sample(bold_filt , ds, dtt)
 
-#bold_down  		=   down_sample(bold_filt , ds, dtt)
-
-#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
-
-bold_cut = np.loadtxt('bold_cut_matlab.dat')
+bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
 correl_matrix 	= 	correl(bold_cut)
-#corr_image		= 	image(correl_matrix , input_name)
+
+corr_image		= 	image(correl_matrix , input_name)
 
 pl.show()
+
+#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
+#bold_cut = np.loadtxt('bold_cut_matlab.dat')
 
 
 #######################################
