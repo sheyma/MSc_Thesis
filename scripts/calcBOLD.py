@@ -132,7 +132,7 @@ def plot_timeseries(t_start , t_range , timeseries):
 	#pl.show()
 	return			
 			
-def calc_bold(bold_input , T):
+def calc_bold(timeseries , T):
 	
 	# applies Balloon Windkessel model to the timeseries
 	# calculates the simulated bold signal
@@ -141,8 +141,8 @@ def calc_bold(bold_input , T):
 	N = np.shape(timeseries)[1] 	# total number of u columns		
 	
 	print "Bold-signalling of u-timeseries starts..."
-	
-	Bold_signal = {}				# type(Bold_signal) = <type 'dict'>
+	# type(Bold_signal) = <type 'dict'>
+	Bold_signal = {}				
 	for col in range(0, N):
 		Bold_signal[col] = bold_euler(T, timeseries[:,[col]], iparams, x_init)
 		#Bold_signal[col] = bold_ode(T, timeseries[:,[col]], iparams, x_init)
@@ -152,7 +152,7 @@ def calc_bold(bold_input , T):
 				count_nan += 1
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
-
+			
 	f = open('bold_signal_python.dat','w')	
 	for row in range( 0, len(Bold_signal[0]) ):
 		for key in Bold_signal.iterkeys():
@@ -163,21 +163,15 @@ def calc_bold(bold_input , T):
 	return Bold_signal
 
 def plot_bold_signal(T, bold_input):
-	# plots the timeseries in a specific time interval
-	# t_range corresponds to time interval
-	
-	print "time T : " , T
-	print "bold_input_type : " , type(bold_input)
-	print bold_input
-	print "bold_input_shape_to_plot : ", len(bold_input[1])
-
-	time = np.linspace(0, T, len(bold_input[0]) )
+	# plots the bold_signal obtained from Balloon-Windkessel model
+		
+	time = np.linspace(0, T, len(bold_input[0]) )	
 	fig = pl.figure(2)
-	for i in range(0, np.shape(bold_input)[0]):
-		pl.plot(time , bold_input[i,:])
+	for key in bold_input.keys():
+		pl.plot( time , bold_input[key])
 	pl.xlabel('t [s]')
-	pl.ylabel('$bold signal u_i(t)$')
-	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
+	pl.ylabel('$bold signal,  u_i(t)$')
+	#pl.savefig(simfile[:-4]+"_bold_signal.eps",format="eps")
 	#pl.show()
 	return	
 
@@ -203,18 +197,26 @@ def filter_bold(bold_input):
 	# import butterworth coefficients from MATLAB results
 	b   = np.loadtxt('Bs_matlab.dat')
 	a   = np.loadtxt('As_matlab.dat')
-		
-	print b
-	print a 
-	
-	#b = (np.loadtxt('Bs_matlab.dat'))
-	#a = (np.loadtxt('As_matlab.dat'))
 
 	Bold_filt = np.zeros((n_T , N))
 	for col in range(0,N):			
 		Bold_filt[: , col] = filtfilt(b, a, bold_input[col])	
 	
+	np.savetxt('bold_filt_python.dat', Bold_filt,'%.6f',delimiter='\t')
 	return Bold_filt
+
+
+def plot_bold_filt(bold_input):
+	# plots the low-pass filtered bold_signal 
+	fig = pl.figure(3)
+	pl.plot( bold_input[0:-1 , :])
+	pl.xlabel('t [s]')
+	pl.ylabel('$filtered bold signal,  u_i(t)$')
+	#pl.savefig(simfile[:-4]+"_bold_filt.eps",format="eps")
+	#pl.show()
+	return	
+	
+		
 
 	
 def down_sample(bold_input, ds, dtt):
@@ -324,16 +326,18 @@ else:
 
 print "T : " , T, " [seconds]"
 
-#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
-#bold_signal 	=   calc_bold(timeseries, T)
+bold_signal 	=   calc_bold(timeseries, T)
 
-#plot_bold_signal(T, bold_signal)
+plot_bold_signal(T , bold_signal)
 
+bold_filt		=   filter_bold(bold_signal)
 
-#bold_filt		=   filter_bold(bold_signal)
+#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
-##bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
+plot_bold_filt(bold_filt)
+
 
 
 #bold_down  		=   down_sample(bold_filt , ds, dtt)
@@ -346,7 +350,7 @@ print "T : " , T, " [seconds]"
 #correl_matrix 	= 	correl(bold_cut)
 #corr_image		= 	image(correl_matrix , input_name)
 
-#pl.show()
+pl.show()
 
 
 #######################################
