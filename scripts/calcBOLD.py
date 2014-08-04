@@ -216,8 +216,6 @@ def plot_bold_filt(bold_input):
 	#pl.show()
 	return	
 	
-		
-
 	
 def down_sample(bold_input, ds, dtt):
 	
@@ -228,7 +226,7 @@ def down_sample(bold_input, ds, dtt):
 	index = np.arange(0 , n_T , int(ds/dtt))
 	down_bold = bold_input[index, :]
 	
-	#np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
+	np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
 	
 	return down_bold
 						
@@ -241,31 +239,20 @@ def keep_frames(bold_input, cut_percent):
 	limit_down = int(math.ceil(length * cut_percent) -1) 
 	limit_up   = int(length - limit_down -1)	
 	index      = np.arange(limit_down, limit_up-2 , 1)
-	print "index : ", index
+	#print "index : ", index
 	cut_bold   = bold_input[index, :]
 	
-	#np.savetxt('bold_cut_python.dat', cut_bold,'%.6f',delimiter='\t')
+	np.savetxt('bold_cut_python.dat', cut_bold,'%.6f',delimiter='\t')
 	
 	return cut_bold
 
 def correl(bold_input):
+	# correlation coefficient among the columns of bold_input calculated
+	# numpy array must be transposed to get the right corrcoef
 	
-	#find correlation coefficient matrix
-	
-	col = np.shape(bold_input)[1]
-	correl_matrix = np.zeros((col , col))
-		
-	for i in range(0,col) :
-		correl_row = np.array([])			
-		
-		for j in range(0,col):
-			A = np.corrcoef(bold_input[:,i] , bold_input[:,j])	
-			correl_row = np.append(correl_row, A[0,1])
-		
-		correl_matrix[i,:] = correl_row	
-	#correl_matrix = np.corrcoef(bold_input)
-	#np.savetxt('bold_corr_python.dat', correl_matrix, '%.10f',delimiter='\t')
-
+	transpose_input = np.transpose(bold_input)
+	correl_matrix   = np.corrcoef(transpose_input)
+	np.savetxt('bold_corr_python.dat', correl_matrix, '%.10f',delimiter='\t')
 	return correl_matrix
 
 def image(bold_input, simfile):
@@ -322,32 +309,29 @@ else:
 	infile = input_name
 
 
-[timeseries, T] = fhn_timeseries(infile)
+#[timeseries, T] = fhn_timeseries(infile)
 
-print "T : " , T, " [seconds]"
+#print "T : " , T, " [seconds]"
 
-fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
-bold_signal 	=   calc_bold(timeseries, T)
+#bold_signal 	=   calc_bold(timeseries, T)
 
-plot_bold_signal(T , bold_signal)
+#plot_bold_signal(T , bold_signal)
 
-bold_filt		=   filter_bold(bold_signal)
+#bold_filt		=   filter_bold(bold_signal)
 
-#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
+bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
-plot_bold_filt(bold_filt)
-
-
+#plot_bold_filt(bold_filt)
 
 #bold_down  		=   down_sample(bold_filt , ds, dtt)
 
-##bold_down  = np.loadtxt('bold_down_matlab.dat')
-
 #bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
-###bold_cut = np.loadtxt('bold_cut_matlab.dat')
-#correl_matrix 	= 	correl(bold_cut)
+bold_cut = np.loadtxt('bold_cut_matlab.dat')
+
+correl_matrix 	= 	correl(bold_cut)
 #corr_image		= 	image(correl_matrix , input_name)
 
 pl.show()
