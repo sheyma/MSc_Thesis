@@ -39,7 +39,7 @@ def bold_euler(T, r, iparams, x_init):
 	t = np.array(np.arange(0,(T+iparams.dt),iparams.dt))
 	n_t = len(t)
 	# cut BOLD signal from beginning bcs of transient behavior
-	t_min = 0		# [s] CHECK FOR THE SIGNAL 
+	t_min = 20		# [s] CHECK FOR THE SIGNAL 
 
 	n_min = round(t_min / iparams.dt)   
 	r_max = np.amax(r)	
@@ -105,18 +105,18 @@ def fhn_timeseries(simfile):
 
 	print "reading data ..."
 	simout = np.loadtxt(simfile)
-	print "shaaaapeeee : " , np.shape(simout)
+	print "shape of input matrix : " , np.shape(simout)
 	# extract time vector and dt
 	tvec = simout[:,0]
 	dt   = tvec[1] - tvec[0]
 	T    = int(math.ceil( (tvec[-1])  / dt * params.dt ))
 
 	# extract u-columns
-	u_indices = np.arange(1, simout.shape[1] ,1)
+	u_indices = np.arange(1, simout.shape[1] ,2)
 	timeseries = simout[:, u_indices]
 	
 	print "extracted u-timeseries: shape =", timeseries.shape, ", dt = ", dt
-	#np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.2f',delimiter='\t')
+	np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')
 	
 	return timeseries, T
 
@@ -165,8 +165,13 @@ def calc_bold(bold_input , T):
 def plot_bold_signal(T, bold_input):
 	# plots the timeseries in a specific time interval
 	# t_range corresponds to time interval
+	
+	print "time T : " , T
+	print "bold_input_type : " , type(bold_input)
+	print bold_input
+	print "bold_input_shape_to_plot : ", len(bold_input[1])
 
-	time = np.linspace(0, T, np.shape(bold_input)[1])
+	time = np.linspace(0, T, len(bold_input[0]) )
 	fig = pl.figure(2)
 	for i in range(0, np.shape(bold_input)[0]):
 		pl.plot(time , bold_input[i,:])
@@ -192,17 +197,15 @@ def filter_bold(bold_input):
 	f_s = 1/dtt							# [Hz]
 	f_n = f_s /2						# [Hz]
 	
-	b , a = butter(Or,float(f_c)/f_n, btype='low',analog=False, output='ba')
-		
-	#f = open('Bs_python.dat','w')
-	#for i in range(len(b)):
-		#f.write("%.20f\t" % (b[i]))
-	#f.close()	
+	# calculate butterworth coefficients with Python's butter function
+	#b , a = butter(Or,float(f_c)/f_n, btype='low',analog=False, output='ba')
 	
-	#f = open('As_python.dat','w')
-	#for i in range(len(a)):
-		#f.write("%.20f\t" % (a[i]))
-	#f.close()	
+	# import butterworth coefficients from MATLAB results
+	b   = np.loadtxt('Bs_matlab.dat')
+	a   = np.loadtxt('As_matlab.dat')
+		
+	print b
+	print a 
 	
 	#b = (np.loadtxt('Bs_matlab.dat'))
 	#a = (np.loadtxt('As_matlab.dat'))
@@ -211,15 +214,6 @@ def filter_bold(bold_input):
 	for col in range(0,N):			
 		Bold_filt[: , col] = filtfilt(b, a, bold_input[col])	
 	
-	#f = open('bold_filt_matlab_py.dat','w')
-	
-	#f = open('bold_filt_python_py.dat','w')
-	#for row in range(0, np.shape(Bold_filt)[0]):
-		#for col in range(0 , np.shape(Bold_filt)[1]):
-			#f.write("%.6f\t" % (Bold_filt[row, col]))
-		#f.write("\n")
-	#f.close()
-		
 	return Bold_filt
 
 	
@@ -315,8 +309,6 @@ input_name = sys.argv[1]
 
 
 
-
-
 # handle xz files transparently
 if input_name.endswith(".xz"):
 	# non-portable but we don't want to depend on pyliblzma module
@@ -332,29 +324,29 @@ else:
 
 print "T : " , T, " [seconds]"
 
-fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
-bold_signal 	=   calc_bold(timeseries, T)
+#bold_signal 	=   calc_bold(timeseries, T)
 
-plot_bold_signal(T, bold_signal)
-
-
-bold_filt		=   filter_bold(bold_signal)
-
-#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
+#plot_bold_signal(T, bold_signal)
 
 
-bold_down  		=   down_sample(bold_filt , ds, dtt)
+#bold_filt		=   filter_bold(bold_signal)
 
-#bold_down  = np.loadtxt('bold_down_matlab.dat')
+##bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
-bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
-##bold_cut = np.loadtxt('bold_cut_matlab.dat')
-correl_matrix 	= 	correl(bold_cut)
-corr_image		= 	image(correl_matrix , input_name)
+#bold_down  		=   down_sample(bold_filt , ds, dtt)
 
-pl.show()
+##bold_down  = np.loadtxt('bold_down_matlab.dat')
+
+#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+
+###bold_cut = np.loadtxt('bold_cut_matlab.dat')
+#correl_matrix 	= 	correl(bold_cut)
+#corr_image		= 	image(correl_matrix , input_name)
+
+#pl.show()
 
 
 #######################################
