@@ -116,7 +116,7 @@ def fhn_timeseries(simfile):
 	timeseries = simout[:, u_indices]
 	
 	print "extracted u-timeseries: shape =", timeseries.shape, ", dt = ", dt
-	np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')
+	#np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')
 	
 	return timeseries, T
 
@@ -202,7 +202,7 @@ def filter_bold(bold_input):
 	for col in range(0,N):			
 		Bold_filt[: , col] = filtfilt(b, a, bold_input[col])	
 	
-	np.savetxt('bold_filt_python.dat', Bold_filt,'%.6f',delimiter='\t')
+	#np.savetxt('bold_filt_python.dat', Bold_filt,'%.6f',delimiter='\t')
 	return Bold_filt
 
 
@@ -226,7 +226,7 @@ def down_sample(bold_input, ds, dtt):
 	index = np.arange(0 , n_T , int(ds/dtt))
 	down_bold = bold_input[index, :]
 	
-	np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
+	#np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
 	
 	return down_bold
 						
@@ -242,7 +242,7 @@ def keep_frames(bold_input, cut_percent):
 	#print "index : ", index
 	cut_bold   = bold_input[index, :]
 	
-	np.savetxt('bold_cut_python.dat', cut_bold,'%.6f',delimiter='\t')
+	#np.savetxt('bold_cut_python.dat', cut_bold,'%.6f',delimiter='\t')
 	
 	return cut_bold
 
@@ -268,7 +268,7 @@ def image(bold_input, simfile):
 	
 	image_name = simfile[0:-4] + '_CORR.eps'	
 	#pl.savefig(image_name, format="eps")
-	pl.show()
+	#pl.show()
 	return  
 	
 
@@ -315,15 +315,15 @@ else:
 
 print "T : " , T, " [seconds]"
 
-fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
 
 bold_signal 	=   calc_bold(timeseries, T)
 
-signal_image    =   plot_bold_signal(T , bold_signal)
+#signal_image    =   plot_bold_signal(T , bold_signal)
 
 bold_filt		=   filter_bold(bold_signal)
 
-filt_image		=   plot_bold_filt(bold_filt)
+#filt_image		=   plot_bold_filt(bold_filt)
 
 bold_down  		=   down_sample(bold_filt , ds, dtt)
 
@@ -331,9 +331,9 @@ bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
 correl_matrix 	= 	correl(input_name , bold_cut)
 
-corr_image		= 	image(correl_matrix , input_name)
+#corr_image		= 	image(correl_matrix , input_name)
 
-pl.show()
+#pl.show()
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 #bold_cut = np.loadtxt('bold_cut_matlab.dat')
