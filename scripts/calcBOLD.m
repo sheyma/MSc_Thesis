@@ -17,13 +17,13 @@ function b = calcBOLD(simfile)
   nt = size(tvec,1)
   dt = tvec(2)-tvec(1)
 
-  N = (size(simoutput,2)-1)/2
+  N = (size(simoutput,2)-1)
 
   timeseries = zeros(size(simoutput,1),N);
   size(timeseries)
 
   for roi = 1:N
-    timeseries(:,roi) = simoutput(:,2*roi);
+    timeseries(:,roi) = simoutput(:,roi+1);
   end
   dlmwrite('bold_timeseries_matlab.dat', timeseries, 'delimiter','\t', 'precision', '%.6f');
 
