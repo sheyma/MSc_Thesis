@@ -32,7 +32,7 @@ function b = calcBOLD(simfile)
   
   %% plot sample time series     
   
-  % specify plotting interval:
+  % specify plotting interval: 
   minval = 325000;
   range = 500;
   h = figure;
@@ -62,8 +62,10 @@ function b = calcBOLD(simfile)
    
 %T =450.0; % in [s]
   
+var = [] ; 
   for roi = 1:N 
     boldsignal{roi} = BOLD(T,timeseries(:,roi));
+    var = [var, boldsignal{roi}];
     disp(roi)
     % verify that there is no errors in the BOLD results
     nans = size(find(isnan(boldsignal{roi})),1);
@@ -71,6 +73,10 @@ function b = calcBOLD(simfile)
       disp(nans)
     end
   end
+  
+  
+  dlmwrite('bold_signal_matlab.dat', var, 'delimiter','\t', 'precision', '%.6f');
+    
   
   %% filter below 0.25Hz:
 
