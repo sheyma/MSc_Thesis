@@ -246,13 +246,15 @@ def keep_frames(bold_input, cut_percent):
 	
 	return cut_bold
 
-def correl(bold_input):
+def correl(input_name , bold_input):
 	# correlation coefficient among the columns of bold_input calculated
 	# numpy array must be transposed to get the right corrcoef
 	
 	transpose_input = np.transpose(bold_input)
 	correl_matrix   = np.corrcoef(transpose_input)
-	np.savetxt('bold_corr_python.dat', correl_matrix, '%.10f',delimiter='\t')
+	
+	file_name       = str(input_name[:-4] + '_corrcoeff.dat') 	
+	np.savetxt(file_name, correl_matrix, '%.10f',delimiter='\t')
 	return correl_matrix
 
 def image(bold_input, simfile):
@@ -327,7 +329,7 @@ bold_down  		=   down_sample(bold_filt , ds, dtt)
 
 bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
-correl_matrix 	= 	correl(bold_cut)
+correl_matrix 	= 	correl(input_name , bold_cut)
 
 corr_image		= 	image(correl_matrix , input_name)
 
