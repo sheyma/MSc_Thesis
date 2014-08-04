@@ -87,7 +87,9 @@ function b = calcBOLD(simfile)
   % Calculate variables for Butterworth lowpass filter of order 5 
   % with cut off frequency f_c/f_N
   [Bs,As] = butter(5,f_c/f_N,'low')
-
+  dlmwrite('Bs_matlab.dat', Bs, 'delimiter','\t', 'precision', '%.25f'); 
+  dlmwrite('As_matlab.dat', As, 'delimiter','\t', 'precision', '%.25f');
+  
   size(BOLD_filt)
 
   for n = 1:N
