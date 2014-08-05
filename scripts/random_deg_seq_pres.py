@@ -40,17 +40,6 @@ def plot_graph(B):
 	pl.show()
 	
 def degre_pres(R , ITER):
-
-   
-	#R = randmio_und_connected(W,ITER);
-
-	#[R eff] = randmio_und_connected(W, ITER);
-
-	#Input:  W,      undirected (binary/weighted) connection matrix
-	       #ITER,   rewiring parameter
-	#Output:     R,      randomized network
-				#eff,    number of actual rewirings carried out
-	
 	
 	n_col   = np.shape(R)[1]		# number of columns in array
 	new_R   = np.triu(R)			# upper triangle of array	
@@ -122,25 +111,29 @@ def degre_pres(R , ITER):
 							break
 							
 						PN = PN +1
-							
-			
-			P = R[(a, d) , : ]
-			
-			P[0,b] = 0
-			P[1,c] = 0
-			PN     = P
-			PN[:,d]= 1
-			PN[:,a]= 1
-			
-			
-			P[0,:] = (R[(P[0,:]!=0), :]).any(0).astype(int) 
-			P[1,:] = (R[(P[1,:]!=0), :]).any(0).astype(int)
-			print "PN"
-			print PN
-			P = P* (np.logical_not(PN).astype(int))
-			print P
-			att = att + 1
-			
+				
+				# reassigning edges
+				if rewire :
+					R[a,d] = R[a,b]
+					R[a,b] = 0			
+					R[d,a] = R[b,a]
+					R[b,a] = 0		
+					R[c,b] = R[c,d]
+					R[c,d] = 0		
+					R[b,c] = R[d,c]
+					R[d,c] = 0
+				
+					# reassigning edge indices
+					j[e1]  = d
+					j[e2]  = b
+					
+					eff = eff+1;
+					break
+		
+			att = att +1
+	return R
+						
+
 	
 	
 	#print maxAttempts
@@ -153,8 +146,15 @@ if __name__ == '__main__':
 		print usage
 		sys.exit(1)
 
-data_matrix = load_matrix(input_name)	
+#data_matrix = load_matrix(input_name)
+#print data_matrix	
 #adja_matrix = threshold_matrix(data_matrix, r=0)
 #plot_graph(data_matrix)
 
-degre_pres(data_matrix , ITER = 10)
+data_matrix = np.loadtxt(input_name)
+print "input :::"
+print data_matrix
+
+W = degre_pres(data_matrix , ITER = 10)
+print "OUTPUT   ;;"
+print W
