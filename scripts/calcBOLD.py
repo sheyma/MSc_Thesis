@@ -153,12 +153,12 @@ def calc_bold(timeseries , T):
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
 			
-	f = open('bold_signal_python.dat','w')	
-	for row in range( 0, len(Bold_signal[0]) ):
-		for key in Bold_signal.iterkeys():
-			f.write('%.6f\t' % ( Bold_signal[key][row] ))
-		f.write('\n')
-	f.close()
+	#f = open('bold_signal_python.dat','w')	
+	#for row in range( 0, len(Bold_signal[0]) ):
+		#for key in Bold_signal.iterkeys():
+			#f.write('%.6f\t' % ( Bold_signal[key][row] ))
+		#f.write('\n')
+	#f.close()
 			
 	return Bold_signal
 
