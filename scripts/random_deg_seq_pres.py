@@ -146,15 +146,14 @@ if __name__ == '__main__':
 		print usage
 		sys.exit(1)
 
-#data_matrix = load_matrix(input_name)
-#print data_matrix	
-#adja_matrix = threshold_matrix(data_matrix, r=0)
-#plot_graph(data_matrix)
-
-data_matrix = np.loadtxt(input_name)
+data_matrix = load_matrix(input_name)
+adja_matrix = threshold_matrix(data_matrix, r=0)
 print "input :::"
 print data_matrix
+#plot_graph(data_matrix)
+
 
 W = degre_pres(data_matrix , ITER = 10)
 print "OUTPUT   ;;"
 print W
+plot_graph(W)
