@@ -52,18 +52,15 @@ def degre_pres(R , ITER):
 				#eff,    number of actual rewirings carried out
 	
 	
-	R.setflags(write=False)
-	n = np.shape(R)[1]
-	print R
-	new_R = np.tril(R)
-	print new_R
-	new_R = np.transpose(new_R)
-	(j , i) = new_R.nonzero()
-	K = len(i)
-	ITER = K*ITER
-	maxAttempts= round(float(n)*K/(n*(n-1)))
+	n_col   = np.shape(R)[1]		# number of columns in array
+	new_R   = np.triu(R)			# upper triangle of array	
+	(j , i) = new_R.nonzero()		# (row,col) index of non-zero elem.
+	K       = len(i)				# total number of non-zero elements
+	ITER    = K*ITER				# total iteration number 
 	
-	eff = 0
+	maxAttempts = int(K/(n_col-1))  # max attempts per iteration
+	
+	eff     = 0  
 	for iter in range(1 , ITER+1 ):
 		att = 0
 		while att<=maxAttempts:
@@ -75,26 +72,43 @@ def degre_pres(R , ITER):
 					e2 = int(math.floor(K*random.random()))
 				
 				a = i[e1]
-				b = j[e1]
+				b = j[e1]				
 				c = i[e2]
-				d = j[e1]
+				d = j[e2]
 				
-				if (a!=c & a!=d) & (b!=c & b!=d):
+				
+				
+				
+				if ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) ) :
+					
+					print "BEFORE : a , b, c, d: " , a , b , c, d
+					print  ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) )
+
+					
 					break
-				
-			if random.random() > 0.5 :
-				
-				i[e2] = d
-				j[e2] = c
-				c     = i[e2]
-				d     = j[e2]		
 			
-			if  int(not(bool( R[a,d] or R[b,d] ))):
-				print int(not(bool( R[a,d] or R[b,d] )))
+			
+
+
+			att = att + 1
+			
 			
 				
+			#if random.random() > 0.5 :
+				
+				
+				#i[e2] = d
+				##j[e2] = c
+				##c     = i[e2]
+				##d     = j[e2]		
+			
+			##if  int(not(bool( R[a,d] or R[b,d] ))):
+				##print int(not(bool( R[a,d] or R[b,d] )))
+			
+			
 	
-	print maxAttempts
+	
+	#print maxAttempts
 
 if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
@@ -105,7 +119,7 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 data_matrix = load_matrix(input_name)	
-#adja_matrix = threshold_matrix(data_matrix, r=0.5)
-#plot_graph(adja_matrix)
+#adja_matrix = threshold_matrix(data_matrix, r=0)
+#plot_graph(data_matrix)
 
 degre_pres(data_matrix , ITER = 10)
