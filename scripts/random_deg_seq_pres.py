@@ -55,6 +55,10 @@ def degre_pres(R , ITER):
 	n_col   = np.shape(R)[1]		# number of columns in array
 	new_R   = np.triu(R)			# upper triangle of array	
 	(j , i) = new_R.nonzero()		# (row,col) index of non-zero elem.
+	
+	i.setflags(write=True)
+	j.setflags(write=True)
+	
 	K       = len(i)				# total number of non-zero elements
 	ITER    = K*ITER				# total iteration number 
 	
@@ -71,40 +75,29 @@ def degre_pres(R , ITER):
 				while e1==e2:
 					e2 = int(math.floor(K*random.random()))
 				
-				a = i[e1]
-				b = j[e1]				
-				c = i[e2]
-				d = j[e2]
-				
-				
+				a = i[e1]          # chose a col number from i
+				b = j[e1]		   # chose a row number from j		
+				c = i[e2]		   # chose another col number from i	
+				d = j[e2]		   # chose another row number from j		
 				
 				
 				if ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) ) :
-					
-					print "BEFORE : a , b, c, d: " , a , b , c, d
-					print  ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) )
-
-					
-					break
+					break          # make sure that a,b,c,d differ
 			
 			
 
 
+			# flipping edge c-d with 50% probability	
+			if random.random() > 0.5 :
+				i[e2]  = d
+				j[e2]  = c
+				c      = i[e2]
+				d      = j[e2]		
+			
+			#if  int(not(bool( R[a,d] or R[b,d] ))):
+			print  int(not(bool( R[a,d] or R[b,d] )))
+			
 			att = att + 1
-			
-			
-				
-			#if random.random() > 0.5 :
-				
-				
-				#i[e2] = d
-				##j[e2] = c
-				##c     = i[e2]
-				##d     = j[e2]		
-			
-			##if  int(not(bool( R[a,d] or R[b,d] ))):
-				##print int(not(bool( R[a,d] or R[b,d] )))
-			
 			
 	
 	
