@@ -94,9 +94,51 @@ def degre_pres(R , ITER):
 				c      = i[e2]
 				d      = j[e2]		
 			
-			#if  int(not(bool( R[a,d] or R[b,d] ))):
-			print  int(not(bool( R[a,d] or R[b,d] )))
+			# rewiring condition
+			if int(not(bool( R[a,d] or R[c,b] ))) : 
+				
+				# connectedness condition	
+				if int(not(bool( R[a,c] or R[b,d] ))) :
+					
+					P = R[(a, d) , : ]
+					P[0,b] = 0
+					P[1,c] = 0
+					PN     = P
+					PN[:,d]= 1
+					PN[:,a]= 1
 			
+					while 1:
+						
+						P[0,:] = (R[(P[0,:]!=0), :]).any(0).astype(int) 
+						P[1,:] = (R[(P[1,:]!=0), :]).any(0).astype(int)
+						
+						P = P* (np.logical_not(PN).astype(int))
+							
+						if int(not((P.any(1)).all())):
+							rewire = 0
+							break
+						
+						elif  (P[:,[b, c]].any(0)).any(0):
+							break
+							
+						PN = PN +1
+							
+			
+			P = R[(a, d) , : ]
+			
+			P[0,b] = 0
+			P[1,c] = 0
+			PN     = P
+			PN[:,d]= 1
+			PN[:,a]= 1
+			
+			
+			P[0,:] = (R[(P[0,:]!=0), :]).any(0).astype(int) 
+			P[1,:] = (R[(P[1,:]!=0), :]).any(0).astype(int)
+			print "PN"
+			print PN
+			P = P* (np.logical_not(PN).astype(int))
+			print P
 			att = att + 1
 			
 	
