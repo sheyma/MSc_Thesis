@@ -55,21 +55,33 @@ def pearson_coef(matrix_A , matrix_B):
 if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
-		input_epmpiri = sys.argv[1]
+		input_empiri = sys.argv[1]
 		#input_simuli  = sys.argv[2]
 	except:
 		print usage
 		sys.exit(1)
 
-
+# fMRI-BOLD input matrix load , this is a correlation matrix already
 mtx_original		=		load_matrix(input_empiri)
 
+# loading correl. mtx. of simulated funct. connectivities
 name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
+
+R_thr =  {}
+
 for THR in np.array([54 , 56 , 60 , 62, 63, 64, 65, 66]):
+	R_temp = []
+	
 	for VEL in (np.arange(30,150+10,10)):
 		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
 		mtx_simuli = load_matrix(input_name)
-
+		R_vel      = pearson_coef(mtx_original, mtx_simuli)
+		R_temp     = np.append(R_temp, R_vel)
+	R_thr[THR] 	   = np.array(R_temp)
+	
+	
+print R_thr.keys()
+		
 		
 #mtx_random			= 		load_matrix(input_simuli)
 #figure				=		plot_corr(mtx_random , input_random)
