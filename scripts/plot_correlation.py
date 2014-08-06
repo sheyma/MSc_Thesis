@@ -31,18 +31,17 @@ def plot_corr(corr_matrix, simfile ):
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
 	cbar = pl.colorbar()
-	cbar.set_ticks(np.arange(0, 1.0+0.1, 0.1) )
-	cbar.set_ticklabels(np.arange(0, 1.0+0.1, 0.1))
+	cbar.set_ticks(np.arange(-0.8 , 1+0.2, 0.2))  #(np.arange(-0.8, 0.8+0.2, 0.2) )
+	#cbar.set_ticklabels(np.arange(-0.8, 0.8+0.2, 0.2))
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
-	pl.title('BOLD-fMRI', fontsize=20)
+	#pl.title('BOLD-fMRI', fontsize=20)
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
 	#pl.xlabel('Nodes', fontsize = 20)
 	#pl.ylabel('Nodes')
-	print np.arange(0, 1.0+0.1, 0.1)
 	#image_name = simfile[0:-4] + '_CORR.eps'	
-	#pl.savefig(image_name, format="eps")
+	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
 	#pl.show()
 	return  	
 	
@@ -55,5 +54,5 @@ if __name__ == '__main__':
 		sys.exit(1)
 		
 input_data		=		load_matrix(input_name)
-plot_corr(input_data , input_name)
+figure			=		plot_corr(input_data , input_name)
 pl.show()
