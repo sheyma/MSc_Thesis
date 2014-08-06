@@ -11,7 +11,7 @@ import random as rnd
 import sys  
 import glob
 import os
-
+import scipy.stats as sistat
 
 # check the loaded matrix if it is symmetric
 def load_matrix(file):
@@ -23,10 +23,8 @@ def load_matrix(file):
 		raise ValueError
 	return AT
 	
-def plot_corr(corr_matrix, simfile ):
-	
-	# plots correlation matrix
-	
+# plots colorbar coded given correlation matrix
+def plot_corr(corr_matrix, simfile ):	
 	N_col  = np.shape(corr_matrix)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
@@ -48,11 +46,26 @@ def plot_corr(corr_matrix, simfile ):
 if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
-		input_name = sys.argv[1]
+		input_original = sys.argv[1]
+		input_random   = sys.argv[2]
 	except:
 		print usage
 		sys.exit(1)
+
+
+def pearson_coef(matrix_A , matrix_B):
+	vector_a = []
+	vector_b = []
+	for i in range(0, np.shape(matrix_A)[0]):
+		vector_a = np.append(vector_a , matrix_A[i,:])
+		vector_b = np.append(vector_b , matrix_B[i,:])
+	[R_pearson , p_value] = sistat.pearsonr(vector_a , vector_b)
+	return R_pearson	
 		
-input_data		=		load_matrix(input_name)
-figure			=		plot_corr(input_data , input_name)
-pl.show()
+		
+mtx_original		=		load_matrix(input_original)
+mtx_random			= 		load_matrix(input_random)
+figure				=		plot_corr(mtx_random , input_random)
+#pl.show()
+R					=       pearson_coef(mtx_original , mtx_random)
+print "pearson correlation coefficient is : " , R 
