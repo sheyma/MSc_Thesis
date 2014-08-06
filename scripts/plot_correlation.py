@@ -29,7 +29,7 @@ def plot_corr(corr_matrix, simfile ):
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
 	cbar = pl.colorbar()
-	cbar.set_ticks(np.arange(-0.8 , 1+0.2, 0.2))  #(np.arange(-0.8, 0.8+0.2, 0.2) )
+	#cbar.set_ticks(np.arange(-0.8 , 1+0.2, 0.2))  #(np.arange(-0.8, 0.8+0.2, 0.2) )
 	#cbar.set_ticklabels(np.arange(-0.8, 0.8+0.2, 0.2))
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
@@ -43,16 +43,6 @@ def plot_corr(corr_matrix, simfile ):
 	#pl.show()
 	return  	
 	
-if __name__ == '__main__':
-	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
-	try:
-		input_original = sys.argv[1]
-		input_random   = sys.argv[2]
-	except:
-		print usage
-		sys.exit(1)
-
-
 def pearson_coef(matrix_A , matrix_B):
 	vector_a = []
 	vector_b = []
@@ -62,10 +52,27 @@ def pearson_coef(matrix_A , matrix_B):
 	[R_pearson , p_value] = sistat.pearsonr(vector_a , vector_b)
 	return R_pearson	
 		
+if __name__ == '__main__':
+	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
+	try:
+		input_epmpiri = sys.argv[1]
+		#input_simuli  = sys.argv[2]
+	except:
+		print usage
+		sys.exit(1)
+
+
+mtx_original		=		load_matrix(input_empiri)
+
+name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
+for THR in np.array([54 , 56 , 60 , 62, 63, 64, 65, 66]):
+	for VEL in (np.arange(30,150+10,10)):
+		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+		mtx_simuli = load_matrix(input_name)
+
 		
-mtx_original		=		load_matrix(input_original)
-mtx_random			= 		load_matrix(input_random)
-figure				=		plot_corr(mtx_random , input_random)
+#mtx_random			= 		load_matrix(input_simuli)
+#figure				=		plot_corr(mtx_random , input_random)
 #pl.show()
-R					=       pearson_coef(mtx_original , mtx_random)
-print "pearson correlation coefficient is : " , R 
+#R					=       pearson_coef(mtx_original , mtx_random)
+#print "pearson correlation coefficient is : " , R 
