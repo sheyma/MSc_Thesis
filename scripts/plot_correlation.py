@@ -12,6 +12,7 @@ import sys
 import glob
 import os
 import scipy.stats as sistat
+import collections
 
 # check the loaded matrix if it is symmetric
 def load_matrix(file):
@@ -79,9 +80,11 @@ for THR in np.array([54 , 56 , 60 , 62, 63, 64, 65, 66]):
 		R_temp     = np.append(R_temp, R_vel)
 	R_thr[THR] 	   = np.array(R_temp)
 	
-	
-print R_thr.keys()
-		
+Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
+datam = np.array(Ordered_R.values())
+
+plot_corr(datam, input_empiri)		
+pl.show()		
 		
 #mtx_random			= 		load_matrix(input_simuli)
 #figure				=		plot_corr(mtx_random , input_random)
