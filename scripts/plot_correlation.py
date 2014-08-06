@@ -35,9 +35,9 @@ def plot_corr(corr_matrix, simfile ):
 	#cbar.set_ticklabels(np.arange(-0.8, 0.8+0.2, 0.2))
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
-	#pl.title('BOLD-fMRI', fontsize=20)
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
+	#pl.title('BOLD-fMRI', fontsize=20)
 	#pl.xlabel('Nodes', fontsize = 20)
 	#pl.ylabel('Nodes')
 	#image_name = simfile[0:-4] + '_CORR.eps'	
