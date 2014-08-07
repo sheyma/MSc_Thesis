@@ -7,11 +7,33 @@ import subprocess as sp
 import numpy as np
 import matplotlib.pyplot as pl	
 import sys 
+import math
 
-# check the loaded matrix if it is symmetric
+params = { # Fitzhugh-Nagumo simulation parameters...
+        'dt': 0.001, 
+			}
+
+# load input data as numpy matrix
 def load_matrix(file):
-	A  = np.loadtxt(file, unpack=True)
+	print "reading data ..."
+	A  = np.loadtxt(file, unpack=False)
+	print "shape of input matrix : " , np.shape(A)
 	return A
+
+# obtain u_i time series from loaded matrix
+def fhn_timeseries(simfile):
+	print "subtracting u-time series as numpy matrix..."
+	# extract first column of simout as time vector
+	tvec = simfile[:,0]
+	dt   = tvec[1] - tvec[0]
+	# calculate total time of simulation 
+	T    = int(math.ceil( (tvec[-1])  / dt * params['dt'] ))
+	print "T = " , T , "[seconds]"
+	# extract u-columns
+	u_indices  = np.arange(1, simfile.shape[1] ,1)
+	u_series   = simfile[:, u_indices]
+	return u_series , T
+
 
 def correl_matrix(matrix , matrix_name):
 	# correlation coefficient among the columns of bold_input calculated
@@ -43,6 +65,9 @@ else:
 	infile = input_name
 
 
+
 data_matrix 		=		load_matrix(infile)
-corr_matrix			=		correl_matrix(data_matrix, input_name)
-print corr_matrix
+[u_matrix , T ]	    =		fhn_timeseries(data_matrix)
+
+#corr_matrix			=		correl_matrix(data_matrix, input_name)
+#print corr_matrix
