@@ -65,12 +65,12 @@ if __name__ == '__main__':
 # fMRI-BOLD input matrix load , this is a correlation matrix already
 mtx_original		=		load_matrix(input_empiri)
 
-# loading correl. mtx. of simulated funct. connectivities
+# loading correl. mtx. of simulated bold activities (calcBOLD output)
 name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
 
 R_thr =  {}
 
-for THR in np.array([54 , 56 , 60 , 62, 63, 64, 65, 66]):
+for THR in np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66]):
 	R_temp = []
 	
 	for VEL in (np.arange(30,150+10,10)):
@@ -79,12 +79,36 @@ for THR in np.array([54 , 56 , 60 , 62, 63, 64, 65, 66]):
 		R_vel      = pearson_coef(mtx_original, mtx_simuli)
 		R_temp     = np.append(R_temp, R_vel)
 	R_thr[THR] 	   = np.array(R_temp)
+
 	
 Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-datam = np.array(Ordered_R.values())
+print "Ordered dict"
+print Ordered_R
 
-plot_corr(datam, input_empiri)		
+datam 		= np.array(Ordered_R.values())
+#np.savetxt('delete.dat', datam, '%.10f', delimiter='\t')
+
+
+print "check its numpy array version"
+print datam
+
+extend = [54 , 66, 3, 15]
+fig  = pl.imshow(np.transpose(datam),  interpolation='nearest', extent=extend)
+cbar = pl.colorbar()
+pl.title('A_aal_0...' + '    $\sigma$ = 0.2', fontsize=20)
+pl.xlabel('thr', fontsize = 20)
+pl.ylabel('v [m/s]', fontsize=20)
+a = fig.axes.get_xticklabels()
+a = [54 , 56 , 58, 60 , 62, 63, 64, 65, 66]
+fig.axes.set_xticklabels(a)
+print "AAAAAAAAAAA" , a
+for t in cbar.ax.get_yticklabels():
+	t.set_fontsize(15)
+pl.xticks(fontsize = 20)
+pl.yticks(fontsize = 20)
 pl.show()		
+
+
 		
 #mtx_random			= 		load_matrix(input_simuli)
 #figure				=		plot_corr(mtx_random , input_random)
