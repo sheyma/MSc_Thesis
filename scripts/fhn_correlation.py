@@ -34,17 +34,14 @@ def fhn_timeseries(simfile):
 	u_series   = simfile[:, u_indices]
 	return u_series , T
 
-
+# correlation coefficients among the columns of a given matrix
 def correl_matrix(matrix , matrix_name):
-	# correlation coefficient among the columns of bold_input calculated
 	# numpy array must be transposed to get the right corrcoef
-	
-	transpose_input = np.transpose(matrix)
-	correl_matrix   = np.corrcoef(transpose_input)
-	
+	tr_matrix = np.transpose(matrix)
+	cr_matrix = np.corrcoef(tr_matrix)
 	#file_name       = str(matrix_name[:-4] + '_FHN_corrcoeff.dat') 	
 	#np.savetxt(file_name, correl_matrix, '%.6f',delimiter='\t')
-	return correl_matrix
+	return cr_matrix
 
 # user defined input name
 if __name__ == '__main__':
@@ -68,6 +65,6 @@ else:
 
 data_matrix 		=		load_matrix(infile)
 [u_matrix , T ]	    =		fhn_timeseries(data_matrix)
-
-#corr_matrix			=		correl_matrix(data_matrix, input_name)
-#print corr_matrix
+print u_matrix
+corr_matrix			=		correl_matrix(u_matrix, input_name)
+print corr_matrix
