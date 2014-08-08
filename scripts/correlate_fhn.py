@@ -1,11 +1,8 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-# plotting correlation matrixes from various input
-
 import subprocess as sp
 import numpy as np
-import matplotlib.pyplot as pl	
 import sys 
 import math
 
@@ -39,7 +36,10 @@ def correl_matrix(matrix , matrix_name):
 	# numpy array must be transposed to get the right corrcoef
 	tr_matrix = np.transpose(matrix)
 	cr_matrix = np.corrcoef(tr_matrix)
-	file_name       = str(matrix_name[:-4] + '_FHN_corrcoeff.dat') 	
+	if matrix_name.endswith(".xz"):
+		file_name       = str(matrix_name[:-7] + '_FHN_corr.dat') 	
+	else :
+		file_name       = str(matrix_name[:-4] + '_FHN_corr.dat')
 	np.savetxt(file_name, cr_matrix, '%.6f',delimiter='\t')
 	return cr_matrix
 
