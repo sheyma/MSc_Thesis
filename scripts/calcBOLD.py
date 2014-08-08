@@ -182,6 +182,8 @@ def filter_bold(bold_input):
 	# type(bold_input) = <type 'dict'>
 	# f_c : cut-off freq., f_s : sampling freq., f_n : Nyquist freq.
 	# Or : order of filter, dtt : resolution of bold signal
+	
+	print "low pass filtering is applied..." 
 	 
 	n_T = len(np.array(bold_input[1]))
 	N   = len(bold_input.keys())
@@ -222,6 +224,7 @@ def down_sample(bold_input, ds, dtt):
 	# downsampling of the filtered bold signal
 	# select one point every 'ds' [ms] to match fmri resolution
 
+	print "downsampling..."
 	n_T = np.shape(bold_input)[0] 
 	index = np.arange(0 , n_T , int(ds/dtt))
 	down_bold = bold_input[index, :]
@@ -235,6 +238,7 @@ def keep_frames(bold_input, cut_percent):
 	
 	# cut array from beginning and end (distorted from filtering)
 	
+	print "cut the distorted parts of signal..."
 	length  = np.shape(bold_input)[0]
 	limit_down = int(math.ceil(length * cut_percent) -1) 
 	limit_up   = int(length - limit_down -1)	
@@ -242,35 +246,9 @@ def keep_frames(bold_input, cut_percent):
 	#print "index : ", index
 	cut_bold   = bold_input[index, :]
 	
-	#np.savetxt('bold_cut_python.dat', cut_bold,'%.6f',delimiter='\t')
-	
+	file_name       = str(input_name[:-4] + '_bold.dat')
+	np.savetxt(file_name, cut_bold,'%.6f',delimiter='\t')	
 	return cut_bold
-
-def correl(input_name , bold_input):
-	# correlation coefficient among the columns of bold_input calculated
-	# numpy array must be transposed to get the right corrcoef
-	
-	transpose_input = np.transpose(bold_input)
-	correl_matrix   = np.corrcoef(transpose_input)
-	
-	file_name       = str(input_name[:-4] + '_corrcoeff.dat') 	
-	np.savetxt(file_name, correl_matrix, '%.10f',delimiter='\t')
-	return correl_matrix
-
-def image(bold_input, simfile):
-	
-	# plots simulated functional connectivity
-	pl.figure(4)
-	N_col = np.shape(bold_input)[1]
-	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
-	pl.imshow(bold_input, interpolation='nearest', extent=extend)
-	pl.colorbar()
-	
-	image_name = simfile[0:-4] + '_CORR.eps'	
-	#pl.savefig(image_name, format="eps")
-	#pl.show()
-	return  
-	
 
 # here we go
 
@@ -288,13 +266,13 @@ params.k3 = 2.0 * params.Eo - 0.2
 
 t_start = 325000;
 t_range = 500;
-ds = 2.3  #### NEEDS TO BE CHECKED!
+ds = 2.3  
 dtt = 0.001
 cut_percent = float(2) / 100
 
 iparams = invert_params(params)
-
-x_init = np.array([0 , 1, 1, 1])	# initial conditions	
+# initial conditions for the bold differential equations
+x_init = np.array([0 , 1, 1, 1])		
 
 input_name = sys.argv[1]
 
@@ -315,11 +293,11 @@ else:
 
 print "T : " , T, " [seconds]"
 
-#fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+#fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
 
 bold_signal 	=   calc_bold(timeseries, T)
 
-#signal_image    =   plot_bold_signal(T , bold_signal)
+#signal_image   =   plot_bold_signal(T , bold_signal)
 
 bold_filt		=   filter_bold(bold_signal)
 
@@ -329,19 +307,11 @@ bold_down  		=   down_sample(bold_filt , ds, dtt)
 
 bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
-correl_matrix 	= 	correl(input_name , bold_cut)
-
-#corr_image		= 	image(correl_matrix , input_name)
-
-#pl.show()
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 #bold_cut = np.loadtxt('bold_cut_matlab.dat')
 
-
 #######################################
-
-
 
 #bold_euler(T , R[1, :], iparams, x_init)
 
