@@ -6,6 +6,16 @@ import numpy as np
 import sys 
 import math
 
+""" 
+	input  : job output from "fhn_time_delays.py" , m rows, n columns
+	
+	intermediate process : loading input, which has ".xz" or ".dat" 
+	extentions, deleting the first column of input, which is the time 
+	column, getting correlation coefficients 
+	
+	output : correlation matrix of the input, n-1 rows, n-1 rows
+"""
+
 params = { # Fitzhugh-Nagumo simulation parameters...
         'dt': 0.001, 
 			}
