@@ -246,7 +246,7 @@ def keep_frames(bold_input, cut_percent):
 	#print "index : ", index
 	cut_bold   = bold_input[index, :]
 	
-	file_name       = str(input_name[:-4] + '_bold.dat')
+	file_name       = str(input_name[:-4] + '_BOLD.dat')
 	np.savetxt(file_name, cut_bold,'%.6f',delimiter='\t')	
 	return cut_bold
 
