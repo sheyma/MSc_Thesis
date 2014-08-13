@@ -195,7 +195,7 @@ f = open(gfilename[:-4]+'_sigma='+str(params['sigma'])+'_D='+str(params['D'])+'_
 for i, t0 in enumerate(t):
 	f.write('%s' % (t0))
 	for j in range(0, len(x)):
-		f.write('\t%.5f' % (float(x[j][i])))
+		f.write('\t%.2g' % (float(x[j][i])))
 	f.write('\n')
 
 f.close()
