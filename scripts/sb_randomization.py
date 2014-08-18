@@ -170,104 +170,6 @@ def get_random_graph_h(B):
 			att = att +1
 	RG = nx.from_numpy_matrix(B)
 	return RG
-			
-
-
-
-# create a random network with method b:
-# networkx.erdos_renyi_graph : random graph with given N and d
-def get_random_graph_b(B):
-	G = nx.from_numpy_matrix(B)
-	N = nx.number_of_nodes(G)
-	d = nx.density(G)
-	RG = nx.erdos_renyi_graph(N,d)
-	return RG
-
-# create a random network with method c
-# networkx.random_degree_sequence_graph : 
-# random graph with given degree sequence
-# note : no guarantee to generate a graph
-def get_random_graph_c(B):
-	G = nx.from_numpy_matrix(B)
-	degree_seq = nx.degree(G).values()
-	RG = nx.random_degree_sequence_graph(degree_seq,tries=1000)
-	return RG
-
-
-# create a random network with method f
-# networkx.generators.degree_seq.havel_hakimi_graph : 
-# random graph with given degree sequence, check assortativity:
-# connecting the node of highest degree to other nodes of highest degree
-def get_random_graph_f(B):
-	G = nx.from_numpy_matrix(B)
-	degree_seq = nx.degree(G).values()
-	RG = nx.generators.degree_seq.havel_hakimi_graph(degree_seq)
-	return RG
-	
-
-
-def get_todo(G, nodis):
-	nodes = G.nodes()
-	#nodes.sort()
-	for n in nodes:
-		if G.degree([n]).values()[0] < nodis[n]:
-			return n
-	return (-324)
-
-def available_nodes(G, nodis, cn, avl):
-	for n in nx.non_neighbors(G, cn):
-		if G.degree([n]).values()[0] < nodis[n]:
-			avl.append(n)
-	avl.sort()
-	return len(avl)
-
-## return -1 not solvable
-##         0 ready
-def random_graph(G, nodis):
-	global deep
-	deep += 1
-	cn = get_todo(G, nodis)
-	if cn == (-324):
-		deep -= 1
-		return 0
-	
-	avl = list()
-	ret = available_nodes(G, nodis, cn, avl)
-	#print "go", cn, deep, ret
-	if ret <= 0:
-		deep -= 1
-		return -1
-
-	rnd.shuffle(avl)
-	for n in avl:
-		G.add_edge(cn, n)
-		ret = random_graph(G, nodis)
-		if ret >= 0:
-			deep -= 1
-			return 0
-		G.remove_edge(cn, n)
-	deep -= 1
-	return -1
-
-# create a random network with method e
-# manual random graph creator when degree sequence given
-def get_random_graph_e(B):
-	global deep
-	G = nx.from_numpy_matrix(B)
-	degree_seq = nx.degree(G).values()
-	
-	nodes = G.nodes()
-	GR = nx.Graph()
-	
-	GR.add_nodes_from(nodes)
-	nodis = dict(zip(nodes, degree_seq))
-	
-	print "bla", len(GR.nodes()), len(GR.edges())
-	deep = 0
-	ret = random_graph(GR, nodis)
-	print "ret", ret, len(GR.nodes()), len(GR.edges())
-	
-	return GR
 
 
 def export_adjacency_matrix(graph , method, input_mtx, r):		# save adjacency matrix
@@ -581,11 +483,7 @@ if __name__ == '__main__':
 random_graph_methods = {
 	"0" : nx.from_numpy_matrix,
 	"a" : get_random_graph_a,
-	"b" : get_random_graph_b,
-	"c" : get_random_graph_c,
 	"d" : get_random_graph_d,
-	"e" : get_random_graph_e,
-	"f" : get_random_graph_f,
 	"g" : get_random_graph_g,
 	"h" : get_random_graph_h,
 }
@@ -606,7 +504,7 @@ for f in filelist:
 data_matrix = load_matrix(input_name)
 print "input data is loaded! "
 
-for i in range(0, 101):
+for i in range(55, 57):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
@@ -619,15 +517,15 @@ for i in range(0, 101):
 		continue
 	
 	#plot_graph(Random_G)
-	#print_adjacency_matrix(A)
-	export_adjacency_matrix(Random_G, method, input_name, thr)
-	get_characteristics(Random_G, thr, input_name)
-	get_single_network_measures(Random_G, thr)
-	get_assortativity(Random_G, thr)
-	get_local_efficiency(Random_G, thr)
-	get_global_effic(Random_G, thr)
-	get_degree_distribution(Random_G, thr)
-	get_node_cc_and_degree(Random_G, thr)
-	get_connected_components_nodes(Random_G, thr)
-	get_small_worldness(Random_G, thr)
-	get_motifs(Random_G, thr)
+	print_adjacency_matrix(A)
+	#export_adjacency_matrix(Random_G, method, input_name, thr)
+	#get_characteristics(Random_G, thr, input_name)
+	#get_single_network_measures(Random_G, thr)
+	#get_assortativity(Random_G, thr)
+	#get_local_efficiency(Random_G, thr)
+	#get_global_effic(Random_G, thr)
+	#get_degree_distribution(Random_G, thr)
+	#get_node_cc_and_degree(Random_G, thr)
+	#get_connected_components_nodes(Random_G, thr)
+	#get_small_worldness(Random_G, thr)
+	#get_motifs(Random_G, thr)
