@@ -39,11 +39,11 @@ def plot_graph(B):
 	nx.draw(G, pos)
 	pl.show()
 	
-def degre_pres(R , ITER):
+def degre_pres(B , ITER):
 	
-	n_col   = np.shape(R)[1]		# number of columns in array
-	new_R   = np.triu(R)			# upper triangle of array	
-	(j , i) = new_R.nonzero()		# (row,col) index of non-zero elem.
+	n_col   = np.shape(B)[1]		# number of columns in array
+	new_B   = np.triu(B)			# upper triangle of array	
+	(j , i) = new_B.nonzero()		# (row,col) index of non-zero elem.
 	
 	i.setflags(write=True)
 	j.setflags(write=True)
@@ -84,12 +84,12 @@ def degre_pres(R , ITER):
 				d      = j[e2]		
 			
 			# rewiring condition
-			if int(not(bool( R[a,d] or R[c,b] ))) : 
+			if int(not(bool( B[a,d] or B[c,b] ))) : 
 				
 				# connectedness condition	
-				if int(not(bool( R[a,c] or R[b,d] ))) :
+				if int(not(bool( B[a,c] or B[b,d] ))) :
 					
-					P = R[(a, d) , : ]
+					P = B[(a, d) , : ]
 					P[0,b] = 0
 					P[1,c] = 0
 					PN     = P
@@ -98,8 +98,8 @@ def degre_pres(R , ITER):
 			
 					while 1:
 						
-						P[0,:] = (R[(P[0,:]!=0), :]).any(0).astype(int) 
-						P[1,:] = (R[(P[1,:]!=0), :]).any(0).astype(int)
+						P[0,:] = (B[(P[0,:]!=0), :]).any(0).astype(int) 
+						P[1,:] = (B[(P[1,:]!=0), :]).any(0).astype(int)
 						
 						P = P* (np.logical_not(PN).astype(int))
 							
@@ -114,14 +114,14 @@ def degre_pres(R , ITER):
 				
 				# reassigning edges
 				if rewire :
-					R[a,d] = R[a,b]
-					R[a,b] = 0			
-					R[d,a] = R[b,a]
-					R[b,a] = 0		
-					R[c,b] = R[c,d]
-					R[c,d] = 0		
-					R[b,c] = R[d,c]
-					R[d,c] = 0
+					B[a,d] = B[a,b]
+					B[a,b] = 0			
+					B[d,a] = B[b,a]
+					B[b,a] = 0		
+					B[c,b] = B[c,d]
+					B[c,d] = 0		
+					B[b,c] = B[d,c]
+					B[d,c] = 0
 				
 					# reassigning edge indices
 					j[e1]  = d
@@ -131,7 +131,7 @@ def degre_pres(R , ITER):
 					break
 		
 			att = att +1
-	return R
+	return B
 						
 
 	
@@ -153,7 +153,7 @@ print data_matrix
 #plot_graph(data_matrix)
 
 
-W = degre_pres(data_matrix , ITER = 10)
-print "OUTPUT   ;;"
+W = degre_pres(adja_matrix , ITER = 10)
+print "OUTPUT  ; "
 print W
 plot_graph(W)
