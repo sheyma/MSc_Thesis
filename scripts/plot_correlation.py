@@ -145,7 +145,7 @@ name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 #mtx_empiri			= 		load_matrix(input_empiri)		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
 #mtx_random			= 		load_matrix(input_simuli)
-#figure				=		plot_corr(mtx_random , input_random)
+#figure				=		plot_corr(mtx_random , input_simuli)
 #pl.title('A_aal, 0 , calcBOLD, thr=0.63 , $\sigma$ = 0.3 , v = 7 [m/s]', fontsize=20)
 #pl.show()
 
