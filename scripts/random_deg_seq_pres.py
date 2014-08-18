@@ -20,9 +20,8 @@ import networkx as nx
 import numpy as np
 from math import factorial 
 import math
-import random
-import matplotlib.pyplot as pl	
 import random as rnd
+import matplotlib.pyplot as pl	
 import sys  
 import glob
 import os
@@ -72,10 +71,10 @@ def degre_pres(B , ITER):
 		while att<=maxAttempts:
 			rewire = 1
 			while 1:
-				e1 = int(math.floor(K*random.random()))
-				e2 = int(math.floor(K*random.random()))
+				e1 = int(math.floor(K*rnd.random()))
+				e2 = int(math.floor(K*rnd.random()))
 				while e1==e2:
-					e2 = int(math.floor(K*random.random()))
+					e2 = int(math.floor(K*rnd.random()))
 				
 				a = i[e1]          # chose a col number from i
 				b = j[e1]		   # chose a row number from j		
@@ -90,7 +89,7 @@ def degre_pres(B , ITER):
 
 
 			# flipping edge c-d with 50% probability	
-			if random.random() > 0.5 :
+			if rnd.random() > 0.5 :
 				i[e2]  = d
 				j[e2]  = c
 				c      = i[e2]
