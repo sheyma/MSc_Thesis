@@ -65,26 +65,34 @@ if __name__ == '__main__':
 # fMRI-BOLD input matrix load , this is a correlation matrix already
 mtx_original		=		load_matrix(input_empiri)
 
-# loading correl. mtx. of simulated bold activities (calcBOLD output)
-name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
-name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_corrcoeff.dat'
+
+## loading correl. mtx. of simulated bold activities (calcBOLD output)
+#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
+#name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_corrcoeff.dat'
 
 
-R_thr =  {}
+# loading correl. mtx. of fhn time series (output of correlation_fhn.py)
+#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_FHN_corr.dat'
+name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 
-for THR in np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66]):
-	R_temp = []
+
+#R_thr =  {}
+
+#for THR in np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66]):
+	#R_temp = []
 	
-	print "THR" , THR
+	#print "THR" , THR
 	
-	for VEL in (np.arange(30,150+10,10)):
-		print "VEL" , VEL
-		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
-		mtx_simuli = load_matrix(input_name)
-		R_vel      = pearson_coef(mtx_original, mtx_simuli)
-		R_temp     = np.append(R_temp, R_vel)
-	R_thr[THR] 	   = np.array(R_temp)
+	##for VEL in (np.arange(30,150+10,10)):
+		##print "VEL" , VEL
+		##input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+		##print "input name : " , input_name
+		##mtx_simuli = load_matrix(input_name)
+		##R_vel      = pearson_coef(mtx_original, mtx_simuli)
+		##R_temp     = np.append(R_temp, R_vel)
+	##R_thr[THR] 	   = np.array(R_temp)
 	#for SIG in np.arange(0.1 , 1.0+0.1, 0.1):
+		#print "SIGMA ; " , SIG
 		#input_name = name_2[0:18] + str(THR) + name_2[20:27] + str(SIG) + name_2[30:]		
 		#mtx_simuli = load_matrix(input_name)
 		#R_sig      = pearson_coef(mtx_original, mtx_simuli)
@@ -92,37 +100,39 @@ for THR in np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66]):
 	#R_thr[THR] 	   = np.array(R_temp)
 	
 	
-Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-print "Ordered dict"
-print Ordered_R
+#Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
+#print "Ordered dict"
+#print Ordered_R
 
-datam 		= np.array(Ordered_R.values())
+#datam 		= np.array(Ordered_R.values())
 
-print "check its numpy array version"
-print datam
+#print "check its numpy array version"
+#print datam
 
-extend = [54 , 66, 15, 3]
-fig  = pl.imshow(np.transpose(datam),  interpolation='nearest', extent=extend)
-cbar = pl.colorbar()
-pl.title('A_aal_0...' + '    $\sigma$ = 0.2', fontsize=20)
-pl.xlabel('thr', fontsize = 20)
-pl.ylabel('v [m/s]', fontsize=20)
-a = fig.axes.get_xticklabels()
-a = [54 , 56 , 58, 60 , 62, 63, 64, 65, 66]
-fig.axes.set_xticklabels(a)
-print "AAAAAAAAAAA" , a
-for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(15)
-pl.xticks(fontsize = 20)
-pl.yticks(fontsize = 20)
-pl.show()		
-
+## PLOT PA OVER SIGMA
 #extend = [54 , 66, 1.0, 0.1]
 #fig  = pl.imshow(np.transpose(datam),  interpolation='nearest', extent=extend, aspect=14)
 #cbar = pl.colorbar()
 #pl.title('A_aal_0...' + '  v = 7 [m/s]', fontsize=20)
 #pl.xlabel('thr', fontsize = 20)
 #pl.ylabel('$\sigma$ ', fontsize=20)
+#for t in cbar.ax.get_yticklabels():
+	#t.set_fontsize(15)
+#pl.xticks(fontsize = 20)
+#pl.yticks(fontsize = 20)
+#pl.show()		
+
+## PLOT PA OVER VELOCITY
+#extend = [54 , 66, 15, 3]
+#fig  = pl.imshow(np.transpose(datam),  interpolation='nearest', extent=extend)
+#cbar = pl.colorbar()
+#pl.title('A_aal_0...' + '    $\sigma$ = 0.2', fontsize=20)
+#pl.xlabel('thr', fontsize = 20)
+#pl.ylabel('v [m/s]', fontsize=20)
+#a = fig.axes.get_xticklabels()
+#a = [54 , 56 , 58, 60 , 62, 63, 64, 65, 66]
+#fig.axes.set_xticklabels(a)
+#print "AAAAAAAAAAA" , a
 #for t in cbar.ax.get_yticklabels():
 	#t.set_fontsize(15)
 #pl.xticks(fontsize = 20)
