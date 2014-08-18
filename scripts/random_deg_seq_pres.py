@@ -144,9 +144,14 @@ def degre_pres(B , ITER):
 					break
 		
 			att = att +1
-	return B
+	RG = nx.from_numpy_matrix(B)
+	return RG
+			
 						
-
+def plot_graph_2(G):
+	pos = nx.shell_layout(G)
+	nx.draw(G, pos)
+	pl.show()
 	
 	
 	#print maxAttempts
@@ -166,7 +171,7 @@ print adja_matrix
 plot_graph(adja_matrix)
 
 
-W = degre_pres(adja_matrix , ITER = 100)
-print "OUTPUT  ; "
-print W
-plot_graph(W)
+RG = degre_pres(adja_matrix , ITER = 1000)
+#print "OUTPUT  ; "
+#print W
+plot_graph_2(RG)
