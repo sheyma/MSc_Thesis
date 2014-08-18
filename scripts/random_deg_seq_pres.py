@@ -1,7 +1,20 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-# Creating a random network by different methhods
+""" 
+	main function : degre_pres(R, iter)
+	
+	input  : R , numpy (adjacency) matrix and iter, iteration number
+	
+	intermediate processes : loading input, chekck symmetry of input, 
+	thresholding input matrix, generating a random network by preser-
+	ving the degree distribution. This code is imported from BCT open
+	source, original script is "randmio_und_connected.m"
+	
+	output : a random adjacency matrix  having the same degree 
+	distribution as in the original input 
+"""
+
 
 import networkx as nx
 import numpy as np
@@ -147,13 +160,13 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 data_matrix = load_matrix(input_name)
-adja_matrix = threshold_matrix(data_matrix, r=0)
+adja_matrix = threshold_matrix(data_matrix, r=0.85)
 print "input :::"
-print data_matrix
-#plot_graph(data_matrix)
+print adja_matrix
+plot_graph(adja_matrix)
 
 
-W = degre_pres(adja_matrix , ITER = 10)
+W = degre_pres(adja_matrix , ITER = 100)
 print "OUTPUT  ; "
 print W
 plot_graph(W)
