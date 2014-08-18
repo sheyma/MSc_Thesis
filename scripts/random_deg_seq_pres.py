@@ -168,10 +168,10 @@ data_matrix = load_matrix(input_name)
 adja_matrix = threshold_matrix(data_matrix, r=0.85)
 print "input :::"
 print adja_matrix
-plot_graph(adja_matrix)
+#plot_graph(adja_matrix)
 
 
 RG = degre_pres(adja_matrix , ITER = 1000)
-#print "OUTPUT  ; "
-#print W
-plot_graph_2(RG)
+print "OUTPUT  ; "
+print nx.adjacency_matrix(RG)
+#plot_graph_2(RG)
