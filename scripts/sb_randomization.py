@@ -6,6 +6,7 @@
 import networkx as nx
 import numpy as np
 from math import factorial 
+import math
 import matplotlib.pyplot as pl	
 import random as rnd
 import sys  
@@ -79,8 +80,97 @@ def get_random_graph_g(B):
 	RG = nx.expected_degree_graph(degree_seq, seed=None, selfloops=False)
  	return RG
 
-
-
+# create a random network with method h
+# generating a random network by preserving degree distribution
+# reference : Brain Connectivity Toolbox, Rubinov & Sporns, 2009
+# ported script : "randmio_und_connected.m"
+def get_random_graph_h(B):
+	ITER = 100						# ITERATION CAN BE CHANGED!
+	n_col   = np.shape(B)[1]		# number of columns in array
+	new_B   = np.triu(B)			# upper triangle of array	
+	(j , i) = new_B.nonzero()		# (row,col) index of non-zero elem.
+	i.setflags(write=True)
+	j.setflags(write=True)	
+	K       = len(i)				# total number of non-zero elements
+	ITER    = K*ITER				# total iteration number 
+	maxAttempts = int(K/(n_col-1))  # max attempts per iteration
+	eff     = 0  
+	for iter in range(1 , ITER+1 ):
+		att = 0
+		while att<=maxAttempts:
+			rewire = 1
+			while 1:
+				e1 = int(math.floor(K*rnd.random()))
+				e2 = int(math.floor(K*rnd.random()))
+				while e1==e2:
+					e2 = int(math.floor(K*rnd.random()))
+				
+				a = i[e1]          # chose a col number from i
+				b = j[e1]		   # chose a row number from j		
+				c = i[e2]		   # chose another col number from i	
+				d = j[e2]		   # chose another row number from j		
+								
+				if ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) ) :
+					break          # make sure that a,b,c,d differ
+			
+			# flipping edge c-d with 50% probability	
+			if rnd.random() > 0.5 :
+				i[e2]  = d
+				j[e2]  = c
+				c      = i[e2]
+				d      = j[e2]		
+			
+			# rewiring condition
+			if int(not(bool( B[a,d] or B[c,b] ))) : 
+				
+				# connectedness condition	
+				if int(not(bool( B[a,c] or B[b,d] ))) :
+					
+					P = B[(a, d) , : ]
+					P[0,b] = 0
+					P[1,c] = 0
+					PN     = P
+					PN[:,d]= 1
+					PN[:,a]= 1
+			
+					while 1:
+						
+						P[0,:] = (B[(P[0,:]!=0), :]).any(0).astype(int) 
+						P[1,:] = (B[(P[1,:]!=0), :]).any(0).astype(int)
+						
+						P = P* (np.logical_not(PN).astype(int))
+							
+						if int(not((P.any(1)).all())):
+							rewire = 0
+							break
+						
+						elif  (P[:,[b, c]].any(0)).any(0):
+							break
+							
+						PN = PN +1
+				
+				# reassigning edges
+				if rewire :
+					B[a,d] = B[a,b]
+					B[a,b] = 0			
+					B[d,a] = B[b,a]
+					B[b,a] = 0		
+					B[c,b] = B[c,d]
+					B[c,d] = 0		
+					B[b,c] = B[d,c]
+					B[d,c] = 0
+				
+					# reassigning edge indices
+					j[e1]  = d
+					j[e2]  = b
+					
+					eff = eff+1;
+					break
+		
+			att = att +1
+	RG = nx.from_numpy_matrix(B)
+	return RG
+			
 
 
 
@@ -497,6 +587,7 @@ random_graph_methods = {
 	"e" : get_random_graph_e,
 	"f" : get_random_graph_f,
 	"g" : get_random_graph_g,
+	"h" : get_random_graph_h,
 }
 
 if not method in random_graph_methods:
@@ -515,7 +606,7 @@ for f in filelist:
 data_matrix = load_matrix(input_name)
 print "input data is loaded! "
 
-for i in range(5, 84):
+for i in range(0, 101):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
@@ -530,13 +621,13 @@ for i in range(5, 84):
 	#plot_graph(Random_G)
 	#print_adjacency_matrix(A)
 	export_adjacency_matrix(Random_G, method, input_name, thr)
-	#get_characteristics(Random_G, thr, input_name)
-	#get_single_network_measures(Random_G, thr)
-	#get_assortativity(Random_G, thr)
-	#get_local_efficiency(Random_G, thr)
-	#get_global_effic(Random_G, thr)
-	#get_degree_distribution(Random_G, thr)
-	#get_node_cc_and_degree(Random_G, thr)
-	#get_connected_components_nodes(Random_G, thr)
-	#get_small_worldness(Random_G, thr)
-	#get_motifs(Random_G, thr)
+	get_characteristics(Random_G, thr, input_name)
+	get_single_network_measures(Random_G, thr)
+	get_assortativity(Random_G, thr)
+	get_local_efficiency(Random_G, thr)
+	get_global_effic(Random_G, thr)
+	get_degree_distribution(Random_G, thr)
+	get_node_cc_and_degree(Random_G, thr)
+	get_connected_components_nodes(Random_G, thr)
+	get_small_worldness(Random_G, thr)
+	get_motifs(Random_G, thr)
