@@ -97,7 +97,7 @@ R_thr =  {}
 for THR in np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66]):
 	R_temp = []
 
-	for VEL in (np.arange(30,150+10,10)):
+	for VEL in (np.arange(150, 30-10, -10)):
 		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
 		mtx_simuli = load_matrix(input_name)
 		R_vel      = pearson_coef(mtx_original, mtx_simuli)
@@ -136,23 +136,22 @@ datam 		= np.array(Ordered_R.values())
 #pl.show()		
 
 # PLOT PA OVER VELOCITY
-
 fig , ax = pl.subplots()
-pl.imshow((datam),  interpolation='nearest') #, extent=extend)
+pl.imshow(np.transpose(datam),  interpolation='nearest') #, extent=extend)
 cbar = pl.colorbar()
 a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
-b = np.array([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+b = np.array([15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3])
 
 pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
 pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
 
-#pl.title('A_aal_0...' + ' , FHN , ' + '$\sigma$ = 0.2', fontsize=20)
-#pl.xlabel('thr', fontsize = 20)
-#pl.ylabel('v [m/s]', fontsize=20)
-#for t in cbar.ax.get_yticklabels():
-	#t.set_fontsize(15)
-#pl.xticks(fontsize = 20)
-#pl.yticks(fontsize = 20)
+pl.title('A_aal_0...' + ' , FHN , ' + '$\sigma$ = 0.2', fontsize=20)
+pl.xlabel('thr', fontsize = 20)
+pl.ylabel('v [m/s]', fontsize=20)
+for t in cbar.ax.get_yticklabels():
+	t.set_fontsize(15)
+pl.xticks(fontsize = 15)
+pl.yticks(fontsize = 15)
 pl.show()		
 
 
