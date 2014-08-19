@@ -71,7 +71,7 @@ def get_random_graph_d(B):
 		print "No swap possible for number of edges", L
 		return G
 
-# create a random network with method c
+# create a random network with method g
 # networkx.expected_degree_graph : 
 # random graph with given degree sequence - a probabilistic approach
 def get_random_graph_g(B):
@@ -85,7 +85,7 @@ def get_random_graph_g(B):
 # reference : Brain Connectivity Toolbox, Rubinov & Sporns, 2009
 # ported script : "randmio_und_connected.m"
 def get_random_graph_h(B):
-	ITER = 100						# ITERATION CAN BE CHANGED!
+	ITER = 1000						# ITERATION CAN BE CHANGED!
 	n_col   = np.shape(B)[1]		# number of columns in array
 	new_B   = np.triu(B)			# upper triangle of array	
 	(j , i) = new_B.nonzero()		# (row,col) index of non-zero elem.
@@ -439,8 +439,6 @@ def get_small_worldness(G, thr):
 
 
 
-
-
 def binomialCoefficient(n, k):
     return factorial(n) // (factorial(k) * factorial(n - k))
   
@@ -504,7 +502,7 @@ for f in filelist:
 data_matrix = load_matrix(input_name)
 print "input data is loaded! "
 
-for i in range(55, 57):
+for i in range(0, 101):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
@@ -517,15 +515,15 @@ for i in range(55, 57):
 		continue
 	
 	#plot_graph(Random_G)
-	print_adjacency_matrix(A)
-	#export_adjacency_matrix(Random_G, method, input_name, thr)
-	#get_characteristics(Random_G, thr, input_name)
-	#get_single_network_measures(Random_G, thr)
-	#get_assortativity(Random_G, thr)
-	#get_local_efficiency(Random_G, thr)
-	#get_global_effic(Random_G, thr)
-	#get_degree_distribution(Random_G, thr)
-	#get_node_cc_and_degree(Random_G, thr)
-	#get_connected_components_nodes(Random_G, thr)
-	#get_small_worldness(Random_G, thr)
-	#get_motifs(Random_G, thr)
+	#print_adjacency_matrix(A)
+	export_adjacency_matrix(Random_G, method, input_name, thr)
+	get_characteristics(Random_G, thr, input_name)
+	get_single_network_measures(Random_G, thr)
+	get_assortativity(Random_G, thr)
+	get_local_efficiency(Random_G, thr)
+	get_global_effic(Random_G, thr)
+	get_degree_distribution(Random_G, thr)
+	get_node_cc_and_degree(Random_G, thr)
+	get_connected_components_nodes(Random_G, thr)
+	get_small_worldness(Random_G, thr)
+	get_motifs(Random_G, thr)
