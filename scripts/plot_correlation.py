@@ -83,33 +83,32 @@ mtx_original		=		load_matrix(input_empiri)
 
 
 ## loading correl. mtx. of simulated bold activities (calcBOLD output)
-#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
+name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
 #name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_corrcoeff.dat'
 
 
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
 #name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_FHN_corr.dat'
-name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+#name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 
 
 R_thr =  {}
 
 for THR in np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66]):
 	R_temp = []
-
-	#for VEL in (np.arange(150, 30-10, -10)):
-		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
-		#mtx_simuli = load_matrix(input_name)
-		#R_vel      = pearson_coef(mtx_original, mtx_simuli)
-		#R_temp     = np.append(R_temp, R_vel)
-	#R_thr[THR] 	   = np.array(R_temp)
-
-	for SIG in np.arange(1.0, 0.1-0.1 , -0.1):
-		input_name = name_2[0:18] + str(THR) + name_2[20:27] + str(SIG) + name_2[30:]		
+	for VEL in (np.arange(150, 30-10, -10)):
+		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
 		mtx_simuli = load_matrix(input_name)
-		R_sig      = pearson_coef(mtx_original, mtx_simuli)
-		R_temp     = np.append(R_temp, R_sig)
+		R_vel      = pearson_coef(mtx_original, mtx_simuli)
+		R_temp     = np.append(R_temp, R_vel)
 	R_thr[THR] 	   = np.array(R_temp)
+
+	#for SIG in np.arange(1.0, 0.1-0.1 , -0.1):
+		#input_name = name_2[0:18] + str(THR) + name_2[20:27] + str(SIG) + name_2[30:]		
+		#mtx_simuli = load_matrix(input_name)
+		#R_sig      = pearson_coef(mtx_original, mtx_simuli)
+		#R_temp     = np.append(R_temp, R_sig)
+	#R_thr[THR] 	   = np.array(R_temp)
 	
 	
 Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
@@ -126,17 +125,23 @@ fig , ax = pl.subplots()
 pl.imshow(np.transpose(datam),  interpolation='nearest') 
 cbar = pl.colorbar()
 
-# PLOT PA OVER SIGMA
-a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
-b = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 , 0.1])
-pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s]', fontsize=20)
-pl.ylabel('$\sigma$ ', fontsize=20)
+## PLOT PA OVER SIGMA
+#a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
+#b = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 , 0.1])
+## title for fhn....
+##pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s]', fontsize=20)
+## title for bold...
+#pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s]', fontsize=20)
+#pl.ylabel('$\sigma$ ', fontsize=20)
 
 # PLOT PA OVER VELOCITY
-#a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
-#b = np.array([15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3])
+a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
+b = np.array([15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3])
+# title for fhn....
 #pl.title('A_aal_0...' + ' , FHN , ' + '$\sigma$ = 0.2', fontsize=20)
-#pl.ylabel('v [m/s]', fontsize=20)
+# title for bold...
+pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
+pl.ylabel('v [m/s]', fontsize=20)
 
 pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
 pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
@@ -147,8 +152,6 @@ pl.xticks(fontsize = 15)
 pl.yticks(fontsize = 15)
 pl.show()		
 
-
-
 #------------------------------------
 #mtx_empiri			= 		load_matrix(input_empiri)		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
@@ -158,6 +161,3 @@ pl.show()
 #figure				=		plot_corr(mtx_random , name_2)
 #pl.title('A_aal, 0 , calcBOLD, thr=0.63 , $\sigma$ = 0.3 , v = 7 [m/s]', fontsize=20)
 #pl.show()
-
-#R					=       pearson_coef(mtx_original , mtx_random)
-#print "pearson correlation coefficient is : " , R 
