@@ -43,16 +43,31 @@ def plot_corr(corr_matrix, simfile ):
 	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
 	#pl.show()
 	return  	
-	
+
+# calculating Pearson's corr. coef. for two given matrices
+# matrix_A : simulated neuronal activity correlations, 1's on diagonal
+# matrix_B : empirical fMRI-BOLD correlations, 0's on diagonal	
 def pearson_coef(matrix_A , matrix_B):
-	vector_a = []
-	vector_b = []
+	vec_a = []
+	vec_b = []
+	
 	for i in range(0, np.shape(matrix_A)[0]):
-		vector_a = np.append(vector_a , matrix_A[i,:])
-		vector_b = np.append(vector_b , matrix_B[i,:])
-	[R_pearson , p_value] = sistat.pearsonr(vector_a , vector_b)
+		for j in range(0, np.shape(matrix_A)[1]):
+			
+			# removing the diagonal elements in both matrices to get
+			# more reasonable Pearson correlation coef. between them
+			if i == j:
+				
+				tmp_a  = np.append(matrix_A[i, 0:j], matrix_A[i, j+1:])
+				vec_a  = np.append(vec_a, tmp_a)
+				
+				tmp_b  = np.append(matrix_B[i, 0:j], matrix_B[i, j+1:])
+				vec_b  = np.append(vec_b, tmp_b)	
+				
+	[R_pearson , p_value] = sistat.pearsonr(vec_a , vec_b)
 	return R_pearson	
-		
+	
+
 if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
@@ -142,10 +157,12 @@ name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 
 
 #------------------------------------
-#mtx_empiri			= 		load_matrix(input_empiri)		
+mtx_empiri			= 		load_matrix(input_empiri)		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
 #mtx_random			= 		load_matrix(input_simuli)
-#figure				=		plot_corr(mtx_random , input_simuli)
+mtx_random			= 		load_matrix(name_2)
+R_pearson			= 	    pearson_coef(mtx_random , mtx_empiri)
+#figure				=		plot_corr(mtx_random , name_2)
 #pl.title('A_aal, 0 , calcBOLD, thr=0.63 , $\sigma$ = 0.3 , v = 7 [m/s]', fontsize=20)
 #pl.show()
 
