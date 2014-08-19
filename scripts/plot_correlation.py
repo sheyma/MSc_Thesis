@@ -137,24 +137,15 @@ datam 		= np.array(Ordered_R.values())
 
 # PLOT PA OVER VELOCITY
 
-#extend = [0.5 , 9+0.5 , 13+0.5, 0.5 ]	
-
-
-extend = [54-0.5 , 66+0.5, 15+0.5, 3-0.5]
 fig , ax = pl.subplots()
-pl.imshow(np.transpose(datam),  interpolation='nearest', extent=extend)
+pl.imshow((datam),  interpolation='nearest') #, extent=extend)
 cbar = pl.colorbar()
-#a  = [54, 55,  56,  57,  58, 59, 60, 61, 62  ]
 a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
-ax.set_xticks(a)
+b = np.array([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
 
-#ax.xaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
-#set(gca, 'xtick', [1 2 3 4 5 6],'XtickLabel',{'0';'1';'5';'10';'15';'20'},'Ytick',[1 3 5 7 9],'YtickLabel',{'0.5'; '1.5';'2.5';'3.5';'4.5'});
+pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
+pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
 
-
-#a = fig.axes.get_xticklabels()
-
-#fig.axes.set_xticklabels(a)
 #pl.title('A_aal_0...' + ' , FHN , ' + '$\sigma$ = 0.2', fontsize=20)
 #pl.xlabel('thr', fontsize = 20)
 #pl.ylabel('v [m/s]', fontsize=20)
