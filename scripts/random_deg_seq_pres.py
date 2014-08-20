@@ -153,21 +153,62 @@ def random_partial(A , B , maxswap):
 	print "triu means thaaaaa ttttt "
 	print new_A
 	
-	(j , i) = new_A.nonzero()
-	print j , i
+	(i , j) = new_A.nonzero()
+	
+	print "j is : " , j 
+	print "i is : " , i
 	m		= len(i)
 	print "length i is : " , m
+	
+	i.setflags(write=True)
+	j.setflags(write=True)
+	
 	nswap   = 0
 	
 	while nswap < maxswap :
 		while 1: 
-			e1  =  rnd.randint(1,m)
-			e2  =  rnd.randint(1,m)
+			e1  =  rnd.randint(0,m-1)
+			e2  =  rnd.randint(0,m-1)
 			while e2 == e1 :
-				e2  = rnd.randint(1,m)
+				e2  = rnd.randint(0,m-1)
 		
-			print "e1 - e2 : " , e1 , e2
-						
+			a = i[e1]          # chose a col number from i
+			b = j[e1]		   # chose a row number from j		
+			c = i[e2]		   # chose another col number from i	
+			d = j[e2]		   # chose another row number from j
+			if ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) ) :
+				break          # make sure that a,b,c,d differ
+				
+				
+		
+		print "a : " , a
+		print "b : " , b
+		print "c : " , c
+		print "d : " , d
+		
+		# flipping edge c-d with 50% probability	
+		if rnd.random() > 0.5 :
+			i[e2]  = d
+			j[e2]  = c
+			c      = i[e2]
+			d      = j[e2]		
+		
+		if int(not(bool( A[a,d] or A[c,b] or B[a,d] or B[c,b] ))):
+			print "if condition works only if is 1"
+			A[a,d] = A[a,b]
+			A[a,b] = 0
+			A[d,a] = A[b,a]
+			A[b,a] = 0
+			A[c,b] = A[c,d]
+			A[c,d] = 0
+			A[b,c] = A[d,c]
+			A[d,c] = 0
+			j[e1]  = d
+			j[e2]  = b
+			nswap = +1	
+	print A
+	return A
+			
 def plot_graph_2(G):
 	pos = nx.shell_layout(G)
 	nx.draw(G, pos)
