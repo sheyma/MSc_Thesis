@@ -149,10 +149,24 @@ def degre_pres(B , ITER):
 
 def random_partial(A , B , maxswap):
 	
+	new_A   =  np.triu(A)
 	print "triu means thaaaaa ttttt "
-	print np.triu(A)
+	print new_A
 	
-			
+	(j , i) = new_A.nonzero()
+	print j , i
+	m		= len(i)
+	print "length i is : " , m
+	nswap   = 0
+	
+	while nswap < maxswap :
+		while 1: 
+			e1  =  rnd.randint(1,m)
+			e2  =  rnd.randint(1,m)
+			while e2 == e1 :
+				e2  = rnd.randint(1,m)
+		
+			print "e1 - e2 : " , e1 , e2
 						
 def plot_graph_2(G):
 	pos = nx.shell_layout(G)
