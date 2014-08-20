@@ -145,6 +145,13 @@ def degre_pres(B , ITER):
 			att = att +1
 	RG = nx.from_numpy_matrix(B)
 	return RG
+
+
+def random_partial(A , B , maxswap):
+	
+	print "triu means thaaaaa ttttt "
+	print np.triu(A)
+	
 			
 						
 def plot_graph_2(G):
@@ -159,6 +166,7 @@ if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
 		input_name = sys.argv[1]
+		input_name_2 = sys.argv[2]
 	except:
 		print usage
 		sys.exit(1)
@@ -167,10 +175,12 @@ data_matrix = load_matrix(input_name)
 adja_matrix = threshold_matrix(data_matrix, r=0.85)
 print "input :::"
 print adja_matrix
+adja_matrix_2 = load_matrix(input_name)
+random_partial(adja_matrix , adja_matrix_2, maxswap=1)
 #plot_graph(adja_matrix)
 
 
-RG = degre_pres(adja_matrix , ITER = 1000)
-print "OUTPUT  ; "
-print nx.adjacency_matrix(RG)
+#RG = degre_pres(adja_matrix , ITER = 1000)
+#print "OUTPUT  ; "
+#print nx.adjacency_matrix(RG)
 #plot_graph_2(RG)
