@@ -570,8 +570,8 @@ for i in range(55, 56):
 		print "couldn't find a random graph", method, sys.exc_info()[0]
 		continue
 	
-	plot_graph(Random_G)
-	#print_adjacency_matrix(A)
+	#plot_graph(Random_G)
+	print_adjacency_matrix(A)
 	#export_adjacency_matrix(Random_G, method, input_name, thr)
 	#get_characteristics(Random_G, thr, input_name)
 	#get_single_network_measures(Random_G, thr)
