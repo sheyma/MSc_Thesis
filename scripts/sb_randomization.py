@@ -40,7 +40,7 @@ def threshold_matrix(A, r):
 def plot_graph(G):
 	pos = nx.shell_layout(G)
 	nx.draw(G, pos)
-	#pl.show()
+	pl.show()
 
 def print_adjacency_matrix(B):			
 	G = nx.from_numpy_matrix(B)
@@ -472,6 +472,9 @@ if __name__ == '__main__':
 	try:
 		method = sys.argv[1]
 		input_name = sys.argv[2]
+		# new input name required for the randomizatin method k
+		name_k     = sys.argv[3]
+		
 		#input_threshold = sys.argv[3]
 	except:
 		print usage
@@ -501,8 +504,9 @@ for f in filelist:
 
 data_matrix = load_matrix(input_name)
 print "input data is loaded! "
+method_k_matrix = load_matrix(name_k)
 
-for i in range(0, 101):
+for i in range(55, 56):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
@@ -514,16 +518,16 @@ for i in range(0, 101):
 		print "couldn't find a random graph", method, sys.exc_info()[0]
 		continue
 	
-	#plot_graph(Random_G)
+	plot_graph(Random_G)
 	#print_adjacency_matrix(A)
-	export_adjacency_matrix(Random_G, method, input_name, thr)
-	get_characteristics(Random_G, thr, input_name)
-	get_single_network_measures(Random_G, thr)
-	get_assortativity(Random_G, thr)
-	get_local_efficiency(Random_G, thr)
-	get_global_effic(Random_G, thr)
-	get_degree_distribution(Random_G, thr)
-	get_node_cc_and_degree(Random_G, thr)
-	get_connected_components_nodes(Random_G, thr)
-	get_small_worldness(Random_G, thr)
-	get_motifs(Random_G, thr)
+	#export_adjacency_matrix(Random_G, method, input_name, thr)
+	#get_characteristics(Random_G, thr, input_name)
+	#get_single_network_measures(Random_G, thr)
+	#get_assortativity(Random_G, thr)
+	#get_local_efficiency(Random_G, thr)
+	#get_global_effic(Random_G, thr)
+	#get_degree_distribution(Random_G, thr)
+	#get_node_cc_and_degree(Random_G, thr)
+	#get_connected_components_nodes(Random_G, thr)
+	#get_small_worldness(Random_G, thr)
+	#get_motifs(Random_G, thr)
