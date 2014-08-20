@@ -212,12 +212,13 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 data_matrix = load_matrix(input_name)
-adja_matrix = threshold_matrix(data_matrix, r=0.85)
-print "input :::"
-print adja_matrix
+#adja_matrix = threshold_matrix(data_matrix, r=0.85)
+#print "input :::"
+#print adja_matrix
 #plot_graph(nx.from_numpy_matrix(adja_matrix))
 adja_matrix_2 = load_matrix(input_name)
-RG = random_partial(adja_matrix , adja_matrix_2, maxswap=1)
+
+RG = random_partial(data_matrix , adja_matrix_2, maxswap=2)
 plot_graph(RG)
 
 
