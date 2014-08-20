@@ -150,15 +150,8 @@ def degre_pres(B , ITER):
 def random_partial(A , B , maxswap):
 	
 	new_A   =  np.triu(A)
-	print "triu means thaaaaa ttttt "
-	print new_A
-	
 	(i , j) = new_A.nonzero()
-	
-	print "j is : " , j 
-	print "i is : " , i
 	m		= len(i)
-	print "length i is : " , m
 	
 	i.setflags(write=True)
 	j.setflags(write=True)
@@ -179,13 +172,6 @@ def random_partial(A , B , maxswap):
 			if ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) ) :
 				break          # make sure that a,b,c,d differ
 				
-				
-		
-		print "a : " , a
-		print "b : " , b
-		print "c : " , c
-		print "d : " , d
-		
 		# flipping edge c-d with 50% probability	
 		if rnd.random() > 0.5 :
 			i[e2]  = d
@@ -194,7 +180,6 @@ def random_partial(A , B , maxswap):
 			d      = j[e2]		
 		
 		if int(not(bool( A[a,d] or A[c,b] or B[a,d] or B[c,b] ))):
-			print "if condition works only if is 1"
 			A[a,d] = A[a,b]
 			A[a,b] = 0
 			A[d,a] = A[b,a]
@@ -206,7 +191,6 @@ def random_partial(A , B , maxswap):
 			j[e1]  = d
 			j[e2]  = b
 			nswap = +1	
-	print A
 	return A
 			
 def plot_graph_2(G):
@@ -231,7 +215,8 @@ adja_matrix = threshold_matrix(data_matrix, r=0.85)
 print "input :::"
 print adja_matrix
 adja_matrix_2 = load_matrix(input_name)
-random_partial(adja_matrix , adja_matrix_2, maxswap=1)
+print "output:::"
+print random_partial(adja_matrix , adja_matrix_2, maxswap=1)
 #plot_graph(adja_matrix)
 
 
