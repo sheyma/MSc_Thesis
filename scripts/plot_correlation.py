@@ -25,14 +25,12 @@ def load_matrix(file):
 		raise ValueError
 	return AT
 	
-# plots colorbar coded given correlation matrix
+# plots colorbar coded empirical correlation matrix (fMRI-BOLD data)
 def plot_corr(corr_matrix, simfile ):	
 	N_col  = np.shape(corr_matrix)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
 	cbar = pl.colorbar()
-	#cbar.set_ticks(np.arange(-0.8 , 1+0.2, 0.2))  #(np.arange(-0.8, 0.8+0.2, 0.2) )
-	#cbar.set_ticklabels(np.arange(-0.8, 0.8+0.2, 0.2))
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 20)
@@ -44,6 +42,32 @@ def plot_corr(corr_matrix, simfile ):
 	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
 	#pl.show()
 	return  	
+
+# plots the correlation matrix of FHN or BOLD simulated signal
+# trick: remove 1's to 0's along the diagonals 
+def plot_corr_diag(corr_matrix, corr_matrix_name ):	
+	N_col  = np.shape(corr_matrix)[1]
+	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
+	for i in range(0,N_col):
+		for j in range(0,N_col):
+			if i==j :
+				corr_matrix[i,j] = 0
+	print "maximum correlation coefficient in:", corr_matrix.max()
+	print "minumum correlation coefficient in:", corr_matrix.min()
+	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
+	cbar = pl.colorbar()
+	for t in cbar.ax.get_yticklabels():
+		t.set_fontsize(15)
+	pl.xticks(fontsize = 20)
+	pl.yticks(fontsize = 20)
+	#pl.title(corr_matrix_name, fontsize=20)
+	pl.xlabel('Nodes', fontsize = 20)
+	pl.ylabel('Nodes', fontsize = 20)
+	#image_name = simfile[0:-4] + '_CORR.eps'	
+	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
+	#pl.show()
+	return
+
 
 # calculating Pearson's corr. coef. for two given matrices
 # matrix_A : simulated neuronal activity correlations, 1's on diagonal
@@ -73,7 +97,7 @@ if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
 		input_empiri = sys.argv[1]
-		#input_simuli  = sys.argv[2]
+		input_simuli = sys.argv[2]
 	except:
 		print usage
 		sys.exit(1)
@@ -121,9 +145,9 @@ datam 		= np.array(Ordered_R.values())
 #print datam
 
 # PLOTTING BEGINS ! 
-fig , ax = pl.subplots()
-pl.imshow(np.transpose(datam),  interpolation='nearest') 
-cbar = pl.colorbar()
+#fig , ax = pl.subplots()
+#pl.imshow(np.transpose(datam),  interpolation='nearest') 
+#cbar = pl.colorbar()
 
 ## PLOT PA OVER SIGMA
 #a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
@@ -140,24 +164,23 @@ b = np.array([15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3])
 # title for fhn....
 #pl.title('A_aal_0...' + ' , FHN , ' + '$\sigma$ = 0.2', fontsize=20)
 # title for bold...
-pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
-pl.ylabel('v [m/s]', fontsize=20)
+#pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
+#pl.ylabel('v [m/s]', fontsize=20)
 
-pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
-pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-pl.xlabel('thr', fontsize = 20)
-for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(15)
-pl.xticks(fontsize = 15)
-pl.yticks(fontsize = 15)
-pl.show()		
+#pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
+#pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
+#pl.xlabel('thr', fontsize = 20)
+#for t in cbar.ax.get_yticklabels():
+	#t.set_fontsize(15)
+#pl.xticks(fontsize = 15)
+#pl.yticks(fontsize = 15)
+#pl.show()		
 
 #------------------------------------
-#mtx_empiri			= 		load_matrix(input_empiri)		
+mtx_empiri			= 		load_matrix(input_empiri)		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
-#mtx_random			= 		load_matrix(input_simuli)
-#mtx_random			= 		load_matrix(name_2)
-#R_pearson			= 	    pearson_coef(mtx_random , mtx_empiri)
-#figure				=		plot_corr(mtx_random , name_2)
-#pl.title('A_aal, 0 , calcBOLD, thr=0.63 , $\sigma$ = 0.3 , v = 7 [m/s]', fontsize=20)
-#pl.show()
+mtx_random			= 		load_matrix(input_simuli)
+figure				=		plot_corr_diag(mtx_random, input_simuli )
+R_pearson			= 	    pearson_coef(mtx_random , mtx_empiri)
+pl.title('A_aal, 0 , BOLD, thr=0.64 , $\sigma$ = 0.2 , v = 7 [m/s]', fontsize=20)
+pl.show()
