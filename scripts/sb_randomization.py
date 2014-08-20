@@ -171,6 +171,53 @@ def get_random_graph_h(B):
 	RG = nx.from_numpy_matrix(B)
 	return RG
 
+def get_random_graph_k(A , B ):
+	maxswap = 1 			#	can be CHANGED!!!!!!!!!!!!!		 
+	new_A   =  np.triu(A)
+	(i , j) = new_A.nonzero()
+	m		= len(i)
+	
+	i.setflags(write=True)
+	j.setflags(write=True)
+	
+	nswap   = 0
+	
+	while nswap < maxswap :
+		while 1: 
+			e1  =  rnd.randint(0,m-1)
+			e2  =  rnd.randint(0,m-1)
+			while e2 == e1 :
+				e2  = rnd.randint(0,m-1)
+		
+			a = i[e1]          # chose a col number from i
+			b = j[e1]		   # chose a row number from j		
+			c = i[e2]		   # chose another col number from i	
+			d = j[e2]		   # chose another row number from j
+			if ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) ) :
+				break          # make sure that a,b,c,d differ
+				
+		# flipping edge c-d with 50% probability	
+		if rnd.random() > 0.5 :
+			i[e2]  = d
+			j[e2]  = c
+			c      = i[e2]
+			d      = j[e2]		
+		
+		if int(not(bool( A[a,d] or A[c,b] or B[a,d] or B[c,b] ))):
+			A[a,d] = A[a,b]
+			A[a,b] = 0
+			A[d,a] = A[b,a]
+			A[b,a] = 0
+			A[c,b] = A[c,d]
+			A[c,d] = 0
+			A[b,c] = A[d,c]
+			A[d,c] = 0
+			j[e1]  = d
+			j[e2]  = b
+			nswap = +1	
+	RG = nx.from_numpy_matrix(A)
+	return RG
+
 
 def export_adjacency_matrix(graph , method, input_mtx, r):		# save adjacency matrix
 	#print graph
@@ -487,6 +534,7 @@ random_graph_methods = {
 	"d" : get_random_graph_d,
 	"g" : get_random_graph_g,
 	"h" : get_random_graph_h,
+	"k" : get_random_graph_k,
 }
 
 if not method in random_graph_methods:
@@ -506,14 +554,18 @@ data_matrix = load_matrix(input_name)
 print "input data is loaded! "
 method_k_matrix = load_matrix(name_k)
 
+
 for i in range(55, 56):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
 	A = threshold_matrix(data_matrix, thr)
-	
 	try:
-		Random_G = random_graph_methods[method](A)
+		if method == 'k':
+			B        = threshold_matrix(method_k_matrix, thr) 
+			Random_G = random_graph_methods[method](A,B)
+		else:
+			Random_G = random_graph_methods[method](A)
 	except:
 		print "couldn't find a random graph", method, sys.exc_info()[0]
 		continue
