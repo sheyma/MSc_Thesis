@@ -45,8 +45,8 @@ def threshold_matrix(A, r):
 				B[row, col] = 1
 	return B
 
-def plot_graph(B):
-	G   = nx.from_numpy_matrix(B)
+def plot_graph(G):
+	#G   = nx.from_numpy_matrix(B)
 	pos = nx.shell_layout(G)
 	nx.draw(G, pos)
 	pl.show()
@@ -191,7 +191,8 @@ def random_partial(A , B , maxswap):
 			j[e1]  = d
 			j[e2]  = b
 			nswap = +1	
-	return A
+	RG = nx.from_numpy_matrix(A)
+	return RG	
 			
 def plot_graph_2(G):
 	pos = nx.shell_layout(G)
@@ -214,10 +215,10 @@ data_matrix = load_matrix(input_name)
 adja_matrix = threshold_matrix(data_matrix, r=0.85)
 print "input :::"
 print adja_matrix
+#plot_graph(nx.from_numpy_matrix(adja_matrix))
 adja_matrix_2 = load_matrix(input_name)
-print "output:::"
-print random_partial(adja_matrix , adja_matrix_2, maxswap=1)
-#plot_graph(adja_matrix)
+RG = random_partial(adja_matrix , adja_matrix_2, maxswap=1)
+plot_graph(RG)
 
 
 #RG = degre_pres(adja_matrix , ITER = 1000)
