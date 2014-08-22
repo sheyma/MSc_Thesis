@@ -5,6 +5,7 @@ import subprocess as sp
 import numpy as np
 import sys 
 import math
+import scipy.stats as sistat
 
 """ 
 	input  : job output from "fhn_time_delays.py" , m rows, n columns
@@ -88,7 +89,14 @@ else:
 
 
 data_matrix 		=		load_matrix(infile)
-#[u_matrix , T ]	    =		fhn_timeseries(data_matrix)
-#corr_matrix			=		correl_matrix(u_matrix, input_name)
+[u_matrix , T ]	    =		fhn_timeseries(data_matrix)
+corr_matrix			=		correl_matrix(u_matrix, input_name)
+[i, j, k , l ]		= 		node_index(corr_matrix)
+[R_pearson , p_value] = sistat.pearsonr(u_matrix[:,i] , u_matrix[:,j])
 
-node_index(data_matrix)
+print "nodes ", i , " and ",j, " well correlated"
+print "nodse ", k,  " and ",l, " worse correlated"
+print "R_pearson i-j : " , R_pearson 
+[R_pearson , p_value] = sistat.pearsonr(u_matrix[:,k] , u_matrix[:,l])
+
+print "R_pearson k-l : " , R_pearson 
