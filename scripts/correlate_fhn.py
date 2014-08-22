@@ -62,7 +62,10 @@ def node_index(matrix):
 	# index of maximum value in matrix
 	[nx , ny] = np.unravel_index(matrix.argmax() , matrix.shape)
 	print nx, ny , matrix[nx,ny]
-	return [nx, ny]
+	# index of maximum value in matrix
+	[mx , my] = np.unravel_index(matrix.argmin() , matrix.shape)
+	print mx, my , matrix[mx,my]
+	return nx, ny , mx, my
 
 # user defined input name
 if __name__ == '__main__':
@@ -85,7 +88,7 @@ else:
 
 
 data_matrix 		=		load_matrix(infile)
-[u_matrix , T ]	    =		fhn_timeseries(data_matrix)
-corr_matrix			=		correl_matrix(u_matrix, input_name)
-[nx , ny ] = node_index(corr_matrix)
-print nx, ny
+#[u_matrix , T ]	    =		fhn_timeseries(data_matrix)
+#corr_matrix			=		correl_matrix(u_matrix, input_name)
+
+node_index(data_matrix)
