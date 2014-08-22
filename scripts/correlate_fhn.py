@@ -53,6 +53,17 @@ def correl_matrix(matrix , matrix_name):
 	np.savetxt(file_name, cr_matrix, '%.6f',delimiter='\t')
 	return cr_matrix
 
+def node_index(matrix):
+	# ignore diagonal elements by assigning it to zero
+	for i in range(0,np.shape(matrix)[0]):
+		for j in range(0,np.shape(matrix)[1]):
+			if i == j :
+				matrix[i,j] = 0
+	# index of maximum value in matrix
+	[nx , ny] = np.unravel_index(matrix.argmax() , matrix.shape)
+	print nx, ny , matrix[nx,ny]
+	return [nx, ny]
+
 # user defined input name
 if __name__ == '__main__':
 	try:
@@ -76,3 +87,5 @@ else:
 data_matrix 		=		load_matrix(infile)
 [u_matrix , T ]	    =		fhn_timeseries(data_matrix)
 corr_matrix			=		correl_matrix(u_matrix, input_name)
+[nx , ny ] = node_index(corr_matrix)
+print nx, ny
