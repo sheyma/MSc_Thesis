@@ -52,8 +52,8 @@ def plot_corr_diag(corr_matrix, corr_matrix_name ):
 		for j in range(0,N_col):
 			if i==j :
 				corr_matrix[i,j] = 0
-	print "maximum correlation coefficient in:", corr_matrix.max()
-	print "minumum correlation coefficient in:", corr_matrix.min()
+	print "max. corr. coef. in input simul-corr-mtx:", corr_matrix.max()
+	print "min. corr. coef. in input simul-corr-mtx:", corr_matrix.min()
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
 	cbar = pl.colorbar()
 	for t in cbar.ax.get_yticklabels():
@@ -103,11 +103,11 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 # fMRI-BOLD input matrix load , this is a correlation matrix already
-mtx_original		=		load_matrix(input_empiri)
+#mtx_original		=		load_matrix(input_empiri)
 
 
 ## loading correl. mtx. of simulated bold activities (calcBOLD output)
-name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
+#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
 #name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_corrcoeff.dat'
 
 
@@ -116,16 +116,16 @@ name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_corrcoeff.dat'
 #name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 
 
-R_thr =  {}
+#R_thr =  {}
 
-for THR in np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66]):
-	R_temp = []
-	for VEL in (np.arange(150, 30-10, -10)):
-		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
-		mtx_simuli = load_matrix(input_name)
-		R_vel      = pearson_coef(mtx_original, mtx_simuli)
-		R_temp     = np.append(R_temp, R_vel)
-	R_thr[THR] 	   = np.array(R_temp)
+#for THR in np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66]):
+	#R_temp = []
+	#for VEL in (np.arange(150, 30-10, -10)):
+		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+		#mtx_simuli = load_matrix(input_name)
+		#R_vel      = pearson_coef(mtx_original, mtx_simuli)
+		#R_temp     = np.append(R_temp, R_vel)
+	#R_thr[THR] 	   = np.array(R_temp)
 
 	#for SIG in np.arange(1.0, 0.1-0.1 , -0.1):
 		#input_name = name_2[0:18] + str(THR) + name_2[20:27] + str(SIG) + name_2[30:]		
@@ -135,11 +135,11 @@ for THR in np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66]):
 	#R_thr[THR] 	   = np.array(R_temp)
 	
 	
-Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
+#Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
 #print "Ordered dict"
 #print Ordered_R
 
-datam 		= np.array(Ordered_R.values())
+#datam 		= np.array(Ordered_R.values())
 
 #print "check its numpy array version"
 #print datam
@@ -182,5 +182,6 @@ mtx_empiri			= 		load_matrix(input_empiri)
 mtx_random			= 		load_matrix(input_simuli)
 figure				=		plot_corr_diag(mtx_random, input_simuli )
 R_pearson			= 	    pearson_coef(mtx_random , mtx_empiri)
-pl.title('A_aal, 0 , BOLD, thr=0.64 , $\sigma$ = 0.2 , v = 7 [m/s]', fontsize=20)
+print "Pearson corr. coef. between empir.-simul. : " , R_pearson
+#pl.title('A_aal, 0 , BOLD, thr=0.64 , $\sigma$ = 0.2 , v = 7 [m/s]', fontsize=20)
 pl.show()
