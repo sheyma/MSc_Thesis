@@ -3,7 +3,6 @@
 *.log
 *.aux
 *.pdf
-*.dat
 *.eps
 *.txt
 *.swp
@@ -14,3 +13,5 @@
 *.xz
 *.jpg
 *.odt
+*.dat
+data/
