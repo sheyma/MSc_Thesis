@@ -183,7 +183,7 @@ mtx_random			= 		load_matrix(input_simuli)
 figure				=		plot_corr_diag(mtx_random, input_simuli )
 R_pearson			= 	    pearson_coef(mtx_random , mtx_empiri)
 print "Pearson corr. coef. between empir.-simul. : " , R_pearson
-figure_name 		= 		input_simuli[0:-3] + str('eps')	
-print figure_name
-pl.title('A_aal, 0-V , FHN \nthr=0.53 , $\sigma$ = 0.02 , tmax=450[s] v = 7 [m/s]', fontsize=20)
+#figure_name 		= 		input_simuli[0:-3] + str('eps')	
+#print figure_name
+#pl.title('A_aal, 0-V , FHN \nthr=0.53 , $\sigma$ = 0.02 , tmax=450[s] v = 7 [m/s]', fontsize=20)
 pl.show()
