@@ -88,15 +88,16 @@ else:
 
 
 
-data_matrix 		=		load_matrix(infile)
-[u_matrix , T ]	    =		fhn_timeseries(data_matrix)
-corr_matrix			=		correl_matrix(u_matrix, input_name)
-[i, j, k , l ]		= 		node_index(corr_matrix)
-[R_pearson , p_value] = sistat.pearsonr(u_matrix[:,i] , u_matrix[:,j])
+data_matrix 		    =	load_matrix(infile)
+#[u_matrix , T ]	    =	fhn_timeseries(data_matrix)
+#corr_matrix			=	correl_matrix(u_matrix, input_name)
+#[i, j, k , l ]			=   node_index(corr_matrix)
 
-print "nodes ", i , " and ",j, " well correlated"
-print "nodse ", k,  " and ",l, " worse correlated"
-print "R_pearson i-j : " , R_pearson 
-[R_pearson , p_value] = sistat.pearsonr(u_matrix[:,k] , u_matrix[:,l])
+[i, j, k , l ]		    = 	node_index(data_matrix)
+[R_pearson_A , p_value] =   sistat.pearsonr(data_matrix[:,i] , data_matrix[:,j])
+[R_pearson_B , p_value] = sistat.pearsonr(data_matrix[:,k] , data_matrix[:,l])
 
-print "R_pearson k-l : " , R_pearson 
+print "nodes i ", i , " and j ",j, " well correlated"
+print "nodes k ", k,  " and l ",l, " worse correlated"
+print "R_pearson i-j : " , R_pearson_A 
+print "R_pearson k-l : " , R_pearson_B 
