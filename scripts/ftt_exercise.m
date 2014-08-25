@@ -7,20 +7,25 @@ T = 1/Fs;   % s, Sample time
 tmax = 100; % s, max time of signal run
 
 t = 0: T : tmax -T ; % time array 
+dlmwrite('t_matlab.dat', t, 'delimiter','\t', 'precision', '%.6f');
 
 x = sin(2*pi*v1*t) + sin(2*pi*v2*t); 
 
 %noise = randn(size(t));
 noise = 0;
 X     = x+noise;
+dlmwrite('sine_matlab.dat', X, 'delimiter','\t', 'precision', '%.6f');
 
 N     = length(x);
 N_pow = 2^nextpow2(N);
 
 Xfft  = fft(X , N_pow) /N;
 Xfft  = 2*abs(Xfft(1:N_pow /2 +1)) ; 
+dlmwrite('sine_fft_matlab.dat', Xfft, 'delimiter','\t', 'precision', '%.6f');
+
 
 fre   = Fs/2 * linspace(0,1, N_pow/2 + 1);
+dlmwrite('freq_matlab.dat', fre, 'delimiter','\t', 'precision', '%.6f');
 
 Wn    = 0.01;   % Hz , cut-off freq 
 [Bs,As] = butter(5,Wn,'low');
