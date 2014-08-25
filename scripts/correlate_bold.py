@@ -12,7 +12,7 @@ import math
 	intermediate process : loading input, getting correlation 
 	coefficients' matrix, exporting it 
 	
-	output : correlation matrix of the input, n rows, n rows
+	output : correlation matrix of the input, n rows, n columns
 """
 
 # load input data as numpy matrix
