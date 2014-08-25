@@ -1,6 +1,9 @@
 # figures generated from those scripts :
 
 * ftt_exercise.m
+
 * ftt_exercise_2.py
+
+	>>>> for ftt_exercise_2.py : there has to be .dat files exported from ftt_exercise.m , they are saved in "data_matlab"	
 
 
