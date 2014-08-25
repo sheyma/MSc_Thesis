@@ -88,13 +88,16 @@ else:
 
 
 
-data_matrix 		    =	load_matrix(infile)
-#[u_matrix , T ]	    =	fhn_timeseries(data_matrix)
-#corr_matrix			=	correl_matrix(u_matrix, input_name)
-#[i, j, k , l ]			=   node_index(corr_matrix)
+data_matrix 	    =	load_matrix(infile)
+#[u_matrix , T]	    =	fhn_timeseries(data_matrix)
+#corr_matrix		=	correl_matrix(u_matrix, input_name)
+#[i, j, k , l ]		=   node_index(corr_matrix)
+#[R_pearson_A , p_value] = sistat.pearsonr(corr_matrix[:,i] , corr_matrix[:,j])
+#[R_pearson_B , p_value] = sistat.pearsonr(corr_matrix[:,k] , corr_matrix[:,l])
 
-[i, j, k , l ]		    = 	node_index(data_matrix)
-[R_pearson_A , p_value] =   sistat.pearsonr(data_matrix[:,i] , data_matrix[:,j])
+
+[i, j, k , l ]		    = node_index(data_matrix)
+[R_pearson_A , p_value] = sistat.pearsonr(data_matrix[:,i] , data_matrix[:,j])
 [R_pearson_B , p_value] = sistat.pearsonr(data_matrix[:,k] , data_matrix[:,l])
 
 print "nodes i ", i , " and j ",j, " well correlated"
