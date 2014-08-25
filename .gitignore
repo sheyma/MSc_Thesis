@@ -14,4 +14,4 @@
 *.jpg
 *.odt
 *.dat
-data/
+/data
