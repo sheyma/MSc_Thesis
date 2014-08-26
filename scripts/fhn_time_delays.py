@@ -180,11 +180,13 @@ solution = neuronetz.ddeN.sample(0,  dt=0.1)
 print "starting print-out of data..."
 
 t = solution['t'][0:]
-
+#DIFFF  :   :   :  t = solution['t']
 x = {}
 y = {}
 for i in range(0,len(G[0])):
 	x[i] =  solution['x'+str(i)][0:]
+	#DIFFF ::: y[i] =  solution['y'+str(i)][0:]
+	
 	# skip y for now to minimize output
 	# y[i] =  solution['y'+str(i)][0:]
 
@@ -196,6 +198,7 @@ for i, t0 in enumerate(t):
 	f.write('%s' % (t0))
 	for j in range(0, len(x)):
 		f.write('\t%.2g' % (float(x[j][i])))
+		# DIFFF :  f.write('%.2f\t%.2f\t' % (float(x[j][i]), float(y[j][i])))
 	f.write('\n')
 
 f.close()
