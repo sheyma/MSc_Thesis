@@ -132,7 +132,7 @@ def plot_timeseries(t_start , t_range , timeseries):
 	#pl.show()
 	return			
 			
-def calc_bold(timeseries , T):
+def calc_bold(timeseries , T, input_na):
 	
 	# applies Balloon Windkessel model to the timeseries
 	# calculates the simulated bold signal
@@ -152,13 +152,14 @@ def calc_bold(timeseries , T):
 				count_nan += 1
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
-			
-	#f = open('bold_signal_python.dat','w')	
-	#for row in range( 0, len(Bold_signal[0]) ):
-		#for key in Bold_signal.iterkeys():
-			#f.write('%.6f\t' % ( Bold_signal[key][row] ))
-		#f.write('\n')
-	#f.close()
+	# exporting BOLD signal 
+	file_name       = 	str(name[:-4] + '_BOLD_signal.dat')		
+	f = open(file_name,'w')	
+	for row in range( 0, len(Bold_signal[0]) ):
+		for key in Bold_signal.iterkeys():
+			f.write('%.6f\t' % ( Bold_signal[key][row] ))
+		f.write('\n')
+	f.close()
 			
 	return Bold_signal
 
@@ -282,30 +283,31 @@ input_name = sys.argv[1]
 if input_name.endswith(".xz"):
 	# non-portable but we don't want to depend on pyliblzma module
 	xzpipe = sp.Popen(["xzcat", input_name], stdout=sp.PIPE)
-	infile = xzpipe.stdout
+	infile = xzpipe.stdout	
+	name   = input_name[0:-3]
 else:
 	# in non-xz case we just use the file name instead of a file object, numpy's
 	# loadtxt() can deal with this
 	infile = input_name
-
+	name   = input_name
 
 [timeseries, T] = fhn_timeseries(infile)
 
 print "T : " , T, " [seconds]"
 
-#fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
+fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
 
-bold_signal 	=   calc_bold(timeseries, T)
+bold_signal 	=   calc_bold(timeseries, T, name)
 
 #signal_image   =   plot_bold_signal(T , bold_signal)
 
-bold_filt		=   filter_bold(bold_signal)
+#bold_filt		=   filter_bold(bold_signal)
 
 #filt_image		=   plot_bold_filt(bold_filt)
 
-bold_down  		=   down_sample(bold_filt , ds, dtt)
+#bold_down  		=   down_sample(bold_filt , ds, dtt)
 
-bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
 
 
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
