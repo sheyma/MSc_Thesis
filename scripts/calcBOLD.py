@@ -177,7 +177,7 @@ def plot_bold_signal(T, bold_input):
 	return	
 
 		
-def filter_bold(bold_input):
+def filter_bold(bold_input , name):
 	
 	# Butterworth low pass filtering of the simulated bold signal		
 	# type(bold_input) = <type 'dict'>
@@ -203,9 +203,11 @@ def filter_bold(bold_input):
 
 	Bold_filt = np.zeros((n_T , N))
 	for col in range(0,N):			
-		Bold_filt[: , col] = filtfilt(b, a, bold_input[col])	
-	
-	#np.savetxt('bold_filt_python.dat', Bold_filt,'%.6f',delimiter='\t')
+		Bold_filt[: , col] = filtfilt(b, a, bold_input[col])
+			
+	file_name       = 	str(name[:-4] + '_BOLD_filtered.dat')	
+	print "file_name : " , file_name
+	np.savetxt(file_name, Bold_filt,'%.6f',delimiter='\t')
 	return Bold_filt
 
 
@@ -297,11 +299,11 @@ print "T : " , T, " [seconds]"
 
 fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
 
-bold_signal 	=   calc_bold(timeseries, T, name)
+bold_signal    =   calc_bold(timeseries, T, name)
 
-#signal_image   =   plot_bold_signal(T , bold_signal)
+signal_image   =   plot_bold_signal(T , bold_signal)
 
-#bold_filt		=   filter_bold(bold_signal)
+bold_filt		=   filter_bold(bold_signal, name)
 
 #filt_image		=   plot_bold_filt(bold_filt)
 
