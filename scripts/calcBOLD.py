@@ -297,21 +297,21 @@ else:
 
 print "T : " , T, " [seconds]"
 
-fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
+#fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
 
 bold_signal    =   calc_bold(timeseries, T, name)
 
-signal_image   =   plot_bold_signal(T , bold_signal)
+#signal_image   =   plot_bold_signal(T , bold_signal)
 
-bold_filt		=   filter_bold(bold_signal, name)
+#bold_filt		=   filter_bold(bold_signal, name)
 
-filt_image		=   plot_bold_filt(bold_filt)
+#filt_image		=   plot_bold_filt(bold_filt)
 
-bold_down  		=   down_sample(bold_filt , ds, dtt)
+#bold_down  		=   down_sample(bold_filt , ds, dtt)
 
-bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
+#bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
 
-pl.show()
+#pl.show()
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 #bold_cut = np.loadtxt('bold_cut_matlab.dat')
 
