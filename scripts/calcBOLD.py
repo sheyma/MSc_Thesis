@@ -237,7 +237,7 @@ def down_sample(bold_input, ds, dtt):
 	return down_bold
 						
 						
-def keep_frames(bold_input, cut_percent):
+def keep_frames(bold_input, cut_percent, name):
 	
 	# cut array from beginning and end (distorted from filtering)
 	
@@ -248,8 +248,8 @@ def keep_frames(bold_input, cut_percent):
 	index      = np.arange(limit_down, limit_up-2 , 1)
 	#print "index : ", index
 	cut_bold   = bold_input[index, :]
-	
-	file_name       = str(input_name[:-4] + '_BOLD.dat')
+	# exporting downsampled + begin./end cut signal !
+	file_name       = str(name[:-4] + '_BOLD_bds.dat')
 	np.savetxt(file_name, cut_bold,'%.6f',delimiter='\t')	
 	return cut_bold
 
@@ -305,13 +305,13 @@ signal_image   =   plot_bold_signal(T , bold_signal)
 
 bold_filt		=   filter_bold(bold_signal, name)
 
-#filt_image		=   plot_bold_filt(bold_filt)
+filt_image		=   plot_bold_filt(bold_filt)
 
-#bold_down  		=   down_sample(bold_filt , ds, dtt)
+bold_down  		=   down_sample(bold_filt , ds, dtt)
 
-#bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
 
-
+pl.show()
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 #bold_cut = np.loadtxt('bold_cut_matlab.dat')
 
