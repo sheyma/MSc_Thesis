@@ -232,7 +232,7 @@ def down_sample(bold_input, ds, dtt):
 	index = np.arange(0 , n_T , int(ds/dtt))
 	down_bold = bold_input[index, :]
 	
-	#np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
+	np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
 	
 	return down_bold
 						
@@ -245,12 +245,11 @@ def keep_frames(bold_input, cut_percent, name):
 	length  = np.shape(bold_input)[0]
 	limit_down = int(math.ceil(length * cut_percent) -1) 
 	limit_up   = int(length - limit_down -1)	
-	index      = np.arange(limit_down, limit_up-2 , 1)
-	#print "index : ", index
+	index      = np.arange(limit_down, limit_up , 1)
 	cut_bold   = bold_input[index, :]
 	# exporting downsampled + begin./end cut signal !
 	file_name       = str(name[:-4] + '_BOLD_bds.dat')
-	np.savetxt(file_name, cut_bold,'%.6f',delimiter='\t')	
+	#np.savetxt(file_name, cut_bold,'%.6f',delimiter='\t')	
 	return cut_bold
 
 # here we go
@@ -293,27 +292,27 @@ else:
 	infile = input_name
 	name   = input_name
 
-[timeseries, T] = fhn_timeseries(infile)
+#[timeseries, T] = fhn_timeseries(infile)
 
-print "T : " , T, " [seconds]"
+#print "T : " , T, " [seconds]"
 
-fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
+#fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
 
-#bold_signal    =   calc_bold(timeseries, T, name)
+#bold_signal     =   calc_bold(timeseries, T, name)
 
-#signal_image   =   plot_bold_signal(T , bold_signal)
+#signal_image    =   plot_bold_signal(T , bold_signal)
 
 #bold_filt		=   filter_bold(bold_signal, name)
 
 #filt_image		=   plot_bold_filt(bold_filt)
 
-#bold_down  		=   down_sample(bold_filt , ds, dtt)
+bold_filt       =   np.loadtxt('filt_matlab.dat')
 
-#bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
+bold_down  		=   down_sample(bold_filt , ds, dtt)
 
-pl.show()
-#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
-#bold_cut = np.loadtxt('bold_cut_matlab.dat')
+bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
+
+#pl.show()
 
 #######################################
 
