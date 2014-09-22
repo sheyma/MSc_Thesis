@@ -116,7 +116,7 @@ def fhn_timeseries(simfile):
 	timeseries = simout[:, u_indices]
 	
 	print "extracted u-timeseries: shape =", timeseries.shape, ", dt = ", dt
-	np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')
+	#np.savetxt('u_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')
 	
 	return timeseries, T
 
@@ -132,7 +132,7 @@ def plot_timeseries(t_start , t_range , timeseries):
 	#pl.show()
 	return			
 			
-def calc_bold(timeseries , T):
+def calc_bold(timeseries , T, input_na):
 	
 	# applies Balloon Windkessel model to the timeseries
 	# calculates the simulated bold signal
@@ -152,8 +152,9 @@ def calc_bold(timeseries , T):
 				count_nan += 1
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
-			
-	f = open('bold_signal_python.dat','w')	
+	# exporting BOLD signal 
+	file_name       = 	str(name[:-4] + '_BOLD_signal.dat')		
+	f = open(file_name,'w')	
 	for row in range( 0, len(Bold_signal[0]) ):
 		for key in Bold_signal.iterkeys():
 			f.write('%.6f\t' % ( Bold_signal[key][row] ))
@@ -176,12 +177,14 @@ def plot_bold_signal(T, bold_input):
 	return	
 
 		
-def filter_bold(bold_input):
+def filter_bold(bold_input , name):
 	
 	# Butterworth low pass filtering of the simulated bold signal		
 	# type(bold_input) = <type 'dict'>
 	# f_c : cut-off freq., f_s : sampling freq., f_n : Nyquist freq.
 	# Or : order of filter, dtt : resolution of bold signal
+	
+	print "low pass filtering is applied..." 
 	 
 	n_T = len(np.array(bold_input[1]))
 	N   = len(bold_input.keys())
@@ -200,9 +203,11 @@ def filter_bold(bold_input):
 
 	Bold_filt = np.zeros((n_T , N))
 	for col in range(0,N):			
-		Bold_filt[: , col] = filtfilt(b, a, bold_input[col])	
-	
-	np.savetxt('bold_filt_python.dat', Bold_filt,'%.6f',delimiter='\t')
+		Bold_filt[: , col] = filtfilt(b, a, bold_input[col])
+			
+	file_name       = 	str(name[:-4] + '_BOLD_filtered.dat')	
+	print "file_name : " , file_name
+	#np.savetxt(file_name, Bold_filt,'%.6f',delimiter='\t')
 	return Bold_filt
 
 
@@ -222,53 +227,30 @@ def down_sample(bold_input, ds, dtt):
 	# downsampling of the filtered bold signal
 	# select one point every 'ds' [ms] to match fmri resolution
 
+	print "downsampling..."
 	n_T = np.shape(bold_input)[0] 
 	index = np.arange(0 , n_T , int(ds/dtt))
 	down_bold = bold_input[index, :]
 	
-	np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
+	#np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
 	
 	return down_bold
 						
 						
-def keep_frames(bold_input, cut_percent):
+def keep_frames(bold_input, cut_percent, name):
 	
 	# cut array from beginning and end (distorted from filtering)
 	
+	print "cut the distorted parts of signal..."
 	length  = np.shape(bold_input)[0]
 	limit_down = int(math.ceil(length * cut_percent) -1) 
 	limit_up   = int(length - limit_down -1)	
-	index      = np.arange(limit_down, limit_up-2 , 1)
-	#print "index : ", index
+	index      = np.arange(limit_down, limit_up , 1)
 	cut_bold   = bold_input[index, :]
-	
-	np.savetxt('bold_cut_python.dat', cut_bold,'%.6f',delimiter='\t')
-	
+	# exporting downsampled + begin./end cut signal !
+	file_name       = str(name[:-4] + '_BOLD_bds.dat')
+	#np.savetxt(file_name, cut_bold,'%.6f',delimiter='\t')	
 	return cut_bold
-
-def correl(bold_input):
-	# correlation coefficient among the columns of bold_input calculated
-	# numpy array must be transposed to get the right corrcoef
-	
-	transpose_input = np.transpose(bold_input)
-	correl_matrix   = np.corrcoef(transpose_input)
-	np.savetxt('bold_corr_python.dat', correl_matrix, '%.10f',delimiter='\t')
-	return correl_matrix
-
-def image(bold_input, simfile):
-	
-	# plots simulated functional connectivity
-	pl.figure(4)
-	N_col = np.shape(bold_input)[1]
-	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
-	pl.imshow(bold_input, interpolation='nearest', extent=extend)
-	pl.colorbar()
-	
-	image_name = simfile[0:-4] + '_CORR.eps'	
-	#pl.savefig(image_name, format="eps")
-	pl.show()
-	return  
-	
 
 # here we go
 
@@ -286,13 +268,13 @@ params.k3 = 2.0 * params.Eo - 0.2
 
 t_start = 325000;
 t_range = 500;
-ds = 2.3  #### NEEDS TO BE CHECKED!
+ds = 2.3  
 dtt = 0.001
 cut_percent = float(2) / 100
 
 iparams = invert_params(params)
-
-x_init = np.array([0 , 1, 1, 1])	# initial conditions	
+# initial conditions for the bold differential equations
+x_init = np.array([0 , 1, 1, 1])		
 
 input_name = sys.argv[1]
 
@@ -302,44 +284,37 @@ input_name = sys.argv[1]
 if input_name.endswith(".xz"):
 	# non-portable but we don't want to depend on pyliblzma module
 	xzpipe = sp.Popen(["xzcat", input_name], stdout=sp.PIPE)
-	infile = xzpipe.stdout
+	infile = xzpipe.stdout	
+	name   = input_name[0:-3]
 else:
 	# in non-xz case we just use the file name instead of a file object, numpy's
 	# loadtxt() can deal with this
 	infile = input_name
-
+	name   = input_name
 
 [timeseries, T] = fhn_timeseries(infile)
 
 print "T : " , T, " [seconds]"
 
-fhn_image       =   plot_timeseries(t_start , t_range , timeseries)
+fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
 
-bold_signal 	=   calc_bold(timeseries, T)
+bold_signal     =   calc_bold(timeseries, T, name)
 
 signal_image    =   plot_bold_signal(T , bold_signal)
 
-bold_filt		=   filter_bold(bold_signal)
+# bold_filt IS THE ONLY FUNCTION DIFFERENT FROM MATLAB'S..
+bold_filt		=   filter_bold(bold_signal, name)
+#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 
-filt_image		=   plot_bold_filt(bold_filt)
+#filt_image		=   plot_bold_filt(bold_filt)
 
 bold_down  		=   down_sample(bold_filt , ds, dtt)
 
-bold_cut 		= 	keep_frames(bold_down ,cut_percent)
+bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
 
-correl_matrix 	= 	correl(bold_cut)
-
-corr_image		= 	image(correl_matrix , input_name)
-
-pl.show()
-
-#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
-#bold_cut = np.loadtxt('bold_cut_matlab.dat')
-
+#pl.show()
 
 #######################################
-
-
 
 #bold_euler(T , R[1, :], iparams, x_init)
 
