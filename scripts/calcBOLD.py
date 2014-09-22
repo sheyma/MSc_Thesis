@@ -116,7 +116,7 @@ def fhn_timeseries(simfile):
 	timeseries = simout[:, u_indices]
 	
 	print "extracted u-timeseries: shape =", timeseries.shape, ", dt = ", dt
-	#np.savetxt('bold_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')
+	np.savetxt('u_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')
 	
 	return timeseries, T
 
@@ -297,9 +297,9 @@ else:
 
 print "T : " , T, " [seconds]"
 
-#fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
+fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
 
-bold_signal    =   calc_bold(timeseries, T, name)
+#bold_signal    =   calc_bold(timeseries, T, name)
 
 #signal_image   =   plot_bold_signal(T , bold_signal)
 
@@ -311,7 +311,7 @@ bold_signal    =   calc_bold(timeseries, T, name)
 
 #bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
 
-#pl.show()
+pl.show()
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 #bold_cut = np.loadtxt('bold_cut_matlab.dat')
 
