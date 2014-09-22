@@ -62,10 +62,8 @@ def node_index(matrix):
 				matrix[i,j] = 0
 	# index of maximum value in matrix
 	[nx , ny] = np.unravel_index(matrix.argmax() , matrix.shape)
-	print nx, ny , matrix[nx,ny]
 	# index of maximum value in matrix
 	[mx , my] = np.unravel_index(matrix.argmin() , matrix.shape)
-	print mx, my , matrix[mx,my]
 	return nx, ny , mx, my
 
 # user defined input name
@@ -86,21 +84,16 @@ else:
 	# loadtxt() can deal with this
 	infile = input_name
 
-
-
 data_matrix 	    =	load_matrix(infile)
-#[u_matrix , T]	    =	fhn_timeseries(data_matrix)
-#corr_matrix		=	correl_matrix(u_matrix, input_name)
-#[i, j, k , l ]		=   node_index(corr_matrix)
+[u_matrix , T]	    =	fhn_timeseries(data_matrix)
+corr_matrix		    =	correl_matrix(u_matrix, input_name)
+[i, j, k , l ]		=   node_index(corr_matrix)
+
+print "nodes ", i , " and ",j, " best correlated"
+print "nodes ", k,  " and ",l, " worst correlated"
+
 #[R_pearson_A , p_value] = sistat.pearsonr(corr_matrix[:,i] , corr_matrix[:,j])
 #[R_pearson_B , p_value] = sistat.pearsonr(corr_matrix[:,k] , corr_matrix[:,l])
 
-
-[i, j, k , l ]		    = node_index(data_matrix)
-[R_pearson_A , p_value] = sistat.pearsonr(data_matrix[:,i] , data_matrix[:,j])
-[R_pearson_B , p_value] = sistat.pearsonr(data_matrix[:,k] , data_matrix[:,l])
-
-print "nodes i ", i , " and j ",j, " well correlated"
-print "nodes k ", k,  " and l ",l, " worse correlated"
-print "R_pearson i-j : " , R_pearson_A 
-print "R_pearson k-l : " , R_pearson_B 
+#print "R_pearson of nodes ", i, "and" , j ," : ", R_pearson_A 
+#print "R_pearson of nodes ", k, "and" , l ," : ", R_pearson_B 
