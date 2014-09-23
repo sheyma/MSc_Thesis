@@ -21,7 +21,7 @@
 
 % Network Density
 %random_G = ('0abdfc');
-random_G = ('0abdfc');
+random_G = ('0adghk');
 color='kmbycr'; type = '-*o*+o';
 input_name = 'acp_w_single_network_measures.dat';
 fig = figure(1);
@@ -32,7 +32,7 @@ for i =1:length(random_G)
     A=load(a);
     plot(A(:,1),A(:,3),strcat(color(i),type(i)),'LineWidth',3)   
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk')
 legend('boxoff')
 %set(legend,'FontSize',14)
 xlabel('Probability [p]')
@@ -40,7 +40,7 @@ ylabel('Network Density')
 hold off
 set(fig, 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Network_Density_Stru.eps','eps2c')
+%saveas(gcf,'Network_Density_Stru.eps','eps2c')
 
 % Network Clustering Coefficient
 figure(2);
@@ -51,7 +51,7 @@ for i =1:length(random_G)
     A=load(a);
     plot(A(:,1),A(:,4),strcat(color(i),type(i)),'LineWidth',3)    
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc') 
+legend('R0', 'Ra','Rd','Rg','Rh','Rk') 
 legend('boxoff')
 %set(legend,'FontSize',14)
 xlabel('Probability [p]')
@@ -59,7 +59,7 @@ ylabel('Clustering Coefficient')
 hold off
 set(figure(2), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Clustering_Coefficient_Stru.eps','eps2c')
+%saveas(gcf,'Clustering_Coefficient_Stru.eps','eps2c')
 
 
 % Average degree of network
@@ -72,7 +72,7 @@ for i =1:length(random_G)
     
           
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc') 
+legend('R0', 'Ra','Rd','Rg','Rh','Rk')
 legend('boxoff')
 %set(legend,'FontSize',14)
 xlabel('Probability [p]')
@@ -80,7 +80,7 @@ ylabel('Average Degree, <k>')
 hold off
 set(figure(3), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Degree_Average_Stru.eps','eps2c')
+%saveas(gcf,'Degree_Average_Stru.eps','eps2c')
  
 % Number of Connected Components
 figure(4);
