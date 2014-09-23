@@ -18,16 +18,17 @@ function b = calcBOLD(simfile)
   nt = size(tvec,1)
   dt = tvec(2)-tvec(1)
 
-  N = (size(simoutput,2)-1)/2
-
+  N = (size(simoutput,2)-1);
+  
   timeseries = zeros(size(simoutput,1),N);
   size(timeseries)
 
   for roi = 1:N
-    timeseries(:,roi) = simoutput(:,2*roi);
+    timeseries(:,roi) = simoutput(:,roi+1);
   end
-
-  save([simfile(1:end-4),'_timeseries.mat'],'timeseries','tvec')
+  %dlmwrite('bold_timeseries_matlab.dat', timeseries, 'delimiter','\t', 'precision', '%.6f');
+  
+  %save([simfile(1:end-4),'_timeseries.mat'],'timeseries','tvec')
   %load([simfile(1:end-4),'_timeseries.mat'])
   
   %% plot sample time series     
@@ -57,11 +58,16 @@ function b = calcBOLD(simfile)
 	
 	% important: specify here to which time interval the simulated 
 	% time series corresponds:
-  T = 700.0; % in [s]
   
+  %T = 700.0; % in [s]
+  dt_BOLD = 0.001 ;
+  T = round(tvec(end) /dt * dt_BOLD)
+ 
+  var = [] ;
   for roi = 1:N 
     boldsignal{roi} = BOLD(T,timeseries(:,roi));
     disp(roi)
+    var = [var, boldsignal{roi}] ; 
     % verify that there is no errors in the BOLD results
     nans = size(find(isnan(boldsignal{roi})),1);
     if nans > 0
@@ -69,6 +75,7 @@ function b = calcBOLD(simfile)
     end
   end
   
+  %dlmwrite('bold_signal_matlab.dat', var, 'delimiter','\t', 'precision', '%.6f');
   %% filter below 0.25Hz:
 
   f_c=0.25;
@@ -84,7 +91,8 @@ function b = calcBOLD(simfile)
   % Calculate variables for Butterworth lowpass filter of order 5 
   % with cut off frequency f_c/f_N
   [Bs,As] = butter(5,f_c/f_N,'low')
-
+  %dlmwrite('Bs_matlab.dat', Bs, 'delimiter','\t', 'precision', '%.25f');
+  %dlmwrite('As_matlab.dat', As, 'delimiter','\t', 'precision', '%.25f');
   size(BOLD_filt)
 
   for n = 1:N
@@ -93,25 +101,33 @@ function b = calcBOLD(simfile)
     %size(BOLD_filt)
   end
 
-
+  %dlmwrite('bold_filt_matlab.dat', BOLD_filt, 'delimiter','\t', 'precision', '%.6f');
   %% Downsampling: select one point every 'ds' ms to match fmri resolution:
 
-  ds=2.500; 
+  ds=2.300; 
   down_bds=BOLD_filt(1:ds/dtt:end,:);
   lenBold = size(down_bds,1);
-  
+  dlmwrite('bold_down_matlab.dat', down_bds, 'delimiter','\t', 'precision', '%.6f');
+
   %% Cutting first and last seconds (distorted from filtering) and keep the middle:
-  nFramesToKeep = 260;
-  bds = down_bds(floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1,:);
+   
+  cut_percent = 2/100;
+  limit_down = ceil(lenBold * cut_percent)
+  limit_up = ceil(lenBold - limit_down)
+  index = limit_down : limit_up;
+  bds = down_bds(index, :);
+  %nFramesToKeep = 260; % use 260!!
+  %bds = down_bds(floor((lenBold-nFramesToKeep)/2):floor((lenBold+nFramesToKeep)/2)-1,:);
   size(bds)  
-  save([simfile(1:end-4),'_bds.mat'],'bds')
+  %save([simfile(1:end-4),'_bds.mat'],'bds')
+  %dlmwrite('bold_cut_matlab.dat', bds, 'delimiter','\t', 'precision', '%.6f');
 
   %%
   
   %load([simfile(1:end-4),'_bds.mat'])
 
   simfc = corr(bds);
-  save([simfile(1:end-4),'_simfc.mat'],'simfc')
+  %save([simfile(1:end-4),'_simfc.mat'],'simfc')
   
    % plot simulated functional connectivity
   h = figure;
@@ -128,5 +144,3 @@ function b = calcBOLD(simfile)
   system(sprintf('ps2pdf -dEPSCrop %s.eps %s.pdf',filo,filo));
   
 end
-
-
