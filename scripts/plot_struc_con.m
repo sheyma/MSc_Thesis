@@ -90,7 +90,7 @@ for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
@@ -98,7 +98,7 @@ ylabel('Average Connected Components')
 hold off
 set(figure(4), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Connected_Components_Average_Stru.eps','eps2c')
+%saveas(gcf,'Connected_Components_Average_Stru.eps','eps2c')
 
 % Shortest Pathway
 figure(5);
@@ -108,7 +108,7 @@ for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,7),strcat(color(i),type(i)),'LineWidth',3) 
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
@@ -116,7 +116,7 @@ ylabel('Shortest Pathway')
 hold off
 set(figure(5), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Shortest_Pathway_Stru.eps','eps2c')
+%saveas(gcf,'Shortest_Pathway_Stru.eps','eps2c')
  
 % Small Worldness
 input_name_2 = 'acp_w_small_worldness.dat';
@@ -127,7 +127,7 @@ for i = 1:length(random_G)
     A =load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
     plot(A(:,1),A(:,8),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
@@ -135,7 +135,7 @@ ylabel('Small Worldness')
 hold off
 set(figure(6), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Small_Worldness_Stru.eps','eps2c')
+%saveas(gcf,'Small_Worldness_Stru.eps','eps2c')
 
 % Transitivity
 figure(7);
@@ -146,7 +146,7 @@ for i = 1:length(random_G)
     A = load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
@@ -154,7 +154,7 @@ ylabel('Transitivity')
 hold off
 set(figure(7), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Transitivity_Stru.eps','eps2c')
+%saveas(gcf,'Transitivity_Stru.eps','eps2c')
 
 % Global Efficiency of Network
 input_name_3 = 'acp_w_global_efficiency_ave.dat';
@@ -166,7 +166,7 @@ for i = 1:length(random_G)
     A = load(a);
     plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
@@ -174,7 +174,7 @@ ylabel('Average Global Efficiency')
 hold off
 set(figure(8), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Global_Efficiency_Average_Stru.eps','eps2c')
+%saveas(gcf,'Global_Efficiency_Average_Stru.eps','eps2c')
 
 % Local efficiency of Network
 input_name_4 = 'acp_w_local_efficiency_ave.dat';
@@ -185,7 +185,7 @@ for i = 1:length(random_G)
     A =load(strcat(input_name_4(1:6),'R',random_G(i),'_local_efficency_ave.dat'));
     plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','SouthWest')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
@@ -193,7 +193,7 @@ ylabel('Local Efficiency')
 hold off
 set(figure(9), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Local_Efficiency_Average_Stru.eps','eps2c')
+%saveas(gcf,'Local_Efficiency_Average_Stru.eps','eps2c')
 
 % Assortativity coefficient of network
 in_name_5 = 'acp_w_assortativity.dat';
@@ -204,7 +204,7 @@ for i = 1:length(random_G)
     A = load(strcat(in_name_5(1:6),'R',random_G(i),in_name_5(6:end)));
     plot(A(:,1),A(:,2),strcat(color(i),type(i)), 'Linewidth', 3)
 end
-legend('R0', 'Ra','Rb','Rf','Rd','Rc','Location','NorthWest')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('Probability [p]')
@@ -212,7 +212,7 @@ ylabel('Assortativity')
 hold off
 set(figure(10), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Assortativity_Stru.eps','eps2c')
+%saveas(gcf,'Assortativity_Stru.eps','eps2c')
 
 % DISTRIBUTIONS
 % Global efficiency of nodes
@@ -266,7 +266,7 @@ for j = 1:length(random_G)
 end
 set(figure(11), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Global_Efficiency_Nodes_Stru.eps','eps2c')
+%saveas(gcf,'Global_Efficiency_Nodes_Stru.eps','eps2c')
 
 %Local efficiency of nodes
 in_name_6 = 'acp_w_local_efficency_node.dat';
@@ -319,7 +319,7 @@ for j = 1:length(random_G)
 end
 set(figure(12), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Local_Efficiency_Nodes_Stru.eps','eps2c')
+%saveas(gcf,'Local_Efficiency_Nodes_Stru.eps','eps2c')
 
 
 %????
@@ -385,7 +385,7 @@ for j = 1:length(random_G)
 end
 set(figure(13), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Connected_Components_Nodes_Stru.eps','eps2c')
+%saveas(gcf,'Connected_Components_Nodes_Stru.eps','eps2c')
 
 % Degree Distribution
 in_name_8 = 'acp_w_degree_dist.dat';
@@ -448,7 +448,7 @@ for j = 1:length(random_G)
 end
 set(figure(14), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Degree_Distribution_Stru.eps','eps2c')
+%saveas(gcf,'Degree_Distribution_Stru.eps','eps2c')
 
 
 
@@ -506,5 +506,5 @@ for j = 1:length(random_G)
 end
 set(figure(15), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Clustering_Coefficient_Node_Stru.eps','eps2c')
+%saveas(gcf,'Clustering_Coefficient_Node_Stru.eps','eps2c')
 
