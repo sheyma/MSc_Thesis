@@ -116,7 +116,7 @@ def fhn_timeseries(simfile):
 	timeseries = simout[:, u_indices]
 	
 	print "extracted u-timeseries: shape =", timeseries.shape, ", dt = ", dt
-	np.savetxt('u_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')
+	#np.savetxt('u_timeseries_python.dat',timeseries,fmt='%.6f',delimiter='\t')
 	
 	return timeseries, T
 
@@ -154,12 +154,12 @@ def calc_bold(timeseries , T, input_na):
 			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
 	# exporting BOLD signal 
 	file_name       = 	str(name[:-4] + '_BOLD_signal.dat')		
-	f = open(file_name,'w')	
-	for row in range( 0, len(Bold_signal[0]) ):
-		for key in Bold_signal.iterkeys():
-			f.write('%.6f\t' % ( Bold_signal[key][row] ))
-		f.write('\n')
-	f.close()
+	#f = open(file_name,'w')	
+	#for row in range( 0, len(Bold_signal[0]) ):
+		#for key in Bold_signal.iterkeys():
+			#f.write('%.6f\t' % ( Bold_signal[key][row] ))
+		#f.write('\n')
+	#f.close()
 			
 	return Bold_signal
 
@@ -207,7 +207,7 @@ def filter_bold(bold_input , name):
 			
 	file_name       = 	str(name[:-4] + '_BOLD_filtered.dat')	
 	print "file_name : " , file_name
-	np.savetxt(file_name, Bold_filt,'%.6f',delimiter='\t')
+	#np.savetxt(file_name, Bold_filt,'%.6f',delimiter='\t')
 	return Bold_filt
 
 
@@ -232,7 +232,7 @@ def down_sample(bold_input, ds, dtt):
 	index = np.arange(0 , n_T , int(ds/dtt))
 	down_bold = bold_input[index, :]
 	
-	np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
+	#np.savetxt('bold_down_python.dat', down_bold,'%.6f',delimiter='\t')
 	
 	return down_bold
 						
@@ -303,16 +303,14 @@ else:
 #signal_image    =   plot_bold_signal(T , bold_signal)
 
 #bold_filt		=   filter_bold(bold_signal, name)
-
-#filt_image		=   plot_bold_filt(bold_filt)
-
-bold_filt       =   np.loadtxt('filt_matlab.dat')
+bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
+filt_image		=   plot_bold_filt(bold_filt)
 
 bold_down  		=   down_sample(bold_filt , ds, dtt)
 
 bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
 
-#pl.show()
+pl.show()
 
 #######################################
 
