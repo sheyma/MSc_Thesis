@@ -42,7 +42,7 @@ ylabel('Network Density')
 hold off
 set(fig, 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Network_Density.eps','eps2c')
+%saveas(gcf,'Network_Density_Fnc.eps','eps2c')
 
 % Network Clustering Coefficient
 figure(2);
@@ -61,7 +61,7 @@ ylabel('Clustering Coefficient')
 hold off
 set(figure(2), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Clustering_Coefficient.eps','eps2c')
+%saveas(gcf,'Clustering_Coefficient_Fnc.eps','eps2c')
 
 
 % Average degree of network
@@ -82,7 +82,7 @@ ylabel('Average Degree, <k>')
 hold off
 set(figure(3), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Degree_Average.eps','eps2c')
+%saveas(gcf,'Degree_Average_Fnc.eps','eps2c')
  
 % Number of Connected Components
 figure(4);
@@ -101,7 +101,7 @@ ylabel('Average Connected Components')
 hold off
 set(figure(4), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Connected_Components_Average.eps','eps2c')
+%saveas(gcf,'Connected_Components_Average_Fnc.eps','eps2c')
 
 % Shortest Pathway
 figure(5);
@@ -120,7 +120,7 @@ ylabel('Shortest Pathway')
 hold off
 set(figure(5), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Shortest_Pathway.eps','eps2c')
+%saveas(gcf,'Shortest_Pathway_Fnc.eps','eps2c')
 
 
 % Small Worldness
@@ -140,7 +140,7 @@ ylabel('Small Worldness')
 hold off
 set(figure(6), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-saveas(gcf,'Small_Worldness.eps','eps2c')
+%saveas(gcf,'Small_Worldness_Fnc.eps','eps2c')
 
 
 % Transitivity
@@ -160,7 +160,7 @@ ylabel('Transitivity')
 hold off
 set(figure(7), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Transitivity_A_txt.eps','eps2c')
+%saveas(gcf,'Transitivity_Fnc.eps','eps2c')
 
  
 % Global Efficiency of Network
@@ -181,7 +181,7 @@ ylabel('Average Global Efficiency')
 hold off
 set(figure(8), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Global_Efficiency_Average.eps','eps2c')
+%saveas(gcf,'Global_Efficiency_Average_Fnc.eps','eps2c')
 
 % Local efficiency of Network
 input_name_4 = 'A_aal_local_efficiency_ave.dat';
@@ -200,7 +200,7 @@ ylabel('Local Efficiency')
 hold off
 set(figure(9), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Local_Efficiency_Average.eps','eps2c')
+%saveas(gcf,'Local_Efficiency_Average_Fnc.eps','eps2c')
 
 % Assortativity coefficient of network
 in_name_5 = 'A_aal_assortativity.dat';
@@ -219,7 +219,7 @@ ylabel('Assortativity')
 hold off
 set(figure(10), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Assortativity.eps','eps2c')
+%saveas(gcf,'Assortativity_Fnc.eps','eps2c')
 
 % DISTRIBUTIONS
 % Global efficiency of nodes
@@ -273,7 +273,7 @@ for j = 1:length(random_G)
 end
 set(figure(11), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Global_Efficiency_Nodes.eps','eps2c')
+%saveas(gcf,'Global_Efficiency_Nodes_Fnc.eps','eps2c')
 
 %Local efficiency of nodes
 in_name_6 = 'A_aal_local_efficency_node.dat';
@@ -327,7 +327,7 @@ for j = 1:length(random_G)
 end
 set(figure(12), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Local_Efficiency_Nodes.eps','eps2c')
+%saveas(gcf,'Local_Efficiency_Nodes_Fnc.eps','eps2c')
 
 
 % Connected Components of Nodes
@@ -387,7 +387,7 @@ for j = 1:length(random_G)
 end
 set(figure(13), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Connected_Components_Nodes.eps','eps2c')
+%saveas(gcf,'Connected_Components_Nodes_Fnc.eps','eps2c')
 
 % Degree Distribution
 in_name_8 = 'A_aal_degree_dist.dat';
@@ -449,7 +449,7 @@ for j = 1:length(random_G)
 end
 set(figure(14), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Degree_Distribution.eps','eps2c')
+%saveas(gcf,'Degree_Distribution_Fnc.eps','eps2c')
 
 
 
@@ -503,5 +503,5 @@ for j = 1:length(random_G)
 end
 set(figure(15), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Clustering_Coefficient_Node.eps','eps2c')
+%saveas(gcf,'Clustering_Coefficient_Node_Fnc.eps','eps2c')
 
