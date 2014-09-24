@@ -1,8 +1,22 @@
 #!/usr/bin/python2.7 
 # -*- coding: utf-8 -*-
 
-# this script aims to visualize local dynamics with FitzHugh Nagumo 
-# model with parameters chosen from literature
+""" 
+	visualizing the local dynamics of FitzHugh Nagumo model with 
+	different parameters chosen from literature. 
+	
+	Literature ; 
+	[PAN12] = D.Rosin, P.Hövel, E.Schöll, "Synchronization of 
+	coupled neuronal oscillators with heterogenous delays", 2012
+	
+	[GHOS08] = A.Ghosh, Y.Rho, A.R.McIntosh, R.Kötter, V.K.Jirsa,
+	"Noise During Rest Enables the Exploration of the Brain's 
+	Dynamic Repertoire", 2008
+	
+	output : plotting activator(x) and inhibitor(y) over time(t)
+	and in state space
+"""
+
 
 
 from __future__ import division
