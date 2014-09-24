@@ -9,15 +9,16 @@
 	[PAN12] = D.Rosin, P.Hövel, E.Schöll, "Synchronization of 
 	coupled neuronal oscillators with heterogenous delays", 2012
 	
-	[GHOS08] = A.Ghosh, Y.Rho, A.R.McIntosh, R.Kötter, V.K.Jirsa,
-	"Noise During Rest Enables the Exploration of the Brain's 
-	Dynamic Repertoire", 2008
+	[GHOS08a] = A.Ghosh, Y.Rho, A.R.McIntosh, R.Kötter, V.K.Jirsa,
+	"Cortical Network Dynamics with time delays reveals functional
+	connectivity in the resting brain", 2008
+	
+	[VUK13] = V.Vuksanovic, P.Hövel, "Large-scale neuronal network
+	model for functional networks of the human cortex", 2013
 	
 	output : plotting activator(x) and inhibitor(y) over time(t)
 	and in state space
 """
-
-
 
 from __future__ import division
 import numpy as np
@@ -42,22 +43,28 @@ from pylab import *
 #yy = np.linspace(-y_limit, y_limit, 10000)
 #xx = -params['a'] * np.ones(len(yy))
 	 
-# GHOS08 local dynamics	
- 
-eqns = {r'x' : '(y + gamma*x - pow(x,3)/3.0) * TAU ',
-	r'y' : '-(x - alpha + b*y  ) / TAU' }
+### [GHOS08a] local dynamics	##
+#eqns   = {r'x' : '(y + gamma*x - pow(x,3)/3.0) * TAU ',
+	      #r'y' : '-(x - alpha + b*y  ) / TAU' }
+
+#params = {'gamma' : 1.0, #0.9
+		  #'alpha' : 1.05, #1.9
+		  #'TAU'   : 1.25,
+		  #'b'     : 0.2 }
+
+## [VUK13] local dynamics ##
+eqns   = {r'x' : '(y + gamma*x - pow(x,3)/3.0) * TAU ',
+	      r'y' : '-(x - alpha + b*y  ) / TAU' }
 
 params = {'gamma' : 1.0, #0.9
-	  'alpha' : 0.85, #1.9
-	  'TAU' : 1.25,
-	  'b' : 0.2
-	  }
-
+		  'alpha' : 0.85, #1.9
+		  'TAU'   : 1.25,
+		  'b'     : 0.2 }
 	  
 x_limit = 2.5
 x_range = np.linspace(-2.5,2.5,500)
 
-#nullclines
+# nullclines
 def nullcl_01(X):
   return -(pow(X,3)/3 - params['gamma']*X)
   #make x minus
@@ -65,11 +72,11 @@ def nullcl_01(X):
 def nullcl_02(X):
   return (params['alpha'] - X ) / params['b']
 
-#calculate the intersection of nullclines
+# calculate the intersection of nullclines
 def intersection(X):
  return nullcl_01(X) - nullcl_02(X)
 
-X0 = -2
+X0    = -2
 X_int = fsolve(intersection,X0)
 Y_int = nullcl_01(X_int)
 
@@ -110,8 +117,8 @@ fig.suptitle('FHN - Local Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
 pl.subplot(121, xlabel='t', ylabel='x(t) , y(t)')
 pl.plot(t, x, 'r', label='$x(t)$')
 pl.plot(t, y, 'b', label='$y(t)$')
-pl.plot(sol_adap['t'],sol_adap['x'],'.r',linewidth=0.2)
-pl.plot(sol_adap['t'],sol_adap['y'],'.b',linewidth=0.2)
+#pl.plot(sol_adap['t'],sol_adap['x'],'.r',linewidth=0.2)
+#pl.plot(sol_adap['t'],sol_adap['y'],'.b',linewidth=0.2)
 pl.axis([0, tfinal, -3, 3])
 lg = legend()
 lg.draw_frame(False)
