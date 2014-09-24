@@ -171,8 +171,8 @@ def get_random_graph_h(B):
 	RG = nx.from_numpy_matrix(B)
 	return RG
 
-def get_random_graph_k(A , B ):
-	maxswap = 1 			#	can be CHANGED!!!!!!!!!!!!!		 
+def get_random_graph_k(A , B , maxswap ):
+	#maxswap = 1 			#	can be CHANGED!!!!!!!!!!!!!		 
 	new_A   =  np.triu(A)
 	(i , j) = new_A.nonzero()
 	m		= len(i)
@@ -555,15 +555,21 @@ print "input data is loaded! "
 method_k_matrix = load_matrix(name_k)
 
 
-for i in range(0, 100):
+for i in range(5, 100):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
 	A = threshold_matrix(data_matrix, thr)
 	try:
 		if method == 'k':
+			
+			if thr < 0.9:
+				maxswap = 0
+			else:
+				maxswap =1				
+			
 			B        = threshold_matrix(method_k_matrix, thr) 
-			Random_G = random_graph_methods[method](A,B)
+			Random_G = random_graph_methods[method](A,B,maxswap)
 		else:
 			Random_G = random_graph_methods[method](A)
 	except:
