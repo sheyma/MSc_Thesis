@@ -30,47 +30,65 @@
    
 
 	\section{Randomization Methods and Measures of Randomized Networks}	
-	
-The randomized networks were constructed with five different \textit{networkx} methods in \textit{Python}. Given a major test matrix derived from BOLD signals, initially the matrix was converted into its corresponding functional brain network and the characteristic measurements of that test network were statistically calculated by using graph theory methods. Then, the randomization methods built the new networks by preserving some of those original network measures such as keeping the degree distribution or network density the same. The purpose is to understand the conditions that distinguish original network topologies from that of randomly constructed networks.  
 
-The first randomization method (\textit{networkx.gnm$\_$random$\_$graph}) keeps the same number of nodes and links as in the test network, second randomization method (\textit{networkx.erdos$\_$renyi$\_$graph}) preserves the number of nodes and the network density, the third method (\textit{nx.double$\_$edge$\_$swap}) preserves the degree distribution but this time by swapping the edges between the links, the fourth method ( \textit{networkx.random$\_$} \textit{degree$\_$sequence$\_$graph}) builds a graph with the given degree sequence, and the fifth one (\textit{nx.generators.degree$\_$seq.havel$\_$hakimi$\_$graph}) creates a graph again with a given degree sequence, but this time by connecting higher degree nodes to the other higher degree nodes.
-	
-This section introduces the network topologies of the BOLD-fMRI and DW-MRI obtained empirical networks; one is the functional connectivity matrix (FCM) and the other is the anatomical connection probability matrix (ACM). For simplicity, the random networks are mentioned as \textit{Ra, Rb, Rd, Rf, Rc} with respect to the described order in previous paragraph, and the graph of the original test network after thresholding is named as \textit{R0}.  	
+The empirical data matrices in our work are obtained from fMRI-BOLD and DW-MRI measures, one is the functional connectivity matrix (FCM) and the other is the anatomical connection probability matrix (ACM). fMRI-BOLD reveals the correlations of functional activity among anatomically labeled brain regions. DW-MRI technique illustrates the  probability of anatomical connection by nerve fiber tracks among those regions, which are also called as nodes or vertices.   
+
+Our work begins with identifying the characteristic network topologies of FCM and ACM, such as network density, degree distribution, clustering coefficient etc.. In addition to the original graphs built on FCM and ACM, we construct further some random graphs and calculate their characteristic measures. The overall purpose is to understand the conditions that distinguish the original network topologies from that of randomly constructed networks.    
+
+Our random graphs depend on our empirical data. The empirical matrix is first converted to its adjacency matrix with a threshold value, which has only ones and zeros. At second, the corresponding real graph of the adjacency matrix is obtained. Thirdly, this graph is reconstructed with some randomization tools. The randomization methods built the new networks by preserving some of the original network measures, e.g. keeping the degree distribution the same as in the original graph, they are summarized in Table 1.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ l | c | r }
+  Abbreviation & Description & Reference \\
+  \hline  \hline                     
+  R0 & original network						  & networkx \\ \hline
+  Ra & same number of nodes and edges in R0   & networkx \\ \hline
+  Rd & swapping two edges in R0 			  & networkx \\ \hline
+  Rg & same degree sequence in R0			  & networkx \\ \hline
+  Rh & same degree distribution in R0		  & BCT 	 \\ \hline
+  Rk & swap edges, same degree distribution	  & BCT 	 \\ \hline  
+  \hline  
+\end{tabular}
+\caption[Table caption text]{Descriptions of randomization tools used, networkx is a Python package based on graph theory, BCT : Brain Connectivity Toolbox, Rubinov and Sporns, 2009}
+%\label{table:name}
+\end{center}
+\end{table}	
 
 \subsection{Average Degree}
 
-Degree (denoted by $k_i$) is simply the number of edges connected to the node $i$. Average degree of a network (denoted by $\langle k \rangle$) indicates the ratio of total number of edges to total number of nodes in a graph.
+Degree (denoted by $k_i$) is simply the number of edges connected to the node $i$. Average degree of a network (denoted by $\langle k \rangle$) indicates the ratio of total number of edges, \textit{L}, to total number of nodes, \textit{N} in a graph.
  
 \begin{equation}
 \langle k \rangle = \frac{2L}{N}
 \end{equation} 
  
- where \textit{L} is the set of all links (edges) and \textit{N} is the set of all nodes (vertices) in the network. In order not to count each link twice, the total number of edges is divided by $\frac{N}{2}$ instead of $N$. 
+In order not to count each link twice, the total number of edges is divided by $\frac{N}{2}$ instead of $N$. 
  
 
-\begin{figure}[htp]
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Degree_Average.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Degree_Average_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Average degrees of the test network and the randomized networks. Left: $R0$ corresponds to the graph of FCM (source is $A\_aal.txt$), right: $R0$ is that of ACM (source is $acp\_w.txt$). Randomization methods $Rc$, $Rd$ and $Rf$ could not successfully create networks for some of the threshold and probability ranges. Fine $r$ ranges in left: $r_{Rc}=[0,0.04]\cup[0.59,1.00]$ , $r_{Rd} = [0.25,1.00]$, $r_{Rf} = [0.01,1.00]$; and fine $p$ ranges in right: $p_{Rc}=[0.14 , 1.00]$ and $p_{Rd}=[0.01 , 1.00]$. All other non-indicated ranges lie in $[0,1.00]$.  }
+%
+%\end{figure}
+%
+Degree is one of the statistical tools to measure the centrality of network. The higher the average degree is, the more interaction the nodes in the graph have. 
 
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Degree_Average.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Degree_Average_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Average degrees of the test network and the randomized networks. Left: $R0$ corresponds to the graph of FCM (source is $A\_aal.txt$), right: $R0$ is that of ACM (source is $acp\_w.txt$). Randomization methods $Rc$, $Rd$ and $Rf$ could not successfully create networks for some of the threshold and probability ranges. Fine $r$ ranges in left: $r_{Rc}=[0,0.04]\cup[0.59,1.00]$ , $r_{Rd} = [0.25,1.00]$, $r_{Rf} = [0.01,1.00]$; and fine $p$ ranges in right: $p_{Rc}=[0.14 , 1.00]$ and $p_{Rd}=[0.01 , 1.00]$. All other non-indicated ranges lie in $[0,1.00]$.  }
-
-\end{figure}
-
-Degree is one of the statistical tools to measure the centrality of network. Once the degree of a node calculated in terms of its local dynamics, we can estimate how "central" the node is. The higher the average degree is, the more interaction the nodes have. 
-
-Increasing threshold ($r$) value diminishes number of edges (those weaker than $r$) in graph as presented in Figure 1. Each network tends to have less $\langle k \rangle$ values with increasing $r$ inverse sigmoidally.  Meanwhile, as long as the total node numbers, total edge numbers and networks density are all preserved while constructing the random graphs, the average degree remains the same. 
-	
-
+Increasing threshold values $r$ for functional connectivity and probability $p$ for structural connectivity diminishes number of edges in graphs as presented in Figure 1. Each network tends to have less $\langle k \rangle$ values with increasing $r$ and $p$ inverse sigmoidally.  As long as the total node numbers, total edge numbers and networks density are all preserved while constructing the random graphs, the average degree remains the same. 
+%	
+%
 \subsection{Network Density}
 
 The denstiy of a network (\textit{D}) is given by the following equation.
@@ -79,32 +97,32 @@ The denstiy of a network (\textit{D}) is given by the following equation.
 D = \frac{2L}{N(N-1)}
 \end{equation}	
 
-The formula above describes the density basically as the ratio between number of total edges and maximum number of possible edges, ${N \choose 2} $.
-	
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Network_Density.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Network_Density_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Network density measure of test and random networks are similar to the Figure 1, except that the network density represents a probability value over all possible nodes, therefore it is lying between 0 and 1.}
-
-\end{figure}
+The formula above describes the density as the ratio between the number of total edges and maximum number of possible edges, ${N \choose 2} $. The density is a scaled version of average degree measure. 
+%	
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Network_Density.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Network_Density_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Network density measure of test and random networks are similar to the Figure 1, except that the network density represents a probability value over all possible nodes, therefore it is lying between 0 and 1.}
+%
+%\end{figure}
 
 All the networks seem to be densely connected at lower $r$ and $p$ values. The FCM reaches zero network density faster than ACM which stays almost constant for higher $p$.
 
  
 \subsection{Average Clustering Coefficient}
 
-The average clustering coefficient (\textit{C}) of network is calculated through the clustering coefficients of single nodes ($C_i$).
+The average clustering coefficient (\textit{C}) of network is calculated through the clustering coefficients of single nodes ($C_i$):
 
 \begin{equation}
 C = \frac{1}{n} \sum\limits_{i\epsilon N}C_i = \frac{1}{n}\sum\limits_{i\epsilon N} \frac{2t_i}{k_i(k_i -1)}
@@ -112,140 +130,141 @@ C = \frac{1}{n} \sum\limits_{i\epsilon N}C_i = \frac{1}{n}\sum\limits_{i\epsilon
 
 where $t_i$ is the number of triangles (triplets) around node $i$, $k_i$ is the degree (number of links connected to the node) of node $i$ (Watts and Strogatz, 1998). Clustering coefficient is a measure of segregation, it reveals how the single nodes in a graph cluster together.
 
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Clustering_Coefficient.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Clustering_Coefficient_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Average clustering coefficient of the test networks and the randomized networks. The randomization methods $Ra$, $Rb$, $Rc$ and $Rd$ construct graphs having slightly lower average clustering coefficients ($cc$). However, the method $Rf$ creates a graph which has larger $cc$ than other random networks and larger than the test networks ($R0$) on left and right.}
-
-\end{figure}
-
-
-Clustering coefficient is formulated as the ratio of $t_i$ over all possible edges of the node $i$; ${k_i \choose 2} $. Since this resembles the probability, all $cc$ values are between 0 and 1. Figure 3 shows that at lower threshold, the nodes tend to cluster more due to higher number of existing edges. The empirically obtained test network has slightly different $cc$ compared to $R0$ between $r=0.4$ and $r=0.9$ on the left. The difference between ACM and other random graphs seem to be larger on the right (besides $Rf$). In general, the actual brain functional network seems to be higher clustered than our randomized networks.	
-
-The reason why the random graph $Rf$ has the largest $cc$ at all might be the following; this method searches to connect high degree nodes to other high degree nodes and number of triangles involving a specific node $t_i$ tends to be higher, resulting in bigger $cc$ values. 
-
-
-
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Clustering_Coefficient.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Clustering_Coefficient_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Average clustering coefficient of the test networks and the randomized networks. The randomization methods $Ra$, $Rb$, $Rc$ and $Rd$ construct graphs having slightly lower average clustering coefficients ($cc$). However, the method $Rf$ creates a graph which has larger $cc$ than other random networks and larger than the test networks ($R0$) on left and right.}
+%
+%\end{figure}
+%
+%
+%Clustering coefficient is formulated as the ratio of $t_i$ over all possible edges of the node $i$; ${k_i \choose 2} $. Since this resembles the probability, all $cc$ values are between 0 and 1. Figure 3 shows that at lower threshold, the nodes tend to cluster more due to higher number of existing edges. The empirically obtained test network has slightly different $cc$ compared to $R0$ between $r=0.4$ and $r=0.9$ on the left. The difference between ACM and other random graphs seem to be larger on the right (besides $Rf$). In general, the actual brain functional network seems to be higher clustered than our randomized networks.	
+%
+%The reason why the random graph $Rf$ has the largest $cc$ at all might be the following; this method searches to connect high degree nodes to other high degree nodes and number of triangles involving a specific node $t_i$ tends to be higher, resulting in bigger $cc$ values. 
+%
+%
+%
 \subsection{Connected Components}
 
-The connected components of an indirected graph indicates the number of of subgraphs in overall network. Subgraph can be imagined as a connected group of vertices which has globally no connection to any other subgraph. In order to visualize subgraphs algebraically, let us define number of edges $L$ of graph $G$ in terms of three subgraphs of $G$: $L_G = L_{G_1}\cup L_{G_2}\cup L_{G_3}$. 
-
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Connected_Components_Average.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Connected_Components_Average_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Number of connected components of the test networks and the randomized networks. The number of subgraphs remain to be zero below the threshold values $r<0.65$ for the FCM and its randomized graphs, and it remains zero for almost all $p$ values for the ACM on the right, except for the last probability value $p=1$.}
-
-\end{figure}
+The connected components of an indirected graph indicates the number of subgraphs in overall network. Subgraph can be imagined as a connected group of vertices which has globally no connection to any other subgraph. In order to visualize subgraphs algebraically, let us define number of edges $L$ of graph $G$ in terms of three subgraphs of $G$: $L_G = L_{G_1}\cup L_{G_2}\cup L_{G_3}$. 
+%
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Connected_Components_Average.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Connected_Components_Average_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Number of connected components of the test networks and the randomized networks. The number of subgraphs remain to be zero below the threshold values $r<0.65$ for the FCM and its randomized graphs, and it remains zero for almost all $p$ values for the ACM on the right, except for the last probability value $p=1$.}
+%
+%\end{figure}
+%
 
 We can expect that the nodes are assumed to be well connected at lower $r$ and $p$, it is always possible to visit any node in the network through the edges, when started from any other node. That means subgraphs should begin to be constructed after a high $r$ and $p$ values.  
-
-Figure 4 shows that there is no subgraph at lower threshold values in any network almost up to $r=0.65$ as expected. At higher $r$ levels, the nodes become sparse as the connectivity density gets lower. When $r>95$, we can imagine each node as a single subgraph since they are not connected at all.  Interestingly, the corresponding graph of the anatomical connectivity matrix on the right ($R0$) lies always at 1 subgraph level except for $p=1$, at which subgraph number jumps to 90. The method $Rf$ gives slightly higher number of subgraphs than other graphs at some $p$ values.
-
-
+%
+%Figure 4 shows that there is no subgraph at lower threshold values in any network almost up to $r=0.65$ as expected. At higher $r$ levels, the nodes become sparse as the connectivity density gets lower. When $r>95$, we can imagine each node as a single subgraph since they are not connected at all.  Interestingly, the corresponding graph of the anatomical connectivity matrix on the right ($R0$) lies always at 1 subgraph level except for $p=1$, at which subgraph number jumps to 90. The method $Rf$ gives slightly higher number of subgraphs than other graphs at some $p$ values.
+%
+%
 \subsection{Transitivity}
-	Transitivity is a similar measure to the clustering coefficient, it is also a measure for the segregation in the network. The mean clustering coefficient is normalized individually for each node [RUB10]. The corresponding equation represents the transitivity of a network (Newman, 2003),
+	Transitivity is a similar measure to the clustering coefficient, it is also a measure for the segregation in the network. The mean clustering coefficient is normalized individually for each node [RUB10]. The corresponding equation represents the transitivity of a network (Newman, 2003):
 	
 \begin{equation}
  T = \frac{\sum\limits_{i \epsilon N} 2 t_i}{\sum\limits_{i \epsilon N}k_i (k_i - 1)}
 \end{equation}	
 
 If a node has links to two other nodes, transitivity inquires whether those two other nodes are also connected to each other. Transitivity is defined only for the whole network rather than single nodes. 
-
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Transitivity.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Transitivity_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Transitivity of the test networks and the randomized networks. The transitivity evolves as the clustering coefficient up to a threshold value. }
-
-\end{figure}
-
-The transitivity of random graphs $Ra$, $Rb$, $Rc$ and $Rd$ are in strong disagreement with that of the test network $R0$ for both FCM (Figure 5, left) and ACM (Figure 5, right), as Newman previously pointed out: Transitivity is one of severe shortcomings that real world networks and random networks strongly differ [NEW10]. 
-
-Besides of having the same number of nodes, links, and network density,  the degree distribution differs between our test network and random networks in general. However, the method $Rf$ and $Rc$ creates random graphs having the same distribution although their algorithm is different. $Rf$ connects higher degree nodes to other higher degree nodes, this brings higher $cc$ and transitivity at less densely connected graphs.  
-
-The interesting behavior of the transitivity as seen in Figure 5 (left) might be due to the changing number of connected components in the network. Figure 4 shows that, when $r>0.7$ approximately, the FCM graphs (both the test network and random graphs) tend to have multiple connected components. The ACM however does not get multiple components besides the exception $p=1$. One can conclude that, as long as the graph tends to include multiple connected components (average connected component number is not 1 anymore), then its transitivity does not show similarity to its clustering coefficient anymore and Equation 4 becomes significantly different than equation 3. This is why Figure (5 left) shows a wavy behavior in transitivity after $r>0.7$.
-
-
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Connected_Components_Average_A_txt.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Transitivity_A_txt.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{A look to another FCM source : $A.txt$.}
-
-\end{figure}
-
-\newpage
-
+%
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Transitivity.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Transitivity_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Transitivity of the test networks and the randomized networks. The transitivity evolves as the clustering coefficient up to a threshold value. }
+%
+%\end{figure}
+%
+%The transitivity of random graphs $Ra$, $Rb$, $Rc$ and $Rd$ are in strong disagreement with that of the test network $R0$ for both FCM (Figure 5, left) and ACM (Figure 5, right), as Newman previously pointed out: Transitivity is one of severe shortcomings that real world networks and random networks strongly differ [NEW10]. 
+%
+%Besides of having the same number of nodes, links, and network density,  the degree distribution differs between our test network and random networks in general. However, the method $Rf$ and $Rc$ creates random graphs having the same distribution although their algorithm is different. $Rf$ connects higher degree nodes to other higher degree nodes, this brings higher $cc$ and transitivity at less densely connected graphs.  
+%
+%The interesting behavior of the transitivity as seen in Figure 5 (left) might be due to the changing number of connected components in the network. Figure 4 shows that, when $r>0.7$ approximately, the FCM graphs (both the test network and random graphs) tend to have multiple connected components. The ACM however does not get multiple components besides the exception $p=1$. One can conclude that, as long as the graph tends to include multiple connected components (average connected component number is not 1 anymore), then its transitivity does not show similarity to its clustering coefficient anymore and Equation 4 becomes significantly different than equation 3. This is why Figure (5 left) shows a wavy behavior in transitivity after $r>0.7$.
+%
+%
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Connected_Components_Average_A_txt.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Transitivity_A_txt.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{A look to another FCM source : $A.txt$.}
+%
+%\end{figure}
+%
+%\newpage
+%
 \subsection{Shortest Pathway}
-Shortest pathway is a measure of integration in the network, opposite to the segregation measures. It corresponds to the shortest path length between two nodes, and if the network is weighted, shortest pathway is is the path on which the sum of the weights along the edges between two nodes is minimized.  
+Shortest pathway is a measure of integration in the network, opposite to the segregation measures. It corresponds to the shortest path length between two nodes in an unweighted graph.  
 
 \begin{equation}
 d_{ij} = \sum\limits_{a_{uv} \epsilon g_{i\leftrightarrow j} } a_{uv}
 \end{equation}
 where $g_{i\leftrightarrow j}$ is the shortest path between nodes $i$ and $j$. $d_{ij}$ is assumed to be $\infty$ for disconnected pairs.
-
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Shortest_Pathway.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Shortest_Pathway_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Shortest pathway of the test networks and random graphs. }
-
-\end{figure}
-
-The test network of FCM seems to be less segregated than the randomized networks while $r$ value is greater than $0.65$ in Figure 7 (left). This is the threshold value at which the test network of FCM begins to get multiple components. The test network of ACM in Figure 7 (right) seems to be more segregated than random networks except for $Rf$. The graph created with the method $Rf$ tends to be the most segregated at all. Whenever all the nodes get sparse in both FCM and ACM networks, the shortest pathway is represented as 0. One can confirm the $r$ and $p$ range for the sparseness of nodes in average connected components plot (Figure 4).
-
+%
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Shortest_Pathway.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Shortest_Pathway_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Shortest pathway of the test networks and random graphs. }
+%
+%\end{figure}
+%
+%The test network of FCM seems to be less segregated than the randomized networks while $r$ value is greater than $0.65$ in Figure 7 (left). This is the threshold value at which the test network of FCM begins to get multiple components. The test network of ACM in Figure 7 (right) seems to be more segregated than random networks except for $Rf$. The graph created with the method $Rf$ tends to be the most segregated at all. Whenever all the nodes get sparse in both FCM and ACM networks, the shortest pathway is represented as 0. One can confirm the $r$ and $p$ range for the sparseness of nodes in average connected components plot (Figure 4).
+%
 \subsection{Global Efficiency}
 The global efficiency is measured as the average of the inverse shortest pathway (Latora and Marchiori, 2001);
 
@@ -255,26 +274,26 @@ E = \frac{1}{n}\sum\limits_{i \epsilon N} E_i = \frac{1}{n}\sum\limits_{i \epsil
 
 where $E_i$ is the global efficiency of node, $d_{ij}$ is the shortest pathway between nodes $i$ and $j$. As seen from the equation, global efficiency becomes larger with smaller shortest pathways between nodes. The global efficiency is a measure of the integration in the network. It reveals the strength of connections in a network. Global efficiency measures the ability of a network to transmit information at the global level (Latora and Marchiori, 2001, 2003).
 
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Global_Efficiency_Average.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Global_Efficiency_Average_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Global efficiencies of the test networks and random graphs; FCM on left side, ACM on right side. The random graph $Rf$ seems to have the lowest global efficiency. Other random graphs have slightly larger values than the test networks at some $r$ and $p$ values. }
- 
-\end{figure}
-
-When Figure 7 (right) and Figure 8 (right) are compared, one can see that higher  $d_{ij}$ values reveals lower global efficiency in a network. When it is easier to visit a node starting from any other node in the graph, the information transmission is better.
-
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Global_Efficiency_Average.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Global_Efficiency_Average_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Global efficiencies of the test networks and random graphs; FCM on left side, ACM on right side. The random graph $Rf$ seems to have the lowest global efficiency. Other random graphs have slightly larger values than the test networks at some $r$ and $p$ values. }
+% 
+%\end{figure}
+%
+%When Figure 7 (right) and Figure 8 (right) are compared, one can see that higher  $d_{ij}$ values reveals lower global efficiency in a network. When it is easier to visit a node starting from any other node in the graph, the information transmission is better.
+%
 \subsection{Local Efficiency}
 The local efficiency is measured as the average of inverse shortest pathways between nodes in neighborhood of a specific node (Latora and Marchiori, 2001);
 
@@ -284,28 +303,28 @@ E_{loc} = \frac{1}{n}\sum\limits_{i \epsilon N} E_{loc,i} = \frac{1}{n}\sum\limi
 
 where $E_{loc,i}$ is the local efficiency of node $i$, $d_{jh}(N_i)$ is the shortest pathway between nodes $j$ and $h$, which are located in neighborhood of node $i$. Local efficiency measure the ability of a network to transmit information at the local level (Latora and Marchiori, 2001, 2003).
 
-
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Local_Efficiency_Average.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Local_Efficiency_Average_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Local efficiencies of the test networks and random graphs; FCM on left side, ACM on right side. The random graph $Rf$ seems to have the relatively higher local efficiencies than that of other random graphs. The anatomical connectivity network and its random graphs have in general higher local efficiencies compared to the functional connectivity network. }
- 
-\end{figure}
-
-The test network $R0$ and random graph $Rf$ have higher local efficiencies than other graphs for the FCM in Figure 9 (left). The test network $R0$ of ACM has the highest local efficiency values up to $p=0.63$, than that of $Rf$ seems to be increasing. In general local information transmit is more efficient in ACM than in FCM. The graphs having higher global efficiencies in Figure 8 tends to have lower local efficiencies in Figure 9. 
-
-
+%
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Local_Efficiency_Average.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Local_Efficiency_Average_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Local efficiencies of the test networks and random graphs; FCM on left side, ACM on right side. The random graph $Rf$ seems to have the relatively higher local efficiencies than that of other random graphs. The anatomical connectivity network and its random graphs have in general higher local efficiencies compared to the functional connectivity network. }
+% 
+%\end{figure}
+%
+%The test network $R0$ and random graph $Rf$ have higher local efficiencies than other graphs for the FCM in Figure 9 (left). The test network $R0$ of ACM has the highest local efficiency values up to $p=0.63$, than that of $Rf$ seems to be increasing. In general local information transmit is more efficient in ACM than in FCM. The graphs having higher global efficiencies in Figure 8 tends to have lower local efficiencies in Figure 9. 
+%
+%
 \subsection{Small Worldness}
 
 A small world network is both highly segregated and integrated, a measure of small worldness was proposed to capture this effect in a single statistic (Humpries and Gurney,2008).
@@ -319,31 +338,31 @@ S = \frac{C/C_{rand}}{L/L_{rand}}
 \begin{equation}
 L = \frac{1}{n}\sum\limits_{i \epsilon N} L_i = \frac{1}{n}\sum\limits_{i \epsilon N} \frac{\sum\limits_{j \epsilon N, j \neq i }d_{ij}}{n-1 } 
 \end{equation}
-
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Small_Worldness.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Small_Worldness_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Small worldness of the test networks and random graphs; FCM on left side, ACM on right side. $Rf$ seems to have the highest small worldness among other random graphs, and even higher than test network at some $r$ and $p$ values. }
- 
-\end{figure}
-
-
-
-Figure 3 representing cluster coefficients show that the test network has larger $C$ than the randomly constructed networks. The characteristic pathway is truly proportional with the shortest pathway. Figure 6 gives a hint that test network tend to have smaller $d_{ij}$, indicating smaller characteristic pathway for it. Hence the division in equation 8 results in such an $S$ value, much larger 1.
-
-Figure 10 implies that the random networks except for $Rf$ can not be equally segregated and integrated at the same time. The real world networks for both  FCM and ACM tend to have higher small worldness, however $Rf$ reaches the highest values only at some $p$ and $r$ values.  
-
+%
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Small_Worldness.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Small_Worldness_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Small worldness of the test networks and random graphs; FCM on left side, ACM on right side. $Rf$ seems to have the highest small worldness among other random graphs, and even higher than test network at some $r$ and $p$ values. }
+% 
+%\end{figure}
+%
+%
+%
+%Figure 3 representing cluster coefficients show that the test network has larger $C$ than the randomly constructed networks. The characteristic pathway is truly proportional with the shortest pathway. Figure 6 gives a hint that test network tend to have smaller $d_{ij}$, indicating smaller characteristic pathway for it. Hence the division in equation 8 results in such an $S$ value, much larger 1.
+%
+%Figure 10 implies that the random networks except for $Rf$ can not be equally segregated and integrated at the same time. The real world networks for both  FCM and ACM tend to have higher small worldness, however $Rf$ reaches the highest values only at some $p$ and $r$ values.  
+%
 \subsection{Assortativity}
 
 Assortativity measures the correlation coefficient between the degrees of all nodes on two opposite ends of a link [RUB10]. Assortativity coefficient of the network (Newman, 2002);
@@ -354,150 +373,150 @@ A = \frac{\dfrac{1}{l} \sum\limits_{(i,j) \in L}  k_i k_j -  \Big ( \dfrac{1}{2L
 
 where $L$ is number of edges in, $k_i$ is degree of node $i$.
 
-
-\begin{figure}[htp]
-
-  \centering
-
-    \begin{tabular}{cc}
-
-    % Requires \usepackage{graphicx}
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Assortativity.eps} &
-
-    \includegraphics[width=0.45\textwidth, height=60mm]{Assortativity_Stru.eps}\\
-
-  \end{tabular}
-
- \label{figur}\caption{Assortativity coefficients of the test networks and random graphs; FCM on left side, ACM on right side. $Rf$ has mostly the highest assortativity.}
- 
-\end{figure}
-
-Negative assortativity presents a network having widely distributed high-degree hubs [RUB10]. On the other hand, assortativity coefficients close to $1$ indicates a graph having fine correlated degree nodes. $Rf$ method creates a random graph by connecting high degree nodes to other high degree nodes and its assortativity tends to be highest in general. 
-
-\newpage
-
-\subsection{Degree Distribution}
-Degree distribution of a network reflects the probability ($P$) of a node to have a given number of degree ($k$). Degree distribution reveals the resilience of a graph. 
-
-\begin{equation}
- P(k) = \sum\limits_{k' \geq k} p(k')
-\end{equation}
-
-where $p(k')$ is the probability of a node having degree $k'$ (Barabasi and Albert, 1999). 
-
-
-\begin{figure}[htp!]
-	\centering
-	\includegraphics[width=\textwidth]{Degree_Distribution.eps}
-	\caption{Heat maps of degree distributions of the FCM network. The limits of colorbar are $[log_{10}(10^0), log_{10}(10^1)]$.}
-\end{figure}
-
-\newpage
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{Degree_Distribution_Stru.eps}
-	\caption{Heat maps of degree distributions of the ACM network and the randomized networks. Fine $p$ ranges: $p_{Rc}=[0.14 , 1.00]$ and $p_{Rd}=[0.01 , 1.00]$, the others are all in $[0,1.0]$ range.The colors are coded as logarithmic scale. The limits of colorbar are $[log_{10}(10^0), log_{10}(10^1)]$. }
-\end{figure}
-
-\newpage
-
-\subsection{Clustering Coefficient of Nodes}
-
-The clustering coefficient of each node is measured as ratio between number of triangles around a node and all possible edge connections of that node ${k_i \choose 2} $ (Watts and Stogatz, 1998); 
-
-\begin{equation}
-C_i =  \frac{2t_i}{k_i(k_i -1)}
-\end{equation}
-
-As the number of triangles around a node increased, $C_i$ becomes larger indicating more segregated nodes in the network.
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{Clustering_Coefficient_Node.eps}
-	\caption{Heat maps of clustering coefficient distributions of FCM network.}
-\end{figure}
-
-\newpage
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{Clustering_Coefficient_Node_Stru.eps}
-	\caption{Heat maps of clustering coefficient distributions of ACM network.}
-\end{figure}
-
-\newpage
-
-\subsection{Connected Components of Nodes}
-Connected components of nodes tells us how many connections a single node in any subgraph in its isolated neighborhood has. It implies how many other nodes we can reach through that single node. 
-
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{Connected_Components_Nodes.eps}
-	\caption{Heat maps of connected component distributions of FCM network. The colors are coded in logarithmic scale, the limits are $[log_{10}(10^0), log_{10}(10^2)]$.}
-\end{figure}
-
-\newpage
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{Connected_Components_Nodes_Stru.eps}
-	\caption{Heat maps of connected component distributions of ACM network. The colors are coded in logarithmic scale, the limits are $[log_{10}(10^0), log_{10}(10^2)]$. The color codes are again in logarithmic scale but connected components are mostly 1, corresponding to blue color $10^0$.}
-\end{figure} 
-
-\newpage
-
-\subsection{Global Efficiencies of Nodes}
-Global efficiency of single node can be expressed with the following equation as described previously; 
-
-\begin{equation}
- E_i =  \frac{\sum\limits_{j \epsilon N, j\neq i}d_{ij}^{-1}}{n-1 }
-\end{equation}
-
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{Global_Efficiency_Nodes.eps}
-	\caption{Heat maps of global efficiency distributions of FCM network.}
-\end{figure}
-
-\newpage 
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{Global_Efficiency_Nodes_Stru.eps}
-	\caption{Heat maps of global efficiency distributions of ACM network.}
-\end{figure}
-
-\newpage 
-
-\subsection{Local Efficiency of Nodes}
-
-\begin{equation}
- E_{loc,i} = \frac{\sum\limits_{j,h \epsilon N, j\neq i} a_{ij} a_{ih}[d_{jh}(N_i)]^{-1}}{k_i(k_i - 1) }
-\end{equation}
-
-
-
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{Local_Efficiency_Nodes.eps}
-	\caption{Heat maps of local efficiency distributions of FCM network.}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{Local_Efficiency_Nodes_Stru.eps}
-	\caption{Heat maps of local efficiency distributions of ACM network.}
-\end{figure}
-
+%
+%\begin{figure}[htp]
+%
+%  \centering
+%
+%    \begin{tabular}{cc}
+%
+%    % Requires \usepackage{graphicx}
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Assortativity.eps} &
+%
+%    \includegraphics[width=0.45\textwidth, height=60mm]{Assortativity_Stru.eps}\\
+%
+%  \end{tabular}
+%
+% \label{figur}\caption{Assortativity coefficients of the test networks and random graphs; FCM on left side, ACM on right side. $Rf$ has mostly the highest assortativity.}
+% 
+%\end{figure}
+%
+%Negative assortativity presents a network having widely distributed high-degree hubs [RUB10]. On the other hand, assortativity coefficients close to $1$ indicates a graph having fine correlated degree nodes. $Rf$ method creates a random graph by connecting high degree nodes to other high degree nodes and its assortativity tends to be highest in general. 
+%
+%\newpage
+%
+%\subsection{Degree Distribution}
+%Degree distribution of a network reflects the probability ($P$) of a node to have a given number of degree ($k$). Degree distribution reveals the resilience of a graph. 
+%
+%\begin{equation}
+% P(k) = \sum\limits_{k' \geq k} p(k')
+%\end{equation}
+%
+%where $p(k')$ is the probability of a node having degree $k'$ (Barabasi and Albert, 1999). 
+%
+%
+%\begin{figure}[htp!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Degree_Distribution.eps}
+%	\caption{Heat maps of degree distributions of the FCM network. The limits of colorbar are $[log_{10}(10^0), log_{10}(10^1)]$.}
+%\end{figure}
+%
+%\newpage
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Degree_Distribution_Stru.eps}
+%	\caption{Heat maps of degree distributions of the ACM network and the randomized networks. Fine $p$ ranges: $p_{Rc}=[0.14 , 1.00]$ and $p_{Rd}=[0.01 , 1.00]$, the others are all in $[0,1.0]$ range.The colors are coded as logarithmic scale. The limits of colorbar are $[log_{10}(10^0), log_{10}(10^1)]$. }
+%\end{figure}
+%
+%\newpage
+%
+%\subsection{Clustering Coefficient of Nodes}
+%
+%The clustering coefficient of each node is measured as ratio between number of triangles around a node and all possible edge connections of that node ${k_i \choose 2} $ (Watts and Stogatz, 1998); 
+%
+%\begin{equation}
+%C_i =  \frac{2t_i}{k_i(k_i -1)}
+%\end{equation}
+%
+%As the number of triangles around a node increased, $C_i$ becomes larger indicating more segregated nodes in the network.
+%
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Clustering_Coefficient_Node.eps}
+%	\caption{Heat maps of clustering coefficient distributions of FCM network.}
+%\end{figure}
+%
+%\newpage
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Clustering_Coefficient_Node_Stru.eps}
+%	\caption{Heat maps of clustering coefficient distributions of ACM network.}
+%\end{figure}
+%
+%\newpage
+%
+%\subsection{Connected Components of Nodes}
+%Connected components of nodes tells us how many connections a single node in any subgraph in its isolated neighborhood has. It implies how many other nodes we can reach through that single node. 
+%
+%
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Connected_Components_Nodes.eps}
+%	\caption{Heat maps of connected component distributions of FCM network. The colors are coded in logarithmic scale, the limits are $[log_{10}(10^0), log_{10}(10^2)]$.}
+%\end{figure}
+%
+%\newpage
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Connected_Components_Nodes_Stru.eps}
+%	\caption{Heat maps of connected component distributions of ACM network. The colors are coded in logarithmic scale, the limits are $[log_{10}(10^0), log_{10}(10^2)]$. The color codes are again in logarithmic scale but connected components are mostly 1, corresponding to blue color $10^0$.}
+%\end{figure} 
+%
+%\newpage
+%
+%\subsection{Global Efficiencies of Nodes}
+%Global efficiency of single node can be expressed with the following equation as described previously; 
+%
+%\begin{equation}
+% E_i =  \frac{\sum\limits_{j \epsilon N, j\neq i}d_{ij}^{-1}}{n-1 }
+%\end{equation}
+%
+%
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Global_Efficiency_Nodes.eps}
+%	\caption{Heat maps of global efficiency distributions of FCM network.}
+%\end{figure}
+%
+%\newpage 
+%
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Global_Efficiency_Nodes_Stru.eps}
+%	\caption{Heat maps of global efficiency distributions of ACM network.}
+%\end{figure}
+%
+%\newpage 
+%
+%\subsection{Local Efficiency of Nodes}
+%
+%\begin{equation}
+% E_{loc,i} = \frac{\sum\limits_{j,h \epsilon N, j\neq i} a_{ij} a_{ih}[d_{jh}(N_i)]^{-1}}{k_i(k_i - 1) }
+%\end{equation}
+%
+%
+%
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Local_Efficiency_Nodes.eps}
+%	\caption{Heat maps of local efficiency distributions of FCM network.}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth]{Local_Efficiency_Nodes_Stru.eps}
+%	\caption{Heat maps of local efficiency distributions of ACM network.}
+%\end{figure}
+%
 
 
 
