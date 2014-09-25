@@ -1,8 +1,38 @@
-\section{FitzHugh-Nagumo Model Dynamics in [PAN12] and [GHO08]}
+%\section{FitzHugh-Nagumo Model Dynamics in [PAN12] and [GHO08]}
+%
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\geometry{
+ a4paper,
+ total={210mm,297mm},
+ left=40mm,
+ right=20mm,
+ top=35mm,
+ bottom=35mm, }
 
-Section 2 analyzes the FitzHugh-Nagumo dynamics with two different models in [PAN12] and [GHO08] papers as isolated and coupled versions of attractor and inhibitor. The local dynamics in both papers are initially presented, then the effects of possible couplings are analyzed. 
 
-\subsection{FHN Model in [PAN12]}
+\usepackage[utf8]{inputenc}
+\usepackage{authblk}
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{amsmath}
+
+
+
+\title{MSc Thesis : Simulation of Brain Functional Connectivity on Emprical and Randomized Complex Networks, \\ 1st Report}
+\author[1]{\c{S}eyma Bayrak \thanks{seyma.bayrak@st.ovgu.de}}
+\author[ ]{\\ Advisers: Philipp H\"{o}vel, Vesna Vuksanovi\'c}
+\affil[1]{\footnotesize{Integrative Neuroscience MSc, Otto von Guericke University, Magdeburg}}
+
+
+
+\date{May 2014}
+\begin{document}
+   \maketitle
+   
+This report presents the FitzHugh-Nagumo attractor and inhibitor dynamics used in [PAN12], [VUK13] and [GHO08] papers. 
+
+\section{FitzHugh-Nagumo (FHN) Model in [PAN12]} 
 
 \subsubsection{Local Dynamics}
 
@@ -17,26 +47,35 @@ where $x$ is activator variable, $y$ is the inhibitor variable, $\varepsilon$ de
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\textwidth]{PAN12_local_dynamics.eps}
-	\caption{The local dynamics with the parameters $a=1.3$ and $\varepsilon = 0.01$. The time evolution shows a rapid excitation and less stronger rapid inhibition at very beginning, later on both $x$ and $y$ stays constant. The state space plot on the right shows the pattern of $x$ and $y$ together with the nullclines. $x$ values evolve faster than $y$.}
+	\caption{The local dynamics with the parameters $a=1.3$ and $\varepsilon = 0.01$. The time evolution shows a rapid excitation and a weaker rapid inhibition at very beginning, over time both $x$ and $y$ stays constant. The state space figure on the right shows the pattern of $x$ and $y$ together with the nullclines. $x$ values evolve faster than $y$, the fixed point as black dot at the intersection of nullclines is linearly stable with $a=1.3$}
 \end{figure}
+
+\newpage
 
 \subsubsection{Global Dynamics with Mutual Coupling and Time Delays}
 
-Now we can consider two nodes influencing each other through a mutual coupling and time delay. The nodes are not isolated from the bigger network.
+Now we can consider two nodes coupled system with mutual coupling. Each node is subject to the delayed response from the other one [PAN12]. 
 
 \begin{subequations} \begin{align} \varepsilon  \dot{x_1} = x_1 - \frac{x_1^3}{3} -y_1  + C [x_2(t-\tau_2^C)-x_1(t)] \label{eqn: frobenius 10}\\  \dot{y_1} = x_1+a \label{eqn: frobenius 11}  \\ \varepsilon  \dot{x_2} = x_2 - \frac{x_2^3}{3} -y_2  + C [x_1(t-\tau_1^C)-x_2(t)] \label{eqn: frobenius 12}  \\  \dot{y_2} = x_2+a \label{eqn: frobenius 13} 
 \end{align} 
 \end{subequations}
 
-where $C$ is the mutual coupling constant, $\tau^C$ is the time delays, and subindices $1$ and $2$ are for two nodes. The time delays must not be necessarily same, however, this assignment keeps both $\tau^C$ at the same value.
+where $C$ is the mutual coupling constant, $\tau^C$ is the time delays, and subindices $1$ and $2$ stand for the two nodes. The time delays must not be necessarily same, however, this assignment keeps both $\tau^C$ homogeneous.
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\textwidth]{PAN12_global_dynamics_C.eps}
-		\caption{The global dynamics of the two nodes with the parameters $a=1.3$ and $\varepsilon = 0.01$, $C=0.5$ and $\tau^C= 3.0$.}
+		\caption{The global dynamics of the two nodes with the parameters $a=1.3$ and $\varepsilon = 0.01$, $C=0.5$ and $\tau^C= 3.0$. The neuronal system of type-II excitability}
 \end{figure}
 
- The time evolution shows a rapid excitatory and less stronger rapid inhibitory behaviors of the nodes as the subsequent oscillation over time. The mutual coupling ($C$) let the $x$ and $y$ variables to oscillate instead of decaying on constant values as in Figure 15. The state space plot indicates a round trip over the nullclines, the change in $x$ is faster than $y$ as seen in excitation and inhibition peaks on time evolution plot.
+\newpage 
+ The time evolution shows a rapid strong excitatory and rapid weak inhibitory behaviors of the nodes 1 and 2 as the subsequent periodic oscillations over time. The mutual coupling ($C$) let the $x$ and $y$ variables to oscillate instead of decaying onto a constant value as previouly in Figure 1. The state space figures indicate a round trip over the nullclines including the fixed point.
+ 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth, height=8cm]{PAN12_global_dynamics_C_t_small.eps}
+		\caption{The global dynamics of the two nodes with the parameters $a=1.3$ and $\varepsilon = 0.01$, $C=0.5$, $\tau^C= 3.0$, $K=0$, $\tau^K= 3.0$. This figure is reproduced in order to visualize the oscillation phase of two nodes in detail.}
+\end{figure} 
  
 \subsubsection{Global Dynamics with Mutual Coupling, Self Coupling and Time Delays}
 
@@ -46,7 +85,7 @@ This part investigates the complete FHN model given in [PAN12].
 \end{align} 
 \end{subequations}
 
-where $K$ is the strength of self coupling of the nodes and $\tau^K$ values are the time delays required for the self coupling, both nodes are assumed to have both self coupling delays for simplicity.
+where $K$ is the strength of self feedback of the nodes and $\tau^K$ values are the time delays required for the self coupling, both nodes are assumed to have the same self coupling delays for simplicity.
 
 \begin{figure}[h!]
 	\centering
@@ -54,126 +93,129 @@ where $K$ is the strength of self coupling of the nodes and $\tau^K$ values are 
 		\caption{The global dynamics of the two nodes with the parameters $a=1.3$ and $\varepsilon = 0.01$, $C=0.5$, $\tau^C= 3.0$, $K=0.1$, $\tau^K= 3.0$.}
 \end{figure}
 
-The mutual coupling constitutes the oscillatory behavior of excitation and inhibition at a higher frequency as seen in time evolution plot in Figure 17 compared to Figure 16. The phase space changes only slightly.
-
-\subsection{FHN Model in [GHO08]}
-
-\subsubsection{Local Dynamics}
-
-\begin{subequations}
- \begin{align}\dot{x} = \tau (y + \gamma x - \frac{x^3}{3})  \label{eqn: frobenius 17}\\  \dot{y} = -\frac{1}{\tau} (x - \alpha + b y) \label{eqn: frobenius 18}   \end{align} 
-\end{subequations}
-
-where $x$ is activator variable, $y$ is the inhibitor variable, $\tau$ denotes the time constant accelerating $x$, and $\gamma$, $\alpha$, $b$ are the parameters. 
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth, height=8cm]{GHO08_local_dynamics.eps}
-		\caption{The local dynamics of one single isolated node with the parameters $\alpha = 0.89$, $\gamma=0.9$, $b=0.1$ and $\tau = 4$.}
-\end{figure}
-
-The time evolution of $x$ and $y$ starts with rapid increase but both decay over time with small amplituded oscillations and even become constant over longer time. 
-
-\subsubsection{Global Dynamics with Mutual Coupling and Time Delays}
-
-\begin{subequations}
- \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x_1^3}{3}) + C [x_2(t-\tau_2^C)-x_1(t)] \label{eqn: frobenius 19}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1) \label{eqn: frobenius 20} \\ \dot{x_2}=tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_2^C)-x_2(t)] \label{eqn: frobenius 21} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + by_2) \label{eqn: frobenius 22}\end{align} 
-\end{subequations}
-
-where $C$ is the mutual coupling constant, $\tau^C$ is the time delays of mutual coupling, and subindices $1$ and $2$ are for two nodes. 
-
-\newpage
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth, height=8cm]{GHO08_global_dynamics_C.eps}
-		\caption{The global dynamics of two nodes with the parameters $\alpha = 0.89$, $\gamma=0.9$, $b=0.1$, $\tau = 4$, $C=5$ and mutual coupling delays $\tau_1^C=\tau_2^C=\tau^C=3$.}
-\end{figure}
-
-The non-zero coupling strength initiates the oscillatory behavior of $x$ and $y$ now. 
-
-\subsubsection{Global Dynamics with Mutual Coupling, Self Coupling and Time Delays}
-
-\begin{subequations}
- \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x_1^3}{3}) + C [x_2(t-\tau_2^C)-x_1(t)] + K(x_1(t-\tau_1^K) - x_1(t)) \label{eqn: frobenius 19}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1) \label{eqn: frobenius 20} \\ \dot{x_2}=tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_2^C)-x_2(t)]+ K(x_2(t-\tau_2^K) - x_2(t)) \label{eqn: frobenius 21} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + by_2) \label{eqn: frobenius 22}\end{align} 
-\end{subequations}
-
-\newpage
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=1\textwidth, height=9cm]{GHO08_global_dynamics_C_K.eps}
-		\caption{The global dynamics of two nodes with the parameters $\alpha = 0.89$, $\gamma=0.9$, $b=0.1$, $\tau = 4$, $C=5$, mutual coupling delays $\tau_1^C=\tau_2^C=\tau^C=3$, $K=4$, and self coupling delays $\tau_1^K=\tau_2^K=\tau^K=3$ .}
-\end{figure}
-
-The mutual coupling adds up new $x$ and $y$ oscillations to the system.
-
-\section{An Overlook to the Adaptive Solution and the Sample Solution of Time Delayed Differental Equations}
-
-In this section I would like to simulate FHN model given in [VUK13] for two simple nodes $i,j={1,2}$ with given distance matrix $d_{ij}$ via adaptive step size method and sampling solution method. The model for the neural dynamics in [VUK13] is expressed as below.
-
-\begin{equation}
- \dot{u}_i=g(u_i,v_i)-c \sum_{j=1}^N  f_{ij} u_j(t-\Delta t_{ij})+n_u
-\end{equation}
-\begin{equation}
- \dot{v}_i=h(u_i,v_i)+n_v
-\end{equation}
-
-where $c$ is coupling strength, $f_{ij}$ is the connectivity matrix, $\Delta t_{ij}$ is time delay due to finite signal propagation velocity between nodes, $n_u$ is the noise factor. $\Delta t_{ij}$ is calculated as $\Delta t_{ij}=\frac{d_{ij}}{\nu}$, distance matrix divided by velocity. 
+The mutual coupling constitutes the oscillatory behavior of excitation and inhibition at a higher frequency as seen in time evolution plot in Figure 4 compared to Figure 2. The phase space changes only slightly.
 
 
-The functions $g$ and $v$ are modeled very similar to FitzHugh-Nagumo model introduced in [GHO08]:
-\begin{equation}
- \dot{u}=g(u,v)=\tau(v+\gamma u - \frac{u^3}{3})
-\end{equation}
-\begin{equation}
- \dot{v}=h(u,v)=-\frac{1}{\tau}(u- \alpha +bv-I)
-\end{equation}
+%\subsection{FHN Model in [GHO08]}
+%
+%\subsubsection{Local Dynamics}
+%
+%\begin{subequations}
+% \begin{align}\dot{x} = \tau (y + \gamma x - \frac{x^3}{3})  \label{eqn: frobenius 17}\\  \dot{y} = -\frac{1}{\tau} (x - \alpha + b y) \label{eqn: frobenius 18}   \end{align} 
+%\end{subequations}
+%
+%where $x$ is activator variable, $y$ is the inhibitor variable, $\tau$ denotes the time constant accelerating $x$, and $\gamma$, $\alpha$, $b$ are the parameters. 
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth, height=8cm]{GHO08_local_dynamics.eps}
+%		\caption{The local dynamics of one single isolated node with the parameters $\alpha = 0.89$, $\gamma=0.9$, $b=0.1$ and $\tau = 4$.}
+%\end{figure}
+%
+%The time evolution of $x$ and $y$ starts with rapid increase but both decay over time with small amplituded oscillations and even become constant over longer time. 
+%
+%\subsubsection{Global Dynamics with Mutual Coupling and Time Delays}
+%
+%\begin{subequations}
+% \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x_1^3}{3}) + C [x_2(t-\tau_2^C)-x_1(t)] \label{eqn: frobenius 19}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1) \label{eqn: frobenius 20} \\ \dot{x_2}=tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_2^C)-x_2(t)] \label{eqn: frobenius 21} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + by_2) \label{eqn: frobenius 22}\end{align} 
+%\end{subequations}
+%
+%where $C$ is the mutual coupling constant, $\tau^C$ is the time delays of mutual coupling, and subindices $1$ and $2$ are for two nodes. 
+%
+%\newpage
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth, height=8cm]{GHO08_global_dynamics_C.eps}
+%		\caption{The global dynamics of two nodes with the parameters $\alpha = 0.89$, $\gamma=0.9$, $b=0.1$, $\tau = 4$, $C=5$ and mutual coupling delays $\tau_1^C=\tau_2^C=\tau^C=3$.}
+%\end{figure}
+%
+%The non-zero coupling strength initiates the oscillatory behavior of $x$ and $y$ now. 
+%
+%\subsubsection{Global Dynamics with Mutual Coupling, Self Coupling and Time Delays}
+%
+%\begin{subequations}
+% \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x_1^3}{3}) + C [x_2(t-\tau_2^C)-x_1(t)] + K(x_1(t-\tau_1^K) - x_1(t)) \label{eqn: frobenius 19}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1) \label{eqn: frobenius 20} \\ \dot{x_2}=tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_2^C)-x_2(t)]+ K(x_2(t-\tau_2^K) - x_2(t)) \label{eqn: frobenius 21} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + by_2) \label{eqn: frobenius 22}\end{align} 
+%\end{subequations}
+%
+%\newpage
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=1\textwidth, height=9cm]{GHO08_global_dynamics_C_K.eps}
+%		\caption{The global dynamics of two nodes with the parameters $\alpha = 0.89$, $\gamma=0.9$, $b=0.1$, $\tau = 4$, $C=5$, mutual coupling delays $\tau_1^C=\tau_2^C=\tau^C=3$, $K=4$, and self coupling delays $\tau_1^K=\tau_2^K=\tau^K=3$ .}
+%\end{figure}
+%
+%The mutual coupling adds up new $x$ and $y$ oscillations to the system.
+%
+%\section{An Overlook to the Adaptive Solution and the Sample Solution of Time Delayed Differental Equations}
+%
+%In this section I would like to simulate FHN model given in [VUK13] for two simple nodes $i,j={1,2}$ with given distance matrix $d_{ij}$ via adaptive step size method and sampling solution method. The model for the neural dynamics in [VUK13] is expressed as below.
+%
+%\begin{equation}
+% \dot{u}_i=g(u_i,v_i)-c \sum_{j=1}^N  f_{ij} u_j(t-\Delta t_{ij})+n_u
+%\end{equation}
+%\begin{equation}
+% \dot{v}_i=h(u_i,v_i)+n_v
+%\end{equation}
+%
+%where $c$ is coupling strength, $f_{ij}$ is the connectivity matrix, $\Delta t_{ij}$ is time delay due to finite signal propagation velocity between nodes, $n_u$ is the noise factor. $\Delta t_{ij}$ is calculated as $\Delta t_{ij}=\frac{d_{ij}}{\nu}$, distance matrix divided by velocity. 
+%
+%
+%The functions $g$ and $v$ are modeled very similar to FitzHugh-Nagumo model introduced in [GHO08]:
+%\begin{equation}
+% \dot{u}=g(u,v)=\tau(v+\gamma u - \frac{u^3}{3})
+%\end{equation}
+%\begin{equation}
+% \dot{v}=h(u,v)=-\frac{1}{\tau}(u- \alpha +bv-I)
+%\end{equation}
+%
+%where $I$ is magnitude of an external stimulus, which is assumed to be 0. 
+%
+%The connectivity and distance matrices only for two nodes are introduced as the following;
+%
+%\[
+%\textbf{$f_{ij}$}=
+%\left[ {\begin{array}{cc }
+%0.0000  &  5,6731.10^{-1} \\
+%5,6731.10^{-1} &  0.0000  \\
+%
+%\end{array} } \right]
+%\]
+%
+%
+%
+%\[
+%\textbf{$d_{ij}$}=
+%\left[ {\begin{array}{cc }
+%0.0000  &  85,5102 \\
+%85,5102 &  0.0000  \\
+%
+%\end{array} } \right]
+%\]
+%
+%The purpose is to run our simulation $(fhn\_time\_series.py)$ to investigate the sampling rate effect on the reliability of data by comparing it to the real numerical solution method, namely adaptive step size method.
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=0.7\textwidth, height=9cm]{fhn_adapti.eps}
+%		\caption{The simulation on top has $dt=0.1$ sampling rate and it lies perfectly on the numerical solutions marked by the dots. The sampling rate for the simulation below is $dt=1$, and it does not match well with the numerical solution.}
+%\end{figure}
+%
+%\subsection{Simulation of FHN time series in [VUK13]}
+%
+%The bigger picture of [VUK13] notations..
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth, height=9cm]{FHN_time_series_C_small.eps}
+%		\caption{Sampling rate is $dt=0.1$, and $C=0.01$}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=\textwidth, height=9cm]{FHN_time_series_C_big.eps}
+%		\caption{Sampling rate is $dt=0.1$, and $C=4$}
+%\end{figure}
 
-where $I$ is magnitude of an external stimulus, which is assumed to be 0. 
-
-The connectivity and distance matrices only for two nodes are introduced as the following;
-
-\[
-\textbf{$f_{ij}$}=
-\left[ {\begin{array}{cc }
-0.0000  &  5,6731.10^{-1} \\
-5,6731.10^{-1} &  0.0000  \\
-
-\end{array} } \right]
-\]
-
-
-
-\[
-\textbf{$d_{ij}$}=
-\left[ {\begin{array}{cc }
-0.0000  &  85,5102 \\
-85,5102 &  0.0000  \\
-
-\end{array} } \right]
-\]
-
-The purpose is to run our simulation $(fhn\_time\_series.py)$ to investigate the sampling rate effect on the reliability of data by comparing it to the real numerical solution method, namely adaptive step size method.
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.7\textwidth, height=9cm]{fhn_adapti.eps}
-		\caption{The simulation on top has $dt=0.1$ sampling rate and it lies perfectly on the numerical solutions marked by the dots. The sampling rate for the simulation below is $dt=1$, and it does not match well with the numerical solution.}
-\end{figure}
-
-\subsection{Simulation of FHN time series in [VUK13]}
-
-The bigger picture of [VUK13] notations..
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth, height=9cm]{FHN_time_series_C_small.eps}
-		\caption{Sampling rate is $dt=0.1$, and $C=0.01$}
-\end{figure}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth, height=9cm]{FHN_time_series_C_big.eps}
-		\caption{Sampling rate is $dt=0.1$, and $C=4$}
-\end{figure}
+\end{document}
