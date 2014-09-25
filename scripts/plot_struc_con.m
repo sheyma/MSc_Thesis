@@ -27,8 +27,9 @@ input_name = 'acp_w_single_network_measures.dat';
 fig = figure(1);
 hold on
 set(gca,'FontSize',25)
+title('ACM')
 for i =1:length(random_G)
-    a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
+    a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end))
     A=load(a);
     plot(A(:,1),A(:,3),strcat(color(i),type(i)),'LineWidth',3)   
 end
@@ -46,6 +47,7 @@ set(gcf, 'PaperPositionMode','auto')
 figure(2);
 hold on
 set(gca,'FontSize',25)
+title('ACM')
 for i =1:length(random_G)
     a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
     A=load(a);
@@ -66,6 +68,7 @@ set(gcf, 'PaperPositionMode','auto')
 figure(3);
 hold on
 set(gca,'FontSize',25)
+title('ACM')
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,5),strcat(color(i),type(i)),'LineWidth',3)  
@@ -86,6 +89,7 @@ set(gcf, 'PaperPositionMode','auto')
 figure(4);
 hold on
 set(gca,'FontSize',25)
+title('ACM')
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
@@ -104,6 +108,7 @@ set(gcf, 'PaperPositionMode','auto')
 figure(5);
 hold on
 set(gca,'FontSize',25)
+title('ACM')
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,7),strcat(color(i),type(i)),'LineWidth',3) 
@@ -122,6 +127,7 @@ set(gcf, 'PaperPositionMode','auto')
 input_name_2 = 'acp_w_small_worldness.dat';
 figure(6);
 set(gca,'FontSize',25)
+title('ACM')
 hold on
 for i = 1:length(random_G)
     A =load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
@@ -140,6 +146,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Transitivity
 figure(7);
 set(gca,'FontSize',25)
+title('ACM')
 hold on
 for i = 1:length(random_G)
     a = strcat(input_name_2(1:2),'R',random_G(i),input_name_2(2:end));
@@ -160,6 +167,7 @@ set(gcf, 'PaperPositionMode','auto')
 input_name_3 = 'acp_w_global_efficiency_ave.dat';
 figure(8);
 set(gca,'FontSize',25)
+title('ACM')
 hold on
 for i = 1:length(random_G)
     a = strcat(input_name_3(1:6),'R',random_G(i),input_name_3(6:end));
@@ -180,6 +188,7 @@ set(gcf, 'PaperPositionMode','auto')
 input_name_4 = 'acp_w_local_efficiency_ave.dat';
 figure(9);
 set(gca,'FontSize',25)
+title('ACM')
 hold on
 for i = 1:length(random_G)
     A =load(strcat(input_name_4(1:6),'R',random_G(i),'_local_efficency_ave.dat'));
@@ -199,6 +208,7 @@ set(gcf, 'PaperPositionMode','auto')
 in_name_5 = 'acp_w_assortativity.dat';
 figure(10);
 set(gca,'FontSize',25)
+title('ACM')
 hold on
 for i = 1:length(random_G)
     A = load(strcat(in_name_5(1:6),'R',random_G(i),in_name_5(6:end)));
@@ -218,7 +228,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Global efficiency of nodes
 in_name_5 = 'acp_w_global_efficiency_node.dat';
 figure(11);
-
+title('ACM')
 for j = 1:length(random_G)
    
     a =strcat(in_name_5(1:6),'R',random_G(j),in_name_5(6:end));
@@ -271,7 +281,7 @@ set(gcf, 'PaperPositionMode','auto')
 %Local efficiency of nodes
 in_name_6 = 'acp_w_local_efficency_node.dat';
 figure(12);
-
+title('ACM')
 for j = 1:length(random_G)
    
     a =strcat(in_name_6(1:6),'R',random_G(j),in_name_6(6:end));
@@ -326,6 +336,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Connected Components of Nodes
 in_name_7 = 'acp_w_connected_compo_node.dat';
 figure(13);
+title('ACM')
 for j = 1:length(random_G)
    
     a =strcat(in_name_7(1:6),'R',random_G(j),in_name_7(6:end));
@@ -390,6 +401,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Degree Distribution
 in_name_8 = 'acp_w_degree_dist.dat';
 figure(14);
+title('ACM')
 for j = 1:length(random_G)
    
     a =strcat(in_name_8(1:6),'R',random_G(j),in_name_8(6:end));
@@ -455,6 +467,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Clustering Coeficient of Nodes
 in_name_8 = 'acp_w_cc_and_degree_node.dat';
 figure(15);
+title('ACM')
 for j = 1:length(random_G)
    
     a =strcat(in_name_8(1:6),'R',random_G(j),in_name_8(6:end));
