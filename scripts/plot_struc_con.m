@@ -226,6 +226,8 @@ set(gcf, 'PaperPositionMode','auto')
 
 % DISTRIBUTIONS
 % Global efficiency of nodes
+random_G = ('0adghk');
+
 in_name_5 = 'acp_w_global_efficiency_node.dat';
 figure(11);
 title('ACM')
@@ -234,45 +236,86 @@ for j = 1:length(random_G)
     a =strcat(in_name_5(1:6),'R',random_G(j),in_name_5(6:end));
     GEF = load(a);
     z_ = GEF(:,3);
-    z = zeros(101,90);
+    z = zeros(size(GEF,1)/90,90);
     
     subplot(3,2,j)
     set(gca,'FontSize',20)
-    if random_G(j) ~= 'd' && random_G(j) ~='c' 
-        for i = 1:101
+    if random_G(j) == '0' 
+        for i = 1:(size(GEF,1)/90)
             a = i-1;
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
         n=(1:90);
-        m=(0:0.01:1);
+        m=(0:0.01:0.99);
         imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0 0.25 0.50 0.80 1])
-        set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
-    elseif random_G(j)=='d'
-        c = zeros(1,90);
-        for k = 1:89
-            c(k,:) = z_( 90*(k-1)+1 : 90*k )';
+        set(gca,'YTick',[0 0.25 0.50 0.80 0.99])
+        
+    elseif random_G(j) == 'a' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
-        imagesc((1:1:90),(0.01:0.01:1),c)
+        n=(1:90);
+        m=(0:0.01:0.99);
+        imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.01 0.25 0.50 0.75 1])
-        set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))    
-    elseif random_G(j) == 'c'
-        c = zeros(1,90);
-        for k = 1:87
-            c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
+        set(gca,'YTick',[0 0.25 0.50 0.80 0.99])
+
+    elseif random_G(j) == 'd' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
-        imagesc((1:1:90),(0.14:0.01:1),c)
+        n=(1:90);
+        m=(0.01:0.01:0.99);
+        imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.15, 0.35, 0.55, 0.75, 1.00])
-        set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
+        set(gca,'YTick',[0.01 0.25 0.50 0.80 0.99])
+ 
+    elseif random_G(j) == 'g' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
+        end
+        n=(1:90);
+        m=(0:0.01:0.99);
+        imagesc(n,m,z)
+        h=colorbar; set(h,'fontsize',15);
+        set(gca,'YTick',[0 0.25 0.50 0.80 0.99])
+        
+    elseif random_G(j) == 'h' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
+        end
+        n=(1:90);
+        m=(0.05:0.01:0.99);
+        imagesc(n,m,z)
+        h=colorbar; set(h,'fontsize',15);
+        set(gca,'YTick',[0.05 0.25 0.50 0.80 0.99])
+    
+    elseif random_G(j) == 'k' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
+        end
+        n=(1:90);
+        m=(0.05:0.01:0.98);
+        imagesc(n,m,z)
+        h=colorbar; set(h,'fontsize',15);
+        set(gca,'YTick',[0.05 0.25 0.50 0.80 0.98])
     end
+    
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
     ylabel('Probability [p]')
+    random_G(j)
+    strcat('Global Efficiency of Nodes, R', random_G(j))
     title(strcat('Global Efficiency of Nodes, R', random_G(j)))
+    set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
     
+
 end
 set(figure(11), 'units', 'inches','position',[10 10 13 20]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -285,46 +328,86 @@ title('ACM')
 for j = 1:length(random_G)
    
     a =strcat(in_name_6(1:6),'R',random_G(j),in_name_6(6:end));
-    LEF = load(a);
-    z_ = LEF(:,3);
-    z = zeros(101,90);
+    GEF = load(a);
+    z_ = GEF(:,3);
+    z = zeros(size(GEF,1)/90,90);
     
     subplot(3,2,j)
     set(gca,'FontSize',20)
-    if random_G(j) ~= 'd' && random_G(j) ~='c' 
-        for i = 1:101
+    if random_G(j) == '0' 
+        for i = 1:(size(GEF,1)/90)
             a = i-1;
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
         n=(1:90);
-        m=(0:0.01:1);
+        m=(0:0.01:0.99);
         imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0 0.25 0.50 0.75 1])
-        set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
-    elseif random_G(j)=='d'
-        c = zeros(1,90);
-        for k = 1:89
-            c(k,:) = z_( 90*(k-1)+1 : 90*k )';
+        set(gca,'YTick',[0 0.25 0.50 0.80 0.99])
+        
+    elseif random_G(j) == 'a' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
-        imagesc((1:1:90),(0.01:0.01:1),c)
+        n=(1:90);
+        m=(0:0.01:0.99);
+        imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.01 0.25 0.50 0.75 1])
-        set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))    
-    elseif random_G(j) == 'c'
-        c = zeros(1,90);
-        for k = 1:87
-            c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
+        set(gca,'YTick',[0 0.25 0.50 0.80 0.99])
+
+    elseif random_G(j) == 'd' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
-        imagesc((1:1:90),(0.14:0.01:1),c)
+        n=(1:90);
+        m=(0.01:0.01:0.99);
+        imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.15, 0.35, 0.55, 0.75, 1.00])
-        set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
+        set(gca,'YTick',[0.01 0.25 0.50 0.80 0.99])
+ 
+    elseif random_G(j) == 'g' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
+        end
+        n=(1:90);
+        m=(0:0.01:0.99);
+        imagesc(n,m,z)
+        h=colorbar; set(h,'fontsize',15);
+        set(gca,'YTick',[0 0.25 0.50 0.80 0.99])
+        
+    elseif random_G(j) == 'h' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
+        end
+        n=(1:90);
+        m=(0.05:0.01:0.99);
+        imagesc(n,m,z)
+        h=colorbar; set(h,'fontsize',15);
+        set(gca,'YTick',[0.05 0.25 0.50 0.80 0.99])
+    
+    elseif random_G(j) == 'k' %&& random_G(j) =='a' && random_G(j) == 'g' 
+        for i = 1:(size(GEF,1)/90)
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
+        end
+        n=(1:90);
+        m=(0.05:0.01:0.98);
+        imagesc(n,m,z)
+        h=colorbar; set(h,'fontsize',15);
+        set(gca,'YTick',[0.05 0.25 0.50 0.80 0.98])
     end
+    
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
     ylabel('Probability [p]')
+    random_G(j)
+    strcat('Local Efficiency of Nodes, R', random_G(j))
     title(strcat('Local Efficiency of Nodes, R', random_G(j)))
+    set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
     
 end
 set(figure(12), 'units', 'inches','position',[10 10 13 20]) 
@@ -342,17 +425,18 @@ for j = 1:length(random_G)
     a =strcat(in_name_7(1:6),'R',random_G(j),in_name_7(6:end));
     COM = load(a);
     z_ = COM(:,3);
-    z = zeros(101,90);
+    z = zeros(size(COM,1)/90,90);
     
     subplot(3,2,j)
     set(gca,'FontSize',15)
-    if random_G(j) ~= 'd' && random_G(j) ~='c' 
-        for i = 1:101
+    
+    if random_G(j) =='0'
+        for i = 1:size(COM,1)/90
             a = i-1;
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
         n=(1:90);
-        m=(0:0.01:1);
+        m=(0:0.01:0.99);
         %Apply a logarithmic colorbar
         log_plot = imagesc(n,m,log10(z));
         colorbar_log([10^(0) 10^0.05])
@@ -361,37 +445,40 @@ for j = 1:length(random_G)
         %set(gca,'YTick',[0 0.25 0.50 0.75 1])
         %set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
    
-    elseif random_G(j)=='d'
-        c = zeros(1,90);
-        for k = 1:89
-            c(k,:) = z_( 90*(k-1)+1 : 90*k )';
+    elseif random_G(j) =='a'
+        for i = 1:size(COM,1)/90
+            a = i-1;
+           z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
-        log_plot = imagesc((1:1:90),(0.01:0.01:1),log10(c));
+        n=(1:90);
+        m=(0:0.01:0.99);
+        %Apply a logarithmic colorbar
+        log_plot = imagesc(n,m,log10(z));
         colorbar_log([10^(0) 10^0.05])
-        %imagesc((1:1:90),(0.01:0.01:1),c)
+        %imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.01 0.25 0.50 0.75 1])
-        set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))    
-    
+        %set(gca,'YTick',[0 0.25 0.50 0.75 1])
+        %set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
+   
+    end   
         
         
-        
-    elseif random_G(j) == 'c'
-        c = zeros(1,90);
-        for k = 1:87
-            c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
-        end
-        %log_plot = imagesc((1:1:90),(0.14:0.01:1),log10(c))
-        %colorbar_log([10^(-1) 10^0.2])
-        imagesc((1:1:90),(0.14:0.01:1),c)
-        h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.15, 0.35, 0.55, 0.75, 1.00])
-        set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
-    end
-    set(gca,'XTick',15:15:90);
-    xlabel('Nodes')
-    ylabel('Probability [p]')
-    title(strcat('Connected Components of Nodes, R', random_G(j)), 'FontSize',20)
+%     elseif random_G(j) == 'c'
+%         c = zeros(1,90);
+%         for k = 1:87
+%             c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
+%         end
+%         %log_plot = imagesc((1:1:90),(0.14:0.01:1),log10(c))
+%         %colorbar_log([10^(-1) 10^0.2])
+%         imagesc((1:1:90),(0.14:0.01:1),c)
+%         h=colorbar; set(h,'fontsize',15);
+%         set(gca,'YTick',[0.15, 0.35, 0.55, 0.75, 1.00])
+%         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
+%     end
+%     set(gca,'XTick',15:15:90);
+%     xlabel('Nodes')
+%     ylabel('Probability [p]')
+%     title(strcat('Connected Components of Nodes, R', random_G(j)), 'FontSize',20)
     
 end
 set(figure(13), 'units', 'inches','position',[10 10 13 20]) 
