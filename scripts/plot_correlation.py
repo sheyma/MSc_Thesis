@@ -1,8 +1,18 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-# plotting correlation matrixes from various input
+""" 
+	input  : empirical matrix (e.g. fMRI-BOLD data), simulation outcome
+	matrix (FHN or BOLD simulations)
+	
+	intermediate process : loading empirical and simulation matrices, 
+	plotting color coded empirical mtx., calculating Pearson's correlat.
+	coefficient between empirical and simulated matrices, parameter
+	analysis plots for the Pearson coefficients over velocity-threshold 
+	or sigma-threshold changing parameter regions 
 
+	output : R_pearson, figures
+"""
 import networkx as nx
 import numpy as np
 from math import factorial 
@@ -42,33 +52,6 @@ def plot_corr(corr_matrix, simfile ):
 	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
 	#pl.show()
 	return  	
-
-# plots the correlation matrix of SIMULATED signal
-# input: any output of fhn_time_delays.py or output of calcBOLD.py 
-# trick: remove 1's to 0's along the diagonals 
-def plot_corr_diag(corr_matrix, corr_matrix_name ):	
-	N_col  = np.shape(corr_matrix)[1]
-	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
-	for i in range(0,N_col):
-		for j in range(0,N_col):
-			if i==j :
-				corr_matrix[i,j] = 0
-	print "max. corr. coef. in input simul-corr-mtx:", corr_matrix.max()
-	print "min. corr. coef. in input simul-corr-mtx:", corr_matrix.min()
-	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
-	cbar = pl.colorbar()
-	for t in cbar.ax.get_yticklabels():
-		t.set_fontsize(15)
-	pl.xticks(fontsize = 20)
-	pl.yticks(fontsize = 20)
-	#pl.title(corr_matrix_name, fontsize=20)
-	pl.xlabel('Nodes', fontsize = 20)
-	pl.ylabel('Nodes', fontsize = 20)
-	#image_name = simfile[0:-4] + '_CORR.eps'	
-	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
-	#pl.show()
-	return
-
 
 # calculating Pearson's corr. coef. for two given matrices
 # matrix_A : simulated neuronal activity correlations, 1's on diagonal
@@ -180,9 +163,8 @@ b = np.array([15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3])
 #------------------------------------
 mtx_empiri			= 		load_matrix(input_empiri)		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
-mtx_random			= 		load_matrix(input_simuli)
-figure				=		plot_corr_diag(mtx_random, input_simuli )
-R_pearson			= 	    pearson_coef(mtx_random , mtx_empiri)
+mtx_simuli			= 		load_matrix(input_simuli)
+R_pearson			= 	    pearson_coef(mtx_simuli , mtx_empiri)
 print "Pearson corr. coef. between empir.-simul. : " , R_pearson
 #figure_name 		= 		input_simuli[0:-3] + str('eps')	
 #print figure_name
