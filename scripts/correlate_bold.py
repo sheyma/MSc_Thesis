@@ -5,6 +5,7 @@ import subprocess as sp
 import numpy as np
 import sys 
 import math
+import matplotlib.pyplot as pl
 
 """ 
 	input  : job output from "calcBOLD.py" , m rows, n columns
@@ -24,12 +25,60 @@ def load_matrix(file):
 
 # correlation coefficients among the columns of a given matrix
 def correl_matrix(matrix , matrix_name):
+	print "obtaining correlation coefficients among BOLD time series..."
 	# numpy array must be transposed to get the right corrcoef
 	tr_matrix = np.transpose(matrix)
 	cr_matrix = np.corrcoef(tr_matrix)
 	file_name = str(matrix_name[:-4] + '_corr.dat')
 	np.savetxt(file_name, cr_matrix, '%.6f',delimiter='\t')
 	return cr_matrix
+
+# find the max and min values and their index in the correlation matrix
+def node_index(matrix):
+	# ignore diagonal elements by assigning it to zero
+	for i in range(0,np.shape(matrix)[0]):
+		for j in range(0,np.shape(matrix)[1]):
+			if i == j :
+				matrix[i,j] = 0
+	print "max. corr. coef. in the correlation matrix:", matrix.max()
+	print "min. corr. coef. in the correlation matrix:", matrix.min()
+
+	# index of maximum value in matrix
+	[nx , ny] = np.unravel_index(matrix.argmax() , matrix.shape)
+	# index of maximum value in matrix
+	[mx , my] = np.unravel_index(matrix.argmin() , matrix.shape)
+	return nx, ny , mx, my
+
+# plots the correlation matrix of SIMULATED signal
+# input: any output of fhn_time_delays.py or output of calcBOLD.py 
+# trick: remove 1's to 0's along the diagonals 
+def plot_corr_diag(corr_matrix, matrix_name) :	
+	N_col  = np.shape(corr_matrix)[1]
+	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
+	for i in range(0,N_col):
+		for j in range(0,N_col):
+			if i==j :
+				corr_matrix[i,j] = 0
+	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
+	cbar = pl.colorbar()
+	for t in cbar.ax.get_yticklabels():
+		t.set_fontsize(15)
+	pl.xticks(fontsize = 20)
+	pl.yticks(fontsize = 20)
+	#pl.suptitle("BOLD correlation matrix", fontsize=20)
+	#pl.title('Method : 0 , ' + '$r$ = ' +'0.65'  +
+				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
+				#'0.05' + '  $v$ = '+'7 [m/s]',	
+				#fontsize=14, fontweight='bold')
+	pl.xlabel('Nodes', fontsize = 20)
+	pl.ylabel('Nodes', fontsize = 20)
+	if matrix_name.endswith(".xz"):
+		image_name       = str(matrix_name[:-7] + '_FHN_CORR.eps') 	
+	else :
+		image_name       = str(matrix_name[:-4] + '_FHN_CORR.eps')
+	#pl.savefig(image_name, format="eps")
+	#pl.show()
+	return
 
 # user defined input name
 if __name__ == '__main__':
@@ -40,3 +89,10 @@ if __name__ == '__main__':
 		
 data_matrix		=		load_matrix(input_name)		
 corr_matrix		=		correl_matrix(data_matrix , input_name)
+[i, j, k , l ]  = 	    node_index(corr_matrix)
+image			= 		plot_corr_diag(corr_matrix, input_name)
+
+# nodes start from 1, not from 0 on figure, therefore add 1 to the index
+print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
+print "nodes ", k+1," and ",l+1," worst correlated : ", corr_matrix[k,l]
+pl.show()
