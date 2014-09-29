@@ -65,7 +65,7 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
-	#pl.suptitle("BOLD correlation matrix", fontsize=20)
+	#pl.suptitle("BOLD-signal correlation matrix", fontsize=20)
 	#pl.title('Method : 0 , ' + '$r$ = ' +'0.65'  +
 				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
 				#'0.05' + '  $v$ = '+'7 [m/s]',	
@@ -73,10 +73,10 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	pl.xlabel('Nodes', fontsize = 20)
 	pl.ylabel('Nodes', fontsize = 20)
 	if matrix_name.endswith(".xz"):
-		image_name       = str(matrix_name[:-7] + '_FHN_CORR.eps') 	
+		image_name       = str(matrix_name[:-7] + '_CORR.eps') 	
 	else :
-		image_name       = str(matrix_name[:-4] + '_FHN_CORR.eps')
-	#pl.savefig(image_name, format="eps")
+		image_name       = str(matrix_name[:-4] + '_CORR.eps')
+	pl.savefig(image_name, format="eps")
 	#pl.show()
 	return
 
