@@ -25,7 +25,7 @@ def load_matrix(file):
 		raise ValueError
 	return AT
 	
-# plots colorbar coded empirical correlation matrix (fMRI-BOLD data)
+# plots colorbar coded EMRPIRICAL correlation matrix (fMRI-BOLD data)
 def plot_corr(corr_matrix, simfile ):	
 	N_col  = np.shape(corr_matrix)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
@@ -35,15 +35,16 @@ def plot_corr(corr_matrix, simfile ):
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
-	#pl.title('BOLD-fMRI', fontsize=20)
-	#pl.xlabel('Nodes', fontsize = 20)
-	#pl.ylabel('Nodes')
+	pl.title('BOLD-fMRI', fontsize=20)
+	pl.xlabel('Nodes', fontsize = 20)
+	pl.ylabel('Nodes', fontsize = 20)
 	#image_name = simfile[0:-4] + '_CORR.eps'	
 	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
 	#pl.show()
 	return  	
 
-# plots the correlation matrix of FHN or BOLD simulated signal
+# plots the correlation matrix of SIMULATED signal
+# input: any output of fhn_time_delays.py or output of calcBOLD.py 
 # trick: remove 1's to 0's along the diagonals 
 def plot_corr_diag(corr_matrix, corr_matrix_name ):	
 	N_col  = np.shape(corr_matrix)[1]
