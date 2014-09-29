@@ -7,6 +7,7 @@ import sys
 import math
 import scipy.stats as sistat
 import matplotlib.pyplot as pl
+from pylab import *
 
 """ 
 	input  : job output from "fhn_time_delays.py" , m rows, n columns
@@ -104,6 +105,20 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	pl.savefig(image_name, format="eps")
 	#pl.show()
 	return
+	
+def plot_timeseries(t_start , t_range , timeseries, x, y):
+	# plots timeseries of two given nodes in a specific time interval
+	# t_range corresponds to time interval
+	v1  = timeseries[:, x]
+	v2  = timeseries[:, y]
+	pl.plot(v1[t_start : (t_start + t_range)], 'r',label=('node '+str(x)))
+	pl.plot(v2[t_start : (t_start + t_range)], 'b',label=('node '+str(y)))
+	lg = legend()
+	pl.xlabel('t [ms]')
+	pl.ylabel('$u_i(t)$')
+	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
+	#pl.show()
+	return	
 
 # user defined input name
 if __name__ == '__main__':
@@ -126,8 +141,15 @@ else:
 data_matrix 	    =	load_matrix(infile)
 [u_matrix , T]	    =	fhn_timeseries(data_matrix)
 corr_matrix		    =	correl_matrix(u_matrix, input_name)
-plot_corr_diag(corr_matrix, input_name )
+#plot_corr_diag(corr_matrix, input_name )
 [i, j, k , l ]		=   node_index(corr_matrix)
+t_start = 500
+t_range = 1500
+plot_timeseries(t_start, t_range, u_matrix, i, j)
+
+#deneme = u_matrix[:,i]
+#print np.shape(deneme)
+#pl.plot(deneme[t_start : (t_start + t_range)],'r')
 
 # nodes start from 1, not from 0, therefore add 1 to the index
 print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
