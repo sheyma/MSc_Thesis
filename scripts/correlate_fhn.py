@@ -90,7 +90,11 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
-	#pl.title("FHN correlation matrix\t input_name", fontsize=20)
+	pl.suptitle("FHN correlation matrix", fontsize=20)
+	pl.title('Method : 0 , ' + '$r$ = ' +'0.65'  +
+				r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
+				'0.05' + '  $v$ = '+'7 [m/s]',	
+				fontsize=14, fontweight='bold')
 	pl.xlabel('Nodes', fontsize = 20)
 	pl.ylabel('Nodes', fontsize = 20)
 	if matrix_name.endswith(".xz"):
