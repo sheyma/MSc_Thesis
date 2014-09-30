@@ -9,6 +9,7 @@ import scipy.stats as sistat
 import matplotlib.pyplot as pl
 from pylab import *
 
+
 """ 
 	input  : job output from "fhn_time_delays.py" , m rows, n columns
 	
@@ -92,8 +93,8 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
 	pl.suptitle("FHN correlation matrix", fontsize=20)
-	#pl.title('Method : 0 , ' + '$r$ = ' +'0.65'  +
-				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
+	#pl.title('Method : 0 , ' + '$r$ = ' +'0.58'  +
+				#r'  $  \sigma$ = '+'0.018'+ ' $   D$ = '+ 
 				#'0.05' + '  $v$ = '+'7 [m/s]',	
 				#fontsize=14, fontweight='bold')
 	pl.xlabel('Nodes', fontsize = 20)
@@ -102,7 +103,7 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 		image_name       = str(matrix_name[:-7] + '_FHN_CORR.eps') 	
 	else :
 		image_name       = str(matrix_name[:-4] + '_FHN_CORR.eps')
-	pl.savefig(image_name, format="eps")
+	#pl.savefig(image_name, format="eps")
 	#pl.show()
 	return
 	
@@ -111,11 +112,14 @@ def plot_timeseries(t_start , t_range , timeseries, x, y):
 	# t_range corresponds to time interval
 	v1  = timeseries[:, x]
 	v2  = timeseries[:, y]
-	pl.plot(v1[t_start : (t_start + t_range)], 'r',label=('node '+str(x)))
-	pl.plot(v2[t_start : (t_start + t_range)], 'b',label=('node '+str(y)))
+	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
+	pl.plot(v1[t_start : (t_start + t_range)], 'r',label=('node '+str(x+1)))
+	pl.plot(v2[t_start : (t_start + t_range)], 'b',label=('node '+str(y+1)))
 	lg = legend()
 	pl.xlabel('t [ms]')
 	pl.ylabel('$u_i(t)$')
+	#pl.title(('FHN - timeseries, corr. coeff. of nodes : ' 
+				#+ str("%.2f" % R_pearson)), fontweight='bold')
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
 	return	
@@ -141,15 +145,19 @@ else:
 data_matrix 	    =	load_matrix(infile)
 [u_matrix , T]	    =	fhn_timeseries(data_matrix)
 corr_matrix		    =	correl_matrix(u_matrix, input_name)
-#plot_corr_diag(corr_matrix, input_name )
+pl.figure(1)
+plot_corr_diag(corr_matrix, input_name )
 [i, j, k , l ]		=   node_index(corr_matrix)
-t_start = 500
-t_range = 1500
-plot_timeseries(t_start, t_range, u_matrix, i, j)
 
-#deneme = u_matrix[:,i]
-#print np.shape(deneme)
-#pl.plot(deneme[t_start : (t_start + t_range)],'r')
+# user defined time range for timeseries plots
+t_start = 0
+t_range = 5500
+# plot the timeseries of best correlated nodes
+pl.figure(2)
+plot_timeseries(t_start, t_range, u_matrix, i, j)
+# plot the timeseries of worst correlated nodes
+pl.figure(3)
+plot_timeseries(t_start, t_range, u_matrix, k, l)
 
 # nodes start from 1, not from 0, therefore add 1 to the index
 print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
