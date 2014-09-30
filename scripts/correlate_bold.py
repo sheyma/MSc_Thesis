@@ -6,6 +6,8 @@ import numpy as np
 import sys 
 import math
 import matplotlib.pyplot as pl
+import scipy.stats as sistat
+from pylab import *
 
 """ 
 	input  : job output from "calcBOLD.py" , m rows, n columns
@@ -76,9 +78,26 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 		image_name       = str(matrix_name[:-7] + '_CORR.eps') 	
 	else :
 		image_name       = str(matrix_name[:-4] + '_CORR.eps')
-	pl.savefig(image_name, format="eps")
+	#pl.savefig(image_name, format="eps")
 	#pl.show()
 	return
+	
+def plot_timeseries(t_start , t_range , timeseries, x, y):
+	# plots timeseries of two given nodes in a specific time interval
+	# t_range corresponds to time interval
+	v1  = timeseries[:, x]
+	v2  = timeseries[:, y]
+	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
+	pl.plot(v1[t_start : (t_start + t_range)], 'r',label=('node '+str(x+1)))
+	pl.plot(v2[t_start : (t_start + t_range)], 'b',label=('node '+str(y+1)))
+	lg = legend()
+	pl.xlabel('t [ms]')
+	#pl.ylabel('$BOLD-filtered_i(t)$')
+	#pl.title(('simulated BOLD activity, corr. coeff. of nodes : ' 
+				#+ str("%.2f" % R_pearson)), fontweight='bold')
+	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
+	#pl.show()
+	return	
 
 # user defined input name
 if __name__ == '__main__':
@@ -91,6 +110,16 @@ data_matrix		=		load_matrix(input_name)
 corr_matrix		=		correl_matrix(data_matrix , input_name)
 [i, j, k , l ]  = 	    node_index(corr_matrix)
 image			= 		plot_corr_diag(corr_matrix, input_name)
+
+# user defined time range for timeseries plots
+t_start = 0
+t_range = 5500
+# BOLD activity of the nodes correlating the best
+pl.figure(2)
+plot_timeseries(t_start, t_range, data_matrix, i, j)
+# BOLD activity of the nodes correlating the worst
+pl.figure(3)
+plot_timeseries(t_start, t_range, data_matrix, k, l)
 
 # nodes start from 1, not from 0 on figure, therefore add 1 to the index
 print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
