@@ -1,0 +1,157 @@
+%\section{FitzHugh-Nagumo Model Dynamics in [PAN12] and [GHO08]}
+%
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\geometry{
+ a4paper,
+ total={210mm,297mm},
+ left=40mm,
+ right=20mm,
+ top=35mm,
+ bottom=35mm, }
+
+
+\usepackage[utf8]{inputenc}
+\usepackage{authblk}
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{amsmath}
+
+
+
+\title{MSc Thesis : Simulation of Brain Functional Connectivity on Emprical and Randomized Complex Networks, \\ 3rd Report}
+\author[1]{\c{S}eyma Bayrak \thanks{seyma.bayrak@st.ovgu.de}}
+\author[ ]{\\ Advisers: Philipp H\"{o}vel, Vesna Vuksanovi\'c}
+\affil[1]{\footnotesize{Integrative Neuroscience MSc, Otto von Guericke University, Magdeburg}}
+
+
+
+\date{June 2014}
+\begin{document}
+   \maketitle
+This work aims to compare my current simulation results with the previously done work and visualize the correlation matrices of simulated neuronal activiy as well as simaulated BOLD signal. The correlation matrices are all obtained by calculating columnwise correlation coefficients straightforward in all given data matrices. 
+\begin{table}[h]
+
+		\caption{$r$ is the threshod value, $\sigma$ is the coupling strength parameters. All the columns presents the Pearson correlation coefficients between the empirical data set and simulated data sets with given parameters: $v=70[m/s]$, $D=0.05$, $tmax=550[s]$. The empirical data is an fMRI-BOLD correlation matrix (source: $A\_aal.txt$) and simulated data is obtained from the FitzHugh-Nagumo model for the neuronal activity (FHN column), Balloon-Windkessel model for the BOLD activity (BOLD-signal), low-pass filtered BOLD activity (filt. BOLD) and then downsampled BOLD activity (downs.BOLD). 	}
+	\begin{tabular}{l | c | c | c | c | c | c } \hline
+$r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. work  \\ \hline \hline
+0.57 &  0.018 	 & 0.0709  &	0.1284	 &	-0.0814		 &	0.0770	   & 0.35   	    \\ \hline
+0.58 &  0.018    & 0.0538  &	0.4275	 &	0.0504		 &	0.3647	   & 0.40			\\ \hline
+0.59 &  0.020    & 0.0549  &	0.1234	 &	-0.1364		 &	0.0574	   & 0.35			\\ \hline
+0.60 &  0.020    & -0.1963 &	0.0703	 &	-0.2232		 &	0.0323	   & 0.33			\\ \hline
+0.63 &  0.025    & +0.0006 &	0.2223	 &	-0.1394		 &	0.1415	   & 0.41			\\ \hline
+0.64 &  0.025    & -0.0564 &	0.1945	 &	-0.1325		 &	0.1390	   & 0.40			\\ \hline
+0.64 &  0.030    & +0.0482 &	0.0790	 &	-0.1322		 &	0.0297	   & 0.34			\\ \hline
+0.65 &  0.025    & -0.1734 &	0.1343	 &	-0.1913		 &	0.0662	   & 0.34    		\\ \hline
+	\end{tabular}
+  
+\end{table}    
+
+\subsection{Correlation Matrices of Simulated Neuronal Activity}
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+    \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_57_sigma=0_018_D=0_05_v=70_0_tmax=55000_FHN_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55000_FHN_CORR.eps}\\
+
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_59_sigma=0_02_D=0_05_v=70_0_tmax=55000_FHN_CORR.eps} &
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_60_sigma=0_02_D=0_05_v=70_0_tmax=55000_FHN_CORR.eps} \\
+
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_63_sigma=0_025_D=0_05_v=70_0_tmax=55000_FHN_CORR.eps} &
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_64_sigma=0_025_D=0_05_v=70_0_tmax=55000_FHN_CORR.eps} \\
+
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_64_sigma=0_03_D=0_05_v=70_0_tmax=55000_FHN_CORR.eps} &
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_65_sigma=0_025_D=0_05_v=70_0_tmax=55000_FHN_CORR.eps} \\
+
+  \end{tabular}
+
+ \label{figur}\caption{ Each square represents the correlation of simulated timeseries of two nodes.  }
+
+\end{figure}
+
+
+
+\subsection{Correlation Matrices of Simulated BOLD Activity}
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+    \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_57_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps}\\
+
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_59_sigma=0_02_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps} &
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_60_sigma=0_02_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps} \\
+
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_63_sigma=0_025_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps} &
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_64_sigma=0_025_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps} \\
+
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_64_sigma=0_03_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps} &
+\includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_65_sigma=0_025_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps} \\
+
+  \end{tabular}
+
+ \label{figur}\caption{ Each square represents the correlation of simulated BOLD activity of two nodes.  }
+
+\end{figure}
+ 
+
+
+\subsection{Correlation Matrices of Filetered BOLD Activity}
+
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+    \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_57_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps}\\
+
+    \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_59_sigma=0_02_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_60_sigma=0_02_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps}\\
+ 
+     \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_63_sigma=0_025_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_64_sigma=0_025_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps}\\
+ 
+     \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_64_sigma=0_03_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_65_sigma=0_025_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps}\\
+  
+  \end{tabular}
+
+ \label{figur}\caption{ Each square represents the correlation of simulated low-pass filetered-BOLD activity of two nodes.  }
+
+\end{figure}
+
+
+
+\subsection{Correlation Matrices of Downsampled BOLD Activity}
+
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+    \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_57_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} \\
+
+    \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_59_sigma=0_02_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_60_sigma=0_02_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} \\
+
+    \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_63_sigma=0_025_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_64_sigma=0_025_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} \\
+
+    \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_64_sigma=0_03_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} &
+ \includegraphics[width=0.48\textwidth, height=48mm]{A_aal_0_ADJ_thr_0_65_sigma=0_025_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} \\
+
+  \end{tabular}
+
+ \label{figur}\caption{ Each square represents the correlation of simulated downsampled filetered-BOLD activity of two nodes.  }
+
+\end{figure}
+
+
+
+
+\end{document}
