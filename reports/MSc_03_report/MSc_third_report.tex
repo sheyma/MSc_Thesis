@@ -151,6 +151,116 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
 \end{figure}
 
+\subsection{Empirical Correlation Matrix}
+
+\begin{figure}[htp!]
+	\centering
+	 \includegraphics[width=0.7\textwidth]{A_aal.eps}
+
+\label{figur}\caption{ $A\_aal.txt$ }
+
+\end{figure}
+
+
+
+
+\subsection{FHN timeseries of nodes }
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=0.4\textwidth, height=44mm]{A_aal.eps} &    
+  \includegraphics[width=0.5\textwidth, height=44mm]{nodes_FHN_good_correlation.eps}\\ 
+
+    \includegraphics[width=0.4\textwidth, height=44mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55000_FHN_CORR.eps} &  
+  \includegraphics[width=0.5\textwidth, height=44mm]{nodes_FHN_bad_correlation.eps} \\
+
+	\end{tabular}
+	
+	\label{figur}\caption{}
+	
+\end{figure}
+
+
+
+
+\subsection{Simulated BOLD activity of nodes }
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=0.4\textwidth, height=40mm]{A_aal.eps} &    
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_signal_good_correlation.eps}\\ 
+
+    \includegraphics[width=0.4\textwidth, height=40mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps} &  
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_signal_bad_correlation.eps} \\
+
+	\end{tabular}
+	
+	\label{figur}\caption{}
+	
+\end{figure}
+
+
+
+\subsection{Low-pass filtered simulated BOLD activity of nodes }
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=0.4\textwidth, height=40mm]{A_aal.eps} &    
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_filtered_good_correlation.eps}\\ 
+
+    \includegraphics[width=0.4\textwidth, height=40mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps} &  
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_filtered_bad_correlation.eps} \\
+
+	\end{tabular}
+	
+	\label{figur}\caption{}
+	
+\end{figure}
+
+
+
+\subsection{Downsampled simulated BOLD activity of nodes }
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=0.4\textwidth, height=40mm]{A_aal.eps} &    
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_bds_good_correlation.eps}\\ 
+
+    \includegraphics[width=0.4\textwidth, height=40mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} &  
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_bds_bad_correlation.eps} \\
+
+	\end{tabular}
+	
+	\label{figur}\caption{}
+	
+\end{figure}
+
+\newpage
+
+\section{MATLAB - PYTHON Difference while filtering}
+
+\subsection{Simple Sinewave}
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{c}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=\textwidth]{sin_fft.eps} \\   
+  \includegraphics[width=\textwidth]{sin_filt.eps}\\ 
+
+
+	\end{tabular}	
+	\label{figur}\caption{}
+	
+\end{figure}
 
 
 
