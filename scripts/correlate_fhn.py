@@ -43,11 +43,11 @@ def fhn_timeseries(simfile):
 	dt   = tvec[1] - tvec[0]
 	# calculate total time of simulation 
 	T    = int(math.ceil( (tvec[-1])  / dt * params['dt'] ))
-	print "T = " , T , "[seconds]"
+	print "T = " , T , "[seconds]", "dt = " , dt/100 ,"[seconds]"
 	# extract u-columns
 	u_indices  = np.arange(1, simfile.shape[1] ,1)
 	u_series   = simfile[:, u_indices]
-	return u_series , T
+	return u_series , T, dt
 
 # correlation coefficients among the columns of a given matrix
 def correl_matrix(matrix , matrix_name):
@@ -109,16 +109,27 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	#pl.show()
 	return
 	
-def plot_timeseries(t_start , t_range , timeseries, x, y):
+def plot_timeseries(t_start , t_final, dt, timeseries, x, y):
 	# plots timeseries of two given nodes in a specific time interval
 	# t_range corresponds to time interval
+	time    =  np.arange(t_start, t_final, dt)
+	i_start =  (t_start / dt)
+	i_final =  (t_final / dt)
+	
 	v1  = timeseries[:, x]
 	v2  = timeseries[:, y]
+	
+	print "shape time : " , np.shape(time)
+	print "i_start : " , i_start
+	print "i_final : " , i_final
+	print "shape B : ", np.shape(v1)
+	
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
-	pl.plot(v1[t_start : (t_start + t_range)], 'r',label=('node '+str(x+1)))
-	pl.plot(v2[t_start : (t_start + t_range)], 'b',label=('node '+str(y+1)))
+	pl.plot(time/100, v1[i_start : i_final], '*r',label=('node '+str(x+1)))
+	
+	#pl.plot(v2[t_start : (t_start + t_range)], 'b',label=('node '+str(y+1)))
 	lg = legend()
-	pl.xlabel('t [ms]')
+	pl.xlabel('t [s]')
 	pl.ylabel('$u_i(t)$')
 	#pl.title(('FHN - timeseries, corr. coeff. of nodes : ' 
 				#+ str("%.2f" % R_pearson)), fontweight='bold')
@@ -144,25 +155,26 @@ else:
 	# numpy's loadtxt() can deal with this
 	infile = input_name
 
-#data_matrix 	    =	load_matrix(infile)
-#[u_matrix , T]	    =	fhn_timeseries(data_matrix)
-#corr_matrix		    =	correl_matrix(u_matrix, input_name)
-# if correlation matrix is given directly :
-corr_matrix			=   load_matrix(infile)
-pl.figure(1)
-plot_corr_diag(corr_matrix, input_name )
+data_matrix 	    =	load_matrix(infile)
+[u_matrix , T, dt]  =	fhn_timeseries(data_matrix)
+corr_matrix		    =	correl_matrix(u_matrix, input_name)
+
+## if correlation matrix is given directly :
+#corr_matrix			=   load_matrix(infile)
+
+#pl.figure(1)
+#plot_corr_diag(corr_matrix, input_name )
 [i, j, k , l ]		=   node_index(corr_matrix)
 
-
-## user defined time range for timeseries plots
-#t_start = 0
-#t_range = 5500
-## plot the timeseries of best correlated nodes
-#pl.figure(2)
-#plot_timeseries(t_start, t_range, u_matrix, i, j)
-## plot the timeseries of worst correlated nodes
+# user defined time range for timeseries plots
+t_start = 0
+t_final = 150
+# plot the timeseries of best correlated nodes
+pl.figure(2)
+plot_timeseries(t_start, t_final, dt, u_matrix, i, j)
+# plot the timeseries of worst correlated nodes
 #pl.figure(3)
-#plot_timeseries(t_start, t_range, u_matrix, k, l)
+#plot_timeseries(t_start, t_range, dt, u_matrix, k, l)
 
 # nodes start from 1, not from 0, therefore add 1 to the index
 print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
