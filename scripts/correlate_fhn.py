@@ -7,6 +7,7 @@ import sys
 import math
 import scipy.stats as sistat
 import matplotlib.pyplot as pl
+from matplotlib import colors
 from pylab import *
 
 
@@ -86,8 +87,9 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 		for j in range(0,N_col):
 			if i==j :
 				corr_matrix[i,j] = 0
-	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
-	cbar = pl.colorbar()
+	cmap   = pl.cm.jet
+	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.5, vmax=0.5, cmap='jet', aspect='auto')
+	cbar = pl.colorbar(cmap=cmap, norm=norm)
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 20)
@@ -142,22 +144,25 @@ else:
 	# numpy's loadtxt() can deal with this
 	infile = input_name
 
-data_matrix 	    =	load_matrix(infile)
-[u_matrix , T]	    =	fhn_timeseries(data_matrix)
-corr_matrix		    =	correl_matrix(u_matrix, input_name)
+#data_matrix 	    =	load_matrix(infile)
+#[u_matrix , T]	    =	fhn_timeseries(data_matrix)
+#corr_matrix		    =	correl_matrix(u_matrix, input_name)
+# if correlation matrix is given directly :
+corr_matrix			=   load_matrix(infile)
 pl.figure(1)
 plot_corr_diag(corr_matrix, input_name )
 [i, j, k , l ]		=   node_index(corr_matrix)
 
-# user defined time range for timeseries plots
-t_start = 0
-t_range = 5500
-# plot the timeseries of best correlated nodes
-pl.figure(2)
-plot_timeseries(t_start, t_range, u_matrix, i, j)
-# plot the timeseries of worst correlated nodes
-pl.figure(3)
-plot_timeseries(t_start, t_range, u_matrix, k, l)
+
+## user defined time range for timeseries plots
+#t_start = 0
+#t_range = 5500
+## plot the timeseries of best correlated nodes
+#pl.figure(2)
+#plot_timeseries(t_start, t_range, u_matrix, i, j)
+## plot the timeseries of worst correlated nodes
+#pl.figure(3)
+#plot_timeseries(t_start, t_range, u_matrix, k, l)
 
 # nodes start from 1, not from 0, therefore add 1 to the index
 print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
