@@ -47,7 +47,7 @@ def fhn_timeseries(simfile):
 	# extract u-columns
 	u_indices  = np.arange(1, simfile.shape[1] ,1)
 	u_series   = simfile[:, u_indices]
-	return u_series , T, dt
+	return u_series , T, dt, tvec
 
 # correlation coefficients among the columns of a given matrix
 def correl_matrix(matrix , matrix_name):
@@ -109,27 +109,29 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	#pl.show()
 	return
 	
-def plot_timeseries(t_start , t_final, dt, timeseries, x, y):
+def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
 	# plots timeseries of two given nodes in a specific time interval
 	# t_range corresponds to time interval
-	time    =  np.arange(t_start, t_final, dt)
-	i_start =  (t_start / dt)
-	i_final =  (t_final / dt)
 	
-	v1  = timeseries[:, x]
-	v2  = timeseries[:, y]
+	i_start =  (t_start /dt)
+	i_final =  (t_final /dt)
 	
-	print "shape time : " , np.shape(time)
+	v1   = timeseries[:, x-1]
+	v2   = timeseries[:, y-1]
+	
+	#print "i_start , i_final : ", i_start, i_final, dt, t[0], v1[0], v2[0]
+	
+	#print "shape time : " , np.shape(t)
 	print "i_start : " , i_start
 	print "i_final : " , i_final
 	print "shape B : ", np.shape(v1)
 	
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
-	pl.plot(time/100, v1[i_start : i_final], '*r',label=('node '+str(x+1)))
+	pl.plot(10*tvec[i_start:i_final], v1[i_start : i_final], '*r',label=('node '+str(x+1)))
 	
 	#pl.plot(v2[t_start : (t_start + t_range)], 'b',label=('node '+str(y+1)))
 	lg = legend()
-	pl.xlabel('t [s]')
+	pl.xlabel('t [ms]')
 	pl.ylabel('$u_i(t)$')
 	#pl.title(('FHN - timeseries, corr. coeff. of nodes : ' 
 				#+ str("%.2f" % R_pearson)), fontweight='bold')
@@ -156,7 +158,7 @@ else:
 	infile = input_name
 
 data_matrix 	    =	load_matrix(infile)
-[u_matrix , T, dt]  =	fhn_timeseries(data_matrix)
+[u_matrix , T, dt, tvec]  =	fhn_timeseries(data_matrix)
 corr_matrix		    =	correl_matrix(u_matrix, input_name)
 
 ## if correlation matrix is given directly :
@@ -168,10 +170,10 @@ corr_matrix		    =	correl_matrix(u_matrix, input_name)
 
 # user defined time range for timeseries plots
 t_start = 0
-t_final = 150
+t_final = 20
 # plot the timeseries of best correlated nodes
 pl.figure(2)
-plot_timeseries(t_start, t_final, dt, u_matrix, i, j)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, 1, 2)
 # plot the timeseries of worst correlated nodes
 #pl.figure(3)
 #plot_timeseries(t_start, t_range, dt, u_matrix, k, l)
