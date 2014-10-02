@@ -18,6 +18,11 @@ from pylab import *
 	output : correlation matrix of the input, n rows, n columns
 """
 
+class Params(object):
+	__slots__ = [ 'dt' ]
+
+params.dt = 0.001
+
 # load input data as numpy matrix
 def load_matrix(file):
 	print "reading data ..."
@@ -49,6 +54,12 @@ def node_index(matrix):
 	[nx , ny] = np.unravel_index(matrix.argmax() , matrix.shape)
 	# index of maximum value in matrix
 	[mx , my] = np.unravel_index(matrix.argmin() , matrix.shape)
+	
+	# assign diagonal elements back to zero 
+	for i in range(0,np.shape(matrix)[0]):
+		for j in range(0,np.shape(matrix)[1]):
+			if i == j :
+				matrix[i,j] = 1
 	return nx, ny , mx, my
 
 # plots the correlation matrix of SIMULATED signal
@@ -60,8 +71,9 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	for i in range(0,N_col):
 		for j in range(0,N_col):
 			if i==j :
-				corr_matrix[i,j] = 0
-	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
+				corr_matrix[i,j] = 1
+	cmap   = pl.cm.jet
+	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.5, vmax=0.5, cmap='jet', aspect='auto')
 	cbar = pl.colorbar()
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
@@ -82,14 +94,18 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	#pl.show()
 	return
 	
-def plot_timeseries(t_start , t_range , timeseries, x, y):
+def plot_bold_signal(timeseries, x, y):
 	# plots timeseries of two given nodes in a specific time interval
-	# t_range corresponds to time interval
-	v1  = timeseries[:, x]
-	v2  = timeseries[:, y]
+	
+	#time = np.linspace(0, T, len(timeseries[0]) )
+	
+	v1  = timeseries[:, x-1]
+	v2  = timeseries[:, y-1]
+	
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
-	pl.plot(v1[t_start : (t_start + t_range)], 'r',label=('node '+str(x+1)))
-	pl.plot(v2[t_start : (t_start + t_range)], 'b',label=('node '+str(y+1)))
+	
+	pl.plot(v1, 'r',label=('node '+str(x)))
+	#pl.plot(v2, 'b',label=('node '+str(y)))
 	lg = legend()
 	pl.xlabel('t [ms]')
 	#pl.ylabel('$BOLD-filtered_i(t)$')
@@ -111,15 +127,12 @@ corr_matrix		=		correl_matrix(data_matrix , input_name)
 [i, j, k , l ]  = 	    node_index(corr_matrix)
 image			= 		plot_corr_diag(corr_matrix, input_name)
 
-# user defined time range for timeseries plots
-t_start = 0
-t_range = 5500
 # BOLD activity of the nodes correlating the best
 pl.figure(2)
-plot_timeseries(t_start, t_range, data_matrix, i, j)
-# BOLD activity of the nodes correlating the worst
-pl.figure(3)
-plot_timeseries(t_start, t_range, data_matrix, k, l)
+plot_bold_signal(data_matrix, 1, 2)
+## BOLD activity of the nodes correlating the worst
+#pl.figure(3)
+#plot_timeseries(t_start, t_range, data_matrix, k, l)
 
 # nodes start from 1, not from 0 on figure, therefore add 1 to the index
 print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
