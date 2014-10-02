@@ -62,6 +62,7 @@ def correl_matrix(matrix , matrix_name):
 	np.savetxt(file_name, cr_matrix, '%.6f',delimiter='\t')
 	return cr_matrix
 
+# finding the index of max and min values in a given correlation matrix
 def node_index(matrix):
 	# ignore diagonal elements by assigning it to zero
 	for i in range(0,np.shape(matrix)[0]):
@@ -75,6 +76,11 @@ def node_index(matrix):
 	[nx , ny] = np.unravel_index(matrix.argmax() , matrix.shape)
 	# index of maximum value in matrix
 	[mx , my] = np.unravel_index(matrix.argmin() , matrix.shape)
+	
+	# nodes start from 1, not from 0, therefore add 1 to the index
+	print "nodes ",nx+1," and ",ny+1," best correlated  : ", matrix[nx,ny] 
+	print "nodes ",mx+1," and ",my+1," worst correlated : ", matrix[mx,my]
+	
 	return nx, ny , mx, my
 
 # plots the correlation matrix of SIMULATED signal
@@ -108,20 +114,23 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	#pl.savefig(image_name, format="eps")
 	#pl.show()
 	return
-	
+
+# plots timeseries of two given nodes in a specific time interval
 def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
-	# plots timeseries of two given nodes in a specific time interval
 	
-	# t_range corresponds to time interval	
+	# corresponding index of t_start and t_final in tvec
 	i_s =  (t_start /dt)
 	i_f =  (t_final /dt)
 	
-	# node numbers start from 0 in timeseries, therefore subract 1
+	# extracting the timeseries of the given nodes as separate vectors
 	v1   = timeseries[:, x-1]
 	v2   = timeseries[:, y-1]
 	
+	# Pearson correlation value between two timeseries
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
 	
+	# plot the timeseries of two nodes in specific interval
+	# tvec multiplied by 10 for making dimensial equal to [ms]
 	pl.plot(10*tvec[i_s:i_f], v1[i_s : i_f],'r',label=('node '+str(x)))
 	pl.plot(10*tvec[i_s:i_f], v2[i_s : i_f],'b',label=('node '+str(y)))
 	lg = legend()
@@ -160,20 +169,16 @@ corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 
 #pl.figure(1)
 #plot_corr_diag(corr_matrix, input_name )
+# node indexes, not forget to subtract 1 
 [i, j, k , l ]		=   node_index(corr_matrix)
 
 # user defined time range for timeseries plots
-t_start = 50
-t_final = 99.9
+t_start = 0
+t_final = 2
 # plot the timeseries of best correlated nodes
 pl.figure(2)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, 17, 62)
-# plot the timeseries of worst correlated nodes
-#pl.figure(3)
-#plot_timeseries(t_start, t_range, dt, u_matrix, k, l)
-
-# nodes start from 1, not from 0, therefore add 1 to the index
-print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
-print "nodes ", k+1," and ",l+1," worst correlated : ", corr_matrix[k,l]
-
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
+#plot the timeseries of worst correlated nodes
+pl.figure(3)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k+1, l+1)
 pl.show()
