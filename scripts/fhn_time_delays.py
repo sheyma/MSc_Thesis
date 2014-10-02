@@ -154,7 +154,7 @@ neuronetz.ddeN.hist_from_arrays(dic)
 
 """ Start simulation with t = [0,tmax] """
 
-tmax = 45000  # for random network simulation  [10 ms] 
+tmax = 1000  # for random network simulation  [10 ms] 
 #tmax = 70000   # ??? [ 10 ms] 
 neuronetz.run(tmax)
 
@@ -197,7 +197,7 @@ f = open(gfilename[:-4]+'_sigma='+str(params['sigma'])+'_D='+str(params['D'])+'_
 for i, t0 in enumerate(t):
 	f.write('%s' % (t0))
 	for j in range(0, len(x)):
-		f.write('\t%.2g' % (float(x[j][i])))
+		f.write('\t%.4f' % (float(x[j][i])))
 		# DIFFF :  f.write('%.2f\t%.2f\t' % (float(x[j][i]), float(y[j][i])))
 	f.write('\n')
 
