@@ -173,8 +173,8 @@ corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 [i, j, k , l ]		=   node_index(corr_matrix)
 
 # user defined time range for timeseries plots
-t_start = 0
-t_final = 2
+t_start = 1600
+t_final = 1750
 # plot the timeseries of best correlated nodes
 pl.figure(2)
 plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
