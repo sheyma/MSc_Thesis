@@ -64,10 +64,10 @@ def correl_matrix(matrix , matrix_name):
 
 # finding the index of max and min values in a given correlation matrix
 def node_index(matrix):
-	# ignore diagonal elements by assigning it to zero
+	# ignore diagonal elements by assigning it to 0
 	for i in range(0,np.shape(matrix)[0]):
 		for j in range(0,np.shape(matrix)[1]):
-			if i == j :
+			if i==j:
 				matrix[i,j] = 0
 	print "max. corr. coef. in the correlation matrix:", matrix.max()
 	print "min. corr. coef. in the correlation matrix:", matrix.min()
@@ -80,19 +80,21 @@ def node_index(matrix):
 	# nodes start from 1, not from 0, therefore add 1 to the index
 	print "nodes ",nx+1," and ",ny+1," best correlated  : ", matrix[nx,ny] 
 	print "nodes ",mx+1," and ",my+1," worst correlated : ", matrix[mx,my]
+
+	# assign diagonal elements back to 1 
+	for i in range(0,np.shape(matrix)[0]):
+		for j in range(0,np.shape(matrix)[1]):
+			if i == j :
+				matrix[i,j] = 1.0
 	
 	return nx, ny , mx, my
 
 # plots the correlation matrix of SIMULATED signal
 # input: any output of fhn_time_delays.py or output of calcBOLD.py 
-# trick: remove 1's to 0's along the diagonals 
 def plot_corr_diag(corr_matrix, matrix_name) :	
 	N_col  = np.shape(corr_matrix)[1]
-	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
-	for i in range(0,N_col):
-		for j in range(0,N_col):
-			if i==j :
-				corr_matrix[i,j] = 0
+	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )
+		
 	cmap   = pl.cm.jet
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.5, vmax=0.5, cmap='jet', aspect='auto')
 	cbar = pl.colorbar(cmap=cmap, norm=norm)
@@ -131,8 +133,8 @@ def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
 	
 	# plot the timeseries of two nodes in specific interval
 	# tvec multiplied by 10 for making dimensial equal to [ms]
-	pl.plot(10*tvec[i_s:i_f], v1[i_s : i_f],'r',label=('node '+str(x)))
-	pl.plot(10*tvec[i_s:i_f], v2[i_s : i_f],'b',label=('node '+str(y)))
+	pl.plot(10*tvec[i_s:i_f], v1[i_s : i_f],'r-o',label=('node '+str(x)))
+	pl.plot(10*tvec[i_s:i_f], v2[i_s : i_f],'b-o',label=('node '+str(y)))
 	lg = legend()
 	pl.xlabel('t [ms]')
 	pl.ylabel('$u_i(t)$')
@@ -167,18 +169,18 @@ corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 ## if correlation matrix is given directly :
 #corr_matrix			=   load_matrix(infile)
 
-#pl.figure(1)
-#plot_corr_diag(corr_matrix, input_name )
+pl.figure(1)
+plot_corr_diag(corr_matrix, input_name )
 # node indexes, not forget to subtract 1 
 [i, j, k , l ]		=   node_index(corr_matrix)
 
-# user defined time range for timeseries plots
-t_start = 1600
-t_final = 1750
-# plot the timeseries of best correlated nodes
-pl.figure(2)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
-#plot the timeseries of worst correlated nodes
-pl.figure(3)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k+1, l+1)
+## user defined time range for timeseries plots
+#t_start = 0
+#t_final = 1000
+## plot the timeseries of best correlated nodes
+#pl.figure(2)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
+##plot the timeseries of worst correlated nodes
+#pl.figure(3)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k+1, l+1)
 pl.show()
