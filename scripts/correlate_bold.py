@@ -60,6 +60,9 @@ def node_index(matrix):
 		for j in range(0,np.shape(matrix)[1]):
 			if i == j :
 				matrix[i,j] = 1
+	#nodes start from 1, not from 0 on figure !
+	print "nodes ",nx+1," and ",ny+1," best corr. : ", corr_matrix[i,j] 
+	print "nodes ",mx+1," and ",my+1," worst corr.: ", corr_matrix[k,l]
 	return nx, ny , mx, my
 
 # plots the correlation matrix of SIMULATED signal
@@ -125,6 +128,7 @@ if __name__ == '__main__':
 		
 data_matrix		=		load_matrix(input_name)		
 corr_matrix		=		correl_matrix(data_matrix , input_name)
+# real node index : add 1!
 [i, j, k , l ]  = 	    node_index(corr_matrix)
 image			= 		plot_corr_diag(corr_matrix, input_name)
 
@@ -134,8 +138,4 @@ plot_bold_signal(data_matrix, i+1,j+1)
 # BOLD activity of the nodes correlating the worst
 pl.figure(3)
 plot_bold_signal(data_matrix, k+1,l+1)
-
-# nodes start from 1, not from 0 on figure, therefore add 1 to the index
-#print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
-#print "nodes ", k+1," and ",l+1," worst correlated : ", corr_matrix[k,l]
 pl.show()
