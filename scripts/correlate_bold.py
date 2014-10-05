@@ -18,10 +18,10 @@ from pylab import *
 	output : correlation matrix of the input, n rows, n columns
 """
 
-class Params(object):
-	__slots__ = [ 'dt' ]
+#class Params(object):
+	#__slots__ = [ 'dt' ]
 
-params.dt = 0.001
+#params.dt = 0.001
 
 # load input data as numpy matrix
 def load_matrix(file):
@@ -97,20 +97,21 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 def plot_bold_signal(timeseries, x, y):
 	# plots timeseries of two given nodes in a specific time interval
 	
-	#time = np.linspace(0, T, len(timeseries[0]) )
-	
 	v1  = timeseries[:, x-1]
 	v2  = timeseries[:, y-1]
 	
+	T   = len(v1)	
+	time = np.linspace(0, T-1, T) / float(60000)
+	
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
 	
-	pl.plot(v1, 'r',label=('node '+str(x)))
-	#pl.plot(v2, 'b',label=('node '+str(y)))
+	pl.plot(time, v1, 'r',label=('node '+str(x)))
+	pl.plot(time, v2, 'b',label=('node '+str(y)))
 	lg = legend()
-	pl.xlabel('t [ms]')
-	#pl.ylabel('$BOLD-filtered_i(t)$')
-	#pl.title(('simulated BOLD activity, corr. coeff. of nodes : ' 
-				#+ str("%.2f" % R_pearson)), fontweight='bold')
+	pl.xlabel('t [min]')
+	pl.ylabel('$BOLD-signal_i(t)$')
+	pl.title(('simulated BOLD activity, corr. coeff. of nodes : ' 
+				+ str("%.2f" % R_pearson)), fontweight='bold')
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
 	return	
@@ -129,12 +130,12 @@ image			= 		plot_corr_diag(corr_matrix, input_name)
 
 # BOLD activity of the nodes correlating the best
 pl.figure(2)
-plot_bold_signal(data_matrix, 1, 2)
-## BOLD activity of the nodes correlating the worst
-#pl.figure(3)
-#plot_timeseries(t_start, t_range, data_matrix, k, l)
+plot_bold_signal(data_matrix, i+1,j+1)
+# BOLD activity of the nodes correlating the worst
+pl.figure(3)
+plot_bold_signal(data_matrix, k+1,l+1)
 
 # nodes start from 1, not from 0 on figure, therefore add 1 to the index
-print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
-print "nodes ", k+1," and ",l+1," worst correlated : ", corr_matrix[k,l]
+#print "nodes ", i+1," and ",j+1," best correlated  : ", corr_matrix[i,j] 
+#print "nodes ", k+1," and ",l+1," worst correlated : ", corr_matrix[k,l]
 pl.show()
