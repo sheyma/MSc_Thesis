@@ -50,33 +50,34 @@ from pylab import *
 ###########################################
 	 
 ## [GHOS08a] local dynamics	##
-# make x minus in first equation!!
-eqns   = {r'x' : '(y - gamma*x + pow(x,3)/3.0) * TAU ',
-	      r'y' : '-(x - alpha + b*y  ) / TAU' }
-
-params = {'gamma' : 1.0, #0.9
-		  'alpha' : 1.05, #1.9
-		  'TAU'   : 1.25,
-		  'b'     : 0.2 }
-
-### [VUK13] local dynamics ##
-#eqns   = {r'x' : '(y + gamma*x - pow(x,3)/3.0) * TAU ',
+ #make x minus in first equation!!
+#eqns   = {r'x' : '(y - gamma*x + pow(x,3)/3.0) * TAU ',
 	      #r'y' : '-(x - alpha + b*y  ) / TAU' }
 
 #params = {'gamma' : 1.0, #0.9
-		  #'alpha' : 0.85, #1.9
+		  #'alpha' : 1.05, #1.9
 		  #'TAU'   : 1.25,
 		  #'b'     : 0.2 }
+
+## [VUK13] local dynamics ##
+eqns   = {r'x' : '(y + gamma*x - pow(x,3)/3.0) * TAU ',
+	      r'y' : '-(x - alpha + b*y  ) / TAU' }
+
+params = {'gamma' : 1.0, #0.9
+		  'alpha' : 0.85, #1.9
+		  'TAU'   : 1.25,
+		  'b'     : 0.2,
+		  'I'	  : 0 }
 
 # nullclines of [GHO08a] and [VUK13]
 # nullcline of Y:
 def nullcl_01(X):
-  return -(pow(X,3)/3 - params['gamma']*X)
+  return (pow(X,3)/3 - params['gamma']*X)
   #make x minus
 
 # nullcline of Y    
 def nullcl_02(X):
-  return (params['alpha'] - X ) / params['b']
+  return (params['alpha'] - X + params['I']) / params['b']
 
 # calculate the intersection of nullclines [GHO08a], [VUK13]
 def intersection(X):
