@@ -149,7 +149,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
 
 
-%\subsection{Correlation Matrices of Downsampled BOLD Activity}
+\subsection{Correlation Matrices of Downsampled BOLD Activity}
 
 
 \begin{figure}[htp!]
@@ -175,133 +175,178 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
 \end{figure}
 
-%\subsection{Empirical Correlation Matrix}
-%
-%\begin{figure}[htp!]
-%	\centering
-%	 \includegraphics[width=0.7\textwidth]{A_aal.eps}
-%
-%\label{figur}\caption{ $A\_aal.txt$ }
-%
-%\end{figure}
-%
-%
-%
-%
-%\subsection{FHN timeseries of nodes }
-%
-%\begin{figure}[htp!]
-%  \centering
-%    \begin{tabular}{cc}
-%    % Requires \usepackage{graphicx}
-%  \includegraphics[width=0.4\textwidth, height=44mm]{A_aal.eps} &    
-%  \includegraphics[width=0.5\textwidth, height=44mm]{nodes_FHN_good_correlation.eps}\\ 
-%
-%    \includegraphics[width=0.4\textwidth, height=44mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55000_FHN_corr.eps} &  
-%  \includegraphics[width=0.5\textwidth, height=44mm]{nodes_FHN_bad_correlation.eps} \\
-%
-%	\end{tabular}
-%	
-%	\label{figur}\caption{}
-%	
-%\end{figure}
-%
-%
-%
-%
-%\subsection{Simulated BOLD activity of nodes }
-%
-%\begin{figure}[htp!]
-%  \centering
-%    \begin{tabular}{cc}
-%    % Requires \usepackage{graphicx}
-%  \includegraphics[width=0.4\textwidth, height=40mm]{A_aal.eps} &    
-%  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_signal_good_correlation.eps}\\ 
-%
-%    \includegraphics[width=0.4\textwidth, height=40mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_signal_CORR.eps} &  
-%  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_signal_bad_correlation.eps} \\
-%
-%	\end{tabular}
-%	
-%	\label{figur}\caption{}
-%	
-%\end{figure}
-%
-%
-%
-%\subsection{Low-pass filtered simulated BOLD activity of nodes }
-%
-%\begin{figure}[htp!]
-%  \centering
-%    \begin{tabular}{cc}
-%    % Requires \usepackage{graphicx}
-%  \includegraphics[width=0.4\textwidth, height=40mm]{A_aal.eps} &    
-%  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_filtered_good_correlation.eps}\\ 
-%
-%    \includegraphics[width=0.4\textwidth, height=40mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_filtered_CORR.eps} &  
-%  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_filtered_bad_correlation.eps} \\
-%
-%	\end{tabular}
-%	
-%	\label{figur}\caption{}
-%	
-%\end{figure}
-%
-%
-%
-%\subsection{Downsampled simulated BOLD activity of nodes }
-%
-%\begin{figure}[htp!]
-%  \centering
-%    \begin{tabular}{cc}
-%    % Requires \usepackage{graphicx}
-%  \includegraphics[width=0.4\textwidth, height=40mm]{A_aal.eps} &    
-%  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_bds_good_correlation.eps}\\ 
-%
-%    \includegraphics[width=0.4\textwidth, height=40mm]{A_aal_0_ADJ_thr_0_58_sigma=0_018_D=0_05_v=70_0_tmax=55_BOLD_bds_CORR.eps} &  
-%  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_bds_bad_correlation.eps} \\
-%
-%	\end{tabular}
-%	
-%	\label{figur}\caption{}
-%	
-%\end{figure}
-%
-%\newpage
-%
-%\section{MATLAB - PYTHON Difference while filtering}
-%
-%\subsection{Simple Sinewave}
-%
-%\begin{figure}[htp!]
-%  \centering
-%    \begin{tabular}{c}
-%    % Requires \usepackage{graphicx}
-%  \includegraphics[width=\textwidth]{sin_fft.eps} \\   
-%  \includegraphics[width=\textwidth]{sin_filt.eps}\\ 
-%
-%
-%	\end{tabular}	
-%	\label{figur}\caption{}
-%	
-%\end{figure}
-%
-%\newpage
-%
-%
-%\subsection{Sample Bold Signal}
-%
-%\begin{figure}[htp!]
-%  \centering
-%    \begin{tabular}{c}
-%    % Requires \usepackage{graphicx}
-%  \includegraphics[width=\textwidth]{bold_fft.eps} \\   
-%  \includegraphics[width=\textwidth]{bold_filt.eps}\\ 
-%
-%
-%	\end{tabular}	
-%	\label{figur}\caption{}
-%	
-%\end{figure}
+\subsection{Empirical Correlation Matrix}
+
+\begin{figure}[htp!]
+	\centering
+	 \includegraphics[width=0.6\textwidth]{A_aal.eps}
+
+\label{figur}\caption{ $A\_aal.txt$ }
+
+\end{figure}
+
+
+
+
+\subsection{FHN timeseries of nodes }
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=0.4\textwidth, height=44mm]{A_aal.eps} &    
+  \includegraphics[width=0.5\textwidth, height=44mm]{nodes_FHN_good_correlation.eps}\\ 
+
+    \includegraphics[width=0.4\textwidth, height=44mm]{FHN_corr_r_0_58_si_0_018.eps} &  
+  \includegraphics[width=0.5\textwidth, height=44mm]{nodes_FHN_bad_correlation.eps} \\
+
+	\end{tabular}
+	
+	\label{figur}\caption{On the left : correlation matrices of empirical data and simulated neuronal activity. The pearson correlation between them is 0.2130. On the right : the simulated timeseries of the best correlated nodes, as weel as the worst correlated nodes. The time resolution is set to $dt=0.001[s]$.}
+	
+\end{figure}
+
+
+
+
+\subsection{Simulated BOLD activity of nodes }
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=0.4\textwidth, height=40mm]{A_aal.eps} &    
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_signal_good_correlation.eps}\\ 
+
+    \includegraphics[width=0.4\textwidth, height=40mm]{BOLD_signal_corr_r_0_58_si_0_018.eps} &  
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_signal_bad_correlation.eps} \\
+
+	\end{tabular}
+	
+	\label{figur}\caption{ The pearson correlation between matrices is 0.4977. The time resolution is set to $dt=0.001[s]$. The BOLD signal is cut from the beginning by $20[s]$}
+	
+\end{figure}
+
+
+
+\subsection{Low-pass filtered simulated BOLD activity of nodes }
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=0.4\textwidth, height=40mm]{A_aal.eps} &    
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_filtered_good_correlation.eps}\\ 
+
+    \includegraphics[width=0.4\textwidth, height=40mm]{BOLD_filtered_corr_r_0_58_si_0_018.eps} &  
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_filtered_bad_correlation.eps} \\
+
+	\end{tabular}
+	
+	\label{figur}\caption{The low pass filtered BOLD activity. Pearson cor. coef. is 0.1340. }
+	
+\end{figure}
+
+
+
+\subsection{Downsampled simulated BOLD activity of nodes }
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{cc}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=0.4\textwidth, height=40mm]{A_aal.eps} &    
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_bds_good_correlation.eps}\\ 
+
+    \includegraphics[width=0.4\textwidth, height=40mm]{BOLD_bds_corr_r_0_58_si_0_018.eps} &  
+  \includegraphics[width=0.5\textwidth, height=40mm]{nodes_BOLD_bds_bad_correlation.eps} \\
+
+	\end{tabular}
+	
+	\label{figur}\caption{Pearson cor. coef. between two matrices is 0.4687. Downsampling means chosing every $ds/dtt $  $(= 2.3/0.001)$ point on data, (chosing one point on every $ds [ms]$), at the end the signal is cut from beginning and end $\%2$. }
+	
+\end{figure}
+
+
+\newpage
+
+\section{Fast Fourier Transform of Simulation Signals}
+
+\subsection{Simulated Neuronal Activity}
+
+\begin{figure}[htp!]
+  \centering
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=\textwidth, height=70mm]{fhn_and_fft.eps}   
+
+
+	\label{figur}\caption{The timeseries of two randomly chosen nodes and fast fouriert transform (fft) of their activity. The resolution of timeseries is $dt=0.001[s]$ and therefore sampling frequency is $F_s=1000[Hz]$.}
+	
+\end{figure}
+
+
+
+\subsection{Simulated BOLD Activity}
+
+\begin{figure}[htp!]
+  \centering
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=\textwidth, height=70mm]{bold_signal_and_fft.eps}   
+
+
+	\label{figur}\caption{The BOLD activity of two nodes and their fft graph. There is almost no signal above $f=0.05[Hz]$ and the range after $f=0.05[Hz]$ is not necessarily visualized. The resolution of the BOLD signaling is $dt=0.001[Hz]$, $F_s=1000[Hz]$.}
+	
+\end{figure}
+
+
+\subsection{Filtered BOLD Activity}
+
+\begin{figure}[htp!]
+  \centering
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=\textwidth, height=70mm]{bold_downsampled_and_fft.eps}   
+
+
+	\label{figur}\caption{The Low-pass filtered BOLD activity of two nodes and their fft graph. The resolution of the BOLD signaling is $dt=0.001[Hz]$, sampling frequency is $F_s=1000[Hz]$.}
+	
+\end{figure}
+
+
+\newpage
+
+\section{MATLAB - PYTHON Difference while filtering}
+
+\subsection{Simple Sinewave}
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{c}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=\textwidth]{sin_fft.eps} \\   
+  \includegraphics[width=\textwidth]{sin_filt.eps}\\ 
+
+
+	\end{tabular}	
+	\label{figur}\caption{}
+	
+\end{figure}
+
+\newpage
+
+
+\subsection{Sample Bold Signal}
+
+\begin{figure}[htp!]
+  \centering
+    \begin{tabular}{c}
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=\textwidth]{bold_fft.eps} \\   
+  \includegraphics[width=\textwidth]{bold_filt.eps}\\ 
+
+
+	\end{tabular}	
+	\label{figur}\caption{}
+	
+\end{figure}
 
 \end{document}
