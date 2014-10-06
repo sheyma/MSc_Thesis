@@ -126,23 +126,48 @@ def plot_bold_signal(timeseries, x, y):
 	#pl.show()
 	return	
 
+def bold_fft(matrix, x, dtt) :
+	
+	# Sampling frequency (Hz)
+	f_s = 1/float(dtt)
+	# array of the signal given by the x'th column
+	Y     = matrix[:,x]
+	t_Y   = np.arange(0, len(Y), 1)
+	m     = len(Y);
+	m_pow = int(pow(2, math.ceil(math.log(m)/math.log(2))))
+	# fast fourier transform of the x'th column
+	Y_fft = np.fft.fft(Y , m_pow) /float(m)
+	Y_fft = 2*abs(Y_fft[0:m_pow /2 +1])  
+	# frequency domain
+	freq  = float(f_s)/2 * np.linspace(0,1, m_pow/2 + 1);
+	
+	return Y_fft, freq
+
+
 # user defined input name
 if __name__ == '__main__':
 	try:
 		input_name = sys.argv[1]
 	except:
 		sys.exit(1)
-		
-data_matrix		=		load_matrix(input_name)		
-corr_matrix		=		correl_matrix(data_matrix , input_name)
-# real node index : add 1!
-[i, j, k , l ]  = 	    node_index(corr_matrix)
-image			= 		plot_corr_diag(corr_matrix, input_name)
 
-# BOLD activity of the nodes correlating the best
-pl.figure(2)
-plot_bold_signal(data_matrix, i+1,j+1)
-# BOLD activity of the nodes correlating the worst
-pl.figure(3)
-plot_bold_signal(data_matrix, k+1,l+1)
+data_matrix		=		load_matrix(input_name)		
+#corr_matrix		=		correl_matrix(data_matrix , input_name)
+## real node index : add 1!
+#[i, j, k , l ]  = 	    node_index(corr_matrix)
+#image			= 		plot_corr_diag(corr_matrix, input_name)
+
+## BOLD activity of the nodes correlating the best
+#pl.figure(2)
+#plot_bold_signal(data_matrix, i+1,j+1)
+## BOLD activity of the nodes correlating the worst
+#pl.figure(3)
+#plot_bold_signal(data_matrix, k+1,l+1)
+#pl.show()
+
+[yfft_1, freq_1] = bold_fft(data_matrix, 0, 0.001)
+[yfft_2, freq_2] = bold_fft(data_matrix, 56, 0.001)
+pl.figure(4);
+pl.plot(freq_1[0:30], yfft_1[0:30], 'k')
+pl.plot(freq_2[0:30] , yfft_2[0:30] , 'r' )
 pl.show()
