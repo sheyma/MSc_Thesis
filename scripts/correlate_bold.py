@@ -108,21 +108,21 @@ def plot_bold_signal(timeseries, x, y):
 	
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
 	
-	## if the given signal downsampled :
-	#time_bds = np.arange(0,  530,  float(530)/len(v1) )/float(60)
-	#pl.plot(time_bds, v1, 'r',label=('node '+str(x)))
-	#pl.plot(time_bds, v2, 'b',label=('node '+str(y)))
+	# if the given signal downsampled :
+	time_bds = np.arange(0,  530,  float(530)/len(v1) )/float(60)
+	pl.plot(time_bds, v1, 'r',label=('node '+str(x)))
+	pl.plot(time_bds, v2, 'b',label=('node '+str(y)))
 	
-	# if no downsampling :
-	pl.plot(time, v1, 'r',label=('node '+str(x)))
-	pl.plot(time, v2, 'b',label=('node '+str(y)))
+	## if no downsampling :
+	#pl.plot(time, v1, 'r',label=('node '+str(x)))
+	#pl.plot(time, v2, 'b',label=('node '+str(y)))
 	
 	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
 	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
 	lg = legend()
 	pl.xlabel('t [min]', fontsize=25)
-	pl.ylabel('BOLD signal', fontsize=25)
-	pl.title(('simulated BOLD activity, corr. coeff. of nodes : ' 
+	pl.ylabel('BOLD downsampled', fontsize=25)
+	pl.title(('downsample BOLD activity, corr. coeff. of nodes : ' 
 			   +str("%.2f" % R_pearson)),fontsize=25)
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
@@ -169,14 +169,18 @@ plot_bold_signal(data_matrix, k+1,l+1)
 rnd_node_1 = 57
 rnd_node_2 = 46
 
-[yfft_1, freq_1] = bold_fft(data_matrix, rnd_node_1-1, 0.001)
-[yfft_2, freq_2] = bold_fft(data_matrix, rnd_node_2-1, 0.001)
+# bold signal parameters, dtt [ms] is resolution of bold signal
+params = {'dtt' : 0.001}
+print params['dtt']
+
+[yfft_1, freq_1] = bold_fft(data_matrix, rnd_node_1-1, params['dtt'])
+[yfft_2, freq_2] = bold_fft(data_matrix, rnd_node_2-1, params['dtt'])
 pl.figure(4);
 pl.subplot(1,2,1)
 plot_bold_signal(data_matrix, rnd_node_1-1, rnd_node_2-1)
 pl.subplot(1,2,2)
-pl.plot(freq_1[0:50],yfft_1[0:50],'r',label=('node '+str(rnd_node_1-1)))
-pl.plot(freq_2[0:50],yfft_2[0:50],'b',label=('node '+str(rnd_node_2-1)))
+pl.plot(freq_1[0:50], yfft_1[0:50], 'r',label=('node '+str(rnd_node_1-1)))
+pl.plot(freq_2[0:50], yfft_2[0:50], 'b',label=('node '+str(rnd_node_2-1)))
 pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
 pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
 lg = legend()
