@@ -46,7 +46,7 @@ where $x$ is activator variable, $y$ is the inhibitor variable, $\varepsilon$ de
 
 The fixed point is where $\dot{x}=0$ and $\dot{y}=0$, corresponding 
 to $( -a, -a+\frac{a^3}{3} )$. The eigenvalues of Jacobian matrix are 
- $\lambda_{1,2}=\frac{1-a^2\pm \sqrt{(1-a^2)^2-4\varepsilon}}{2\varepsilon}$, $\varepsilon=0.005$, for $\lambda<1$ the fixed point is stable, for $\lambda|>1$ unstable.
+ $\lambda_{1,2}=\frac{1-a^2\pm \sqrt{(1-a^2)^2-4\varepsilon}}{2\varepsilon}$, $\varepsilon=0.005$, for $\lambda<1$ the fixed point is stable, for $|\lambda|>1$ unstable.
 
 
 \begin{figure}[h!]
@@ -123,8 +123,7 @@ The eigenvalues of the Jacobian matrix is given as the following:
 		\caption{The local dynamics of one single isolated node with the parameters $\alpha = 1.05$, $\gamma=1.0$, $b=0.2$ and $\tau = 1.25$, the system is in quiescent state, the initial point given by red dot is chosen randomly. The fixed point is $[0.91, 0.66]$}
 \end{figure}
 
-The time evolution of $x$ and $y$ starts with rapid increase but both decay over time with small amplitude oscillations and even become constant over longer time. The state space indicates the system at rest. 
-
+The time evolution of $x$ and $y$ starts with rapid increase but both decay over time with small amplitude oscillations and even become constant over longer time. Activator and inhibitor relaxation onto the fixed point states that the system is at rest. 
 \newpage
 
 \subsubsection{Global Dynamics with Mutual Coupling and Time Delays}
@@ -162,10 +161,11 @@ where $C$ is the mutual coupling constant, $\tau^C$ is the time delays of mutual
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\textwidth, height=5.5cm]{VUK13_local_dynamics.eps}
-		\caption{The local dynamics of two nodes with the parameters $\alpha = 0.85$, $\gamma=1.0$, $b=0.2$, $\tau = 1.4$. System resembles a damped oscillatory behavior.}
+		\caption{The local dynamics of two nodes with the parameters $\alpha = 0.85$, $\gamma=1.0$, $b=0.2$, $\tau = 1.4$ and $I=0$. Intersection of nullclines $[x_0, y_0] = (0.98,  -0.67)$. }
 \end{figure}
 
-\newpage
+The time evolution of $x$ and $y$ resembles damped oscillatory behavior. The system is stable, $x$ and $y$ relax on the fixed point over time as seen in state space.
+
 
 \subsection{Global Dynamics}
 
