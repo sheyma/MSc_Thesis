@@ -108,14 +108,14 @@ def plot_bold_signal(timeseries, x, y):
 	
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
 	
-	# if the given signal downsampled :
-	time_bds = np.arange(0,  530,  float(530)/len(v1) )/float(60)
-	pl.plot(time_bds, v1, 'r',label=('node '+str(x)))
-	pl.plot(time_bds, v2, 'b',label=('node '+str(y)))
+	## if the given signal downsampled :
+	#time_bds = np.arange(0,  530,  float(530)/len(v1) )/float(60)
+	#pl.plot(time_bds, v1, 'r',label=('node '+str(x)))
+	#pl.plot(time_bds, v2, 'b',label=('node '+str(y)))
 	
-	## if no downsampling :
-	#pl.plot(time, v1, 'r',label=('node '+str(x)))
-	#pl.plot(time, v2, 'b',label=('node '+str(y)))
+	# if no downsampling :
+	pl.plot(time, v1, 'r',label=('node '+str(x)))
+	pl.plot(time, v2, 'b',label=('node '+str(y)))
 	
 	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
 	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
