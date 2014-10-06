@@ -61,8 +61,8 @@ def node_index(matrix):
 			if i == j :
 				matrix[i,j] = 1
 	#nodes start from 1, not from 0 on figure !
-	print "nodes ",nx+1," and ",ny+1," best corr. : ",corr_matrix[nx,ny] 
-	print "nodes ",mx+1," and ",my+1," worst corr.: ",corr_matrix[mx,my]
+	print "nodes ",nx+1," and ",ny+1," best corr. : ", corr_matrix[nx,ny] 
+	print "nodes ",mx+1," and ",my+1," worst corr.: ", corr_matrix[mx,ny]
 	return nx, ny , mx, my
 
 # plots the correlation matrix of SIMULATED signal
@@ -71,10 +71,10 @@ def node_index(matrix):
 def plot_corr_diag(corr_matrix, matrix_name) :	
 	N_col  = np.shape(corr_matrix)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
-	for i in range(0,N_col):
-		for j in range(0,N_col):
-			if i==j :
-				corr_matrix[i,j] = 1
+	#for i in range(0,N_col):
+		#for j in range(0,N_col):
+			#if i==j :
+				#corr_matrix[i,j] = 1
 	cmap   = pl.cm.jet
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.5, vmax=0.5, cmap='jet', aspect='auto')
 	cbar = pl.colorbar()
@@ -82,18 +82,17 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
-	pl.suptitle("BOLD-bds correlation matrix", fontsize=20)
-	pl.title('Method : 0 , ' + '$r$ = ' +'0.65'  +
-				r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
-				'0.05' + '  $v$ = '+'7 [m/s]',	
-				fontsize=14, fontweight='bold')
+	#pl.suptitle("BOLD-signal correlation matrix", fontsize=20)
+	#pl.title('Method : 0 , ' + '$r$ = ' +'0.65'  +
+				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
+				#'0.05' + '  $v$ = '+'7 [m/s]',	
+				#fontsize=14, fontweight='bold')
 	pl.xlabel('Nodes', fontsize = 20)
 	pl.ylabel('Nodes', fontsize = 20)
 	if matrix_name.endswith(".xz"):
 		image_name       = str(matrix_name[:-7] + '_CORR.eps') 	
 	else :
 		image_name       = str(matrix_name[:-4] + '_CORR.eps')
-	pl.savefig('BOLD_bds_corr_r_0_65_si_0_025.eps', format="eps")
 	#pl.savefig(image_name, format="eps")
 	#pl.show()
 	return
@@ -109,12 +108,19 @@ def plot_bold_signal(timeseries, x, y):
 	
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
 	
+	## if the given signal downsampled :
+	#time_bds = np.arange(0,  530,  float(530)/len(v1) )/float(60)
+	#pl.plot(time_bds, v1, 'r',label=('node '+str(x)))
+	#pl.plot(time_bds, v2, 'b',label=('node '+str(y)))
+	
+	# if no downsampling :
 	pl.plot(time, v1, 'r',label=('node '+str(x)))
 	pl.plot(time, v2, 'b',label=('node '+str(y)))
+	
 	lg = legend()
 	pl.xlabel('t [min]')
-	pl.ylabel('$BOLD-signal_i(t)$')
-	pl.title(('simulated BOLD activity, corr. coeff. of nodes : ' 
+	pl.ylabel('$BOLD-filtered_i(t)$')
+	pl.title(('filtered BOLD activity, corr. coeff. of nodes : ' 
 				+ str("%.2f" % R_pearson)), fontweight='bold')
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
@@ -127,19 +133,16 @@ if __name__ == '__main__':
 	except:
 		sys.exit(1)
 		
-#data_matrix		=		load_matrix(input_name)		
-#corr_matrix		=		correl_matrix(data_matrix , input_name)
+data_matrix		=		load_matrix(input_name)		
+corr_matrix		=		correl_matrix(data_matrix , input_name)
 # real node index : add 1!
-#[i, j, k , l ]  = 	    node_index(corr_matrix)
-#image			= 		plot_corr_diag(corr_matrix, input_name)
-
-corr_matrix = load_matrix(input_name)
+[i, j, k , l ]  = 	    node_index(corr_matrix)
 image			= 		plot_corr_diag(corr_matrix, input_name)
 
-## BOLD activity of the nodes correlating the best
-#pl.figure(2)
-#plot_bold_signal(data_matrix, i+1,j+1)
-## BOLD activity of the nodes correlating the worst
-#pl.figure(3)
-#plot_bold_signal(data_matrix, k+1,l+1)
+# BOLD activity of the nodes correlating the best
+pl.figure(2)
+plot_bold_signal(data_matrix, i+1,j+1)
+# BOLD activity of the nodes correlating the worst
+pl.figure(3)
+plot_bold_signal(data_matrix, k+1,l+1)
 pl.show()
