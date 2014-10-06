@@ -117,11 +117,13 @@ def plot_bold_signal(timeseries, x, y):
 	pl.plot(time, v1, 'r',label=('node '+str(x)))
 	pl.plot(time, v2, 'b',label=('node '+str(y)))
 	
+	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
 	lg = legend()
-	pl.xlabel('t [min]')
-	pl.ylabel('$BOLD-filtered_i(t)$')
-	pl.title(('filtered BOLD activity, corr. coeff. of nodes : ' 
-				+ str("%.2f" % R_pearson)), fontweight='bold')
+	pl.xlabel('t [min]', fontsize=25)
+	pl.ylabel('BOLD signal', fontsize=25)
+	pl.title(('simulated BOLD activity, corr. coeff. of nodes : ' 
+			   +str("%.2f" % R_pearson)),fontsize=25)
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
 	return	
@@ -138,7 +140,7 @@ def bold_fft(matrix, x, dtt) :
 	# fast fourier transform of the x'th column
 	Y_fft = np.fft.fft(Y , m_pow) /float(m)
 	Y_fft = 2*abs(Y_fft[0:m_pow /2 +1])  
-	# frequency domain
+	# frequency domain [Hz]
 	freq  = float(f_s)/2 * np.linspace(0,1, m_pow/2 + 1);
 	
 	return Y_fft, freq
@@ -152,22 +154,33 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 data_matrix		=		load_matrix(input_name)		
-#corr_matrix		=		correl_matrix(data_matrix , input_name)
-## real node index : add 1!
-#[i, j, k , l ]  = 	    node_index(corr_matrix)
-#image			= 		plot_corr_diag(corr_matrix, input_name)
+corr_matrix		=		correl_matrix(data_matrix , input_name)
+# real node index : add 1!
+[i, j, k , l ]  = 	    node_index(corr_matrix)
+image			= 		plot_corr_diag(corr_matrix, input_name)
 
-## BOLD activity of the nodes correlating the best
-#pl.figure(2)
-#plot_bold_signal(data_matrix, i+1,j+1)
-## BOLD activity of the nodes correlating the worst
-#pl.figure(3)
-#plot_bold_signal(data_matrix, k+1,l+1)
-#pl.show()
+# BOLD activity of the nodes correlating the best
+pl.figure(2)
+plot_bold_signal(data_matrix, i+1,j+1)
+# BOLD activity of the nodes correlating the worst
+pl.figure(3)
+plot_bold_signal(data_matrix, k+1,l+1)
 
-[yfft_1, freq_1] = bold_fft(data_matrix, 0, 0.001)
-[yfft_2, freq_2] = bold_fft(data_matrix, 56, 0.001)
+rnd_node_1 = 57
+rnd_node_2 = 46
+
+[yfft_1, freq_1] = bold_fft(data_matrix, rnd_node_1-1, 0.001)
+[yfft_2, freq_2] = bold_fft(data_matrix, rnd_node_2-1, 0.001)
 pl.figure(4);
-pl.plot(freq_1[0:30], yfft_1[0:30], 'k')
-pl.plot(freq_2[0:30] , yfft_2[0:30] , 'r' )
+pl.subplot(1,2,1)
+plot_bold_signal(data_matrix, rnd_node_1-1, rnd_node_2-1)
+pl.subplot(1,2,2)
+pl.plot(freq_1[0:50],yfft_1[0:50],'r',label=('node '+str(rnd_node_1-1)))
+pl.plot(freq_2[0:50],yfft_2[0:50],'b',label=('node '+str(rnd_node_2-1)))
+pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
+lg = legend()
+pl.title('Fourier Transformed Signal', fontsize=25)
+pl.xlabel('frequency [Hz]' , fontsize = 25 )
+pl.ylabel('bold signal (f)' , fontsize = 25 )
 pl.show()
