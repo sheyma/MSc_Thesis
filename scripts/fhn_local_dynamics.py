@@ -95,7 +95,7 @@ x_range = np.linspace(-x_limit,x_limit,500)
 
 dde = dde23(eqns=eqns,params=params)
 
-tfinal =100
+tfinal =1000
 
 dde.set_sim_params(tfinal)
 

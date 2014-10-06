@@ -150,26 +150,27 @@ eqns = {
 
 #set the parameters and the delay
 params = { 
-		'alpha': 1.05,  #[GHO08a]
-        #'alpha': 0.85,  #[VUK13] 
+		#'alpha': 1.05,  #[GHO08a]
+        'alpha': 0.85,  #[VUK13] 
 		'gamma': 1.0,
         'b': 0.2,
-        'C': 3,
+        'C': 0,
         'K' : 0,
         'TAU': 1.25,
-        'tau' : 5.00}
+        'tau' : 0,
+        'I' : 0}
        
 x_limit = 2.5
 x_range = np.linspace(-2.5,2.5,500)
 
-# nullclines
 def nullcl_01(X):
-  return -(pow(X,3)/3 - params['gamma']*X)
-  # make x minus
-  
-def nullcl_02(X):
-  return (params['alpha'] - X ) / params['b']
+  return (pow(X,3)/3 - params['gamma']*X)
+  #make x minus
 
+# nullcline of Y    
+def nullcl_02(X):
+  return (params['alpha'] - X + params['I']) / params['b']
+  
 # calculate the intersection of nullclines
 def intersection(X):
   return nullcl_01(X) - nullcl_02(X)
@@ -183,7 +184,7 @@ print "intersection of nullclines x_0 , y_0 : ", X_int, Y_int
 # initalise the solver
 dde = dde23(eqns=eqns, params=params)
 
-tfinal = 500
+tfinal = 100
 dde.set_sim_params(tfinal)
 
 dde.hist_from_funcs({'x1': lambda t : -0.05 , 'y1': lambda t: -0.75 })
