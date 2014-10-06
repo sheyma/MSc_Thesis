@@ -135,14 +135,34 @@ def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
 	# tvec multiplied by 0.01 to make dimensiion equal to [ms]
 	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f],'r.-',label=('node '+str(x)))
 	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f],'b.-',label=('node '+str(y)))
+	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
 	lg = legend()
-	pl.xlabel('t [s]')
-	pl.ylabel('$u_i(t)$')
+	pl.xlabel('t [s]', fontsize=25)
+	pl.ylabel('$u_i(t)$', fontsize=25)
 	pl.title(('FHN - timeseries, corr. coeff. of nodes : ' 
-				+ str("%.2f" % R_pearson)), fontweight='bold')
+				+ str("%.2f" % R_pearson)), fontsize=25)
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
 	return	
+
+def fhn_fft(matrix, x, dtt) :
+	
+	# Sampling frequency (Hz)
+	f_s = 1/float(dtt)
+	# array of the signal given by the x'th column
+	Y     = matrix[:,x]
+	t_Y   = np.arange(0, len(Y), 1)
+	m     = len(Y);
+	m_pow = int(pow(2, math.ceil(math.log(m)/math.log(2))))
+	# fast fourier transform of the x'th column
+	Y_fft = np.fft.fft(Y , m_pow) /float(m)
+	Y_fft = 2*abs(Y_fft[0:m_pow /2 +1])  
+	# frequency domain [Hz]
+	freq  = float(f_s)/2 * np.linspace(0,1, m_pow/2 + 1);
+	
+	return Y_fft, freq
+	
 
 # user defined input name
 if __name__ == '__main__':
@@ -183,4 +203,26 @@ plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
 #plot the timeseries of worst correlated nodes
 pl.figure(3)
 plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k+1, l+1)
+
+
+# FHN model resolution dtt [ms] 
+params = {'dtt' : 0.001}
+
+rnd_node_1 = 57
+rnd_node_2 = 46
+
+[yfft_1, freq_1] = fhn_fft(data_matrix, rnd_node_1-1, params['dtt'])
+[yfft_2, freq_2] = fhn_fft(data_matrix, rnd_node_2-1, params['dtt'])
+pl.figure(4);
+pl.subplot(1,2,1)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
+pl.subplot(1,2,2)
+pl.plot(freq_1[0:50], yfft_1[0:50], 'r',label=('node '+str(rnd_node_1-1)))
+pl.plot(freq_2[0:50], yfft_2[0:50], 'b',label=('node '+str(rnd_node_2-1)))
+pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
+lg = legend()
+pl.title('Fourier Transformed Signal', fontsize=25)
+pl.xlabel('frequency [Hz]' , fontsize = 25 )
+pl.ylabel('timeseries (f)' , fontsize = 25 )
 pl.show()
