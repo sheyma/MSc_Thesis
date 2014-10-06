@@ -103,17 +103,17 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
 	pl.suptitle("FHN correlation matrix", fontsize=20)
-	#pl.title('Method : 0 , ' + '$r$ = ' +'0.58'  +
-				#r'  $  \sigma$ = '+'0.018'+ ' $   D$ = '+ 
-				#'0.05' + '  $v$ = '+'7 [m/s]',	
-				#fontsize=14, fontweight='bold')
+	pl.title('Method : 0 , ' + '$r$ = ' +'0.64'  +
+				r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
+				'0.05' + '  $v$ = '+'7 [m/s]',	
+				fontsize=14, fontweight='bold')
 	pl.xlabel('Nodes', fontsize = 20)
 	pl.ylabel('Nodes', fontsize = 20)
 	if matrix_name.endswith(".xz"):
 		image_name       = str(matrix_name[:-7] + '_FHN_CORR.eps') 	
 	else :
 		image_name       = str(matrix_name[:-4] + '_FHN_CORR.eps')
-	#pl.savefig(image_name, format="eps")
+	#pl.savefig('FHN_corr_r_0_64_si_0_030.eps', format="eps")
 	#pl.show()
 	return
 
@@ -162,17 +162,17 @@ else:
 	# numpy's loadtxt() can deal with this
 	infile = input_name
 
-data_matrix 	   			 =	load_matrix(infile)
-[u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
-corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
+#data_matrix 	   			 =	load_matrix(infile)
+#[u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
+#corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 
-## if correlation matrix is given directly :
-#corr_matrix			=   load_matrix(infile)
+# if correlation matrix is given directly :
+corr_matrix			=   load_matrix(infile)
 
 pl.figure(1)
 plot_corr_diag(corr_matrix, input_name )
 # node indexes, not forget to subtract 1 
-[i, j, k , l ]		=   node_index(corr_matrix)
+#[i, j, k , l ]		=   node_index(corr_matrix)
 
 ## user defined time range for timeseries plots
 #t_start = 0

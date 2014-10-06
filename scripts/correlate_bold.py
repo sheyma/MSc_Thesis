@@ -61,8 +61,8 @@ def node_index(matrix):
 			if i == j :
 				matrix[i,j] = 1
 	#nodes start from 1, not from 0 on figure !
-	print "nodes ",nx+1," and ",ny+1," best corr. : ", corr_matrix[i,j] 
-	print "nodes ",mx+1," and ",my+1," worst corr.: ", corr_matrix[k,l]
+	print "nodes ",nx+1," and ",ny+1," best corr. : ",corr_matrix[nx,ny] 
+	print "nodes ",mx+1," and ",my+1," worst corr.: ",corr_matrix[mx,my]
 	return nx, ny , mx, my
 
 # plots the correlation matrix of SIMULATED signal
@@ -82,17 +82,18 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
-	#pl.suptitle("BOLD-signal correlation matrix", fontsize=20)
-	#pl.title('Method : 0 , ' + '$r$ = ' +'0.65'  +
-				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
-				#'0.05' + '  $v$ = '+'7 [m/s]',	
-				#fontsize=14, fontweight='bold')
+	pl.suptitle("BOLD-bds correlation matrix", fontsize=20)
+	pl.title('Method : 0 , ' + '$r$ = ' +'0.65'  +
+				r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
+				'0.05' + '  $v$ = '+'7 [m/s]',	
+				fontsize=14, fontweight='bold')
 	pl.xlabel('Nodes', fontsize = 20)
 	pl.ylabel('Nodes', fontsize = 20)
 	if matrix_name.endswith(".xz"):
 		image_name       = str(matrix_name[:-7] + '_CORR.eps') 	
 	else :
 		image_name       = str(matrix_name[:-4] + '_CORR.eps')
+	pl.savefig('BOLD_bds_corr_r_0_65_si_0_025.eps', format="eps")
 	#pl.savefig(image_name, format="eps")
 	#pl.show()
 	return
@@ -126,16 +127,19 @@ if __name__ == '__main__':
 	except:
 		sys.exit(1)
 		
-data_matrix		=		load_matrix(input_name)		
-corr_matrix		=		correl_matrix(data_matrix , input_name)
+#data_matrix		=		load_matrix(input_name)		
+#corr_matrix		=		correl_matrix(data_matrix , input_name)
 # real node index : add 1!
-[i, j, k , l ]  = 	    node_index(corr_matrix)
+#[i, j, k , l ]  = 	    node_index(corr_matrix)
+#image			= 		plot_corr_diag(corr_matrix, input_name)
+
+corr_matrix = load_matrix(input_name)
 image			= 		plot_corr_diag(corr_matrix, input_name)
 
-# BOLD activity of the nodes correlating the best
-pl.figure(2)
-plot_bold_signal(data_matrix, i+1,j+1)
-# BOLD activity of the nodes correlating the worst
-pl.figure(3)
-plot_bold_signal(data_matrix, k+1,l+1)
+## BOLD activity of the nodes correlating the best
+#pl.figure(2)
+#plot_bold_signal(data_matrix, i+1,j+1)
+## BOLD activity of the nodes correlating the worst
+#pl.figure(3)
+#plot_bold_signal(data_matrix, k+1,l+1)
 pl.show()

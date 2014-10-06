@@ -555,7 +555,7 @@ print "input data is loaded! "
 method_k_matrix = load_matrix(name_k)
 
 
-for i in range(5, 100):
+for i in range(5, 84):
 	thr = float(i) / 100.0
 	print "loop", i, thr
 	
@@ -578,14 +578,14 @@ for i in range(5, 100):
 	
 	#plot_graph(Random_G)
 	#print_adjacency_matrix(A)
-	#export_adjacency_matrix(Random_G, method, input_name, thr)
+	export_adjacency_matrix(Random_G, method, input_name, thr)
 	#get_characteristics(Random_G, thr, input_name)
-	get_single_network_measures(Random_G, thr)
-	get_assortativity(Random_G, thr)
-	get_local_efficiency(Random_G, thr)
-	get_global_effic(Random_G, thr)
-	get_degree_distribution(Random_G, thr)
-	get_node_cc_and_degree(Random_G, thr)
-	get_connected_components_nodes(Random_G, thr)
-	get_small_worldness(Random_G, thr)
-	get_motifs(Random_G, thr)
+	#get_single_network_measures(Random_G, thr)
+	#get_assortativity(Random_G, thr)
+	#get_local_efficiency(Random_G, thr)
+	#get_global_effic(Random_G, thr)
+	#get_degree_distribution(Random_G, thr)
+	#get_node_cc_and_degree(Random_G, thr)
+	#get_connected_components_nodes(Random_G, thr)
+	#get_small_worldness(Random_G, thr)
+	#get_motifs(Random_G, thr)
