@@ -103,10 +103,10 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
 	pl.suptitle("FHN correlation matrix", fontsize=20)
-	pl.title('Method : 0 , ' + '$r$ = ' +'0.64'  +
-				r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
-				'0.05' + '  $v$ = '+'7 [m/s]',	
-				fontsize=14, fontweight='bold')
+	#pl.title('Method : 0 , ' + '$r$ = ' +'0.64'  +
+				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
+				#'0.05' + '  $v$ = '+'7 [m/s]',	
+				#fontsize=14, fontweight='bold')
 	pl.xlabel('Nodes', fontsize = 20)
 	pl.ylabel('Nodes', fontsize = 20)
 	if matrix_name.endswith(".xz"):
@@ -132,11 +132,11 @@ def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
 	
 	# plot the timeseries of two nodes in specific interval
-	# tvec multiplied by 10 for making dimensial equal to [ms]
-	pl.plot(10*tvec[i_s:i_f], v1[i_s : i_f],'r-o',label=('node '+str(x)))
-	pl.plot(10*tvec[i_s:i_f], v2[i_s : i_f],'b-o',label=('node '+str(y)))
+	# tvec multiplied by 0.01 to make dimensiion equal to [ms]
+	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f],'r.-',label=('node '+str(x)))
+	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f],'b.-',label=('node '+str(y)))
 	lg = legend()
-	pl.xlabel('t [ms]')
+	pl.xlabel('t [s]')
 	pl.ylabel('$u_i(t)$')
 	pl.title(('FHN - timeseries, corr. coeff. of nodes : ' 
 				+ str("%.2f" % R_pearson)), fontweight='bold')
@@ -162,25 +162,25 @@ else:
 	# numpy's loadtxt() can deal with this
 	infile = input_name
 
-#data_matrix 	   			 =	load_matrix(infile)
-#[u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
-#corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
+data_matrix 	   			 =	load_matrix(infile)
+[u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
+corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 
-# if correlation matrix is given directly :
-corr_matrix			=   load_matrix(infile)
+## if correlation matrix is given directly :
+#corr_matrix			=   load_matrix(infile)
 
 pl.figure(1)
 plot_corr_diag(corr_matrix, input_name )
 # node indexes, not forget to subtract 1 
-#[i, j, k , l ]		=   node_index(corr_matrix)
+[i, j, k , l ]		=   node_index(corr_matrix)
 
-## user defined time range for timeseries plots
-#t_start = 0
-#t_final = 1000
-## plot the timeseries of best correlated nodes
-#pl.figure(2)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
-##plot the timeseries of worst correlated nodes
-#pl.figure(3)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k+1, l+1)
+# user defined time range for timeseries plots
+t_start = 1650
+t_final = 1750
+# plot the timeseries of best correlated nodes
+pl.figure(2)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
+#plot the timeseries of worst correlated nodes
+pl.figure(3)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k+1, l+1)
 pl.show()
