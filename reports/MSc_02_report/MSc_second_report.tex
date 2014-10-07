@@ -164,19 +164,52 @@ where $C$ is the mutual coupling constant, $\tau^C$ is the time delays of mutual
 		\caption{The local dynamics of two nodes with the parameters $\alpha = 0.85$, $\gamma=1.0$, $b=0.2$, $\tau = 1.4$ and $I=0$. Intersection of nullclines $[x_0, y_0] = (0.98,  -0.67)$. }
 \end{figure}
 
-The time evolution of $x$ and $y$ resembles damped oscillatory behavior. The system is stable, $x$ and $y$ relax on the fixed point over time as seen in state space.
+The time evolution of $x$ and $y$ resembles damped oscillatory behavior. The system is stable, $x$ and $y$ relax on the fixed point ($[x_0, y_0] = [0.98,  -0.67]$) over time as seen in state space.
 
+\subsection{Local Dynamics with Noise}
+\begin{subequations}
+ \begin{align}\dot{x} = \tau (y + \gamma x - \frac{x^3}{3}) +n_x  \label{eqn: frobenius 17}\\  \dot{y} = -\frac{1}{\tau} (x - \alpha + b y - I ) + n_y \label{eqn: frobenius 18}   \end{align} 
+\end{subequations}
+
+The parameters $n_x$ and $n_y$ stand for the Gaussian white noise with strength $D$, which is not included explicitly in equations above.
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth, height=5.5cm]{VUK13_local_dynamics_noise.eps}
+		\caption{The local dynamics of two nodes with the same parameters as in Figure 8, but this time with a Gaussian white noise with strength $D = 0.05$. Intersection of nullclines $[x_0, y_0] = (0.98,  -0.67)$. }
+\end{figure}
+
+The noise causes sub-threshold oscillations in the time evolution of the activator and inhibitor. It prevents the $x$ and $y$ variables from relaxing on the fixed point, instead, they fluctuate around it. This dynamics happen at the onset of instability, and it is called "type II excitation" in terms of neuronal dynamics.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{VUK13_local_dynamics_noise_t_longer.eps}
+		\caption{ }
+\end{figure}
+
+\newpage
 
 \subsection{Global Dynamics}
 
 \begin{subequations}
- \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x^3}{3}) + C [x_2(t-\tau_2^C)-x_1(t)]  \label{eqn: frobenius 17}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1 - I ) \label{eqn: frobenius 18} \\ \dot{x_2} = \tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_1^C)-x_2(t)] \label{eqn: frobenius 18} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + b y_2 - I ) \end{align} 
+ \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x^3}{3}) + C [x_2(t-\tau_{12})]  \label{eqn: frobenius 17}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1 - I ) \label{eqn: frobenius 18} \\ \dot{x_2} = \tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_{21})] \label{eqn: frobenius 18} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + b y_2 - I ) \end{align} 
 \end{subequations}
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\textwidth, height=7cm]{VUK13_global_dynamics.eps}
-		\caption{The global dynamics of two nodes with the parameters $\alpha = 0.85$, $\gamma=1.0$, $b=0.2$, $\tau = 1.4$. System resembles a damped oscillatory behavior.}
+		\caption{The global dynamics of two coupled nodes with time delays $\tau_{12}$ and $\tau_{21}$. The $x$ and $y$ variables are oscillatory over time and system does not fell on to the fixed point.}
+\end{figure}
+
+\begin{subequations}
+ \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x^3}{3}) + C [x_2(t-\tau_{12})]  +n_{x1}\label{eqn: frobenius 17}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1 - I ) +n_{y1} \label{eqn: frobenius 18} \\ \dot{x_2} = \tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_{21})] +n_{x2} \label{eqn: frobenius 18} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + b y_2 - I ) +n_{y2} \end{align} 
+\end{subequations}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth, height=7cm]{VUK13_global_dynamics_noise.eps}
+		\caption{The system in Figure 11 is now added a Gaussian white noise with the strength $D=0.05$. The $x$ and $y$ variables are oscillatory over time and system does not fell on to the fixed point.}
 \end{figure}
 
 \section{FHN Time Series}
@@ -204,7 +237,7 @@ where $c$ is coupling strength, $f_{ij}$ is the connectivity matrix, $\Delta t_{
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=\textwidth, height=7cm]{FHN_local_dynamics.eps}
+	\includegraphics[width=\textwidth, height=7cm]{VUK13_local_dynamics.eps}
 		\caption{The activator-inhibitor time series of any node chosen from the simple graph with a randomly chosen initial point seen as red dot.}
 \end{figure}
 
