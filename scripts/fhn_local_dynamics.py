@@ -67,7 +67,10 @@ params = {'gamma' : 1.0, #0.9
 		  'alpha' : 0.85, #1.9
 		  'TAU'   : 1.25,
 		  'b'     : 0.2,
-		  'I'	  : 0 }
+		  'I'	  : 0,
+		  'D'	  : 0.05 }
+
+noise = {'x': 'D * gwn()', 'y': 'D * gwn()'}		  
 
 # nullclines of [GHO08a] and [VUK13]
 # nullcline of Y:
@@ -93,9 +96,13 @@ Y_int = nullcl_01(X_int)
 x_limit = 2.5
 x_range = np.linspace(-x_limit,x_limit,500)
 
+# without noise :
 dde = dde23(eqns=eqns,params=params)
 
-tfinal =1000
+## with noise :
+#dde = dde23(eqns=eqns,params=params, noise=noise)
+
+tfinal =100
 
 dde.set_sim_params(tfinal)
 
@@ -132,7 +139,8 @@ fig = pl.figure(num=None, figsize=(13.5, 6), dpi=100, facecolor='w', edgecolor='
 ## [GHO08a], [VUK13]
 fig.suptitle('FHN - Local Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
 	      r'  $  \gamma$ = '+str(params['gamma']) + ' $   b$ = '+ 
-	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']),
+	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) ,
+	      #+ '  D = ' + str(params['D']) ,
 	      fontsize=14, fontweight='bold')
 
 pl.subplot(121, xlabel='t', ylabel='x(t) , y(t)')
