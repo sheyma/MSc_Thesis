@@ -29,12 +29,12 @@
 \date{June 2014}
 \begin{document}
    \maketitle
-This work aims to compare my current simulation results with the previously done work and visualize the correlation matrices of simulated neuronal activiy as well as simaulated BOLD signal. The correlation matrices are all obtained by calculating columnwise correlation coefficients straightforward in all given data matrices. 
+This work aims to compare my current simulation results with the previously done work and visualize the correlation matrices of simulated neuronal activity as well as simulated BOLD signal. The correlation matrices are all obtained by calculating column-wise correlation coefficients straightforward in all given data matrices. 
 
 \newpage
 
 \begin{table}[h]
-		\caption{$r$ is the threshod value, $\sigma$ is the coupling strength parameters. All the columns presents the Pearson correlation coefficients between the empirical data set and simulated data sets with given parameters: $v=70[m/s]$, $D=0.05$, $tmax=550[s]$. The empirical data is an fMRI-BOLD correlation matrix (source: $A\_aal.txt$) and simulated data is obtained from the FitzHugh-Nagumo model for the neuronal activity (FHN column), Balloon-Windkessel model for the BOLD activity (BOLD-signal), low-pass filtered BOLD activity (filt. BOLD) and then downsampled BOLD activity (downs.BOLD). Diagonal elements in both matrices are ignored while calculating Pearsons coefficients. 	}
+		\caption{$r$ is the threshold value, $\sigma$ is the coupling strength parameters. All the columns presents the Pearson correlation coefficients between the empirical data set and simulated data sets with given parameters: $v=70[m/s]$, $D=0.05$, $tmax=550[s]$. The empirical data is an fMRI-BOLD correlation matrix (source: $A\_aal.txt$) and simulated data is obtained from the FitzHugh-Nagumo model for the neuronal activity (FHN column), Balloon-Windkessel model for the BOLD activity (BOLD-signal), low-pass filtered BOLD activity (filt. BOLD) and then downsampled BOLD activity (downs.BOLD). Diagonal elements in both matrices are ignored while calculating Pearson's coefficients. 	}
 	\begin{tabular}{l | c | c | c | c | c | c } \hline
 $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. work  \\ \hline \hline
 0.57 &  0.018 	 & 0.0709  &	0.1284	 &	-0.0814		 &	0.0770	   & 0.35   	    \\ \hline
@@ -90,7 +90,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
   \end{tabular}
 
- \label{figur}\caption{ Each square represents the correlation of simulated timeseries of two nodes. Diagonals are equal to 1.0 }
+ \label{figur}\caption{ Each square represents the correlation of simulated timeseries of two nodes. Diagonals are equal to 1.0. The FHN model is simulated for $T=550[s]=9.17[min]$. }
 
 \end{figure}
 
@@ -116,7 +116,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
   \end{tabular}
 
- \label{figur}\caption{ Each square represents the correlation of simulated BOLD activity of two nodes. Diagonals are equal to 1.0  }
+ \label{figur}\caption{Diagonals are equal to 1.0. The signal is cut from the beginning by amount of $20[s]$, the corresponding time of the signal used for visualization is $T=530[s]=8.83[min]$.  }
 
 \end{figure}
  
@@ -143,7 +143,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
   \end{tabular}
 
- \label{figur}\caption{ Each square represents the correlation of simulated low-pass filetered-BOLD activity of two nodes. Diagonals are equal to 1.0  }
+ \label{figur}\caption{Diagonals are equal to 1.0. A 5th order butterworth low-pass filter with cut-off frequency $Wn = 0.005 [Hz]$ is applied on BOLD activity simulation.  }
 
 \end{figure}
 
@@ -171,7 +171,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
   \end{tabular}
 
- \label{figur}\caption{ Each square represents the correlation of simulated downsampled filetered-BOLD activity of two nodes. Diagonals are equal to 1.0 }
+ \label{figur}\caption{Diagonals are equal to 1.0. The filtered BOLD activity simulation is downsampled by choosing each point in every 2300 points.  }
 
 \end{figure}
 
@@ -202,7 +202,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
 	\end{tabular}
 	
-	\label{figur}\caption{On the left : correlation matrices of empirical data and simulated neuronal activity. The pearson correlation between them is 0.2130. On the right : the simulated timeseries of the best correlated nodes, as weel as the worst correlated nodes. The time resolution is set to $dt=0.001[s]$.}
+	\label{figur}\caption{On the left : correlation matrices of empirical data and simulated neuronal activity. The Pearson correlation between them is 0.2130. On the right : the simulated timeseries of the best correlated nodes, as well as the worst correlated nodes. The time resolution is set to $dt=0.001[s]$. Total time of simulation is $T=550[s]=9.17[min]$.}
 	
 \end{figure}
 
@@ -223,7 +223,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
 	\end{tabular}
 	
-	\label{figur}\caption{ The pearson correlation between matrices is 0.4977. The time resolution is set to $dt=0.001[s]$. The BOLD signal is cut from the beginning by $20[s]$}
+	\label{figur}\caption{ The Pearson correlation between matrices is 0.4977. Resolution is set to $dt=0.001[s]$. The signal is cut $20[s]$ at beginning, total time is $T=530[s]=8.83[min]$.}
 	
 \end{figure}
 
@@ -263,7 +263,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 
 	\end{tabular}
 	
-	\label{figur}\caption{Pearson cor. coef. between two matrices is 0.4687. Downsampling means chosing every $ds/dtt $  $(= 2.3/0.001)$ point on data, (chosing one point on every $ds [ms]$), at the end the signal is cut from beginning and end $\%2$. }
+	\label{figur}\caption{Pearson correlation coefficient between two matrices is 0.4687. The filtered BOLD activity simulation is finally downsampled. Downsampling means selecting only some data points at some defined time interval. Here we chose the data points at every 2300 points, given by downsampling rate $ds$, which is divided by the resolution of the simulation $dt$: $\frac{2.3[s]}{0.001[s]}=2300$. At the end the signal is cut by amount of $\%4$ : $\%2$ from beginning and $\%2$ from end. }
 	
 \end{figure}
 
@@ -280,7 +280,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
   \includegraphics[width=\textwidth, height=70mm]{fhn_and_fft.eps}   
 
 
-	\label{figur}\caption{The timeseries of two randomly chosen nodes and fast fouriert transform (fft) of their activity. The resolution of timeseries is $dt=0.001[s]$ and therefore sampling frequency is $F_s=1000[Hz]$.}
+	\label{figur}\caption{The timeseries of two randomly chosen nodes and fast Fourier transform (fft) of their activity. The resolution of timeseries is $dt=0.001[s]$ and therefore sampling frequency is $F_s=1000[Hz]$.}
 	
 \end{figure}
 
@@ -294,7 +294,7 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
   \includegraphics[width=\textwidth, height=70mm]{bold_signal_and_fft.eps}   
 
 
-	\label{figur}\caption{The BOLD activity of two nodes and their fft graph. There is almost no signal above $f=0.05[Hz]$ and the range after $f=0.05[Hz]$ is not necessarily visualized. The resolution of the BOLD signaling is $dt=0.001[Hz]$, $F_s=1000[Hz]$.}
+	\label{figur}\caption{The BOLD activity of two nodes and their fft graph. There is almost no signal above $f=0.05[Hz]$ and the range after $f=0.05[Hz]$ is not necessarily visualized. The resolution of the BOLD signaling is $dt=0.001[s]$, the sampling frequency is $F_s=1000[Hz]$.}
 	
 \end{figure}
 
@@ -304,13 +304,25 @@ $r$  &  $\sigma$ & FHN     & BOLD-signal & filt. BOLD    & downs. BOLD & prev. w
 \begin{figure}[htp!]
   \centering
     % Requires \usepackage{graphicx}
-  \includegraphics[width=\textwidth, height=70mm]{bold_downsampled_and_fft.eps}   
+  \includegraphics[width=\textwidth, height=70mm]{bold_filtered_and_fft.eps}   
 
 
-	\label{figur}\caption{The Low-pass filtered BOLD activity of two nodes and their fft graph. The resolution of the BOLD signaling is $dt=0.001[Hz]$, sampling frequency is $F_s=1000[Hz]$.}
+	\label{figur}\caption{The low-pass filtered BOLD activity of two nodes and their fft graph. The resolution of the BOLD signaling is $dt=0.001[Hz]$, sampling frequency is $F_s=1000[Hz]$. The cut-off frequency used for filtering is $Wn = 0.0005 [Hz]$}
 	
 \end{figure}
 
+
+\subsection{Downsampled BOLD Activity}
+
+\begin{figure}[htp!]
+  \centering
+    % Requires \usepackage{graphicx}
+  \includegraphics[width=\textwidth, height=70mm]{bold_downsampled_and_fft.eps}   
+
+
+	\label{figur}\caption{The downsampled BOLD activity of two nodes and their fft graph. Downsampling rate is $ds=2.3[s]$, the resolution of the BOLD signaling is $dt=0.001[Hz]$, sampling frequency is $F_s=1000[Hz]$. }
+	
+\end{figure}
 
 \newpage
 
