@@ -138,28 +138,40 @@ import math
 
 ########################################################################
 
-## [GHO08a] global dynamics ###########################################
-eqns = { 
-        'x1': '(y1 - gamma*x1 + pow(x1,3)/3.0)* TAU + C*(x2(t-tau)-x1)', 
-        #+ K*(x1(t-tau)-x1) ',
-        'y1': '-(x1 - alpha + b*y1)/ TAU',
-        'x2': '(y2 - gamma*x2 + pow(x2,3)/3.0 )*TAU + C*(x1(t-tau)-x2)', 
-        #+ K*(x2(t-tau)-x2)',
-        'y2': '-(x2 - alpha + b*y2)/ TAU'
-        }
+### [GHO08a] global dynamics ###########################################
+#eqns = { 
+        #r'x1': '(y1 - gamma*x1 + pow(x1,3)/3.0)* TAU ' , # + C*(x2(t-tau)-x1)', 
+        ##+ K*(x1(t-tau)-x1) ',
+        #r'y1': '-(x1 - alpha + b*y1)/ TAU',
+        #r'x2': '(y2 - gamma*x2 + pow(x2,3)/3.0 )*TAU  ', #+ C*(x1(t-tau)-x2)', 
+        ##+ K*(x2(t-tau)-x2)',
+        #r'y2': '-(x2 - alpha + b*y2)/ TAU'
+        #}
 
-#set the parameters and the delay
-params = { 
-		#'alpha': 1.05,  #[GHO08a]
-        'alpha': 0.85,  #[VUK13] 
-		'gamma': 1.0,
-        'b': 0.2,
-        'C': 0,
-        'K' : 0,
-        'TAU': 1.25,
-        'tau' : 0,
-        'I' : 0}
-       
+##set the parameters and the delay
+#params = { 
+		##'alpha': 1.05,  #[GHO08a]
+        #'alpha': 0.85,  #[VUK13] 
+		#'gamma': 1.0,
+        #'b': 0.2,
+        #'C': 0,
+        #'K' : 0,
+        #'TAU': 1.25,
+        #'tau' : 0,
+        #'I' : 0}
+        
+## [VUK13] global dynamics ############################################
+
+eqns   = {r'x1' : '(y1 + gamma*x1 - pow(x1,3)/3.0) * TAU ',
+	      r'y1' : '-(x1 - alpha + b*y1  ) / TAU',
+	      r'x2' : '(y2 + gamma*x2 - pow(x2,3)/3.0) * TAU ',
+	      r'y2' : '-(x2 - alpha + b*y2  ) / TAU' }
+
+params = {'gamma' : 1.0, #0.9
+		  'alpha' : 0.85, #1.9
+		  'TAU'   : 1.25,
+		  'b'     : 0.2,
+		  'I'	  : 0 }       
 x_limit = 2.5
 x_range = np.linspace(-x_limit,x_limit, 500)
 
@@ -184,10 +196,11 @@ print "intersection of nullclines x_0 , y_0 : ", X_int, Y_int
 # initalise the solver
 dde = dde23(eqns=eqns, params=params)
 
-tfinal = 10000
+tfinal = 1000
 dde.set_sim_params(tfinal)
 
-dde.hist_from_funcs({'x1': lambda t : -0.05 , 'y1': lambda t: -0.75 })
+dde.hist_from_funcs({'x1': lambda t : -0.05 , 'y1': lambda t: -0.75,
+					 'x2': lambda t :  0 ,    'y2': lambda t: 0	})
 
 dde.run()
 
@@ -203,14 +216,14 @@ t  = sol['t']
 
 fig = pl.figure(num=None, figsize=(14, 6), dpi=100, facecolor='w', edgecolor='k')
 ### [GHO08a] and [VUK13]############################################
-fig.suptitle('[GHO08a]- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
-#fig.suptitle('[VUK13]- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
-	      r'  $\gamma$ = '+str(params['gamma']) + ' $ b$ = '+ 
-	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) + 
-	      '  C = '+ str(params['C']) +'  '  + r'$\tau^C$= ' +str(params['tau']) #+
-	      #'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
-	      #str(params['tau'])#
-	      , fontsize=14, fontweight='bold')
+#fig.suptitle('[GHO08a]- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
+##fig.suptitle('[VUK13]- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
+	      #r'  $\gamma$ = '+str(params['gamma']) + ' $ b$ = '+ 
+	      #str(params['b']) + r'  $\tau$ = '+str(params['TAU']) + 
+	      #'  C = '+ str(params['C']) +'  '  + r'$\tau^C$= ' +str(params['tau']) #+
+	      ##'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
+	      ##str(params['tau'])#
+	      #, fontsize=14, fontweight='bold')
 
 index = np.arange(0,len(t),1)
 
