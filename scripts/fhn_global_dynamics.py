@@ -162,16 +162,23 @@ import math
         
 ## [VUK13] global dynamics ############################################
 
-eqns   = {r'x1' : '(y1 + gamma*x1 - pow(x1,3)/3.0) * TAU ',
+eqns   = {r'x1' : '(y1 + gamma*x1 - pow(x1,3)/3.0) * TAU + C*(x2(t-delay))',
 	      r'y1' : '-(x1 - alpha + b*y1  ) / TAU',
-	      r'x2' : '(y2 + gamma*x2 - pow(x2,3)/3.0) * TAU ',
+	      r'x2' : '(y2 + gamma*x2 - pow(x2,3)/3.0) * TAU + C*(x1(t-delay))',
 	      r'y2' : '-(x2 - alpha + b*y2  ) / TAU' }
 
 params = {'gamma' : 1.0, #0.9
 		  'alpha' : 0.85, #1.9
 		  'TAU'   : 1.25,
 		  'b'     : 0.2,
-		  'I'	  : 0 }       
+		  'I'	  : 0,
+		  'C'	  : 0.5,
+		  'delay' : 0.5,
+		  'D'     : 0.05	 }      
+		  
+noise = {'x1': 'D * gwn()', 'y1': 'D * gwn()',
+		 'x2': 'D * gwn()', 'y2': 'D * gwn()' }
+
 x_limit = 2.5
 x_range = np.linspace(-x_limit,x_limit, 500)
 
@@ -193,10 +200,13 @@ Y_int = nullcl_01(X_int)
 
 print "intersection of nullclines x_0 , y_0 : ", X_int, Y_int
 
-# initalise the solver
-dde = dde23(eqns=eqns, params=params)
+## initalise the solver, without noise!
+#dde = dde23(eqns=eqns, params=params)
 
-tfinal = 1000
+# with noise :
+dde = dde23(eqns=eqns,params=params, noise=noise)
+
+tfinal = 100
 dde.set_sim_params(tfinal)
 
 dde.hist_from_funcs({'x1': lambda t : -0.05 , 'y1': lambda t: -0.75,
@@ -217,13 +227,14 @@ t  = sol['t']
 fig = pl.figure(num=None, figsize=(14, 6), dpi=100, facecolor='w', edgecolor='k')
 ### [GHO08a] and [VUK13]############################################
 #fig.suptitle('[GHO08a]- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
-##fig.suptitle('[VUK13]- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
-	      #r'  $\gamma$ = '+str(params['gamma']) + ' $ b$ = '+ 
-	      #str(params['b']) + r'  $\tau$ = '+str(params['TAU']) + 
-	      #'  C = '+ str(params['C']) +'  '  + r'$\tau^C$= ' +str(params['tau']) #+
-	      ##'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
-	      ##str(params['tau'])#
-	      #, fontsize=14, fontweight='bold')
+fig.suptitle('[VUK13]- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
+	      r'  $\gamma$ = '+str(params['gamma']) + ' $ b$ = '+ 
+	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) + 
+	      '  C = '+ str(params['C']) +'  '  + r'$\tau_{12}=\tau_{21}$= '
+	       +str(params['delay']) + ' D = ' + str(params['D']) #+
+	      #'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
+	      #str(params['tau'])#
+	      , fontsize=14, fontweight='bold')
 
 index = np.arange(0,len(t),1)
 
@@ -240,6 +251,7 @@ pl.plot(x1[index], y1[index], 'r')
 pl.plot(x_range, nullcl_01(x_range),'b', label='$y_{nullcline}$')
 pl.plot(x_range, nullcl_02(x_range),'k', label='$x_{nullcline}$')
 pl.plot(X_int,Y_int, 'ok', linewidth=3)
+pl.plot(x1[0], y1[0], '.r')
 pl.xlabel('$x_1$')
 pl.ylabel('$y_1$')
 lg = legend()
@@ -261,6 +273,7 @@ pl.ylabel('$y_2$')
 pl.plot(x_range, nullcl_01(x_range),'b', label='$y_{nullcline}$')
 pl.plot(x_range, nullcl_02(x_range),'k', label='$x_{nullcline}$')
 pl.plot(X_int,Y_int, 'ok', linewidth=3)
+pl.plot(x2[0], y2[0], '.r')
 pl.axis([-2.3, 2.3, -2.3, 2.3])
 lg = legend()
 lg.draw_frame(False)
