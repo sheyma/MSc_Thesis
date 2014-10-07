@@ -161,7 +161,7 @@ params = {
         'I' : 0}
        
 x_limit = 2.5
-x_range = np.linspace(-2.5,2.5,500)
+x_range = np.linspace(-x_limit,x_limit, 500)
 
 def nullcl_01(X):
   return (pow(X,3)/3 - params['gamma']*X)
@@ -184,7 +184,7 @@ print "intersection of nullclines x_0 , y_0 : ", X_int, Y_int
 # initalise the solver
 dde = dde23(eqns=eqns, params=params)
 
-tfinal = 100
+tfinal = 10000
 dde.set_sim_params(tfinal)
 
 dde.hist_from_funcs({'x1': lambda t : -0.05 , 'y1': lambda t: -0.75 })
