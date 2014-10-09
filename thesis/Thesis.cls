@@ -183,7 +183,7 @@
 
 \thesistitle{Simulation of Brain Functional and Structural Connectivity on Empirical and Randomized Complex Networks} % Your thesis title - this is used in the title and abstract
 %-------------------------------------------------  
-\supervisor{Dr. Philipp \textsc{H\"{o}vel} \\ Dr. Vesna \textsc{Vuksanovi\'c}} % You supervisor's name - this is used in the title page
+\supervisor{Prof. Jochen \textsc{Braun}\\ Dr. Philipp \textsc{H\"{o}vel} \\ Dr. Vesna \textsc{Vuksanovi\'c}} % You supervisor's name - this is used in the title page
 %-------------------------------------------------   
 \examiner{} % Your examiner's name - this is not currently used anywhere in the template, cite it with \examname if you want it
 %-------------------------------------------------   
