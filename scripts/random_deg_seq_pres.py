@@ -49,7 +49,7 @@ def plot_graph(G):
 	#G   = nx.from_numpy_matrix(B)
 	pos = nx.shell_layout(G)
 	nx.draw(G, pos)
-	pl.show()
+	#pl.show()
 	
 def degre_pres(B , ITER):
 	
@@ -212,15 +212,21 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 data_matrix = load_matrix(input_name)
-#adja_matrix = threshold_matrix(data_matrix, r=0.85)
-#print "input :::"
-#print adja_matrix
-#plot_graph(nx.from_numpy_matrix(adja_matrix))
-adja_matrix_2 = load_matrix(input_name)
+adja_matrix = threshold_matrix(data_matrix, r=0.85)
 
-RG = random_partial(data_matrix , adja_matrix_2, maxswap=2)
+#RG = nx.from_numpy_matrix(adja_matrix)
+print "input :::", input_name
+print adja_matrix
+pl.figure(1)
+plot_graph(nx.from_numpy_matrix(adja_matrix))
+
+data_matrix_2 = load_matrix(input_name_2)
+adja_matrix_2 = threshold_matrix(data_matrix_2, r=0.85)
+
+RG = random_partial(adja_matrix , adja_matrix_2, maxswap=1)
+pl.figure(2)
 plot_graph(RG)
-
+pl.show()
 
 #RG = degre_pres(adja_matrix , ITER = 1000)
 #print "OUTPUT  ; "
