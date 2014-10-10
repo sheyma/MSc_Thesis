@@ -48,7 +48,8 @@ def threshold_matrix(A, r):
 def export_adjacency_matrix(graph, input_mtx, r):  
 	#print graph
 	hiwi = nx.adjacency_matrix(graph)
-	f = open('deneme_' + input_mtx[:-4] + '.dat','w')
+	print ('DENEME_' + input_mtx[:-4] + '.dat' )
+	f = open('DENEME_' + input_mtx[:-4] + '.dat','w')
 	for i in range(len(hiwi)):
 		for j in range(len(hiwi)):
 			f.write("%d\t" % (hiwi[i,j]))
@@ -158,10 +159,14 @@ def degre_pres(B , ITER):
 
 
 def random_partial(A , B , maxswap):
-	
-	new_A   =  np.triu(A)
+
+	new_A   =  np.triu(A,1)
 	(i , j) = new_A.nonzero()
 	m		= len(i)
+	
+	print new_A
+	print (i,j)
+	print m
 	
 	i.setflags(write=True)
 	j.setflags(write=True)
@@ -175,13 +180,14 @@ def random_partial(A , B , maxswap):
 			while e2 == e1 :
 				e2  = rnd.randint(0,m-1)
 		
-			a = i[e1]          # chose a col number from i
-			b = j[e1]		   # chose a row number from j		
-			c = i[e2]		   # chose another col number from i	
-			d = j[e2]		   # chose another row number from j
+			a = i[e1]          # chose a row number from i
+			b = j[e1]		   # chose a col number from j		
+			c = i[e2]		   # chose another row number from i	
+			d = j[e2]		   # chose another col number from j
+		
 			if ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) ) :
 				break          # make sure that a,b,c,d differ
-				
+	
 		# flipping edge c-d with 50% probability	
 		if rnd.random() > 0.5 :
 			i[e2]  = d
@@ -222,26 +228,29 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 data_matrix = load_matrix(input_name)
-adja_matrix = threshold_matrix(data_matrix, r=0.50)
+#adja_matrix = threshold_matrix(data_matrix, r=0.50)
 
 #RG = nx.from_numpy_matrix(adja_matrix)
-print "input :::", input_name
-print adja_matrix
-pl.figure(1)
-plot_graph(nx.from_numpy_matrix(adja_matrix))
+#print "input :::", input_name
+#print adja_matrix
+#pl.figure(1)
+#plot_graph(nx.from_numpy_matrix(adja_matrix))
 
 data_matrix_2 = load_matrix(input_name_2)
-adja_matrix_2 = threshold_matrix(data_matrix_2, r=0.50)
+#adja_matrix_2 = threshold_matrix(data_matrix_2, r=0.50)
 
-RG = random_partial(adja_matrix , adja_matrix_2, maxswap=2)
-print "output ::: " 
-print nx.adjacency_matrix(RG)
+#RG = random_partial(adja_matrix , adja_matrix_2, maxswap=1)
+RG = random_partial(data_matrix , data_matrix_2, maxswap=3)
+
+#print "output ::: " 
+#print nx.adjacency_matrix(RG)
 
 export_adjacency_matrix(RG , input_name, r=0.50)
 
-pl.figure(2)
-plot_graph(RG)
-pl.show()
+#pl.figure(2)
+#plot_graph(RG)
+#pl.show()
+
 
 #RG = degre_pres(adja_matrix , ITER = 1000)
 #print "OUTPUT  ; "
