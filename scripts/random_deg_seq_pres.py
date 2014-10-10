@@ -45,6 +45,16 @@ def threshold_matrix(A, r):
 				B[row, col] = 1
 	return B
 
+def export_adjacency_matrix(graph, input_mtx, r):  
+	#print graph
+	hiwi = nx.adjacency_matrix(graph)
+	f = open('deneme_' + input_mtx[:-4] + '.dat','w')
+	for i in range(len(hiwi)):
+		for j in range(len(hiwi)):
+			f.write("%d\t" % (hiwi[i,j]))
+		f.write("\n")
+	f.close()		
+
 def plot_graph(G):
 	#G   = nx.from_numpy_matrix(B)
 	pos = nx.shell_layout(G)
@@ -212,7 +222,7 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 data_matrix = load_matrix(input_name)
-adja_matrix = threshold_matrix(data_matrix, r=0.85)
+adja_matrix = threshold_matrix(data_matrix, r=0.50)
 
 #RG = nx.from_numpy_matrix(adja_matrix)
 print "input :::", input_name
@@ -221,9 +231,14 @@ pl.figure(1)
 plot_graph(nx.from_numpy_matrix(adja_matrix))
 
 data_matrix_2 = load_matrix(input_name_2)
-adja_matrix_2 = threshold_matrix(data_matrix_2, r=0.85)
+adja_matrix_2 = threshold_matrix(data_matrix_2, r=0.50)
 
-RG = random_partial(adja_matrix , adja_matrix_2, maxswap=1)
+RG = random_partial(adja_matrix , adja_matrix_2, maxswap=2)
+print "output ::: " 
+print nx.adjacency_matrix(RG)
+
+export_adjacency_matrix(RG , input_name, r=0.50)
+
 pl.figure(2)
 plot_graph(RG)
 pl.show()
