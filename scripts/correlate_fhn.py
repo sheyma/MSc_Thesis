@@ -189,41 +189,41 @@ corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 ## if correlation matrix is given directly :
 #corr_matrix			=   load_matrix(infile)
 
-pl.figure(1)
-plot_corr_diag(corr_matrix, input_name )
-# node indexes, not forget to subtract 1 
-[i, j, k , l ]		=   node_index(corr_matrix)
+#pl.figure(1)
+#plot_corr_diag(corr_matrix, input_name )
+## node indexes, not forget to subtract 1 
+#[i, j, k , l ]		=   node_index(corr_matrix)
 
-# user defined time range for timeseries plots
-t_start = 1650
-t_final = 1750
-# plot the timeseries of best correlated nodes
-pl.figure(2)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
-#plot the timeseries of worst correlated nodes
-pl.figure(3)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k+1, l+1)
+## user defined time range for timeseries plots
+#t_start = 1650
+#t_final = 1750
+## plot the timeseries of best correlated nodes
+#pl.figure(2)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
+##plot the timeseries of worst correlated nodes
+#pl.figure(3)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k+1, l+1)
 
 
 # FHN model resolution dtt [ms] 
 params = {'dtt' : 0.001}
 
-rnd_node_1 = 57
-rnd_node_2 = 46
+#rnd_node_1 = 57
+#rnd_node_2 = 46
 
-[yfft_1, freq_1] = fhn_fft(data_matrix, rnd_node_1-1, params['dtt'])
-[yfft_2, freq_2] = fhn_fft(data_matrix, rnd_node_2-1, params['dtt'])
-pl.figure(4);
-pl.subplot(1,2,1)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
-pl.subplot(1,2,2)
-pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1-1)))
-pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2-1)))
-pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
-pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
-lg = legend()
-pl.title('Fourier Transformed Signal', fontsize=25)
-pl.xlabel('frequency [Hz]' , fontsize = 25 )
-pl.ylabel('timeseries (f)' , fontsize = 25 )
-pl.axis([-1, 50, 0 0.5])
+#[yfft_1, freq_1] = fhn_fft(data_matrix, rnd_node_1-1, params['dtt'])
+#[yfft_2, freq_2] = fhn_fft(data_matrix, rnd_node_2-1, params['dtt'])
+#pl.figure(4);
+#pl.subplot(1,2,1)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
+#pl.subplot(1,2,2)
+#pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1-1)))
+#pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2-1)))
+#pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+#pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
+#lg = legend()
+#pl.title('Fourier Transformed Signal', fontsize=25)
+#pl.xlabel('frequency [Hz]' , fontsize = 25 )
+#pl.ylabel('timeseries (f)' , fontsize = 25 )
+#pl.axis([-1, 50, 0 0.5])
 pl.show()
