@@ -70,25 +70,25 @@ def pearson_coef(matrix_A , matrix_B):
 		#tmp_b  = matrix_B[i,:]
 		#vec_b  = np.append(vec_b, tmp_b)	
 		
-		## removing the diagonal elements in both matrices to get
-		## more reasonable Pearson correlation coef. between them
-		#for j in range(0, np.shape(matrix_A)[1]):
-			#if i == j:
-		 
-				#tmp_a  = np.append(matrix_A[i, 0:j], matrix_A[i, j+1:])
-				#vec_a  = np.append(vec_a, tmp_a)
-				
-				#tmp_b  = np.append(matrix_B[i, 0:j], matrix_B[i, j+1:])
-				#vec_b  = np.append(vec_b, tmp_b)	
-		
-		# assigning 1's to the diagonal of the empirical matrix
+		# removing the diagonal elements in both matrices to get
+		# more reasonable Pearson correlation coef. between them
 		for j in range(0, np.shape(matrix_A)[1]):
 			if i == j:
+		 
+				tmp_a  = np.append(matrix_A[i, 0:j], matrix_A[i, j+1:])
+				vec_a  = np.append(vec_a, tmp_a)
 				
-				matrix_A[i,j] = 1
-				vec_a  = np.append(vec_a, matrix_A[i, :])
+				tmp_b  = np.append(matrix_B[i, 0:j], matrix_B[i, j+1:])
+				vec_b  = np.append(vec_b, tmp_b)	
+		
+		## assigning 1's to the diagonal of the empirical matrix
+		#for j in range(0, np.shape(matrix_A)[1]):
+			#if i == j:
 				
-				vec_b  = np.append(vec_b, matrix_B[i, :])
+				#matrix_A[i,j] = 1
+				#vec_a  = np.append(vec_a, matrix_A[i, :])
+				
+				#vec_b  = np.append(vec_b, matrix_B[i, :])
 		
 	[R_pearson , p_value] = sistat.pearsonr(vec_a , vec_b)
 	return R_pearson	
