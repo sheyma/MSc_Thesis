@@ -138,19 +138,19 @@ for THR in np.array([26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 62, 64,
 	#R_thr[THR] 	   = np.array(R_temp)
 	
 	
-#Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-#print "Ordered dict"
-#print Ordered_R
+Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
+print "Ordered dict"
+print Ordered_R
 
-#datam 		= np.array(Ordered_R.values())
+datam 		= np.array(Ordered_R.values())
 
-#print "check its numpy array version"
-#print datam
+print "check its numpy array version"
+print datam
 
 # PLOTTING BEGINS ! 
-#fig , ax = pl.subplots()
-#pl.imshow(np.transpose(datam),  interpolation='nearest') 
-#cbar = pl.colorbar()
+fig , ax = pl.subplots()
+pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
+cbar = pl.colorbar()
 
 ## PLOT PA OVER SIGMA
 #a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
@@ -162,22 +162,23 @@ for THR in np.array([26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 62, 64,
 #pl.ylabel('$\sigma$ ', fontsize=20)
 
 # PLOT PA OVER VELOCITY
-a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
-b = np.array([15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3])
+a = np.array([26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 62, 64,
+                      66, 72, 76, 82])
+b = np.array([70, 110, 150])
 # title for fhn....
 #pl.title('A_aal_0...' + ' , FHN , ' + '$\sigma$ = 0.2', fontsize=20)
 # title for bold...
 #pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
-#pl.ylabel('v [m/s]', fontsize=20)
+pl.ylabel('v [m/s]', fontsize=20)
 
-#pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
-#pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-#pl.xlabel('thr', fontsize = 20)
-#for t in cbar.ax.get_yticklabels():
-	#t.set_fontsize(15)
-#pl.xticks(fontsize = 15)
-#pl.yticks(fontsize = 15)
-#pl.show()		
+pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
+pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
+pl.xlabel('thr', fontsize = 20)
+for t in cbar.ax.get_yticklabels():
+	t.set_fontsize(15)
+pl.xticks(fontsize = 15)
+pl.yticks(fontsize = 15)
+pl.show()		
 
 #------------------------------------
 #mtx_empiri			= 		load_matrix(input_empiri)		
