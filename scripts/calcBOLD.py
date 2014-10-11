@@ -154,6 +154,7 @@ def calc_bold(timeseries , T, input_na):
 			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
 	# exporting BOLD signal 
 	file_name       = 	str(name[:-4] + '_BOLD_signal.dat')		
+	print file_name
 	f = open(file_name,'w')	
 	for row in range( 0, len(Bold_signal[0]) ):
 		for key in Bold_signal.iterkeys():
@@ -294,23 +295,26 @@ else:
 	infile = input_name
 	name   = input_name
 
-[timeseries, T] = fhn_timeseries(infile)
+#[timeseries, T] = fhn_timeseries(infile)
 
-print "T : " , T, " [seconds]"
+#print "T : " , T, " [seconds]"
 
 #fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
 
+### THIS NEEDS TO BE CHANGED !!! ################## 
+timeseries      =   np.loadtxt(input_name)
+T = 550.0
 bold_signal     =   calc_bold(timeseries, T, name)
 
 #signal_image    =   plot_bold_signal(T , bold_signal)
 
-bold_filt		=   filter_bold(bold_signal, name)
+#bold_filt		=   filter_bold(bold_signal, name)
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 #filt_image		=   plot_bold_filt(bold_filt)
 
-bold_down  		=   down_sample(bold_filt , ds, dtt, name)
+#bold_down  		=   down_sample(bold_filt , ds, dtt, name)
 
-bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
+#bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
 
 #pl.show()
 
