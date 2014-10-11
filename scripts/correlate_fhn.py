@@ -220,8 +220,8 @@ else:
 data_matrix 	   			 =	load_matrix(infile)
 [u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
 filtered_fhn				 =  filter_fhn(u_matrix, input_name)
-plot_fhn_filt(filtered_fhn)
-corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
+#plot_fhn_filt(filtered_fhn)
+#corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 
 ## if correlation matrix is given directly :
 #corr_matrix			=   load_matrix(infile)
