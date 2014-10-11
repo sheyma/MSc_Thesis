@@ -9,7 +9,7 @@ import scipy.stats as sistat
 import matplotlib.pyplot as pl
 from matplotlib import colors
 from pylab import *
-
+from scipy.signal import  butter , filtfilt , correlate2d
 
 """ 
 	input  : job output from "fhn_time_delays.py" , m rows, n columns
@@ -162,7 +162,42 @@ def fhn_fft(matrix, x, dtt) :
 	freq  = float(f_s)/2 * np.linspace(0,1, m_pow/2 + 1);
 	
 	return Y_fft, freq
+
+def filter_fhn(input_fhn , name):
 	
+	# Butterworth low pass filtering of the simulated GHN 		
+	# type(bold_input) = np.array
+		
+	print "low pass filtering is applied..." 
+	 
+	n_T = np.size(input_fhn, 0)
+	N   = np.size(input_fhn, 1)
+	fhn_filt = np.zeros((n_T , N))
+	
+	Or  = 5
+	Wn  = 0.020	
+	b , a = butter(Or, float(Wn), btype='low',analog=False, output='ba')
+	
+	for col in range(0,N):			
+		fhn_filt[: , col] = filtfilt(b, a, input_fhn[:,col])
+			
+	file_name       = 	str(name[:-4] + '_FHN_0020_filtered.dat')	
+	print "file_name : " , file_name
+	np.savetxt(file_name, fhn_filt,'%.6f',delimiter='\t')
+	return fhn_filt
+
+
+def plot_fhn_filt(fhn_input):
+	# plots the low-pass filtered bold_signal 
+	fig = pl.figure(3)
+	pl.plot(fhn_input)
+	pl.xlabel('t [s]')
+	pl.ylabel('$filtered fhn signal, Wn=0.025,  u_i(t)$')
+	#pl.savefig(simfile[:-4]+"_bold_filt.eps",format="eps")
+	#pl.show()
+	return	
+	
+		
 
 # user defined input name
 if __name__ == '__main__':
@@ -184,6 +219,8 @@ else:
 
 data_matrix 	   			 =	load_matrix(infile)
 [u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
+filtered_fhn				 =  filter_fhn(u_matrix, input_name)
+plot_fhn_filt(filtered_fhn)
 corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 
 ## if correlation matrix is given directly :
