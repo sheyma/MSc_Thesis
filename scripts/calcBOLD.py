@@ -39,7 +39,7 @@ def bold_euler(T, r, iparams, x_init):
 	t = np.array(np.arange(0,(T+iparams.dt),iparams.dt))
 	n_t = len(t)
 	# cut BOLD signal from beginning bcs of transient behavior
-	t_min = 20		# [s] CHECK FOR THE SIGNAL 
+	t_min = 50		# [s] CHECK FOR THE SIGNAL 
 
 	n_min = round(t_min / iparams.dt)   
 	r_max = np.amax(r)	
