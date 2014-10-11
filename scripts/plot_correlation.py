@@ -139,13 +139,13 @@ for THR in np.array([26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 62, 64,
 	
 	
 Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-print "Ordered dict"
-print Ordered_R
+#print "Ordered dict"
+#print Ordered_R
 
 datam 		= np.array(Ordered_R.values())
 
-print "check its numpy array version"
-print datam
+#print "check its numpy array version"
+#print datam
 
 # PLOTTING BEGINS ! 
 fig , ax = pl.subplots()
@@ -166,7 +166,7 @@ a = np.array([26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 62, 64,
                       66, 72, 76, 82])
 b = np.array([70, 110, 150])
 # title for fhn....
-#pl.title('A_aal_0...' + ' , FHN , ' + '$\sigma$ = 0.2', fontsize=20)
+pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.1', fontsize=20)
 # title for bold...
 #pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
 pl.ylabel('v [m/s]', fontsize=20)
