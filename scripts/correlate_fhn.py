@@ -219,7 +219,7 @@ else:
 
 data_matrix 	   			 =	load_matrix(infile)
 [u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
-#filtered_fhn				 =  filter_fhn(u_matrix, input_name)
+filtered_fhn				 =  filter_fhn(u_matrix, input_name)
 #plot_fhn_filt(filtered_fhn)
 #corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 
@@ -248,8 +248,8 @@ params = {'dtt' : 0.001}
 rnd_node_1 = 7
 rnd_node_2 = 24
 
-[yfft_1, freq_1] = fhn_fft(data_matrix, rnd_node_1-1, params['dtt'])
-[yfft_2, freq_2] = fhn_fft(data_matrix, rnd_node_2-1, params['dtt'])
+[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dtt'])
+[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dtt'])
 pl.figure(4);
 pl.subplot(2,1,1)
 plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
