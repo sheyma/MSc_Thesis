@@ -125,16 +125,16 @@ def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
 	i_f =  (t_final /dt)
 	
 	# extracting the timeseries of the given nodes as separate vectors
-	v1   = timeseries[:, x-1]
-	v2   = timeseries[:, y-1]
+	v1   = timeseries[:, x]
+	v2   = timeseries[:, y]
 	
 	# Pearson correlation value between two timeseries
 	[R_pearson , p_value] = sistat.pearsonr(v1 , v2)
 	
 	# plot the timeseries of two nodes in specific interval
 	# tvec multiplied by 0.01 to make dimensiion equal to [ms]
-	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f],'r.-',label=('node '+str(x)))
-	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f],'b.-',label=('node '+str(y)))
+	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f],'r',label=('node '+str(x+1)))
+	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f],'b',label=('node '+str(y+1)))
 	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
 	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
 	lg = legend()
@@ -219,7 +219,7 @@ else:
 
 data_matrix 	   			 =	load_matrix(infile)
 [u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
-filtered_fhn				 =  filter_fhn(u_matrix, input_name)
+#filtered_fhn				 =  filter_fhn(u_matrix, input_name)
 #plot_fhn_filt(filtered_fhn)
 #corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
 
@@ -232,8 +232,8 @@ filtered_fhn				 =  filter_fhn(u_matrix, input_name)
 #[i, j, k , l ]		=   node_index(corr_matrix)
 
 ## user defined time range for timeseries plots
-#t_start = 1650
-#t_final = 1750
+t_start = 1
+t_final = 2500
 ## plot the timeseries of best correlated nodes
 #pl.figure(2)
 #plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i+1, j+1)
@@ -245,22 +245,22 @@ filtered_fhn				 =  filter_fhn(u_matrix, input_name)
 # FHN model resolution dtt [ms] 
 params = {'dtt' : 0.001}
 
-#rnd_node_1 = 57
-#rnd_node_2 = 46
+rnd_node_1 = 7
+rnd_node_2 = 24
 
-#[yfft_1, freq_1] = fhn_fft(data_matrix, rnd_node_1-1, params['dtt'])
-#[yfft_2, freq_2] = fhn_fft(data_matrix, rnd_node_2-1, params['dtt'])
-#pl.figure(4);
-#pl.subplot(1,2,1)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
-#pl.subplot(1,2,2)
-#pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1-1)))
-#pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2-1)))
-#pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
-#pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
-#lg = legend()
-#pl.title('Fourier Transformed Signal', fontsize=25)
-#pl.xlabel('frequency [Hz]' , fontsize = 25 )
-#pl.ylabel('timeseries (f)' , fontsize = 25 )
+[yfft_1, freq_1] = fhn_fft(data_matrix, rnd_node_1-1, params['dtt'])
+[yfft_2, freq_2] = fhn_fft(data_matrix, rnd_node_2-1, params['dtt'])
+pl.figure(4);
+pl.subplot(2,1,1)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
+pl.subplot(2,1,2)
+pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
+pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
+pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
+lg = legend()
+pl.title('Fourier Transformed Signal', fontsize=25)
+pl.xlabel('frequency [Hz]' , fontsize = 25 )
+pl.ylabel('timeseries (f)' , fontsize = 25 )
 #pl.axis([-1, 50, 0 0.5])
 pl.show()
