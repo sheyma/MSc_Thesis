@@ -100,8 +100,8 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 def plot_bold_signal(timeseries, x, y):
 	# plots timeseries of two given nodes in a specific time interval
 	
-	v1  = timeseries[:, x-1]
-	v2  = timeseries[:, y-1]
+	v1  = timeseries[:, x]
+	v2  = timeseries[:, y]
 	
 	T   = len(v1)	
 	time = np.linspace(0, T-1, T) / float(60000)
@@ -114,15 +114,15 @@ def plot_bold_signal(timeseries, x, y):
 	#pl.plot(time_bds, v2, 'b',label=('node '+str(y)))
 	
 	# if no downsampling :
-	pl.plot(time, v1, 'r',label=('node '+str(x)))
-	pl.plot(time, v2, 'b',label=('node '+str(y)))
+	pl.plot(time, v1, 'r',label=('node '+str(x+1)))
+	pl.plot(time, v2, 'b',label=('node '+str(y+1)))
 	
 	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
 	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
 	lg = legend()
 	pl.xlabel('t [min]', fontsize=25)
-	pl.ylabel('BOLD downsampled', fontsize=25)
-	pl.title(('downsample BOLD activity, corr. coeff. of nodes : ' 
+	pl.ylabel('BOLD change', fontsize=25)
+	pl.title(('BOLD activity, corr. coeff. of nodes : ' 
 			   +str("%.2f" % R_pearson)),fontsize=25)
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
@@ -157,17 +157,17 @@ data_matrix		=		load_matrix(input_name)
 corr_matrix		=		correl_matrix(data_matrix , input_name)
 # real node index : add 1!
 [i, j, k , l ]  = 	    node_index(corr_matrix)
-image			= 		plot_corr_diag(corr_matrix, input_name)
+#image			= 		plot_corr_diag(corr_matrix, input_name)
 
-# BOLD activity of the nodes correlating the best
-pl.figure(2)
-plot_bold_signal(data_matrix, i+1,j+1)
-# BOLD activity of the nodes correlating the worst
-pl.figure(3)
-plot_bold_signal(data_matrix, k+1,l+1)
+## BOLD activity of the nodes correlating the best
+#pl.figure(2)
+#plot_bold_signal(data_matrix, i+1,j+1)
+## BOLD activity of the nodes correlating the worst
+#pl.figure(3)
+#plot_bold_signal(data_matrix, k+1,l+1)
 
-rnd_node_1 = 57
-rnd_node_2 = 46
+rnd_node_1 = 7
+rnd_node_2 = 24
 
 # bold signal parameters, dtt [ms] is resolution of bold signal
 params = {'dtt' : 0.001}
@@ -176,11 +176,11 @@ print params['dtt']
 [yfft_1, freq_1] = bold_fft(data_matrix, rnd_node_1-1, params['dtt'])
 [yfft_2, freq_2] = bold_fft(data_matrix, rnd_node_2-1, params['dtt'])
 pl.figure(4);
-pl.subplot(1,2,1)
+pl.subplot(2,1,1)
 plot_bold_signal(data_matrix, rnd_node_1-1, rnd_node_2-1)
-pl.subplot(1,2,2)
-pl.plot(freq_1[0:50], yfft_1[0:50], 'r',label=('node '+str(rnd_node_1-1)))
-pl.plot(freq_2[0:50], yfft_2[0:50], 'b',label=('node '+str(rnd_node_2-1)))
+pl.subplot(2,1,2)
+pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
+pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
 pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
 pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
 lg = legend()
