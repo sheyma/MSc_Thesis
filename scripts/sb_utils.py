@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import re
 import subprocess as sp
 
 # load input data as numpy matrix
@@ -9,7 +10,7 @@ def load_matrix(infile):
 	print "reading data ..."
 	
 	# handle xz files transparently
-	if infile.endswith(".xz"):
+	if re.search(r'\.xz$', infile, flags=re.IGNORECASE):
 		# non-portable but we don't want to depend on pyliblzma module
 		xzpipe = sp.Popen(["xzcat", infile], stdout=sp.PIPE)
 		x_infile = xzpipe.stdout
@@ -21,3 +22,9 @@ def load_matrix(infile):
 	A  = np.loadtxt(x_infile, unpack=False)
 	print "shape of input matrix : " , np.shape(A)
 	return A
+
+
+# return file name without extensions like ".dat", ".dat.xz", etc.
+def get_dat_basename(infile):
+	basename = re.sub(r'\.dat(|\.xz|\.gz|\.bz2)$', '', infile, flags=re.IGNORECASE)
+	return basename
