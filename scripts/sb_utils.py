@@ -6,7 +6,7 @@ import re
 import subprocess as sp
 
 # load input data as numpy matrix
-def load_matrix(infile):
+def load_matrix(infile, unpack=False):
 	print "reading data ..."
 	
 	# handle xz files transparently
@@ -19,7 +19,7 @@ def load_matrix(infile):
 		# object, numpy's loadtxt() can deal with this
 		x_infile = infile
 	
-	A  = np.loadtxt(x_infile, unpack=False)
+	A  = np.loadtxt(x_infile, unpack=unpack)
 	print "shape of input matrix : " , np.shape(A)
 	return A
 
