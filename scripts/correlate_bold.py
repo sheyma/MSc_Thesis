@@ -1,6 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
+import sb_utils as sb
 import subprocess as sp
 import numpy as np
 import sys 
@@ -23,20 +24,13 @@ from pylab import *
 
 #params.dt = 0.001
 
-# load input data as numpy matrix
-def load_matrix(file):
-	print "reading data ..."
-	A  = np.loadtxt(file, unpack=False)
-	print "shape of input matrix : " , np.shape(A)
-	return A
-
 # correlation coefficients among the columns of a given matrix
-def correl_matrix(matrix , matrix_name):
+def correl_matrix(matrix , out_basename):
 	print "obtaining correlation coefficients among BOLD time series..."
 	# numpy array must be transposed to get the right corrcoef
 	tr_matrix = np.transpose(matrix)
 	cr_matrix = np.corrcoef(tr_matrix)
-	file_name = str(matrix_name[:-4] + '_corr.dat')
+	file_name = str(out_basename + '_corr.dat')
 	np.savetxt(file_name, cr_matrix, '%.6f',delimiter='\t')
 	return cr_matrix
 
@@ -68,7 +62,7 @@ def node_index(matrix):
 # plots the correlation matrix of SIMULATED signal
 # input: any output of fhn_time_delays.py or output of calcBOLD.py 
 # trick: remove 1's to 0's along the diagonals 
-def plot_corr_diag(corr_matrix, matrix_name) :	
+def plot_corr_diag(corr_matrix, out_basename):
 	N_col  = np.shape(corr_matrix)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
 	#for i in range(0,N_col):
@@ -89,10 +83,7 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 				#fontsize=14, fontweight='bold')
 	pl.xlabel('Nodes', fontsize = 20)
 	pl.ylabel('Nodes', fontsize = 20)
-	if matrix_name.endswith(".xz"):
-		image_name       = str(matrix_name[:-7] + '_CORR.eps') 	
-	else :
-		image_name       = str(matrix_name[:-4] + '_CORR.eps')
+	image_name = str(out_basename + '_CORR.eps')
 	#pl.savefig(image_name, format="eps")
 	#pl.show()
 	return
@@ -153,11 +144,13 @@ if __name__ == '__main__':
 	except:
 		sys.exit(1)
 
-data_matrix		=		load_matrix(input_name)		
-corr_matrix		=		correl_matrix(data_matrix , input_name)
+data_matrix = sb.load_matrix(input_name)
+out_basename = sb.get_dat_basename(input_name)
+
+corr_matrix = correl_matrix(data_matrix , out_basename)
 # real node index : add 1!
 [i, j, k , l ]  = 	    node_index(corr_matrix)
-#image			= 		plot_corr_diag(corr_matrix, input_name)
+#image = plot_corr_diag(corr_matrix, out_basename)
 
 ## BOLD activity of the nodes correlating the best
 #pl.figure(2)

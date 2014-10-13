@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-import subprocess as sp
+import sb_utils as sb
 import numpy as np
 import sys 
 import math
@@ -28,13 +28,6 @@ params = { # Fitzhugh-Nagumo simulation parameters...
         'dt': 0.001, 
 			}
 
-# load input data as numpy matrix
-def load_matrix(file):
-	print "reading data ..."
-	A  = np.loadtxt(file, unpack=False)
-	print "shape of input matrix : " , np.shape(A)
-	return A
-
 # obtain u_i time series from loaded matrix
 def fhn_timeseries(simfile):
 	print "subtracting u-time series as numpy matrix..."
@@ -50,15 +43,12 @@ def fhn_timeseries(simfile):
 	return u_series , T, dt, tvec
 
 # correlation coefficients among the columns of a given matrix
-def correl_matrix(matrix , matrix_name):
+def correl_matrix(matrix , out_basename):
 	print "obtaining correlation coefficients among time series..."
 	# numpy array must be transposed to get the right corrcoef
 	tr_matrix = np.transpose(matrix)
 	cr_matrix = np.corrcoef(tr_matrix)
-	if matrix_name.endswith(".xz"):
-		file_name       = str(matrix_name[:-7] + '_FHN_corr.dat') 	
-	else :
-		file_name       = str(matrix_name[:-4] + '_FHN_corr.dat')
+	file_name = str(out_basename + '_FHN_corr.dat')
 	np.savetxt(file_name, cr_matrix, '%.6f',delimiter='\t')
 	return cr_matrix
 
@@ -91,7 +81,7 @@ def node_index(matrix):
 
 # plots the correlation matrix of SIMULATED signal
 # input: any output of fhn_time_delays.py or output of calcBOLD.py 
-def plot_corr_diag(corr_matrix, matrix_name) :	
+def plot_corr_diag(corr_matrix, out_basename):
 	N_col  = np.shape(corr_matrix)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )
 		
@@ -109,10 +99,7 @@ def plot_corr_diag(corr_matrix, matrix_name) :
 				#fontsize=14, fontweight='bold')
 	pl.xlabel('Nodes', fontsize = 20)
 	pl.ylabel('Nodes', fontsize = 20)
-	if matrix_name.endswith(".xz"):
-		image_name       = str(matrix_name[:-7] + '_FHN_CORR.eps') 	
-	else :
-		image_name       = str(matrix_name[:-4] + '_FHN_CORR.eps')
+	image_name = str(out_basename + '_FHN_CORR.eps')
 	#pl.savefig('FHN_corr_r_0_64_si_0_030.eps', format="eps")
 	#pl.show()
 	return
@@ -163,7 +150,7 @@ def fhn_fft(matrix, x, dtt) :
 	
 	return Y_fft, freq
 
-def filter_fhn(input_fhn , name):
+def filter_fhn(input_fhn , out_basename):
 	
 	# Butterworth low pass filtering of the simulated GHN 		
 	# type(bold_input) = np.array
@@ -181,7 +168,7 @@ def filter_fhn(input_fhn , name):
 	for col in range(0,N):			
 		fhn_filt[: , col] = filtfilt(b, a, input_fhn[:,col])
 			
-	file_name       = 	str(name[:-4] + '_FHN_0020_filtered.dat')	
+	file_name = str(out_basename + '_FHN_0020_filtered.dat')
 	print "file_name : " , file_name
 	np.savetxt(file_name, fhn_filt,'%.6f',delimiter='\t')
 	return fhn_filt
@@ -206,28 +193,19 @@ if __name__ == '__main__':
 	except:
 		sys.exit(1)
 
-# handle xz files transparently
+data_matrix = sb.load_matrix(input_name)
+out_basename = sb.get_dat_basename(input_name)
 
-if input_name.endswith(".xz"):
-	# non-portable but we don't want to depend on pyliblzma module
-	xzpipe = sp.Popen(["xzcat", input_name], stdout=sp.PIPE)
-	infile = xzpipe.stdout
-else:
-	# in non-xz case we just use the file name instead of a file object, 
-	# numpy's loadtxt() can deal with this
-	infile = input_name
-
-data_matrix 	   			 =	load_matrix(infile)
 [u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
-filtered_fhn				 =  filter_fhn(u_matrix, input_name)
+filtered_fhn = filter_fhn(u_matrix, out_basename)
 #plot_fhn_filt(filtered_fhn)
-#corr_matrix		   			 =	correl_matrix(u_matrix, input_name)
+#corr_matrix = correl_matrix(u_matrix, out_basename)
 
 ## if correlation matrix is given directly :
 #corr_matrix			=   load_matrix(infile)
 
 #pl.figure(1)
-#plot_corr_diag(corr_matrix, input_name )
+#plot_corr_diag(corr_matrix, out_basename )
 ## node indexes, not forget to subtract 1 
 #[i, j, k , l ]		=   node_index(corr_matrix)
 
