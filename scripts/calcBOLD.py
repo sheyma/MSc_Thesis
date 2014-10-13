@@ -39,7 +39,7 @@ def bold_euler(T, r, iparams, x_init):
 	t = np.array(np.arange(0,(T+iparams.dt),iparams.dt))
 	n_t = len(t)
 	# cut BOLD signal from beginning bcs of transient behavior
-	t_min = 50		# [s] CHECK FOR THE SIGNAL 
+	t_min = 20		# [s] CHECK FOR THE SIGNAL 
 
 	n_min = round(t_min / iparams.dt)   
 	r_max = np.amax(r)	
@@ -295,15 +295,15 @@ else:
 	infile = input_name
 	name   = input_name
 
-#[timeseries, T] = fhn_timeseries(infile)
+[timeseries, T] = fhn_timeseries(infile)
 
-#print "T : " , T, " [seconds]"
+print "T : " , T, " [seconds]"
 
 #fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
 
 ### THIS NEEDS TO BE CHANGED !!! ################## 
-timeseries      =   np.loadtxt(input_name)
-T = 550.0
+#timeseries      =   np.loadtxt(input_name)
+#T = 550.0
 bold_signal     =   calc_bold(timeseries, T, name)
 
 #signal_image    =   plot_bold_signal(T , bold_signal)
