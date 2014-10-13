@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sb_utils as sb
-import subprocess as sp
 import numpy as np
 import sys 
 import math
@@ -200,18 +199,7 @@ if __name__ == '__main__':
 	except:
 		sys.exit(1)
 
-# handle xz files transparently
-
-if input_name.endswith(".xz"):
-	# non-portable but we don't want to depend on pyliblzma module
-	xzpipe = sp.Popen(["xzcat", input_name], stdout=sp.PIPE)
-	infile = xzpipe.stdout
-else:
-	# in non-xz case we just use the file name instead of a file object, 
-	# numpy's loadtxt() can deal with this
-	infile = input_name
-
-data_matrix = sb.load_matrix(infile)
+data_matrix = sb.load_matrix(input_name)
 [u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
 filtered_fhn				 =  filter_fhn(u_matrix, input_name)
 #plot_fhn_filt(filtered_fhn)
