@@ -1,6 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
+import sb_utils as sb
 import subprocess as sp
 import numpy as np
 import sys 
@@ -22,13 +23,6 @@ from pylab import *
 	#__slots__ = [ 'dt' ]
 
 #params.dt = 0.001
-
-# load input data as numpy matrix
-def load_matrix(file):
-	print "reading data ..."
-	A  = np.loadtxt(file, unpack=False)
-	print "shape of input matrix : " , np.shape(A)
-	return A
 
 # correlation coefficients among the columns of a given matrix
 def correl_matrix(matrix , matrix_name):
@@ -153,7 +147,7 @@ if __name__ == '__main__':
 	except:
 		sys.exit(1)
 
-data_matrix		=		load_matrix(input_name)		
+data_matrix = sb.load_matrix(input_name)
 corr_matrix		=		correl_matrix(data_matrix , input_name)
 # real node index : add 1!
 [i, j, k , l ]  = 	    node_index(corr_matrix)

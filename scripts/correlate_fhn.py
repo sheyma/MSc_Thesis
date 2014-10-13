@@ -1,6 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
+import sb_utils as sb
 import subprocess as sp
 import numpy as np
 import sys 
@@ -27,13 +28,6 @@ from scipy.signal import  butter , filtfilt , correlate2d
 params = { # Fitzhugh-Nagumo simulation parameters...
         'dt': 0.001, 
 			}
-
-# load input data as numpy matrix
-def load_matrix(file):
-	print "reading data ..."
-	A  = np.loadtxt(file, unpack=False)
-	print "shape of input matrix : " , np.shape(A)
-	return A
 
 # obtain u_i time series from loaded matrix
 def fhn_timeseries(simfile):
@@ -217,7 +211,7 @@ else:
 	# numpy's loadtxt() can deal with this
 	infile = input_name
 
-data_matrix 	   			 =	load_matrix(infile)
+data_matrix = sb.load_matrix(infile)
 [u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
 filtered_fhn				 =  filter_fhn(u_matrix, input_name)
 #plot_fhn_filt(filtered_fhn)
