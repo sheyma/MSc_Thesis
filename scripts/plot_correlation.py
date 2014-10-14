@@ -116,10 +116,10 @@ mtx_empiri		=		load_matrix(input_empiri)
 #name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 name = 'acp_w_0_ADJ_thr_0.26_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 
-thr_array = np.array([26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 62, 64,
-                      66, 72, 76, 82 ,84 ])
+thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 
+					  62, 64, 66, 72, 76, 82 ])
                       
-vel_array = np.array([30, 70, 110, 150])
+vel_array = np.array([30, 50, 70, 90, 110, 130, 150])
 
 R_thr =  {}
 
@@ -148,8 +148,8 @@ for THR in thr_array :
 	
 	
 Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-print "Ordered dict"
-print Ordered_R
+#print "Ordered dict"
+#print Ordered_R
 
 datam 		= np.array(Ordered_R.values())
 
@@ -174,13 +174,14 @@ cbar = pl.colorbar()
 a = thr_array
 b = vel_array
 # title for fhn....
-pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.1', fontsize=20)
+pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.1 '+' T = 450 [s]',
+		 fontsize=20)
 # title for bold...
 #pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
 pl.ylabel('v [m/s]', fontsize=20)
 
-pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
-pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
+pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = thr_array)
+pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = vel_array)
 pl.xlabel('thr', fontsize = 20)
 for t in cbar.ax.get_yticklabels():
 	t.set_fontsize(15)
