@@ -121,30 +121,40 @@ thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60,
                       
 vel_array = np.array([30, 50, 70, 90, 110, 130, 150])
 
+sig_array = np.array([0.1, 0.3, 0.5, 0.9])
+
 R_thr =  {}
 
 for THR in thr_array :
 	R_temp = []
-	for VEL in vel_array :
-		local_path = '../data/jobs_corr/'
- 		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+	
+	#for VEL in vel_array :
+		#local_path = '../data/jobs_corr/'
+ 		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
 		
+		#try:
+			#mtx_simuli = load_matrix(local_path + input_name)
+		#except :
+			#R_vel      = np.nan
+		#else :
+			#R_vel      = pearson_coef(mtx_empiri, mtx_simuli)
+			
+		#R_temp     = np.append(R_temp, R_vel)
+	#R_thr[THR] 	   = np.array(R_temp)
+		
+	for SIG in sig_array :
+		local_path = '../data/jobs_corr/'
+		input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
+	
 		try:
 			mtx_simuli = load_matrix(local_path + input_name)
 		except :
-			R_vel      = np.nan
+			R_sig      = np.nan
 		else :
-			R_vel      = pearson_coef(mtx_empiri, mtx_simuli)
-			
-		R_temp     = np.append(R_temp, R_vel)
+			R_sig      = pearson_coef(mtx_empiri, mtx_simuli)
+	
+		R_temp     = np.append(R_temp, R_sig)
 	R_thr[THR] 	   = np.array(R_temp)
-		
-	#for SIG in np.arange(1.0, 0.1-0.1 , -0.1):
-		#input_name = name_2[0:18] + str(THR) + name_2[20:27] + str(SIG) + name_2[30:]		
-		#mtx_simuli = load_matrix(input_name)
-		#R_sig      = pearson_coef(mtx_original, mtx_simuli)
-		#R_temp     = np.append(R_temp, R_sig)
-	#R_thr[THR] 	   = np.array(R_temp)
 	
 	
 Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
@@ -161,27 +171,28 @@ fig , ax = pl.subplots()
 pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
-## PLOT PA OVER SIGMA
-#a = np.array([54 , 56 , 58, 60 , 62, 63, 64, 65, 66])
-#b = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 , 0.1])
-## title for fhn....
-##pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s]', fontsize=20)
-## title for bold...
-#pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s]', fontsize=20)
-#pl.ylabel('$\sigma$ ', fontsize=20)
-
-# PLOT PA OVER VELOCITY
+# PLOT PA OVER SIGMA
 a = thr_array
-b = vel_array
+b = sig_array
 # title for fhn....
-pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.1 '+' T = 450 [s]',
+pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s] '+' T = 450 [s]',
 		 fontsize=20)
 # title for bold...
-#pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
-pl.ylabel('v [m/s]', fontsize=20)
+#pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s]', fontsize=20)
+pl.ylabel('$\sigma$ ', fontsize=20)
 
-pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = thr_array)
-pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = vel_array)
+## PLOT PA OVER VELOCITY
+#a = thr_array
+#b = vel_array
+## title for fhn....
+#pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.1 '+' T = 450 [s]',
+		 #fontsize=20)
+## title for bold...
+##pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
+#pl.ylabel('v [m/s]', fontsize=20)
+
+pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
+pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
 pl.xlabel('thr', fontsize = 20)
 for t in cbar.ax.get_yticklabels():
 	t.set_fontsize(15)
