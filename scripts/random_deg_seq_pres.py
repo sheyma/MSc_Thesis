@@ -164,9 +164,9 @@ def random_partial(A , B , maxswap):
 	(i , j) = new_A.nonzero()
 	m		= len(i)
 	
-	print new_A
-	print (i,j)
-	print m
+	#print new_A
+	#print (i,j)
+	#print m
 	
 	i.setflags(write=True)
 	j.setflags(write=True)
@@ -207,8 +207,8 @@ def random_partial(A , B , maxswap):
 			j[e1]  = d
 			j[e2]  = b
 			nswap = +1	
-	RG = nx.from_numpy_matrix(A)
-	return RG	
+	# returning an adjacency matrix
+	return A	
 			
 def plot_graph_2(G):
 	pos = nx.shell_layout(G)
@@ -221,38 +221,45 @@ def plot_graph_2(G):
 if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
-		input_name = sys.argv[1]
+		input_name   = sys.argv[1]
 		input_name_2 = sys.argv[2]
+		#input_name_3 = sys.argv[3]
 	except:
 		print usage
 		sys.exit(1)
 
-data_matrix = load_matrix(input_name)
-#adja_matrix = threshold_matrix(data_matrix, r=0.50)
+# if there is no thresholding needed :
+A          = load_matrix(input_name)
+Graph_A    = nx.from_numpy_matrix(A)
+B          = load_matrix(input_name_2)
+Graph_B    = nx.from_numpy_matrix(B)
+A_rnd      = random_partial(A, B, maxswap=1)
+Graph_rnd  = nx.from_numpy_matrix(A_rnd)
+print "output ::: " 
+print A_rnd
 
-#RG = nx.from_numpy_matrix(adja_matrix)
-#print "input :::", input_name
-#print adja_matrix
-#pl.figure(1)
-#plot_graph(nx.from_numpy_matrix(adja_matrix))
+pl.figure(2)
+pl.subplot(1,3,1)
+plot_graph(Graph_A)
+pl.subplot(1,3,2)
+plot_graph(Graph_B)
+pl.subplot(1,3,3)
+plot_graph(Graph_rnd)
+pl.show()
 
-data_matrix_2 = load_matrix(input_name_2)
-#adja_matrix_2 = threshold_matrix(data_matrix_2, r=0.50)
-
-#RG = random_partial(adja_matrix , adja_matrix_2, maxswap=1)
-RG = random_partial(data_matrix , data_matrix_2, maxswap=3)
-
-#print "output ::: " 
-#print nx.adjacency_matrix(RG)
-
-export_adjacency_matrix(RG , input_name, r=0.50)
-
-#pl.figure(2)
-#plot_graph(RG)
+## if everything is IMPORTED HERE :
+#data_matrix = load_matrix(input_name)
+#data_matrix_2 = load_matrix(input_name_2)
+#data_matrix_3 = load_matrix(input_name_3)
+#pl.figure(3)
+#pl.subplot(1,3,1)
+#plot_graph(nx.from_numpy_matrix(data_matrix))
+#pl.title('acp_w_0.48')
+#pl.subplot(1,3,2)
+#plot_graph(nx.from_numpy_matrix(data_matrix_2))
+#pl.title('A_aal_0.48')
+#pl.subplot(1,3,3)
+#plot_graph(nx.from_numpy_matrix(data_matrix_3))
+#pl.title('swap=150')
 #pl.show()
 
-
-#RG = degre_pres(adja_matrix , ITER = 1000)
-#print "OUTPUT  ; "
-#print nx.adjacency_matrix(RG)
-#plot_graph_2(RG)
