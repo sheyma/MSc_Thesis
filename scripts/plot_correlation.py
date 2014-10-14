@@ -102,7 +102,7 @@ if __name__ == '__main__':
 	except:
 		print usage
 		sys.exit(1)
-
+		
 # fMRI-BOLD input matrix load , this is a correlation matrix already
 mtx_empiri		=		load_matrix(input_empiri)
 
@@ -119,14 +119,19 @@ name = 'acp_w_0_ADJ_thr_0.26_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 R_thr =  {}
 
 for THR in np.array([26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 62, 64,
-                      66, 72, 76, 82]):
+                      66, 72, 76, 82 ]):
 	R_temp = []
-	for VEL in np.array([70, 110, 150]):
+	for VEL in np.array([30, 70, 110, 150]):
 		local_path = '../data/jobs_corr/'
  		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
-		mtx_simuli = load_matrix(local_path + input_name)
-		R_vel      = pearson_coef(mtx_empiri, mtx_simuli)
-		#print THR, VEL, R_vel
+		
+		try:
+			mtx_simuli = load_matrix(local_path + input_name)
+		except :
+			R_vel      = np.nan
+		else :
+			R_vel      = pearson_coef(mtx_empiri, mtx_simuli)
+			
 		R_temp     = np.append(R_temp, R_vel)
 	R_thr[THR] 	   = np.array(R_temp)
 		
