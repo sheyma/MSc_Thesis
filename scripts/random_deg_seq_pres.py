@@ -160,10 +160,11 @@ def degre_pres(B , ITER):
 
 def random_partial(A , B , maxswap):
 
-	new_A   =  np.triu(A,1)
+	new_A   = np.triu(A,1)
 	(i , j) = new_A.nonzero()
 	m		= len(i)
 	
+	#print A
 	#print new_A
 	#print (i,j)
 	#print m
@@ -208,6 +209,7 @@ def random_partial(A , B , maxswap):
 			j[e2]  = b
 			nswap = +1	
 	# returning an adjacency matrix
+	
 	return A	
 			
 def plot_graph_2(G):
@@ -233,10 +235,10 @@ A          = load_matrix(input_name)
 Graph_A    = nx.from_numpy_matrix(A)
 B          = load_matrix(input_name_2)
 Graph_B    = nx.from_numpy_matrix(B)
-A_rnd      = random_partial(A, B, maxswap=1)
+A_rnd      = random_partial(A, B, maxswap=100)
 Graph_rnd  = nx.from_numpy_matrix(A_rnd)
-print "output ::: " 
-print A_rnd
+#print "output ::: " 
+#print A_rnd
 
 pl.figure(2)
 pl.subplot(1,3,1)
