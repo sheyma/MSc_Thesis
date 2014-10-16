@@ -84,21 +84,26 @@ def node_index(matrix):
 def plot_corr_diag(corr_matrix, out_basename):
 	N_col  = np.shape(corr_matrix)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )
-		
-	cmap   = pl.cm.jet
-	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.5, vmax=0.5, cmap='jet', aspect='auto')
-	cbar = pl.colorbar(cmap=cmap, norm=norm)
-	for t in cbar.ax.get_yticklabels():
-		t.set_fontsize(15)
-	pl.xticks(fontsize = 20)
-	pl.yticks(fontsize = 20)
-	pl.suptitle("FHN correlation matrix", fontsize=20)
+	
+	# plot Adjacency matrix black-and-white, correct suptitle! :	
+	pl.suptitle("Adjacency matrix, r=0.66", fontsize=25)	
+	cmap = pl.get_cmap('gray_r', 10)
+	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, cmap=cmap)
+	
+	#cmap   = pl.cm.jet
+	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.5, vmax=0.5, cmap='jet', aspect='auto')
+	#cbar = pl.colorbar(cmap=cmap, norm=norm)
+	#for t in cbar.ax.get_yticklabels():
+		#t.set_fontsize(15)
+	pl.xticks(fontsize = 25)
+	pl.yticks(fontsize = 25)
+	#pl.suptitle("FHN correlation matrix", fontsize=20)
 	#pl.title('Method : 0 , ' + '$r$ = ' +'0.64'  +
 				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
 				#'0.05' + '  $v$ = '+'7 [m/s]',	
 				#fontsize=14, fontweight='bold')
-	pl.xlabel('Nodes', fontsize = 20)
-	pl.ylabel('Nodes', fontsize = 20)
+	pl.xlabel('Nodes', fontsize = 25)
+	pl.ylabel('Nodes', fontsize = 25)
 	image_name = str(out_basename + '_FHN_CORR.eps')
 	#pl.savefig('FHN_corr_r_0_64_si_0_030.eps', format="eps")
 	#pl.show()
@@ -195,9 +200,12 @@ if __name__ == '__main__':
 
 data_matrix = sb.load_matrix(input_name)
 out_basename = sb.get_dat_basename(input_name)
+plot_corr_diag(data_matrix, out_basename)
+pl.show()
+#[u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
+#filtered_fhn = filter_fhn(u_matrix, out_basename)
 
-[u_matrix , T, dt, tvec] 	 =	fhn_timeseries(data_matrix)
-filtered_fhn = filter_fhn(u_matrix, out_basename)
+
 #plot_fhn_filt(filtered_fhn)
 #corr_matrix = correl_matrix(u_matrix, out_basename)
 
@@ -221,24 +229,24 @@ t_final = 2500
 
 
 # FHN model resolution dtt [ms] 
-params = {'dtt' : 0.001}
+#params = {'dtt' : 0.001}
 
-rnd_node_1 = 7
-rnd_node_2 = 24
+#rnd_node_1 = 7
+#rnd_node_2 = 24
 
-[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dtt'])
-[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dtt'])
-pl.figure(4);
-pl.subplot(2,1,1)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
-pl.subplot(2,1,2)
-pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
-pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
-pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
-pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
-lg = legend()
-pl.title('Fourier Transformed Signal', fontsize=25)
-pl.xlabel('frequency [Hz]' , fontsize = 25 )
-pl.ylabel('timeseries (f)' , fontsize = 25 )
-#pl.axis([-1, 50, 0 0.5])
-pl.show()
+#[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dtt'])
+#[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dtt'])
+#pl.figure(4);
+#pl.subplot(2,1,1)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
+#pl.subplot(2,1,2)
+#pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
+#pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
+#pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+#pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
+#lg = legend()
+#pl.title('Fourier Transformed Signal', fontsize=25)
+#pl.xlabel('frequency [Hz]' , fontsize = 25 )
+#pl.ylabel('timeseries (f)' , fontsize = 25 )
+##pl.axis([-1, 50, 0 0.5])
+#pl.show()
