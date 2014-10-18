@@ -42,12 +42,12 @@ def plot_corr(corr_matrix, simfile ):
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
 	cbar = pl.colorbar()
 	for t in cbar.ax.get_yticklabels():
-		t.set_fontsize(15)
-	pl.xticks(fontsize = 20)
-	pl.yticks(fontsize = 20)
-	pl.title('BOLD-fMRI', fontsize=20)
-	pl.xlabel('Nodes', fontsize = 20)
-	pl.ylabel('Nodes', fontsize = 20)
+		t.set_fontsize(25)
+	pl.xticks(fontsize = 25)
+	pl.yticks(fontsize = 25)
+	pl.title('BOLD-fMRI', fontsize=25)
+	pl.xlabel('Nodes', fontsize = 25)
+	pl.ylabel('Nodes', fontsize = 25)
 	#image_name = simfile[0:-4] + '_CORR.eps'	
 	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
 	#pl.show()
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
 		input_empiri = sys.argv[1]
-		input_simuli = sys.argv[2]
+		#input_simuli = sys.argv[2]
 	except:
 		print usage
 		sys.exit(1)
@@ -181,15 +181,15 @@ pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s] '+' T = 450 [s]',
 #pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s]', fontsize=20)
 pl.ylabel('$\sigma$ ', fontsize=20)
 
-## PLOT PA OVER VELOCITY
-#a = thr_array
-#b = vel_array
-## title for fhn....
-#pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.1 '+' T = 450 [s]',
-		 #fontsize=20)
-## title for bold...
-##pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
-#pl.ylabel('v [m/s]', fontsize=20)
+# PLOT PA OVER VELOCITY
+a = thr_array
+b = vel_array
+# title for fhn....
+pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.1 '+' T = 450 [s]',
+		 fontsize=20)
+# title for bold...
+#pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
+pl.ylabel('v [m/s]', fontsize=20)
 
 pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
 pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
