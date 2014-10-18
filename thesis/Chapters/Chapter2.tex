@@ -102,8 +102,22 @@ The configuration model variant used here is the expected-degree-graph method, w
 The \textit{degree distribution} of a network reflects the probability of a node to have a given number of degree \textit{k}. The preserved-degree-distribution method randomizes a given undirected network by rewiring its edges randomly while preserving its degree distribution. The method first chooses four target nodes randomly, then flips the edges between those nodes with the probability of $P=0.5$. The total number of rewirings to be performed is given as an iteration parameter to the method. 
 
  
-
+\subsection{Partial Randomization}
  
+The partial randomization method  reconstructs a graph (say A) with partial rewirings with respect to a second graph (say B) while keeping the degree distribution the same as in A. The analogy of this algorithm is to perform rewirings in the adjacency matrix of A, while avoiding any edge generation which already exist in the B. In other words, the choice of edges to be performed rewirings in A is limited with respect to the B. 
+
+In this project, the functional connectivity (FC) adjacency matrix is partially rewired with anatomical connectivity (AC) adjacency matrix.  This means doing such rewirings among the nodes in FCM, only if these nodes are not structurally connected in the brain at above a probability value. The same procedure is done to randomize AC adjacency matrix partially with respect to FC adjacency matrix.  This time such nodes in ACM are rewired, that do not functionally correlated above a given threshold.   
+
+\begin{figure}[htbp]
+ %\begin{tabular}{cc}
+  \centering
+	\includegraphics[width=\textwidth, height=60mm]{Figures/p1.png}  
+    \rule{35em}{0.5pt}
+    \caption[Partial Randomization Example]{Graph A is performed a partial randomization with respect to graph B. While the partial randomization tool rewires edges in A, it avoids creating such edges that exist in B.}
+  \label{fig:Partial Randomization Example}
+ %\end{tabular}	
+\end{figure}
+
 
 \section{FitzHugh-Nagumo Model for Neuronal Activity Simulation}
 
