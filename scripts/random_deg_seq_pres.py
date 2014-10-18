@@ -207,7 +207,7 @@ def random_partial(A , B , maxswap):
 			A[d,c] = 0
 			j[e1]  = d
 			j[e2]  = b
-			nswap = +1	
+			nswap += 1
 	# returning an adjacency matrix
 	
 	return A	
