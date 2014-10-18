@@ -207,6 +207,7 @@ Notes:
 
             j[e1]=d; j[e2]=b			#reassign edge indices
             nswap+=1
+    return A
 
 
 def plot_graph_2(G):
