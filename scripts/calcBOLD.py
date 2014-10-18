@@ -3,8 +3,8 @@
 
 # calculating BOLD signal from netpy output
 
+import sb_utils as sb
 import numpy as np
-import subprocess as sp
 import sys
 import math
 import pylab as pl
@@ -102,10 +102,9 @@ def fhn_timeseries(simfile):
 	# load simfile as numpy matrix
 	# extract first column of simout as time vector
 	# read u_i time series from simout
-
-	print "reading data ..."
-	simout = np.loadtxt(simfile)
-	print "shape of input matrix : " , np.shape(simout)
+	
+	simout = sb.load_matrix(simfile)
+	
 	# extract time vector and dt
 	tvec = simout[:,0]
 	dt   = tvec[1] - tvec[0]
@@ -132,7 +131,7 @@ def plot_timeseries(t_start , t_range , timeseries):
 	#pl.show()
 	return			
 			
-def calc_bold(timeseries , T, input_na):
+def calc_bold(timeseries , T, out_basename):
 	
 	# applies Balloon Windkessel model to the timeseries
 	# calculates the simulated bold signal
@@ -153,7 +152,7 @@ def calc_bold(timeseries , T, input_na):
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
 	# exporting BOLD signal 
-	file_name       = 	str(name[:-4] + '_BOLD_signal.dat')		
+	file_name = str(out_basename + '_BOLD_signal.dat')
 	print file_name
 	f = open(file_name,'w')	
 	for row in range( 0, len(Bold_signal[0]) ):
@@ -178,7 +177,7 @@ def plot_bold_signal(T, bold_input):
 	return	
 
 		
-def filter_bold(bold_input , name):
+def filter_bold(bold_input , out_basename):
 	
 	# Butterworth low pass filtering of the simulated bold signal		
 	# type(bold_input) = <type 'dict'>
@@ -206,7 +205,7 @@ def filter_bold(bold_input , name):
 	for col in range(0,N):			
 		Bold_filt[: , col] = filtfilt(b, a, bold_input[col])
 			
-	file_name       = 	str(name[:-4] + '_BOLD_filtered.dat')	
+	file_name = str(out_basename + '_BOLD_filtered.dat')
 	print "file_name : " , file_name
 	np.savetxt(file_name, Bold_filt,'%.6f',delimiter='\t')
 	return Bold_filt
@@ -223,7 +222,7 @@ def plot_bold_filt(bold_input):
 	return	
 	
 	
-def down_sample(bold_input, ds, dtt, name):
+def down_sample(bold_input, ds, dtt, out_basename):
 	
 	# downsampling of the filtered bold signal
 	# select one point every 'ds' [ms] to match fmri resolution
@@ -233,14 +232,14 @@ def down_sample(bold_input, ds, dtt, name):
 	index = np.arange(0 , n_T , int(ds/dtt))
 	down_bold = bold_input[index, :]
 	
-	#file_name       = 	str(name[:-4] + '_BOLD_ds.dat')	
+	#file_name = str(out_basename + '_BOLD_ds.dat')
 	#print "file_name : " , file_name
 	#np.savetxt(file_name, down_bold,'%.6f',delimiter='\t')
 	
 	return down_bold
 						
 						
-def keep_frames(bold_input, cut_percent, name):
+def keep_frames(bold_input, cut_percent, out_basename):
 	
 	# cut array from beginning and end (distorted from filtering)
 	
@@ -251,7 +250,7 @@ def keep_frames(bold_input, cut_percent, name):
 	index      = np.arange(limit_down, limit_up , 1)
 	cut_bold   = bold_input[index, :]
 	# exporting downsampled + begin./end cut signal !
-	file_name       = str(name[:-4] + '_BOLD_bds.dat')
+	file_name = str(out_basename + '_BOLD_bds.dat')
 	np.savetxt(file_name, cut_bold,'%.6f',delimiter='\t')	
 	return cut_bold
 
@@ -281,21 +280,8 @@ x_init = np.array([0 , 1, 1, 1])
 
 input_name = sys.argv[1]
 
-
-
-# handle xz files transparently
-if input_name.endswith(".xz"):
-	# non-portable but we don't want to depend on pyliblzma module
-	xzpipe = sp.Popen(["xzcat", input_name], stdout=sp.PIPE)
-	infile = xzpipe.stdout	
-	name   = input_name[0:-3]
-else:
-	# in non-xz case we just use the file name instead of a file object, numpy's
-	# loadtxt() can deal with this
-	infile = input_name
-	name   = input_name
-
-[timeseries, T] = fhn_timeseries(infile)
+out_basename = sb.get_dat_basename(input_name)
+[timeseries, T] = fhn_timeseries(input_name)
 
 print "T : " , T, " [seconds]"
 
@@ -304,17 +290,17 @@ print "T : " , T, " [seconds]"
 ### THIS NEEDS TO BE CHANGED !!! ################## 
 #timeseries      =   np.loadtxt(input_name)
 #T = 550.0
-bold_signal     =   calc_bold(timeseries, T, name)
+bold_signal     =   calc_bold(timeseries, T, out_basename)
 
 #signal_image    =   plot_bold_signal(T , bold_signal)
 
-#bold_filt		=   filter_bold(bold_signal, name)
+#bold_filt		=   filter_bold(bold_signal, out_basename)
 #bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
 #filt_image		=   plot_bold_filt(bold_filt)
 
-#bold_down  		=   down_sample(bold_filt , ds, dtt, name)
+#bold_down =  down_sample(bold_filt , ds, dtt, out_basename)
 
-#bold_cut 		= 	keep_frames(bold_down ,cut_percent, name)
+#bold_cut = keep_frames(bold_down ,cut_percent, out_basename)
 
 #pl.show()
 
