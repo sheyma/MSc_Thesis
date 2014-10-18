@@ -157,61 +157,58 @@ def degre_pres(B , ITER):
 	RG = nx.from_numpy_matrix(B)
 	return RG
 
+# taken from bctpy, https://github.com/aestrivex/bctpy
+def randomize_graph_partial_und(A,B,maxswap):
+    '''
+A = RANDOMIZE_GRAPH_PARTIAL_UND(A,B,MAXSWAP) takes adjacency matrices A 
+and B and attempts to randomize matrix A by performing MAXSWAP 
+rewirings. The rewirings will avoid any spots where matrix B is 
+nonzero.
 
-def random_partial(A , B , maxswap):
+Inputs:       A,      adjacency matrix to randomize
+              B,      edges to avoid
+        MAXSWAP,      number of rewirings
 
-	new_A   = np.triu(A,1)
-	(i , j) = new_A.nonzero()
-	m		= len(i)
-	
-	#print A
-	#print new_A
-	#print (i,j)
-	#print m
-	
-	i.setflags(write=True)
-	j.setflags(write=True)
-	
-	nswap   = 0
-	
-	while nswap < maxswap :
-		while 1: 
-			e1  =  rnd.randint(0,m-1)
-			e2  =  rnd.randint(0,m-1)
-			while e2 == e1 :
-				e2  = rnd.randint(0,m-1)
-		
-			a = i[e1]          # chose a row number from i
-			b = j[e1]		   # chose a col number from j		
-			c = i[e2]		   # chose another row number from i	
-			d = j[e2]		   # chose another col number from j
-		
-			if ( ( (a!=c) & (a!=d) ) & ( (b!=c) & (b!=d)) ) :
-				break          # make sure that a,b,c,d differ
-	
-		# flipping edge c-d with 50% probability	
-		if rnd.random() > 0.5 :
-			i[e2]  = d
-			j[e2]  = c
-			c      = i[e2]
-			d      = j[e2]		
-		
-		if int(not(bool( A[a,d] or A[c,b] or B[a,d] or B[c,b] ))):
-			A[a,d] = A[a,b]
-			A[a,b] = 0
-			A[d,a] = A[b,a]
-			A[b,a] = 0
-			A[c,b] = A[c,d]
-			A[c,d] = 0
-			A[b,c] = A[d,c]
-			A[d,c] = 0
-			j[e1]  = d
-			j[e2]  = b
-			nswap += 1
-	# returning an adjacency matrix
-	
-	return A	
-			
+Outputs:      A,      randomized matrix
+
+Notes:
+1. Graph may become disconnected as a result of rewiring. Always
+  important to check.
+2. A can be weighted, though the weighted degree sequence will not be
+  preserved.
+3. A must be undirected.
+    '''
+    A=A.copy()
+    i,j=np.where(np.triu(A,1))
+    i.setflags(write=True); j.setflags(write=True)
+    m=len(i)
+
+    nswap=0
+    while nswap < maxswap: 
+        while True:
+            e1,e2=np.random.randint(m,size=(2,));
+            while e1==e2: e2=np.random.randint(m)
+            a=i[e1]; b=j[e1]
+            c=i[e2]; d=j[e2]
+        
+            if a!=c and a!=d and b!=c and b!=d:
+                break					#all 4 vertices must be different
+
+        if np.random.random()>.5:
+            i[e2]=d; j[e2]=c			#flip edge c-d with 50% probability
+            c=i[e2]; d=j[e2]			#to explore all potential rewirings
+            
+        #rewiring condition
+        if not (A[a,d] or A[c,b] or B[a,d] or B[c,b]): #avoid specified ixes
+            A[a,d]=A[a,b]; A[a,b]=0
+            A[d,a]=A[b,a]; A[b,a]=0
+            A[c,b]=A[c,d]; A[c,d]=0
+            A[b,c]=A[d,c]; A[d,c]=0
+
+            j[e1]=d; j[e2]=b			#reassign edge indices
+            nswap+=1
+
+
 def plot_graph_2(G):
 	pos = nx.shell_layout(G)
 	nx.draw(G, pos)
@@ -235,7 +232,7 @@ A          = load_matrix(input_name)
 Graph_A    = nx.from_numpy_matrix(A)
 B          = load_matrix(input_name_2)
 Graph_B    = nx.from_numpy_matrix(B)
-A_rnd      = random_partial(A, B, maxswap=100)
+A_rnd      = randomize_graph_partial_und(A, B, maxswap=100)
 Graph_rnd  = nx.from_numpy_matrix(A_rnd)
 #print "output ::: " 
 #print A_rnd
