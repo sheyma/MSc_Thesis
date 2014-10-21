@@ -27,7 +27,7 @@ color='kmbcyr'; type = '-*o+*o';
 input_name = 'A_aal_single_network_measures.dat';
 fig = figure(1);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 for i =1:length(random_G)
     a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
@@ -38,8 +38,8 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk')
 legend('boxoff')
 %%set(legend,'FontSize',14)
-xlabel('Threshold [r]')
-ylabel('Network Density')
+xlabel('r')
+ylabel('D')
 hold off
 set(fig, 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -48,7 +48,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Network Clustering Coefficient
 figure(2);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 for i =1:length(random_G)
     a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
@@ -58,8 +58,8 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk')
 legend('boxoff')
 %%set(legend,'FontSize',14)
-xlabel('Threshold [r]')
-ylabel('Clustering Coefficient')
+xlabel('r')
+ylabel('C')
 hold off
 set(figure(2), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -69,7 +69,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Average degree of network
 figure(3);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
@@ -80,7 +80,7 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk')
 legend('boxoff')
 %%set(legend,'FontSize',14)
-xlabel('Threshold [r]')
+xlabel('r')
 ylabel('Average Degree, <k>')
 hold off
 set(figure(3), 'units', 'inches','position',[5 4 10 7]) 
@@ -90,7 +90,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Number of Connected Components
 figure(4);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 for i =1:length(random_G)
     strcat(input_name(1:6),'R',random_G(i),input_name(6:end))
@@ -100,7 +100,7 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest' )
 %%set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]')
+xlabel('r')
 ylabel('Average Connected Components')
 hold off
 set(figure(4), 'units', 'inches','position',[5 4 10 7]) 
@@ -110,7 +110,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Shortest Pathway
 figure(5);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 for i =1:length(random_G)
     strcat(input_name(1:6),'R',random_G(i),input_name(6:end))
@@ -120,7 +120,7 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest' )
 %%set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]')
+xlabel('r')
 ylabel('Shortest Pathway')
 hold off
 set(figure(5), 'units', 'inches','position',[5 4 10 7]) 
@@ -131,7 +131,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Small Worldness
 input_name_2 = 'A_aal_small_worldness.dat';
 figure(6);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 hold on
 for i = 1:length(random_G)
@@ -141,7 +141,7 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest' )
 %%set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]')
+xlabel('r')
 ylabel('Small Worldness')
 hold off
 set(figure(6), 'units', 'inches','position',[5 4 10 7]) 
@@ -151,7 +151,7 @@ set(gcf, 'PaperPositionMode','auto')
 
 % Transitivity
 figure(7);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 hold on
 for i = 1:length(random_G)
@@ -162,7 +162,7 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest' )
 %%set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]')
+xlabel('r')
 ylabel('Transitivity')
 hold off
 set(figure(7), 'units', 'inches','position',[5 4 10 7]) 
@@ -173,7 +173,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Global Efficiency of Network
 input_name_3 = 'A_aal_global_efficiency_ave.dat';
 figure(8);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 hold on
 for i = 1:length(random_G)
@@ -184,7 +184,7 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest' )
 %%set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]')
+xlabel('r')
 ylabel('Average Global Efficiency')
 hold off
 set(figure(8), 'units', 'inches','position',[5 4 10 7]) 
@@ -194,7 +194,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Local efficiency of Network
 input_name_4 = 'A_aal_local_efficiency_ave.dat';
 figure(9);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 hold on
 for i = 1:length(random_G)
@@ -204,7 +204,7 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest' )
 %%set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]')
+xlabel('r')
 ylabel('Local Efficiency')
 hold off
 set(figure(9), 'units', 'inches','position',[5 4 10 7]) 
@@ -214,7 +214,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Assortativity coefficient of network
 in_name_5 = 'A_aal_assortativity.dat';
 figure(10);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('FCM')
 hold on
 for i = 1:length(random_G)
@@ -224,7 +224,7 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest' )
 %%set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Threshold [r]')
+xlabel('r')
 ylabel('Assortativity')
 hold off
 set(figure(10), 'units', 'inches','position',[5 4 10 7]) 
@@ -266,18 +266,18 @@ for j = 1:length(random_G)
         set(gca,'YTick',[0.25 0.45 0.65 0.85 1.00])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))    
     elseif random_G(j) == 'k'
-        c = zeros(87,90);
-        for k = 1:87
+        c = zeros(70,90);
+        for k = 1:70
             c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
         end
-        imagesc((1:1:90),(0.08:0.01:0.94),c)
+        imagesc((1:1:90),(0.25:0.01:0.94),c)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.08 0.25 0.50 0.75 0.94])
+        set(gca,'YTick',[0.25 0.38 0.52 0.78 0.94])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
     end
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Threshold [r]')
+    ylabel('r')
     title(strcat('Global Efficiency of Nodes, R', random_G(j)))
     
 end
@@ -320,18 +320,18 @@ for j = 1:length(random_G)
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))    
      
     elseif random_G(j) == 'k'
-        c = zeros(87,90);
-        for k = 1:87
+        c = zeros(70,90);
+        for k = 1:70
             c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
         end
-        imagesc((1:1:90),(0.08:0.01:0.94),c)
+        imagesc((1:1:90),(0.25:0.01:0.94),c)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.08 0.25 0.50 0.75 0.94])
+        set(gca,'YTick',[0.25 0.38 0.52 0.78 0.94])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
     end
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Threshold [r]')
+    ylabel('r')
     title(strcat('Local Efficiency of Nodes, R', random_G(j)))
     
 end
@@ -379,20 +379,20 @@ for j = 1:length(random_G)
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))  
     
     elseif random_G(j) == 'k'
-        c = zeros(87,90);
-        for k = 1:87
+        c = zeros(70,90);
+        for k = 1:70
             c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
         end
         % Apply a logarithmic colorbar
-        log_plot = imagesc((1:1:90),(0.08:0.01:0.94),log10(c));
+        log_plot = imagesc((1:1:90),(0.25:0.01:0.94),log10(c));
         colorbar_log([10^(0) 10^2])
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.08 0.25 0.50 0.75 0.94])
+        set(gca,'YTick',[0.25 0.38 0.52 0.78 0.94])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))                      
     end
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Threshold [r]')
+    ylabel('r')
     title(strcat('Connected Components of Nodes, R', random_G(j)), 'FontSize',20)
     
 end
@@ -442,21 +442,21 @@ for j = 1:length(random_G)
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))     
         
     elseif random_G(j) == 'k'
-        c = zeros(87,90);
-        for k = 1:87
+        c = zeros(70,90);
+        for k = 1:70
             c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
         end
          % Apply a logarithmic colorbar
-        log_plot = imagesc((1:1:90),(0.08:0.01:0.94),log10(c));
+        log_plot = imagesc((1:1:90),(0.25:0.01:0.94),log10(c));
         colorbar_log([10^(0) 10^1])
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.08 0.25 0.50 0.75 0.94])
+        set(gca,'YTick',[0.25 0.38 0.54 0.76 0.94])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
     end
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Threshold [r]')
-    title(strcat('Degree Distribution, R', random_G(j)), 'FontSize',20)
+    ylabel('r')
+    title(strcat('P(k), R', random_G(j)), 'FontSize',20)
     
 end
 set(figure(14), 'units', 'inches','position',[10 10 13 20]) 
@@ -499,19 +499,19 @@ for j = 1:length(random_G)
         set(gca,'YTick',[0.25 0.45 0.65 0.85 1.00])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f')) 
     elseif random_G(j) == 'k'
-        c = zeros(87,90);
-        for k = 1:87
+        c = zeros(70,90);
+        for k = 1:70
             c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
         end
-        imagesc((1:1:90),(0.08:0.01:0.94),c)
+        imagesc((1:1:90),(0.25:0.01:0.94),c)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.08 0.25 0.50 0.75 0.94])
+        set(gca,'YTick',[0.25 0.38 0.54 0.76 0.94])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
     end
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Threshold [r]')
-    title(strcat('Clustering Coefficient of Nodes, R', random_G(j)), 'FontSize',20)
+    ylabel('r')
+    title(strcat('C_{i}, R', random_G(j)), 'FontSize',20)
   
 end
 set(figure(15), 'units', 'inches','position',[10 10 13 20]) 
