@@ -86,7 +86,7 @@ def plot_corr_diag(corr_matrix, out_basename):
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )
 	
 	# plot Adjacency matrix black-and-white, correct suptitle! :	
-	pl.suptitle("Adjacency matrix, r=0.66", fontsize=25)	
+	pl.suptitle("Adjacency matrix, r=0.55", fontsize=50)	
 	cmap = pl.get_cmap('gray_r', 10)
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, cmap=cmap)
 	
@@ -95,15 +95,15 @@ def plot_corr_diag(corr_matrix, out_basename):
 	#cbar = pl.colorbar(cmap=cmap, norm=norm)
 	#for t in cbar.ax.get_yticklabels():
 		#t.set_fontsize(15)
-	pl.xticks(fontsize = 25)
-	pl.yticks(fontsize = 25)
+	pl.xticks(fontsize = 50)
+	pl.yticks(fontsize = 50)
 	#pl.suptitle("FHN correlation matrix", fontsize=20)
 	#pl.title('Method : 0 , ' + '$r$ = ' +'0.64'  +
 				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
 				#'0.05' + '  $v$ = '+'7 [m/s]',	
 				#fontsize=14, fontweight='bold')
-	pl.xlabel('Nodes', fontsize = 25)
-	pl.ylabel('Nodes', fontsize = 25)
+	pl.xlabel('Nodes', fontsize = 50)
+	pl.ylabel('Nodes', fontsize = 50)
 	image_name = str(out_basename + '_FHN_CORR.eps')
 	#pl.savefig('FHN_corr_r_0_64_si_0_030.eps', format="eps")
 	#pl.show()
