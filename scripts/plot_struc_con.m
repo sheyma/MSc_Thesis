@@ -26,7 +26,7 @@ color='kmbycr'; type = '-*o*+o';
 input_name = 'acp_w_single_network_measures.dat';
 fig = figure(1);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 for i =1:length(random_G)
     a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
@@ -36,8 +36,8 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk')
 legend('boxoff')
 %set(legend,'FontSize',14)
-xlabel('Probability [p]')
-ylabel('Network Density')
+xlabel('p')
+ylabel('D')
 hold off
 set(fig, 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -46,7 +46,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Network Clustering Coefficient
 figure(2);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 for i =1:length(random_G)
     a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
@@ -56,8 +56,8 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk') 
 legend('boxoff')
 %set(legend,'FontSize',14)
-xlabel('Probability [p]')
-ylabel('Clustering Coefficient')
+xlabel('p')
+ylabel('C')
 hold off
 set(figure(2), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -67,7 +67,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Average degree of network
 figure(3);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
@@ -78,8 +78,8 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk')
 legend('boxoff')
 %set(legend,'FontSize',14)
-xlabel('Probability [p]')
-ylabel('Average Degree, <k>')
+xlabel('p')
+ylabel('<k>')
 hold off
 set(figure(3), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -88,7 +88,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Number of Connected Components
 figure(4);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
@@ -97,7 +97,7 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Probability [p]')
+xlabel('p')
 ylabel('Average Connected Components')
 hold off
 set(figure(4), 'units', 'inches','position',[5 4 10 7]) 
@@ -107,7 +107,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Shortest Pathway
 figure(5);
 hold on
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
@@ -116,8 +116,8 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Probability [p]')
-ylabel('Shortest Pathway')
+xlabel('p')
+ylabel('d_{ij}')
 hold off
 set(figure(5), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -126,7 +126,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Small Worldness
 input_name_2 = 'acp_w_small_worldness.dat';
 figure(6);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 hold on
 for i = 1:length(random_G)
@@ -136,16 +136,16 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Probability [p]')
-ylabel('Small Worldness')
+xlabel('p')
+ylabel('S')
 hold off
-set(figure(6), 'units', 'inches','position',[5 4 10 7]) 
+%set(figure(6), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Small_Worldness_Stru.eps','eps2c')
 
 % Transitivity
 figure(7);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 hold on
 for i = 1:length(random_G)
@@ -153,20 +153,20 @@ for i = 1:length(random_G)
     A = load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthEast')
 %set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Probability [p]')
-ylabel('Transitivity')
+xlabel('p')
+ylabel('T')
 hold off
-set(figure(7), 'units', 'inches','position',[5 4 10 7]) 
+%set(figure(7), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Transitivity_Stru.eps','eps2c')
 
 % Global Efficiency of Network
 input_name_3 = 'acp_w_global_efficiency_ave.dat';
 figure(8);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 hold on
 for i = 1:length(random_G)
@@ -177,8 +177,8 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Probability [p]')
-ylabel('Average Global Efficiency')
+xlabel('p')
+ylabel('E')
 hold off
 set(figure(8), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -187,7 +187,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Local efficiency of Network
 input_name_4 = 'acp_w_local_efficiency_ave.dat';
 figure(9);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 hold on
 for i = 1:length(random_G)
@@ -197,8 +197,8 @@ end
 legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Probability [p]')
-ylabel('Local Efficiency')
+xlabel('p')
+ylabel('E_{loc}')
 hold off
 set(figure(9), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -207,20 +207,20 @@ set(gcf, 'PaperPositionMode','auto')
 % Assortativity coefficient of network
 in_name_5 = 'acp_w_assortativity.dat';
 figure(10);
-set(gca,'FontSize',25)
+set(gca,'FontSize',40)
 title('ACM')
 hold on
 for i = 1:length(random_G)
     A = load(strcat(in_name_5(1:6),'R',random_G(i),in_name_5(6:end)));
     plot(A(:,1),A(:,2),strcat(color(i),type(i)), 'Linewidth', 3)
 end
-legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest')
+legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','SouthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
-xlabel('Probability [p]')
-ylabel('Assortativity')
+xlabel('p')
+ylabel('A')
 hold off
-set(figure(10), 'units', 'inches','position',[5 4 10 7]) 
+%set(figure(10), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Assortativity_Stru.eps','eps2c')
 
@@ -301,18 +301,18 @@ for j = 1:length(random_G)
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
         n=(1:90);
-        m=(0.05:0.01:0.98);
+        m=(0.01:0.01:0.98);
         imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.05 0.25 0.50 0.80 0.98])
+        set(gca,'YTick',[0.01 0.25 0.50 0.75 0.98])
     end
     
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Probability [p]')
+    ylabel('p')
     random_G(j)
     strcat('Global Efficiency of Nodes, R', random_G(j))
-    title(strcat('Global Efficiency of Nodes, R', random_G(j)))
+    title(strcat('E_{nodes}, R', random_G(j)))
     set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
     
 
@@ -395,18 +395,18 @@ for j = 1:length(random_G)
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
         n=(1:90);
-        m=(0.05:0.01:0.98);
+        m=(0.01:0.01:0.98);
         imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.05 0.25 0.50 0.80 0.98])
+        set(gca,'YTick',[0.01 0.25 0.50 0.75 0.98])
     end
     
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Probability [p]')
+    ylabel('p')
     random_G(j)
-    strcat('Local Efficiency of Nodes, R', random_G(j))
-    title(strcat('Local Efficiency of Nodes, R', random_G(j)))
+    
+    title(strcat(strcat('E_{loc, nodes}, R', random_G(j))))
     set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
     
 end
@@ -513,18 +513,18 @@ for j = 1:length(random_G)
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
         n=(1:90);
-        m=(0.05:0.01:0.98);
+        m=(0.01:0.01:0.98);
         %Apply a logarithmic colorbar
         log_plot = imagesc(n,m,log10(z));
         colorbar_log([10^(0) 10^0.05])
         %imagesc(n,m,z)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.05 0.25 0.50 0.75 0.98])
+        set(gca,'YTick',[0.01 0.25 0.50 0.75 0.98])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))     
     end
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Probability [p]')
+    ylabel('p')
     title(strcat('Connected Components of Nodes, R', random_G(j)))
 end
 set(figure(13), 'units', 'inches','position',[10 10 13 20]) 
@@ -631,22 +631,22 @@ for j = 1:length(random_G)
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
         end
         n=(1:90);
-        m=(0.05:0.01:0.98);
+        m=(0.01:0.01:0.98);
     
         % Apply a logarithmic colorbar
         log_plot = imagesc(n,m,log10(z));
         colorbar_log([10^(0) 10^1])
         h=colorbar; set(h,'fontsize',15);
 
-        set(gca,'YTick',[0.05 0.25 0.50 0.75 0.98])
+        set(gca,'YTick',[0.01 0.25 0.50 0.75 0.98])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))     
         
     end   
    
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Probability [p]')
-    title(strcat('Degree Distribution, R', random_G(j)), 'FontSize',20)
+    ylabel('p')
+    title(strcat('P(k), R', random_G(j)), 'FontSize',20)
     
 end
 set(figure(14), 'units', 'inches','position',[10 10 13 20]) 
@@ -725,17 +725,17 @@ for j = 1:length(random_G)
         for k = 1:size(DD,1)/90
             c(k,:) = z_( 90*(k-1)+1 : 90*(k) )';
         end
-        imagesc((1:1:90),(0.05:0.01:0.98),c)
+        imagesc((1:1:90),(0.01:0.01:0.98),c)
         h=colorbar; set(h,'fontsize',15);
-        set(gca,'YTick',[0.05 0.25 0.50 0.75 0.98])
+        set(gca,'YTick',[0.01 0.25 0.50 0.75 0.98])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))    
         
     end    
         
     set(gca,'XTick',15:15:90);
     xlabel('Nodes')
-    ylabel('Probability [p]')
-    title(strcat('Clustering Coefficient of Nodes, R', random_G(j)), 'FontSize',20)
+    ylabel('p')
+    title(strcat('C_{i}, R', random_G(j)), 'FontSize',20)
     
 end
 set(figure(15), 'units', 'inches','position',[10 10 13 20]) 
