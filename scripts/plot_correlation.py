@@ -58,8 +58,18 @@ def corr_histo(corr_matrix, simfile):
 	corr_max  = 1.0
 	corr_min  = -1.0
 	bins = np.linspace(corr_min, corr_max, 20)
-	pl.hist(corr_flat, bins, normed =True, histtype='bar')
+	hist = pl.hist(corr_flat, bins, normed =True, histtype='bar')
 	pl.title(simfile)
+	return hist
+
+def chi2_distance(histA, histB, eps = 1e-10):
+	# compute the chi-squared distance
+	d = 0.5 * np.sum([((a - b) ** 2) / (a + b + eps)
+	for (a, b) in zip(histA, histB)])
+ 
+	# return the chi-squared distance
+	return d
+
 
 def plot_hist(corr_matrix, simfile ):	
 	N_col  = np.shape(corr_matrix)[1]
@@ -231,10 +241,11 @@ mtx_empiri			= 		load_matrix(input_empiri)
 #figure				=		plot_corr(mtx_empiri , input_empiri)
 mtx_simuli			= 		load_matrix(input_simuli)
 pl.figure(1)
-corr_histo(mtx_empiri, input_empiri)
+HistA = corr_histo(mtx_empiri, input_empiri)
 
 pl.figure(2)
-corr_histo(mtx_simuli, input_simuli)
+HistB = corr_histo(mtx_simuli, input_simuli)
+chi2_distance(HistA, HistB, eps = 1e-10)
 #figure_hist			=		plot_hist(mtx_simuli, input_simuli)
 #R_pearson			= 	    pearson_coef(mtx_empiri , mtx_simuli)
 #print "Pearson corr. coef. between empir.-simul. : " , R_pearson
