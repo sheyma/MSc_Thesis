@@ -53,6 +53,32 @@ def plot_corr(corr_matrix, simfile ):
 	#pl.show()
 	return  	
 
+def corr_histo(corr_matrix, simfile):
+	corr_flat = np.ndarray.flatten(corr_matrix) 
+	corr_max  = 1.0
+	corr_min  = -1.0
+	bins = np.linspace(corr_min, corr_max, 20)
+	pl.hist(corr_flat, bins, normed =True, histtype='bar')
+	pl.title(simfile)
+
+def plot_hist(corr_matrix, simfile ):	
+	N_col  = np.shape(corr_matrix)[1]
+	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
+	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
+	cbar = pl.colorbar()
+	for t in cbar.ax.get_yticklabels():
+		t.set_fontsize(20)
+	pl.xticks(fontsize = 20)
+	pl.yticks(fontsize = 20)
+	pl.suptitle('FCM (BOLD-fMRI)', fontsize= 20)
+	pl.xlabel('Nodes', fontsize = 20)
+	pl.ylabel('Nodes', fontsize = 20)
+	#image_name = simfile[0:-4] + '_CORR.eps'	
+	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
+	#pl.show()
+	return  	
+	
+
 # calculating Pearson's corr. coef. for two given matrices
 # matrix_A : simulated neuronal activity correlations, 1's on diagonal
 # matrix_B : empirical fMRI-BOLD correlations, 0's on diagonal	
@@ -98,7 +124,7 @@ if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
 	try:
 		input_empiri = sys.argv[1]
-		#input_simuli = sys.argv[2]
+		input_simuli = sys.argv[2]
 	except:
 		print usage
 		sys.exit(1)
@@ -114,7 +140,7 @@ mtx_empiri		=		load_matrix(input_empiri)
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
 #name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_FHN_corr.dat'
 #name_2 = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-name = 'acp_w_0_ADJ_thr_0.26_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+name = 'acp_w_0_ADJ_thr_0.26_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 
 thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 
 					  62, 64, 66, 72, 76, 82 ])
@@ -128,33 +154,33 @@ R_thr =  {}
 for THR in thr_array :
 	R_temp = []
 	
-	#for VEL in vel_array :
-		#local_path = '../data/jobs_corr/'
- 		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
-		
-		#try:
-			#mtx_simuli = load_matrix(local_path + input_name)
-		#except :
-			#R_vel      = np.nan
-		#else :
-			#R_vel      = pearson_coef(mtx_empiri, mtx_simuli)
-			
-		#R_temp     = np.append(R_temp, R_vel)
-	#R_thr[THR] 	   = np.array(R_temp)
-		
-	for SIG in sig_array :
+	for VEL in vel_array :
 		local_path = '../data/jobs_corr/'
-		input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
-	
+ 		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+		
 		try:
 			mtx_simuli = load_matrix(local_path + input_name)
 		except :
-			R_sig      = np.nan
+			R_vel      = np.nan
 		else :
-			R_sig      = pearson_coef(mtx_empiri, mtx_simuli)
-	
-		R_temp     = np.append(R_temp, R_sig)
+			R_vel      = pearson_coef(mtx_empiri, mtx_simuli)
+			
+		R_temp     = np.append(R_temp, R_vel)
 	R_thr[THR] 	   = np.array(R_temp)
+		
+	#for SIG in sig_array :
+		#local_path = '../data/jobs_corr/'
+		#input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
+	
+		#try:
+			#mtx_simuli = load_matrix(local_path + input_name)
+		#except :
+			#R_sig      = np.nan
+		#else :
+			#R_sig      = pearson_coef(mtx_empiri, mtx_simuli)
+	
+		#R_temp     = np.append(R_temp, R_sig)
+	#R_thr[THR] 	   = np.array(R_temp)
 	
 	
 Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
@@ -185,7 +211,7 @@ datam 		= np.array(Ordered_R.values())
 #a = thr_array
 #b = vel_array
 ## title for fhn....
-#pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.1 '+' T = 450 [s]',
+#pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
 		 #fontsize=20)
 ## title for bold...
 ##pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
@@ -202,8 +228,14 @@ datam 		= np.array(Ordered_R.values())
 
 #------------------------------------
 mtx_empiri			= 		load_matrix(input_empiri)		
-figure				=		plot_corr(mtx_empiri , input_empiri)
-#mtx_simuli			= 		load_matrix(input_simuli)
+#figure				=		plot_corr(mtx_empiri , input_empiri)
+mtx_simuli			= 		load_matrix(input_simuli)
+pl.figure(1)
+corr_histo(mtx_empiri, input_empiri)
+
+pl.figure(2)
+corr_histo(mtx_simuli, input_simuli)
+#figure_hist			=		plot_hist(mtx_simuli, input_simuli)
 #R_pearson			= 	    pearson_coef(mtx_empiri , mtx_simuli)
 #print "Pearson corr. coef. between empir.-simul. : " , R_pearson
 #figure_name 		= 		input_simuli[0:-3] + str('eps')	
