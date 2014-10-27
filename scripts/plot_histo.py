@@ -3,7 +3,7 @@
 
 import networkx as nx
 import numpy as np
-from math import factorial 
+from math import factorial, sqrt 
 import matplotlib.pyplot as pl	
 from matplotlib.pyplot import FormatStrFormatter
 import random as rnd
@@ -29,9 +29,9 @@ def corr_histo(corr_matrix, simfile):
 	corr_flat = np.ndarray.flatten(corr_matrix) 
 	corr_max  = 1.0
 	corr_min  = -1.0
-	bin_nu    = 20
+	bin_nu    = 100
 	# a normalized histogram is obtained
-	hist = pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =False, histtype='bar')
+	hist = pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True, histtype='bar')
 	pl.title(simfile)
 	# type(hist) = <type 'tuple'> and len(hist) = 3
 	# y_axis : hist[0] , normalized hist values
@@ -49,6 +49,23 @@ def intersec_hists(HA, HB):
 	# normalize minsum 
 	minsum  = float(minsum) /  sum(HB_norm) 
 	return minsum
+	
+# intersection method to compare two histograms
+def bhatta_hists(HA, HB):
+	y_axis    = 0
+	HA_norm = HA[y_axis]
+	HB_norm = HB[y_axis]
+	N  = len(HA_norm)
+	HA_bar  = sum(HA_norm) / float(N)
+	HB_bar  = sum(HB_norm) / float(N)
+	S1      = 1./ sqrt(HA_bar*HB_bar*N*N)
+	S2      = 0
+	for i in range(0, N) :
+		S2 = S2 + sqrt(HA_norm[i]*HB_norm[i])
+	
+	S3  = sqrt(1 - S1*S2)	
+	return S3
+	
 
 def chi2_hists(HA, HB):
 	# compute the chi-squared distance
@@ -101,7 +118,8 @@ for THR in thr_array :
 			R_vel      = np.nan
 		else :
 			#R_vel      = intersec_hists(HistA, HistB)
-			R_vel      = chi2_hists(HistA, HistB)
+			#R_vel      = chi2_hists(HistA, HistB)
+			R_vel      = bhatta_hists(HistA, HistB)
 			
 		R_temp     = np.append(R_temp, R_vel)
 	R_thr[THR] 	   = np.array(R_temp)	
@@ -138,7 +156,7 @@ b = vel_array
 # title for fhn....
 #pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
 #		 fontsize=20)
-pl.title('A_aal_0...' + ' , FHN , chi^2 test, bins=20' + '$\sigma$ = 0.2', fontsize=20)
+pl.title('A_aal_0...' + ' , FHN , batta test, bins=100' + '$\sigma$ = 0.2', fontsize=20)
 pl.ylabel('v [m/s]', fontsize=20)
 
 pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
