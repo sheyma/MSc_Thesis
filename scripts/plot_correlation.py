@@ -74,8 +74,8 @@ def intersec_hists(HA, HB):
 	minsum  = 0
 	for i in range(0, len(HA_norm)) :
 		minsum = minsum + min(HA_norm[i], HB_norm[i])
-	#minsum  = float(minsum) / (min( sum(HA_norm), sum(HB_norm) ))
-	minsum  = float(minsum) /  sum(HA_norm) 
+	# normalize minsum 
+	minsum  = float(minsum) /  sum(HB_norm) 
 	print "minsum : ", minsum
 	return minsum
 
