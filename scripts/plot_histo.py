@@ -115,11 +115,15 @@ mtx_empiri = load_matrix(input_empiri)
 HistA      = corr_histo(mtx_empiri, input_empiri)
 
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
-name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_FHN_corr.dat'
+#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_FHN_corr.dat'
+name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=110.0_tmax=45000_FHN_corr.dat'
 
-thr_array = np.array([54, 56, 58, 60, 62, 63, 64, 65, 66])					                        
+#thr_array = np.array([54, 56, 58, 60, 62, 63, 64, 65, 66])					                        
+#vel_array = np.array([30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
 
-vel_array = np.array([30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
+thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 
+					  62, 64, 66, 72, 76, 82 ])
+vel_array = np.array([30, 50, 70, 90, 110, 130, 150])
 
 sig_array = np.array([0.1, 0.3, 0.5, 0.9])
 
@@ -131,8 +135,10 @@ for THR in thr_array :
 	
 	for VEL in vel_array :
 		local_path   = '../data/jobs_corr/'
- 		input_simuli = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
-		
+ 		#input_simuli = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+		print str(THR)
+		input_simuli = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[43:]	
+		print input_simuli
 		try:
 			mtx_simuli = load_matrix(local_path + input_simuli)
 			HistB      = corr_histo(mtx_simuli, input_simuli)
@@ -160,7 +166,7 @@ datam 		= np.array(Ordered_R.values())
 fig, ax = pl.subplots()
 cmap    = pl.cm.jet
 #pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', vmin=0.0, vmax=0.48, aspect='auto')
-pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet',  aspect='auto')
+pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
 ## PLOT PA OVER SIGMA
