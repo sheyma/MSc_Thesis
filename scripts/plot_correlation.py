@@ -54,15 +54,30 @@ def plot_corr(corr_matrix, simfile ):
 	return  	
 
 def corr_histo(corr_matrix, simfile):
+	# merge 2D corr_matrix into 1D numpy array by flatten
 	corr_flat = np.ndarray.flatten(corr_matrix) 
 	corr_max  = 1.0
 	corr_min  = -1.0
 	bin_nu    = 20
-	# a normalized histogram is obtained, type(hist) = <type 'tuple'>
+	# a normalized histogram is obtained
 	hist = pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True, histtype='bar')
 	pl.title(simfile)
-	print hist
+	# type(hist) = <type 'tuple'> and len(hist) = 3
+	# y_axis : hist[0] , normalized hist values
+	# x_axis : hist[1] , start points of bins 
 	return hist
+
+def intersec_hists(HA, HB):
+	y_axis    = 0
+	HA_norm = HA[y_axis]
+	HB_norm = HB[y_axis]
+	minsum  = 0
+	for i in range(0, len(HA_norm)) :
+		minsum = minsum + min(HA_norm[i], HB_norm[i])
+	#minsum  = float(minsum) / (min( sum(HA_norm), sum(HB_norm) ))
+	minsum  = float(minsum) /  sum(HA_norm) 
+	print "minsum : ", minsum
+	return minsum
 
 def chi2_distance(histA, histB, eps = 1e-10):
 	# compute the chi-squared distance
@@ -244,9 +259,10 @@ mtx_empiri			= 		load_matrix(input_empiri)
 mtx_simuli			= 		load_matrix(input_simuli)
 pl.figure(1)
 HistA = corr_histo(mtx_empiri, input_empiri)
-print type(HistA)
-#pl.figure(2)
-#HistB = corr_histo(mtx_simuli, input_simuli)
+pl.figure(2)
+HistB = corr_histo(mtx_simuli, input_simuli)
+intersec_hists(HistA, HistB)
+
 #chi2_distance(HistA, HistB, eps = 1e-10)
 #figure_hist			=		plot_hist(mtx_simuli, input_simuli)
 #R_pearson			= 	    pearson_coef(mtx_empiri , mtx_simuli)
