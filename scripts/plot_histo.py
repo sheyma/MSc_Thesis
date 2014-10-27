@@ -51,6 +51,23 @@ def intersec_hists(HA, HB):
 	minsum  = float(minsum) /  sum(HB_norm) 
 	return minsum
 	
+def correl_hists(HA, HB):
+	y_axis    = 0
+	HA_norm = HA[y_axis]
+	HB_norm = HB[y_axis]
+	N  = len(HA_norm)
+	HA_bar  = sum(HA_norm) / float(N)
+	HB_bar  = sum(HB_norm) / float(N)
+	tmp1    = 0 
+	tmp2    = 0
+	tmp3	= 0
+	for i in range(0, N) : 
+		tmp1 = tmp1 + (HA_norm[i] - HA_bar) * (HB_norm[i] - HB_bar)
+		tmp2 = tmp2 + pow((HA_norm[i] - HA_bar) , 2)
+		tmp3 = tmp3 + pow((HB_norm[i] - HB_bar) , 2)
+	d = float(tmp1) / sqrt(tmp2 * tmp3)
+	return d 
+	
 # Bhattacharyya method to compare two histograms
 # HA and HB must be normalized histograms
 def bhatta_hists(HA, HB):
@@ -123,8 +140,9 @@ for THR in thr_array :
 			R_vel      = np.nan
 		else :
 			#R_vel      = intersec_hists(HistA, HistB)
-			R_vel      = chi2_hists(HistA, HistB)
+			#R_vel      = chi2_hists(HistA, HistB)
 			#R_vel      = bhatta_hists(HistA, HistB)
+			R_vel = correl_hists(HistA, HistB)
 			
 		R_temp     = np.append(R_temp, R_vel)
 	R_thr[THR] 	   = np.array(R_temp)	
@@ -161,7 +179,7 @@ b = vel_array
 # title for fhn....
 #pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
 #		 fontsize=20)
-pl.title('A_aal_0...' + ' , FHN , chi^2 test, bins=100' + '$\sigma$ = 0.2', fontsize=20)
+pl.title('A_aal_0...' + ' , FHN , correl. test, bins=100' + '$\sigma$ = 0.2', fontsize=20)
 pl.ylabel('v [m/s]', fontsize=20)
 
 pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
