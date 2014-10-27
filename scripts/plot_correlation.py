@@ -57,9 +57,11 @@ def corr_histo(corr_matrix, simfile):
 	corr_flat = np.ndarray.flatten(corr_matrix) 
 	corr_max  = 1.0
 	corr_min  = -1.0
-	bins = np.linspace(corr_min, corr_max, 20)
-	hist = pl.hist(corr_flat, bins, normed =True, histtype='bar')
+	bin_nu    = 20
+	# a normalized histogram is obtained, type(hist) = <type 'tuple'>
+	hist = pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True, histtype='bar')
 	pl.title(simfile)
+	print hist
 	return hist
 
 def chi2_distance(histA, histB, eps = 1e-10):
@@ -242,10 +244,10 @@ mtx_empiri			= 		load_matrix(input_empiri)
 mtx_simuli			= 		load_matrix(input_simuli)
 pl.figure(1)
 HistA = corr_histo(mtx_empiri, input_empiri)
-
-pl.figure(2)
-HistB = corr_histo(mtx_simuli, input_simuli)
-chi2_distance(HistA, HistB, eps = 1e-10)
+print type(HistA)
+#pl.figure(2)
+#HistB = corr_histo(mtx_simuli, input_simuli)
+#chi2_distance(HistA, HistB, eps = 1e-10)
 #figure_hist			=		plot_hist(mtx_simuli, input_simuli)
 #R_pearson			= 	    pearson_coef(mtx_empiri , mtx_simuli)
 #print "Pearson corr. coef. between empir.-simul. : " , R_pearson
