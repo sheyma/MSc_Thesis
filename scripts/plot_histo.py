@@ -23,6 +23,7 @@ def load_matrix(file):
 		raise ValueError
 	return AT
 
+
 def corr_histo(corr_matrix, simfile):
 	# merge 2D corr_matrix into 1D numpy array by flatten
 	corr_flat = np.ndarray.flatten(corr_matrix) 
@@ -30,7 +31,8 @@ def corr_histo(corr_matrix, simfile):
 	corr_min  = -1.0
 	bin_nu    = 20
 	# a normalized histogram is obtained
-	hist = pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True, histtype='bar')
+	hist = pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =False, histtype='bar')
+	pl.title(simfile)
 	# type(hist) = <type 'tuple'> and len(hist) = 3
 	# y_axis : hist[0] , normalized hist values
 	# x_axis : hist[1] , start points of bins 
@@ -48,13 +50,17 @@ def intersec_hists(HA, HB):
 	minsum  = float(minsum) /  sum(HB_norm) 
 	return minsum
 
-def chi2_distance(histA, histB, eps = 1e-10):
+def chi2_hists(HA, HB):
 	# compute the chi-squared distance
-	d = 0.5 * np.sum([((a - b) ** 2) / (a + b + eps)
-	for (a, b) in zip(histA, histB)])
- 
-	# return the chi-squared distance
-	return d
+	y_axis    = 0
+	HA_norm = HA[y_axis]
+	HB_norm = HB[y_axis]
+	squsum  = 0
+	eps = 1e-10
+	for i in range(0, len(HA_norm)) :
+		tmp = 0.5 * pow((HA_norm[i] - HB_norm[i]) , 2) / float(HA_norm[i] + HA_norm[i] + eps)
+		squsum = squsum + tmp
+	return squsum
 		
 if __name__ == '__main__':
 	usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
@@ -70,7 +76,7 @@ mtx_empiri = load_matrix(input_empiri)
 HistA      = corr_histo(mtx_empiri, input_empiri)
 
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
-name       = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_FHN_corr.dat'
+name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=90.0_tmax=45000_FHN_corr.dat'
 
 thr_array = np.array([54, 56, 58, 60, 62, 63, 64, 65, 66])					                        
 
@@ -94,7 +100,8 @@ for THR in thr_array :
 		except :
 			R_vel      = np.nan
 		else :
-			R_vel      = intersec_hists(HistA, HistB)
+			#R_vel      = intersec_hists(HistA, HistB)
+			R_vel      = chi2_hists(HistA, HistB)
 			
 		R_temp     = np.append(R_temp, R_vel)
 	R_thr[THR] 	   = np.array(R_temp)	
@@ -111,7 +118,8 @@ datam 		= np.array(Ordered_R.values())
 # PLOTTING BEGINS ! 
 fig, ax = pl.subplots()
 cmap    = pl.cm.jet
-pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', vmin=0.0, vmax=0.48, aspect='auto')
+#pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', vmin=0.0, vmax=0.48, aspect='auto')
+pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet',  aspect='auto')
 cbar = pl.colorbar()
 
 ## PLOT PA OVER SIGMA
@@ -130,8 +138,7 @@ b = vel_array
 # title for fhn....
 #pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
 #		 fontsize=20)
-# title for bold...
-#pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
+pl.title('A_aal_0...' + ' , FHN , chi^2 test, bins=20' + '$\sigma$ = 0.2', fontsize=20)
 pl.ylabel('v [m/s]', fontsize=20)
 
 pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
@@ -149,5 +156,8 @@ pl.show()
 #HistA = corr_histo(mtx_empiri, input_empiri)
 #pl.figure(2)
 #HistB = corr_histo(mtx_simuli, input_simuli)
-#intersec_hists(HistA, HistB)
-#chi2_distance(HistA, HistB, eps = 1e-10)
+#print intersec_hists(HistA, HistB)
+#print chi2_distance(HistA, HistB)
+
+#pl.show()
+
