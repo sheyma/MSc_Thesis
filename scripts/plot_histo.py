@@ -39,6 +39,7 @@ def corr_histo(corr_matrix, simfile):
 	return hist
 
 # intersection method to compare two histograms
+# HA and HB must be normalized histograms
 def intersec_hists(HA, HB):
 	y_axis    = 0
 	HA_norm = HA[y_axis]
@@ -50,7 +51,8 @@ def intersec_hists(HA, HB):
 	minsum  = float(minsum) /  sum(HB_norm) 
 	return minsum
 	
-# intersection method to compare two histograms
+# Bhattacharyya method to compare two histograms
+# HA and HB must be normalized histograms
 def bhatta_hists(HA, HB):
 	y_axis    = 0
 	HA_norm = HA[y_axis]
@@ -75,8 +77,11 @@ def chi2_hists(HA, HB):
 	squsum  = 0
 	eps = 1e-10
 	for i in range(0, len(HA_norm)) :
-		tmp = 0.5 * pow((HA_norm[i] - HB_norm[i]) , 2) / float(HA_norm[i] + HA_norm[i] + eps)
-		squsum = squsum + tmp
+		tmp1 = pow((HA_norm[i] - HB_norm[i]) , 2) 
+		tmp2 = HA_norm[i] + HB_norm[i]
+		if tmp2 == 0 :
+			tmp2 = eps
+		squsum = squsum + tmp1 / float(tmp2)
 	return squsum
 		
 if __name__ == '__main__':
@@ -118,8 +123,8 @@ for THR in thr_array :
 			R_vel      = np.nan
 		else :
 			#R_vel      = intersec_hists(HistA, HistB)
-			#R_vel      = chi2_hists(HistA, HistB)
-			R_vel      = bhatta_hists(HistA, HistB)
+			R_vel      = chi2_hists(HistA, HistB)
+			#R_vel      = bhatta_hists(HistA, HistB)
 			
 		R_temp     = np.append(R_temp, R_vel)
 	R_thr[THR] 	   = np.array(R_temp)	
@@ -156,7 +161,7 @@ b = vel_array
 # title for fhn....
 #pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
 #		 fontsize=20)
-pl.title('A_aal_0...' + ' , FHN , batta test, bins=100' + '$\sigma$ = 0.2', fontsize=20)
+pl.title('A_aal_0...' + ' , FHN , chi^2 test, bins=100' + '$\sigma$ = 0.2', fontsize=20)
 pl.ylabel('v [m/s]', fontsize=20)
 
 pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
