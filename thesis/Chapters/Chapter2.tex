@@ -8,30 +8,30 @@
 
 %----------------------------------------------------------------------------------------
 
-\section{Empirical functional and anatomical connectivity matrices}
 
-\section{Randomization Methods and Network Characterizations}
+\textit{Graph theory} is a mathematical field applicable to a considerable diversity of complex systems such as markets, ecosystems, computer circuits, and gene-gene interactions [Barabasi, 2009]. A graph is defined as an ensemble of vertices (nodes) that are linked with edges. If the edges connect the nodes in a specified direction, the graph is referred to as \textit{directed}, otherwise \textit{undirected}. Moreover, the edges can be assigned a weight yielding a \textit{weighted} graph. A graph with edges of uniform weight is called an \textit{unweighted} graph.
 
-\textit{Graph theory} is a mathematical study applicable on a considerable diversity of complex systems such as markets, ecosystems, computer circuits, and gene-gene interactions [Barabasi, 2009]. A graph is defined as an assemble of vertices (nodes) that are linked with edges. If the edges connect the nodes in a specified direction, the graph is referred as \textit{directed}, otherwise \textit{undirected}. Moreover, the links can be assigned a weight implying a \textit{weighted} graph. A graph with homogenous links excluding any weight on its edges is identified as \textit{unweighted} graph.
-
-\textit{Network science} is a subfield of graph theory applied on a   
-distinct complex domain. Unlike classical graph theory, the analysis in network science primarily deals with real life networks that are large and complex - neither uniformly random nor ordered [RUB10]. The neuro-anatomical and neuro-physiological data sets derived from  DW-MRI and fMRI-BOLD techniques can be constructed as such large-scale complex brain graphs, that are undirected and unweighted. Nodes in large-scale brain networks usually represent brain regions, while links represent anatomical, functional or effective connections (Friston, 1994). 
+\textit{Network science} incorporates graph theory applied on a   
+distinct complex domain. Unlike classical graph theory, network science primarily deals with real life networks that are large and complex - neither uniformly random nor ordered [RUB10]. The neuro-anatomical and neuro-physiological data sets derived from  DW-MRI and fMRI-BOLD techniques can be constructed as such large-scale complex brain graphs that are undirected and unweighted. Nodes in large-scale brain networks usually represent brain regions, while edges represent anatomical, functional or effective connections (Friston, 1994). 
 
 
-A brain network can be statistically identified in terms of its topological features, that are concerned with the arrangement of homogeneous nodes and edges staying stationary independent of their spatial positions. The topological network measurements described in previous studies present local and global properties of a network, i.e. local and global efficiency, clustering coefficient, transitivity and small-worldness etc.[LAT01, WAT98, NEW03, HUM08].
+A brain network can be statistically described in terms of its topology, i.e. solely in terms of its connectivity and independently of spatial positions of nodes and edges. Topological measures described in previous studies capture local and global properties of a network, e.g. local and global efficiency, clustering coefficient, transitivity and small-worldness [LAT01, WAT98, NEW03, HUM08].
 
 
-Methods of graph theory applied to structural and functional systems have shown that both share typical features of many complex networks [BUL09, RUB09, HEU11, VUK14]. However, the underlying phenomena of brain's connectivity still remains to be ambiguous both for functional and structural maps. In this project, it is aimed to investigate at least that brain does not behave as a completely random circuitry. This idea will be tested by comparing brain graphs to the randomized networks as it was previously noticed by Bullmore and Bassett [BUL11a]. The majority of random graphs here are constructed with the inspirations from  Erd\H{o}s-R\'{e}nyi type random networks and the configuration model. 
+Methods of graph theory applied to structural and functional systems have shown that both share typical features of many complex networks [BUL09, RUB09, HEU11, VUK14]. However, the essential features of brain's connectivity still remain ambiguous both for functional and structural maps. This project aims to investigate whether the brain does not behave as a completely random circuitry. This idea will be tested by comparing brain graphs to the randomized networks as it was previously noticed by Bullmore and Bassett [BUL11a]. The majority of random graphs here are inspired by  Erd\H{o}s-R\'{e}nyi type random networks and the configuration model. 
  
 
-In this section, the construction of brain graphs based on empirical functional connectivity matrix (FCM) and anatomical connectivity matrix (ACM) will be first introduced. Then, the topological characteristics of all the graphs will be statistically measured and those topological metrics will be interpreted neuro-biologically. In particular, it is aimed to explore such conditions that distinguish brain network topologies from that of random networks. This approach is expected to provide a deeper insight into the underlying process involved in the observed functional and structural brain connectivity. 
+In this section, the construction of brain graphs based on empirical functional connectivity matrix (FCM) and anatomical connectivity matrix (ACM) will be first introduced. Then, the topological characteristics of all graphs will be statistically measured and those topological measures will be interpreted neuro-biologically. In particular, it is aimed to explore under which conditions that brain network topologies distinguish from random networks. This approach is expected to provide a deeper insight into the underlying process involved in the observed functional and structural brain connectivity. 
 
 
-\subsection{The Brain Graph}
+\section{Empirical functional and anatomical connectivity matrices}
 
-The brain graphs are derived from the two sets of empirical brain connectivity maps; FCM and ACM derived from fMRI-BOLD and DW-MRI tecniques respectively. Those data sets represent measurements from $N=90$ cortical and sub-cortical regions labeled with AAL, the equivalent terminology is so called "nodes" in the network science. The nodes can be connected to each other by means of "edges". If the graph is constructed on the FCM, the edge is interpreted as the correlation strength between the functional BOLD activity of the two nodes. If the graph is built on the ACM, an existing edge is considered as the probability of two nodes to be structurally connected by fiber tracks in white matter.
 
-The brain graphs in this project are generated after binarizing the functional connectivity matrix (FCM) and anatomical connectivity matrix (ACM). Binarization here means converting all the values in a given matrix into 1's and 0's via thresholding. Because of the nature of their definition, both empirical data sets have values between 0 and 1, reflecting a correlation rate in case of FCM or a probability value in case of ACM. We define arbitrarily a threshold value, $r$, for the strength of correlations in FCM. Then, the values greater and equal to $r$ are assigned to 1, while others are set to 0. This thresholding is applied by means of the strength of probability value, $p$, for the ACM. The binarized matrix is the basis of brain graph construction, and it is better called as "adjacency matrix". \textsc{Networkx} software package in \textsc{PYTHON} is used to built graphs given adjacency matrices. Neither the direction of functional or anatomical connectivity between nodes, nor any other values apart from 0 and 1  are considered in adjacency matrices, the resultant graphs are therefore classified in "undirected" and "unweighted" category. In other words, all the existing edges are thought to be homogeneously strong and it is possible to move in two opposite directions along an edge. 
+\section{The Brain Graph}
+
+The brain graphs considered here are derived from two sets of empirical brain connectivity maps: FCM and ACM obtained from fMRI-BOLD and DW-MRI techniques, respectively. Those data sets represent measurements from $N=90$ cortical and sub-cortical regions labeled with AAL, represented by nodes in the graph. The nodes can be connected to each other by means of "edges". If the graph is constructed on the FCM, edges are interpreted as correlation strengths between the functional BOLD activity of two nodes. If the graph is built on the ACM, an existing edge is considered as the probability of two nodes to be structurally connected by fiber tracks in white matter.
+
+The brain graphs in this project are generated through binarizing the functional connectivity matrix (FCM) and anatomical connectivity matrix (ACM). Binarization here means converting all the values in a given matrix into 1's and 0's via thresholding. Because of the nature of their definition, both empirical data sets have values between 0 and 1, reflecting a correlation strength in case of FCM or a probability value in case of ACM. We arbitrarily define a threshold value $r$ for the strength of correlations in FCM. Then, the values greater and equal to $r$ are assigned the value 1, while others are set to 0. This thresholding is applied by means of the strength of probability value, $p$, for the ACM. The binarized matrix is the basis of brain graph construction, and it is commonly known as \textit{adjacency matrix}. The \textsc{Networkx} software package in \textsc{PYTHON} is used to built graphs given adjacency matrices. Neither the direction of functional or anatomical connectivity between nodes, nor any other values apart from 0 and 1  are encoded in the adjacency matrices,  so that the resulting graphs are considered as "undirected" and "unweighted". In other words, all existing edges are thought to be of uniform weight and nodes interact both ways along an edge connecting them. 
 
 \begin{figure}[htbp]
  %\begin{tabular}{cc}
@@ -44,14 +44,22 @@ The brain graphs in this project are generated after binarizing the functional c
 	%\includegraphics[width=0.48\textwidth]{Figures/adj_mtx.png} \\
     
     \rule{35em}{0.5pt}
-  \caption[Binarizing via thresholding]{How to build a brain graph : The empirical data matrix derived from fMRI-BOLD technique (on the upper left) is binarized via a threshold value $r=0.55$ and its corresponding adjacency matrix is obtained (on the upper right). The black spots represent 1's meaning edges between nodes, whereas the white squares represent 0's implying no connectivity. The brain graph is derived from the adjacency matrix (on the bottom) has $N=90$ nodes, the links represent the functionally connected node pairs.}
-  \label{fig:Electron}
+  \caption[Binarizing via thresholding]{How to build a brain graph : The empirical data matrix derived from fMRI-BOLD technique (on the upper left) is binarized via a threshold value $r=0.55$ and its corresponding adjacency matrix is obtained (on the upper right). The black spots represent 1's indicating edges between nodes, whereas the white squares represent 0's implying no connectivity. The brain graph derived from the adjacency matrix (on the bottom) has $N=90$ nodes, edges represent functionally connected node pairs.}
+  \label{fig:Binarizing via thresholding}
  %\end{tabular}	
 \end{figure}
 
-Figure 2.1 illustrates the construction of a brain graph exemplary for the FCM. All the correlation values among the brain nodes in the empirical fMRI-BOLD data lie between 0 and 1. The adjacency matrix (AM) is filled out only with 1's and 0's indicating functionally connected and unconnected nodes, whose correlated BOLD activity is equal to or greater than $r=0.55$. The algorithm \textsc{Networkx} builds the corresponding graph of an adjacency matrix. It should be noted that both FCM and AM are symmetric. The diagram of obtaining a brain graph based on ACM would be the same, but the adjacency matrix of ACM would represent the probability of two nodes to be anatomically connected over a predefined probability threshold $p$. 
+Figure 2.1 illustrates the exemplary construction of a brain graph exemplary from the FCM. All the correlation values among the cortical and sub-cortical regions in the empirical fMRI-BOLD data lie between 0 and 1. The adjacency matrix (AM) is filled out only with 1's and 0's indicating functionally connected and unconnected nodes, whose correlated BOLD activity is equal to or greater than $r=0.55$. The algorithm \textsc{Networkx} builds the corresponding graph of an adjacency matrix. It should be noted that both FCM and AM are symmetric. The AM obtained from an ACM would look similar, but would represent the probability of two nodes to be anatomically connected above a predefined threshold $p$. 
 
-The following sections will cover the randomization methods rebuilding the brain graphs and introduce some of the topological concepts identifying brain graphs as well as random networks.
+The following sections will cover randomization methods reshuffling the brain graphs and introduce some of the topological concepts characterizing brain graphs as well as random networks.
+
+
+
+\section{Randomization Methods}
+
+
+
+
 
 \subsection{Erd\H{o}s-R\'{e}nyi Type Randomization}
 
@@ -154,6 +162,8 @@ The brain graph and randomly generated graphs will be identified in terms of the
 \label{table:Abbreviations}
 \end{center}
 \end{table}	
+
+\section{Network Characterizations}
 
 \subsection{Network Density}
 The \textit{average degree} $\langle k \rangle$ of a network indicates the ratio of total number of edges $L$ to total number of nodes $N$ in a graph. 
