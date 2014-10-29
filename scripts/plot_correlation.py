@@ -17,6 +17,7 @@ import networkx as nx
 import numpy as np
 from math import factorial 
 import matplotlib.pyplot as pl	
+from matplotlib import colors
 from matplotlib.pyplot import FormatStrFormatter
 import random as rnd
 import sys  
@@ -35,23 +36,51 @@ def load_matrix(file):
 		raise ValueError
 	return AT
 	
-# plots colorbar coded EMRPIRICAL correlation matrix (fMRI-BOLD data)
-def plot_corr(corr_matrix, simfile ):	
+# plots colorbar coded EMRPIRICAL correlation matrix 
+def plot_corr(adj_matrix, simfile ):	
 	N_col  = np.shape(corr_matrix)[1]
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
-	pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
+	pl.imshow(corr_matrix, interpolation='nearest', vmin=0.0, vmax=1.0, extent=extend)
 	cbar = pl.colorbar()
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(50)
 	pl.xticks(fontsize = 50)
 	pl.yticks(fontsize = 50)
-	pl.suptitle('FCM (BOLD-fMRI)', fontsize= 50)
+	pl.suptitle('ACM (DW-MRI)', fontsize= 50)
+	#pl.suptitle('FCM (fMRI-BOLD)', fontsize= 50)
 	pl.xlabel('Nodes', fontsize = 50)
 	pl.ylabel('Nodes', fontsize = 50)
 	#image_name = simfile[0:-4] + '_CORR.eps'	
 	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
 	#pl.show()
 	return  	
+
+# plots ADJACENCY matrix black - white 
+def plot_adj(corr_matrix, simfile ):	
+	N_col  = np.shape(corr_matrix)[1]
+	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
+	cmap = colors.ListedColormap(['white', 'black'])
+	bounds=[0, 0.5, 1]
+	norm = colors.BoundaryNorm(bounds, cmap.N)
+	img = pl.imshow(corr_matrix, interpolation='nearest', origin='lower',
+                    cmap=cmap, norm=norm)
+
+	# make a color bar
+	cbar = pl.colorbar(img, cmap=cmap, norm=norm, boundaries=bounds, ticks=[0, 1])
+	
+	for t in cbar.ax.get_yticklabels():
+		t.set_fontsize(50)
+	pl.xticks(fontsize = 50)
+	pl.yticks(fontsize = 50)
+	#pl.suptitle('ACM (DW-MRI)', fontsize= 50)
+	##pl.suptitle('FCM (fMRI-BOLD)', fontsize= 50)
+	pl.xlabel('Nodes', fontsize = 50)
+	pl.ylabel('Nodes', fontsize = 50)
+	#image_name = simfile[0:-4] + '_CORR.eps'	
+	##pl.savefig(simfile[0:-4]+'.eps', format="eps")
+	##pl.show()
+	return  
+
 
 # calculating Pearson's corr. coef. for two given matrices
 # matrix_A : simulated neuronal activity correlations, 1's on diagonal
@@ -103,95 +132,97 @@ if __name__ == '__main__':
 		print usage
 		sys.exit(1)
 		
-# fMRI-BOLD input matrix load , this is a correlation matrix already
-mtx_empiri		=		load_matrix(input_empiri)
+## fMRI-BOLD input matrix load , this is a correlation matrix already
+#mtx_empiri		=		load_matrix(input_empiri)
 
-# loading correl. mtx. of fhn time series (output of correlation_fhn.py)
-name = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-#name = 'acp_w_h_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+## loading correl. mtx. of fhn time series (output of correlation_fhn.py)
+#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+##name = 'acp_w_h_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 
-thr_array = np.array([54, 56, 58, 60, 62, 63, 64, 65, 66])					                        
-vel_array = np.array([40, 50, 60, 70, 80])
-sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
+#thr_array = np.array([54, 56, 58, 60, 62, 63, 64, 65, 66])					                        
+#vel_array = np.array([40, 50, 60, 70, 80])
+#sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
 
-#thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 
-#					  62, 64, 66, 72, 76, 82 ])
-#vel_array = np.array([30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
-#sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+##thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 
+##					  62, 64, 66, 72, 76, 82 ])
+##vel_array = np.array([30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
+##sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
 
-R_thr =  {}
+#R_thr =  {}
 
-for THR in thr_array :
-	R_temp = []
+#for THR in thr_array :
+	#R_temp = []
 	
-	for VEL in vel_array :
-		local_path = '../data/jobs_corr/'
-		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]	
- 		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[43:]		
-
-	#for SIG in sig_array :
+	#for VEL in vel_array :
 		#local_path = '../data/jobs_corr/'
-		#input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
+		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]	
+ 		##input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[43:]		
+
+	##for SIG in sig_array :
+		##local_path = '../data/jobs_corr/'
+		##input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
 	
-		try:
-			mtx_simuli = load_matrix(local_path + input_name)
-		except :
-			R_val      = np.nan
-		else :
-			R_val      = pearson_coef(mtx_empiri, mtx_simuli)
+		#try:
+			#mtx_simuli = load_matrix(local_path + input_name)
+		#except :
+			#R_val      = np.nan
+		#else :
+			#R_val      = pearson_coef(mtx_empiri, mtx_simuli)
 	
 		
-		R_temp     = np.append(R_temp, R_val)
-	R_thr[THR] 	   = np.array(R_temp)
+		#R_temp     = np.append(R_temp, R_val)
+	#R_thr[THR] 	   = np.array(R_temp)
 
 
 	
-Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-#print "Ordered dict"
-#print Ordered_R
+#Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
+##print "Ordered dict"
+##print Ordered_R
 
-datam 		= np.array(Ordered_R.values())
+#datam 		= np.array(Ordered_R.values())
 
-#print "check its numpy array version"
-#print datam
+##print "check its numpy array version"
+##print datam
 
-# PLOTTING BEGINS ! 
-fig , ax = pl.subplots()
-pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
-cbar = pl.colorbar()
+## PLOTTING BEGINS ! 
+#fig , ax = pl.subplots()
+#pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
+#cbar = pl.colorbar()
 
-# PLOT PA OVER SIGMA
-a = thr_array
-b = sig_array
-# title for fhn....
-pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s] '+' T = 450 [s]',
-		 fontsize=20)
-# title for bold...
-#pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s]', fontsize=20)
-pl.ylabel('$\sigma$ ', fontsize=20)
-
-## PLOT PA OVER VELOCITY
+## PLOT PA OVER SIGMA
 #a = thr_array
-#b = vel_array
-### title for fhn....
-##pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
-##		 fontsize=20)
-### title for bold...
-##pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
-#pl.ylabel('v [m/s]', fontsize=20)
+#b = sig_array
+## title for fhn....
+#pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s] '+' T = 450 [s]',
+		 #fontsize=20)
+## title for bold...
+##pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s]', fontsize=20)
+#pl.ylabel('$\sigma$ ', fontsize=20)
 
-pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
-pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-pl.xlabel('thr', fontsize = 20)
-for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(15)
-pl.xticks(fontsize = 15)
-pl.yticks(fontsize = 15)
-pl.show()		
+### PLOT PA OVER VELOCITY
+##a = thr_array
+##b = vel_array
+#### title for fhn....
+###pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
+###		 fontsize=20)
+#### title for bold...
+###pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
+##pl.ylabel('v [m/s]', fontsize=20)
+
+#pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
+#pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
+#pl.xlabel('thr', fontsize = 20)
+#for t in cbar.ax.get_yticklabels():
+	#t.set_fontsize(15)
+#pl.xticks(fontsize = 15)
+#pl.yticks(fontsize = 15)
+#pl.show()		
 
 #------------------------------------
-#mtx_empiri			= 		load_matrix(input_empiri)		
+mtx_empiri			= 		load_matrix(input_empiri)		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
+# plot_adj gets and "adjacency matrix"
+figure				=		plot_adj(mtx_empiri , input_empiri)
 #mtx_simuli			= 		load_matrix(input_simuli)
 
 
@@ -200,4 +231,4 @@ pl.show()
 #figure_name 		= 		input_simuli[0:-3] + str('eps')	
 #print figure_name
 #pl.title('A_aal, 0-V , FHN \nthr=0.53 , $\sigma$ = 0.02 , tmax=450[s] v = 7 [m/s]', fontsize=20)
-#pl.show()
+pl.show()
