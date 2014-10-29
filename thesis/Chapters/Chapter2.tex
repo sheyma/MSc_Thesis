@@ -26,14 +26,40 @@ In this section, the construction of brain graphs based on empirical functional 
 
 \section{Empirical functional and anatomical connectivity matrices}
 
-The functional-magnetic-resonance-imaging (fMRI) is a widely used method to detect the blood-oxygen-level-dependent (BOLD) contrast in the brain. The fMRI-BOLD contrast is used to interpret the neuronal activity in the respective voxel, which can be consireded as a rectangular volume in brain defined for the imaging studies. The ongoing firing activity of neurons requires energy and it is supplied by neighboring blood cells via oxygen and glucose release into the nerve cells. The deviations in deoxygenation level, cerebral flow and volume in blood vessels due to neuronal activity, known as \textit{hemodynamic process}, cause a change in the detected fMRI-BOLD signal strength. The functional connectivity matrix (FCM) represents correlation coefficients of these fMRI-BOLD signals detected from the pre-defined brain regions with voxels. 
+The functional-magnetic-resonance-imaging (fMRI) is a widely used method to detect the blood-oxygen-level-dependent (BOLD) contrast in the brain. The fMRI-BOLD contrast is used to interpret the neuronal activity in the respective voxel, which can be considered as a rectangular volume in brain defined for the imaging studies. The ongoing firing activity of neurons requires energy and it is supplied by neighboring blood cells via oxygen and glucose release into the nerve cells. The deviations in deoxygenation level, cerebral flow and volume in blood vessels due to neuronal activity, known as \textit{hemodynamic process}, cause a change in the detected fMRI-BOLD signal strength. The functional connectivity matrix (FCM) represents correlation coefficients of these fMRI-BOLD signals detected from the pre-defined brain regions with voxels. 
 
-The resting state empirical FCM used in this project is obtained from the \textit{1000 Functional Connectome Project} website \url{http://www.nitric.org/}). The human brain is segmented into $N=90$ cortical and subcortical regions according to the Tzourio-Mazoyer brain atlas [Tzourio-Mazoyer et.al 2002] with the automated anatomical labelling (AAL) template, such that regions with index $n={1,2,...,45}$ lie on the right hemisphere, whereas $n={46,47,...,90}$ on the left. The fMRI-BOLD activity is measured from all voxels in an AAL region for 7.5 min of acquisition time. Once the fMRI-BOLD mean timeseries are obtained for all AAL regions, then the FCM is obtained by calculating the Pearson correlation coefficients of timeseries between all pairs in 90 AAL regions. Therefore the size of FCM is $NXN = 90X90$.  To be more precise, BOLD-fMRI signal is averaged for the same subject over voxels in an AAL region, and FCM is averaged over all subjects at the end. 
+The resting state empirical FCM used in this project is obtained from the \textit{1000 Functional Connectome Project} website \url{http://www.nitric.org/}). The human brain is segmented into $N=90$ cortical and sub-cortical regions according to the Tzourio-Mazoyer brain atlas [Tzourio-Mazoyer et.al 2002] with the automated anatomical labeling (AAL) template, such that regions with index $n=\{1,2,...,45\}$ lie on the right hemisphere, whereas $n=\{46,47,...,90\}$ on the left. The fMRI-BOLD activity is measured from all voxels in an AAL region for 7.5 min of acquisition time. Once the fMRI-BOLD mean time-series are obtained for all AAL regions, then the FCM is obtained by calculating the Pearson correlation coefficients of timeseries between all pairs in 90 AAL regions. Therefore the size of FCM is $N\times N = 90 \times 90$.  To be more precise, BOLD-fMRI signal is averaged for the same subject over voxels in an AAL region, and FCM is averaged over all subjects at the end. 
 
 The diffusion-weighted magnetic-resonance-imaging (DW-MRI) technique estimates the anatomical connection probabilities among brain regions by investigating the diffusion direction of water molecules within a voxel. The direction of the fiber tracks in white matter depends on the diffusion pattern of water molecules. A DW-MRI experiment approximates the existence of a fiber track between regions of interest. The anatomical connectivity matrix (ACM) used in this project is obtained from the study of Iturria-Medina et. al. (2008) [1] and it is based on the same $N=90$ AAL regions as in the FCM described above. The size of ACM is also $NXN = 90X90$, and each value reveals the probability of 2 AAL regions being connected via axonal fibers. 
   
-  
-    
+\begin{figure}[htbp]
+ 
+  \centering
+	 \includegraphics[width=0.49\textwidth]{Figures/FCM.eps} 
+	 \includegraphics[width=0.49\textwidth]{Figures/ACM.eps} 
+	
+    \rule{35em}{0.5pt}
+  \caption[Empirical FCM and ACM]{Empirical functional and anatomical connectivity maps of human cortex, FCM obtained from fMRI-BOLD technique (on the left) and ACM obtained from DW-MRI (on the right). The colorbars exhibit correlation coefficients and probability values in FCM and ACM, respectively. }
+  \label{fig:Empirical FCM and ACM}
+ 	
+\end{figure}  
+
+ 
+\begin{figure}[htbp]
+ 
+  \centering
+	 \includegraphics[width=0.49\textwidth]{Figures/FCM_brain.eps} 
+	 \includegraphics[width=0.49\textwidth]{Figures/ACM_brain.eps} 
+    \rule{35em}{0.5pt}
+  \caption[Empirical FCM and ACM in cortex]{3D visualization of FCM and ACM on the human cortex with the \textsc{BrainNet Viewer} [REF]. } 
+  \label{fig:Empirical FCM and ACM in cortex}
+ 	
+\end{figure} 
+
+Figure 2.1 represents empirically captured FCM and ACM. All correlation coefficients in FCM appear in the range [0,1] as well as all probability values in ACM. Both matrices are symmetric. A correlation value close to 1 in FCM indicates that the quantified functional activities of corresponding nodes highly resemble each other. A probability value close to 1 in ACM demonstrates that corresponding nodes are most likely connected by fiber tracks in white matter. Although some node pairs are not anatomically coupled at all in ACM (cold colors), they could be functionally coupled in FCM (hot colors).    
+
+FCM and ACM are embedded in human cortex in Figure 2.2 [BrainNetViewer]. All nodes are presented with equal size and black color independent of their topological properties. However, edges have different thickness and color distribution according to correlation coefficients and probability values with respect to FCM and ACM. 
+ 
    
 \section{The Brain Graph}
 
@@ -44,20 +70,18 @@ The brain graphs in this project are generated through binarizing the functional
 \begin{figure}[htbp]
  %\begin{tabular}{cc}
   \centering
-	 \includegraphics[width=90mm,height=52mm]{Figures/bla.eps} 
-	 \includegraphics[width=55mm,height=52mm]{Figures/Sample_Adj.eps} 
-	 \includegraphics[width=0.50\textwidth]{Figures/brain_graph.png}  
-  
-    %\includegraphics[width=0.48\textwidth]{Figures/adj_mtx.png} &
-	%\includegraphics[width=0.48\textwidth]{Figures/adj_mtx.png} \\
-    
+	 \includegraphics[width=0.45\textwidth]{Figures/FCM.eps} 
+	 \includegraphics[width=0.45\textwidth]{Figures/Sample_Adj.eps} 
+	\includegraphics[width=0.45\textwidth]{Figures/Sample_Adj_brain.eps}  
+   \includegraphics[width=0.45\textwidth]{Figures/brain_graph.png}      
+
     \rule{35em}{0.5pt}
-  \caption[Binarizing via thresholding]{How to build a brain graph : The empirical data matrix derived from fMRI-BOLD technique (on the upper left) is binarized via a threshold value $r=0.55$ and its corresponding adjacency matrix is obtained (on the upper right). The black spots represent 1's indicating edges between nodes, whereas the white squares represent 0's implying no connectivity. The brain graph derived from the adjacency matrix (on the bottom) has $N=90$ nodes, edges represent functionally connected node pairs.}
+  \caption[Binarizing via thresholding]{How to build a brain graph : The empirical data matrix derived from fMRI-BOLD technique (on the upper left) is binarized via a threshold value $r=0.55$ and its corresponding adjacency matrix is obtained (on the upper right). The black spots represent 1's indicating edges between nodes, whereas the white squares represent 0's implying no connectivity. The adjacency matrix is embedded on human cortex (on the lower left) with \textsc{BrainNet Viewer} [REF] and the brain graph derived from the adjacency matrix with \textsc{NETWORKX} (on the lower right).}
   \label{fig:Binarizing via thresholding}
  %\end{tabular}	
 \end{figure}
 
-Figure 2.1 illustrates the exemplary construction of a brain graph exemplary from the FCM. All the correlation values among the cortical and sub-cortical regions in the empirical fMRI-BOLD data lie between 0 and 1. The adjacency matrix (AM) is filled out only with 1's and 0's indicating functionally connected and unconnected nodes, whose correlated BOLD activity is equal to or greater than $r=0.55$. The algorithm \textsc{Networkx} builds the corresponding graph of an adjacency matrix. It should be noted that both FCM and AM are symmetric. The AM obtained from an ACM would look similar, but would represent the probability of two nodes to be anatomically connected above a predefined threshold $p$. 
+Figure 2.1 illustrates the exemplary construction of a brain graph from the FCM. All correlation values among the cortical and sub-cortical regions in the empirical fMRI-BOLD data lie between 0 and 1. 3D visualization represents only the existing edges with black lines among the nodes [REf brain vie.]. The adjacency matrix (AM) is filled out only with 1's and 0's indicating functionally connected and unconnected nodes, whose correlated BOLD activity is equal to or greater than $r=0.55$. The algorithm \textsc{Networkx} builds the corresponding graph of an adjacency matrix. The AM obtained from an ACM would look similar, but would represent the probability of two nodes to be anatomically connected above a predefined threshold $p$. 
 
 The following sections will cover randomization methods reshuffling the brain graphs and introduce some of the topological concepts characterizing brain graphs as well as random networks.
 
