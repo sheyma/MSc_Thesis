@@ -72,7 +72,7 @@ def plot_adj(corr_matrix, simfile ):
 		t.set_fontsize(50)
 	pl.xticks(fontsize = 50)
 	pl.yticks(fontsize = 50)
-	#pl.suptitle('ACM (DW-MRI)', fontsize= 50)
+	pl.suptitle('Adjacency Matrix, r=0.55', fontsize= 50)
 	##pl.suptitle('FCM (fMRI-BOLD)', fontsize= 50)
 	pl.xlabel('Nodes', fontsize = 50)
 	pl.ylabel('Nodes', fontsize = 50)
