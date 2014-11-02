@@ -9,16 +9,16 @@
 %----------------------------------------------------------------------------------------
 
 
-\textit{Graph theory} is a mathematical field applicable to a considerable diversity of complex systems such as markets, ecosystems, computer circuits, and gene-gene interactions [Barabasi, 2009]. A graph is defined as an ensemble of vertices (nodes) that are linked with edges. If the edges connect the nodes in a specified direction, the graph is referred to as \textit{directed}, otherwise \textit{undirected}. Moreover, the edges can be assigned a weight yielding a \textit{weighted} graph. A graph with edges of uniform weight is called an \textit{unweighted} graph.
+\textit{Graph theory} is a mathematical field applicable to a considerable diversity of complex systems such as markets, ecosystems, computer circuits, and gene-gene interactions \citep{XYZ09}. A graph is defined as an ensemble of vertices (nodes) that are linked with edges. If the edges connect the nodes in a specified direction, the graph is referred to as \textit{directed}, otherwise \textit{undirected}. Moreover, the edges can be assigned a weight yielding a \textit{weighted} graph. A graph with edges of uniform weight is called an \textit{unweighted} graph.
 
 \textit{Network science} incorporates graph theory applied on a   
-distinct complex domain. Unlike classical graph theory, network science primarily deals with real life networks that are large and complex - neither uniformly random nor ordered [RUB10]. The neuro-anatomical and neuro-physiological data sets derived from  DW-MRI and fMRI-BOLD techniques can be constructed as such large-scale complex brain graphs that are undirected and unweighted. Nodes in large-scale brain networks usually represent brain regions, while edges represent anatomical, functional or effective connections (Friston, 1994). 
+distinct complex domain. Unlike classical graph theory, network science primarily deals with real life networks that are large and complex - neither uniformly random nor ordered \citep{RUB10}. The neuro-anatomical and neuro-physiological data sets derived from  DW-MRI and fMRI-BOLD techniques can be constructed as such large-scale complex brain graphs that are undirected and unweighted. Nodes in large-scale brain networks usually represent brain regions, while edges represent anatomical, functional or effective connections \citep{XYZ94}. 
 
 
-A brain network can be statistically described in terms of its topology, i.e. solely in terms of its connectivity and independently of spatial positions of nodes and edges. Topological measures described in previous studies capture local and global properties of a network, e.g. local and global efficiency, clustering coefficient, transitivity and small-worldness [LAT01, WAT98, NEW03, HUM08].
+A brain network can be statistically described in terms of its topology, i.e. solely in terms of its connectivity and independently of spatial positions of nodes and edges. Topological measures described in previous studies capture local and global properties of a network, e.g. local and global efficiency, clustering coefficient, transitivity and small-worldness \citep{LAT01, WAT98, NEW03, HUM08}.
 
 
-Methods of graph theory applied to structural and functional systems have shown that both share typical features of many complex networks [BUL09, RUB09, HEU11, VUK14]. However, the essential features of brain's connectivity still remain ambiguous both for functional and structural maps. This project aims to investigate whether the brain does not behave as a completely random circuitry. This idea will be tested by comparing brain graphs to the randomized networks as it was previously noticed by Bullmore and Bassett [BUL11a]. The majority of random graphs here are inspired by  Erd\H{o}s-R\'{e}nyi type random networks and the configuration model. 
+Methods of graph theory applied to structural and functional systems have shown that both share typical features of many complex networks \citep{BUL09, RUB09, HEU11, VUK14}. However, the essential features of brain's connectivity still remain ambiguous both for functional and structural maps. This project aims to investigate whether the brain does not behave as a completely random circuitry. This idea will be tested by comparing brain graphs to the randomized networks as it was previously noticed by Bullmore and Bassett \citep{BUL11a}. The majority of random graphs here are inspired by  Erd\H{o}s-R\'{e}nyi type random networks and the configuration model. 
  
 
 In this section, the construction of brain graphs based on empirical functional connectivity matrix (FCM) and anatomical connectivity matrix (ACM) will be first introduced. Then, the topological characteristics of all graphs will be statistically measured and those topological measures will be interpreted neuro-biologically. In particular, it is aimed to explore under which conditions that brain network topologies distinguish from random networks. This approach is expected to provide a deeper insight into the underlying process involved in the observed functional and structural brain connectivity. 
@@ -28,9 +28,9 @@ In this section, the construction of brain graphs based on empirical functional 
 
 The functional-magnetic-resonance-imaging (fMRI) is a widely used method to detect the blood-oxygen-level-dependent (BOLD) contrast in the brain. The fMRI-BOLD contrast is used to interpret the neuronal activity in the respective voxel, which can be considered as a rectangular volume in brain defined for the imaging studies. The ongoing firing activity of neurons requires energy and it is supplied by neighboring blood cells via oxygen and glucose release into the nerve cells. The deviations in deoxygenation level, cerebral flow and volume in blood vessels due to neuronal activity, known as \textit{hemodynamic process}, cause a change in the detected fMRI-BOLD signal strength. The functional connectivity matrix (FCM) represents correlation coefficients of these fMRI-BOLD signals detected from the pre-defined brain regions with voxels. 
 
-The resting state empirical FCM used in this project is obtained from the \textit{1000 Functional Connectome Project} website \url{http://www.nitric.org/}). The human brain is segmented into $N=90$ cortical and sub-cortical regions according to the Tzourio-Mazoyer brain atlas [Tzourio-Mazoyer et.al 2002] with the automated anatomical labeling (AAL) template, such that regions with index $n=\{1,2,...,45\}$ lie on the right hemisphere, whereas $n=\{46,47,...,90\}$ on the left. The fMRI-BOLD activity is measured from all voxels in an AAL region for 7.5 min of acquisition time. Once the fMRI-BOLD mean time-series are obtained for all AAL regions, then the FCM is obtained by calculating the Pearson correlation coefficients of timeseries between all pairs in 90 AAL regions. Therefore the size of FCM is $N\times N = 90 \times 90$.  To be more precise, BOLD-fMRI signal is averaged for the same subject over voxels in an AAL region, and FCM is averaged over all subjects at the end. 
+The resting state empirical FCM used in this project is obtained from the \textit{1000 Functional Connectome Project} website \url{http://www.nitric.org/}). The human brain is segmented into $N=90$ cortical and sub-cortical regions according to the Tzourio-Mazoyer brain atlas with the automated anatomical labeling (AAL) template  \citep{TZO02}, such that regions with index $n=\{1,2,...,45\}$ lie on the right hemisphere, whereas $n=\{46,47,...,90\}$ on the left. The fMRI-BOLD activity is measured from all voxels in an AAL region for 7.5 min of acquisition time. Once the fMRI-BOLD mean time-series are obtained for all AAL regions, then the FCM is obtained by calculating the Pearson correlation coefficients of timeseries between all pairs in 90 AAL regions. Therefore the size of FCM is $N\times N = 90 \times 90$.  To be more precise, BOLD-fMRI signal is averaged for the same subject over voxels in an AAL region, and FCM is averaged over all subjects at the end. 
 
-The diffusion-weighted magnetic-resonance-imaging (DW-MRI) technique estimates the anatomical connection probabilities among brain regions by investigating the diffusion direction of water molecules within a voxel. The direction of the fiber tracks in white matter depends on the diffusion pattern of water molecules. A DW-MRI experiment approximates the existence of a fiber track between regions of interest. The anatomical connectivity matrix (ACM) used in this project is obtained from the study of Iturria-Medina et. al. (2008) [1] and it is based on the same $N=90$ AAL regions as in the FCM described above. The size of ACM is also $NXN = 90X90$, and each value reveals the probability of 2 AAL regions being connected via axonal fibers. 
+The diffusion-weighted magnetic-resonance-imaging (DW-MRI) technique estimates the anatomical connection probabilities among brain regions by investigating the diffusion direction of water molecules within a voxel. The direction of the fiber tracks in white matter depends on the diffusion pattern of water molecules. A DW-MRI experiment approximates the existence of a fiber track between regions of interest. The anatomical connectivity matrix (ACM) used in this project is obtained from the study of Iturria-Medina et. al. \citep{ITU08} and it is based on the same $N=90$ AAL regions as in the FCM described above. The size of ACM is also $NXN = 90X90$, and each value reveals the probability of 2 AAL regions being connected via axonal fibers. 
   
 \begin{figure}[htbp]
  
@@ -51,14 +51,14 @@ The diffusion-weighted magnetic-resonance-imaging (DW-MRI) technique estimates t
 	 \includegraphics[width=0.49\textwidth]{Figures/FCM_brain.eps} 
 	 \includegraphics[width=0.49\textwidth]{Figures/ACM_brain.eps} 
     \rule{35em}{0.5pt}
-  \caption[Empirical FCM and ACM in cortex]{3D visualization of FCM and ACM on the human cortex with the \textsc{BrainNet Viewer} [REF]. } 
+  \caption[Empirical FCM and ACM in cortex]{3D sagittal visualization of FCM and ACM on the human cortex with the \textsc{BrainNet Viewer} \citep{XYZ13}. } 
   \label{fig:Empirical FCM and ACM in cortex}
  	
 \end{figure} 
 
 Figure 2.1 represents empirically captured FCM and ACM. All correlation coefficients in FCM appear in the range [0,1] as well as all probability values in ACM. Both matrices are symmetric. A correlation value close to 1 in FCM indicates that the quantified functional activities of corresponding nodes highly resemble each other. A probability value close to 1 in ACM demonstrates that corresponding nodes are most likely connected by fiber tracks in white matter. Although some node pairs are not anatomically coupled at all in ACM (cold colors), they could be functionally coupled in FCM (hot colors).    
 
-FCM and ACM are embedded in human cortex in Figure 2.2 [BrainNetViewer]. All nodes are presented with equal size and black color independent of their topological properties. However, edges have different thickness and color distribution according to correlation coefficients and probability values with respect to FCM and ACM. 
+FCM and ACM are embedded in human cortex in Figure 2.2 \citep{XYZ13}. All nodes are presented with equal size and black color independent of their topological properties. However, edges have different thickness and color distribution according to correlation coefficients and probability values with respect to FCM and ACM. 
  
    
 \section{The Brain Graph}
@@ -76,12 +76,12 @@ The brain graphs in this project are generated through binarizing the functional
    \includegraphics[width=0.45\textwidth]{Figures/brain_graph.png}      
 
     \rule{35em}{0.5pt}
-  \caption[Binarizing via thresholding]{How to build a brain graph : The empirical data matrix derived from fMRI-BOLD technique (on the upper left) is binarized via a threshold value $r=0.55$ and its corresponding adjacency matrix is obtained (on the upper right). The black spots represent 1's indicating edges between nodes, whereas the white squares represent 0's implying no connectivity. The adjacency matrix is embedded on human cortex (on the lower left) with \textsc{BrainNet Viewer} [REF] and the brain graph derived from the adjacency matrix with \textsc{NETWORKX} (on the lower right).}
+  \caption[Binarizing via thresholding]{How to build a brain graph : The empirical data matrix derived from fMRI-BOLD technique (on the upper left) is binarized via a threshold value $r=0.55$ and its corresponding adjacency matrix (on the upper right). The black spots represent 1's indicating edges between nodes, whereas the white squares represent 0's implying no edge at all. The adjacency matrix is embedded on human cortex axially (on the lower left) with \textsc{BrainNet Viewer} \citep{XYZ13} and the brain graph derived from the adjacency matrix with \textsc{NETWORKX} (on the lower right).}
   \label{fig:Binarizing via thresholding}
  %\end{tabular}	
 \end{figure}
 
-Figure 2.1 illustrates the exemplary construction of a brain graph from the FCM. All correlation values among the cortical and sub-cortical regions in the empirical fMRI-BOLD data lie between 0 and 1. 3D visualization represents only the existing edges with black lines among the nodes [REf brain vie.]. The adjacency matrix (AM) is filled out only with 1's and 0's indicating functionally connected and unconnected nodes, whose correlated BOLD activity is equal to or greater than $r=0.55$. The algorithm \textsc{Networkx} builds the corresponding graph of an adjacency matrix. The AM obtained from an ACM would look similar, but would represent the probability of two nodes to be anatomically connected above a predefined threshold $p$. 
+Figure 2.1 illustrates the exemplary construction of a brain graph from the FCM. All correlation values among the cortical and sub-cortical regions in the empirical fMRI-BOLD data lie between 0 and 1. 3D axial cortex visualization represents only the existing edges with black edges among the nodes. The adjacency matrix (AM) is filled out only with 1's and 0's indicating functionally connected and unconnected nodes, whose correlated BOLD activity is equal to or greater than $r=0.55$. The algorithm \textsc{Networkx} builds the corresponding graph of an adjacency matrix. The AM obtained from an ACM would look similar, but would represent the probability of two nodes to be anatomically connected above a predefined threshold $p$. 
 
 The following sections will cover randomization methods reshuffling the brain graphs and introduce some of the topological concepts characterizing brain graphs as well as random networks.
 
@@ -125,38 +125,76 @@ The \textit{degree} $k_i$ of a node $i$ is defined as the number of edges connec
 \begin{figure}[htbp]
  %\begin{tabular}{cc}
   \centering
-	\includegraphics[width=0.8\textwidth, height=40mm]{Figures/s.eps}  
-    %\includegraphics[width=0.04\textwidth, height=20mm]{Figures/arrow.png}  
-	%\includegraphics[width=0.30\textwidth, height=40mm]{Figures/s2.png} 
+	\includegraphics[width=0.32\textwidth, height=50mm]{Figures/G1_swap.eps}  
+    \includegraphics[width=0.32\textwidth, height=50mm]{Figures/G2_swap.eps}  
+	\includegraphics[width=0.32\textwidth, height=50mm]{Figures/G3_swap.eps} 
     \rule{35em}{0.5pt}
-  \caption[Double-Edge-Swap Example]{Swapping edges between 4 nodes}
+  \caption[Double-Edge-Swap Example]{Swapping edges between 2 paired nodes}
   \label{fig:Double-Edge-Swap Example}
  %\end{tabular}	
 \end{figure}
 
-Figure 2.3 illustrates randomly chosen double edges in a sample graph to be swapped. After the existing edges are removed, the new couple of nodes are rewired. The degree of each node is the same before and after swapping. The \textit{degree distribution} is the probability distribution of node degrees over the whole graph. Although the randomly constructed graphs with the double-edge-swap method are expected to have the same degree distribution, the latter is not a unique property identifying a graph.
+Figure 2.3 illustrates randomly chosen double edges in a sample graph to be swapped. After the existing edges are removed, the new pair of nodes are rewired. The degree of each node is the same before and after swapping; degrees of nodes $k_1 = 1$, $k_2=1$, $k_3=1$, $k_4=1$ are all fixed in each graph. Although the randomly constructed graphs with the double-edge-swap method are expected to have same degrees, the latter is not a unique property identifying a graph.
 
-\subsection{Configuration Model Randomization}
+The \textit{degree distribution} is the probability distribution of node degrees over the whole graph. Conservation of each $k_i$ preserves the degree distribution, however, preserving degree distribution does not guarantee to fix $k_i$ values. We will discover in the next section how to preserve degree distribution by altering node degrees.
 
-The \textit{degree sequence} of a graph is either its ascending or descending sequence of node degrees. The configuration model generates a random graph with a given degree sequence. The direct implementation of this model is to assign edges to the nodes randomly until the desired degree sequence is matched. However, these algorithms are non-trivial due to the occurance of self-loops (node is connected to itself) and parallel edges (multiple edges connecting two nodes), which are both undesirable graph properties in this project. 
+\subsection{Preserved-Degree-Distribution Type Randomization}
+
+The preserved-degree-distribution method randomizes a given network by adding-removing or rewiring its edges randomly while recovering its degree distribution $P(k)$. The idea is to reassign edge indices in the graph, meaning that the degree of individual nodes may change. P(k) is defined with the following equation,
+
+\begin{equation}
+P(k) = \sum_{k' \geq k} p(k')
+\end{equation}
+
+where $p(k')$ is the probability of a node to have degree number $k'$ \citep{BAR99a}.
+
 
 \begin{figure}[htbp]
  %\begin{tabular}{cc}
   \centering
-	\includegraphics[width=0.50\textwidth, height=60mm]{Figures/c1.png}  
+	\includegraphics[width=0.45\textwidth, height=60mm]{Figures/G_degree_dist_1.eps}  
+	\includegraphics[width=0.45\textwidth, height=60mm]{Figures/G_degree_dist_2.eps}    
     \rule{35em}{0.5pt}
-    \caption[Degree Sequence Definition]{The degrees of the nodes: $k_0 = 2$, $k_1 =1$, $k_2=2$, $k_3=3$ and the degree sequence in non-increasing order in the sample graph : $\{3,\,2,\,2,\,1\}$}
+  \caption[Degree Distribution 2D Example]{Reconstruction of a given graph (on the left) with degree-distribution-preservation model (on the right). $k_i=\{3,1,1,1\}$ in the original graph and $k_{i}=\{1,0,1,3,1\}$ in the randomized graph. }
+  \label{fig:Degree Distribution Example}
+ %\end{tabular}	
+\end{figure}
+
+The algorithm is thought to add-remove new nodes to a given graph while preserving $P(k)$ as shown in Figure 2.6. However, we randomize our brain graph with a conserved total number of nodes $N$ as well as $P(k)$. The figure is given only for a better visualization in order to distinguish preserved-degree-distribution randomization method and configuration model randomization, which will be introduced in the next section.
+
+\begin{figure}[htbp]
+ %\begin{tabular}{cc}
+  \centering
+	\includegraphics[width=\textwidth]{Figures/G_degree_dist.eps}  
+    \rule{35em}{0.5pt}
+  \caption[Degree Distribution 3D Example]{Heat maps for degree distributions of the brain graph obtained from FCM (on the left), and of the randomized graph with preserved-degree-distribution tool (on the right). Colorbars are in logarithmic scale with lower and upper limits : $[\log_{10} {10}^0 , \,  \log_{10} {10}^1]$}
+  \label{fig:Degree Distribution 3D Example}
+ %\end{tabular}	
+\end{figure}
+
+$P(k)$ is a global topological measure for a network, it can be illustrated over all nodes in the whole graph as in Figure 2.7. Node indexes are labeled on $x$ axis on heat maps, threshold $r$ values for adjacency matrices are given on $y$ axis. The preserved-degree-distribution method generates successfully a random graph with the same $P(k)$ as in the brain graph. 
+
+
+\subsection{Configuration Model Randomization}
+
+The \textit{degree sequence} of a graph is either its ascending or descending sequence of node degrees. The configuration model generates a random graph with a given degree sequence. The direct implementation of this model is to assign edges to the nodes randomly until the desired degree sequence is matched. The resultant random graph is expected to be a node-index-shuffled version of the original graph. However, these algorithms are non-trivial due to the occurrence of self-loops (node is connected to itself) and parallel edges (multiple edges connecting two nodes), which are both undesirable graph properties in this project. 
+
+\begin{figure}[htbp]
+ %\begin{tabular}{cc}
+  \centering
+	\includegraphics[width=0.45\textwidth, height=60mm]{Figures/G_config_1.eps}  
+	\includegraphics[width=0.45\textwidth, height=60mm]{Figures/G_config_2.eps} 
+    \rule{35em}{0.5pt}
+    \caption[Degree Sequence Definition]{The degrees of the nodes in the original graph (on the left): $k_0 = 2$, $k_1 =1$, $k_2=2$, $k_3=3$ and that of the randomized graph (on the right) : $k_0 = 3$, $k_1 =2$, $k_2=1$, $k_3=2$. The degree sequence in non-increasing order in both graphs : $\{3,\,2,\,2,\,1\}$}
   \label{fig:Degree Sequence Definition}
  %\end{tabular}	
 \end{figure}
 
-Figure 2.4 points out the relevance of the degree sequence to the node degrees. Moreover, one should not confuse degree distribution and degree sequence.   
+Figure 2.8 points out the relevance of the degree sequence to the node degrees. Moreover, one should not confuse degree distribution and degree sequence.   
 
 The configuration model variant used here is the expected-degree-graph method, which excludes self-loops and parallel edges. This algorithm receives the list of the expected degree sequence as an input $(k_u, k_v, k_m, k_l, ...)$, and assigns edges between nodes with a predefined probability $P_{uv}=\dfrac{k_u k_w}{\sum_{i}k_i}$. This method does not guarantee to construct graphs with exactly the same given degree sequence but with the closest possible sequence.  
 
-\subsection{Preserved-Degree-Distribution Type Randomization}
 
-The \textit{degree distribution} of a network reflects the probability of a node to have a given number of degree \textit{k}. The preserved-degree-distribution method randomizes a given undirected network by rewiring its edges randomly while preserving its degree distribution. The method first chooses four target nodes randomly, then flips the edges between those nodes with the probability of $P=0.5$. The total number of rewirings to be performed is given as an iteration parameter to the method. 
 
  
 \subsection{Partial Randomization}
@@ -175,6 +213,9 @@ In this project, the functional connectivity (FC) adjacency matrix is partially 
  %\end{tabular}	
 \end{figure}
 
+Representative graphs $A$ and $B$ in Figure 2.9 can be thought as FCM and ACM, respectively. In this case, $A \,\, random$ is the partially randomized graph of FCM with respect to ACM.
+
+
 The brain graph and randomly generated graphs will be identified in terms of their topological properties in the following sections. For simplicity the abbreviations are introduced in the table below. 
 
 \begin{table}[h]
@@ -186,8 +227,8 @@ The brain graph and randomly generated graphs will be identified in terms of the
   R0 & the brain graph						  & \textsc{networkx} \\ \hline
   Ra & Erd\H{o}s-R\'{e}nyi, G(N,L)            & \textsc{networkx} \\ \hline
   Rd & double-edge-swap            			  & \textsc{networkx} \\ \hline
+  Rh & preserved-degree-distribution		  & \textsc{BCT} 	 \\ \hline  
   Rg & configuration model       			  & \textsc{networkx} \\ \hline
-  Rh & preserved-degree-distribution		  & \textsc{BCT} 	 \\ \hline
   Rk & partial randomization            	  & \textsc{BCT} 	 \\ \hline  
   \hline  
 \end{tabular}
@@ -210,7 +251,7 @@ It should be noted that in order to not count each edge twice, the total number 
 D = \frac{2L}{N(N-1)}.
 \end{equation}	
 
-The measure of network density can be referred to as the total \textit{wiring cost} of the network [RUB10]. The degree, average degree and network density are key scalar measures to characterize the topology of a network. There is for instance clinical evidence that reductions in nodal degree are associated with greater severity of local amyloid deposition in patients with Alzheimer's disease [Buckner et al. 2009]. 
+The measure of network density can be referred to as the total \textit{wiring cost} of the network \citep{RUB10}. The degree, average degree and network density are key scalar measures to characterize the topology of a network. There is for instance clinical evidence that reductions in nodal degree are associated with greater severity of local amyloid deposition in patients with Alzheimer's disease \citep{XYZ2009}. 
 
 \begin{figure}[htbp]
  %\begin{tabular}{cc}
@@ -228,7 +269,7 @@ The network density $D$ can be considered a probability for all graphs in corres
 
 All networks for FCM and ACM are densely connected for low $r$ and $p$. For the brain graph and randomized graphs of FCM, $D$ decreases sigmoidally with $r$. In comparison, $D$ decreases slower with $p$ for ACM graphs. It should be noted that all graphs have almost the same $D$ values. 
 
-Functional networks are likely to be denser than anatomical networks, as they will typically contain numerous connections between anatomically unconnected regions [DAM09]. 
+Functional networks are likely to be denser than anatomical networks, as they will typically contain numerous connections between anatomically unconnected regions \citep{DAM09}. 
 
 \subsection{Average Clustering Coefficient}
     
@@ -238,7 +279,7 @@ The \textit{average clustering coefficient} $C$ of a network is calculated throu
 C = \frac{1}{n} \sum\limits_{i\epsilon N}C_i = \frac{1}{n}\sum\limits_{i\epsilon N} \frac{2t_i}{k_i(k_i -1)} .
 \end{equation} 
 
-where $t_i$ is the number of triangles around node $i$ and $k_i$ is the degree of node $i$ [WAT98]. The clustering coefficient is a measure of segregation, that is the ability for specialized processing to occur within densely interconnected groups of brain regions [RUB10]. It reveals how the individual nodes in a graph cluster together; how many neighbors of a node are neighbors of each other. 
+where $t_i$ is the number of triangles around node $i$ and $k_i$ is the degree of node $i$ \citep{WAT98}. The clustering coefficient is a measure of segregation, that is the ability for specialized processing to occur within densely interconnected groups of brain regions \citep{RUB10}. It reveals how the individual nodes in a graph cluster together; how many neighbors of a node are neighbors of each other. 
 
 \begin{figure}[htbp]
  %\begin{tabular}{cc}
@@ -251,11 +292,11 @@ where $t_i$ is the number of triangles around node $i$ and $k_i$ is the degree o
  %\end{tabular}	
 \end{figure}
 
-The clustering coefficient $C_i$ of a node $i$ is a measure of local connectivity and is highly correlated with the local efficiency of the information transfer [LAT01]. The $C_i$ is formulated as the ratio of $t_i$ over all possible edges of the node $i$; ${k_i \choose 2} $. The average clustering coefficient $C$ is a normalized version of $C_i$ for the whole network, yielding now a global property. All $C$ values are between 0 and 1. Figure 2.7 shows that at lower binarization thresholds, nodes tend to cluster more due to higher number of existing edges. The empirically obtained brain networks of FCM and ACM have the highest $C$ compared to random graphs. The local information transfer seems to be more efficient in the brain graphs.  The randomized graphs of ACM $Ra$, $Rd$, $Rh$ and $Rk$ share more nodes with lower degrees compared to $R0$.
+The clustering coefficient $C_i$ of a node $i$ is a measure of local connectivity and is highly correlated with the local efficiency of the information transfer \citep{LAT01}. The $C_i$ is formulated as the ratio of $t_i$ over all possible edges of the node $i$; ${k_i \choose 2} $. The average clustering coefficient $C$ is a normalized version of $C_i$ for the whole network, yielding now a global property. All $C$ values are between 0 and 1. Figure 2.7 shows that at lower binarization thresholds, nodes tend to cluster more due to higher number of existing edges. The empirically obtained brain networks of FCM and ACM have the highest $C$ compared to random graphs. The local information transfer seems to be more efficient in the brain graphs.  The randomized graphs of ACM $Ra$, $Rd$, $Rh$ and $Rk$ share more nodes with lower degrees compared to $R0$.
 
 \subsection{Transitivity}
 
-Transitivity is a similar measure to the clustering coefficient, and also quantifies segregation in the network. It is defined as (Newman, 2003)
+Transitivity is a similar measure to the clustering coefficient, and also quantifies segregation in the network. It is defined as \citep{NEW03}
 	
 \begin{equation}
  T = \frac{\sum\limits_{i \epsilon N} 2 t_i}{\sum\limits_{i \epsilon N}k_i (k_i - 1)} .
@@ -275,7 +316,7 @@ If a node has links to two other nodes, transitivity inquires whether those two 
 \end{figure}
 
 
-The degree of transitivity is one of the fundamental differences between real world networks and random networks [NEW10]. This difference is more pronounced than the clustering difference between brain graphs and random graphs (see Figures 2.7 and 2.8). 
+The degree of transitivity is one of the fundamental differences between real world networks and random networks \citep{NEW10}. This difference is more pronounced than the clustering difference between brain graphs and random graphs (see Figures 2.7 and 2.8). $T$ is more effected with $P(k)$ of a network, the more nodes with lower degrees, the higher the $T$ is. ACM related graphs tend to have lower $p(k')$ values distributed among many nodes, whereas FCM related graphs have higher $p(k')$ values distributed among less nodes. This holds even for $R0$ and $Rh$ graphs of FCM in Figure 2.12, that their $P(k)$ is reflected in higher $T$ (see Appendix).
 
 
 
