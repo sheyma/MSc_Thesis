@@ -129,13 +129,11 @@ def plot_timeseries(t_start , t_range , timeseries):
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
 	return			
-			
+
+# standart normalization of timeseries (MATLAB's zscore)			
 def normalize_timeseries(timeseries):
-	print "SHAPE timeser" , np.shape(timeseries)
 	N_timeseries = sta.mstats.zscore(timeseries)
-	print "SHAPE norm timeser" , np.shape(timeseries)
 	np.savetxt('../data/tmp/bak_N_python.dat', N_timeseries,'%.6f',delimiter='\t')			
-	print N_timeseries
 	return N_timeseries
 			
 def calc_bold(timeseries , T, out_basename):
@@ -174,8 +172,10 @@ def plot_bold_signal(T, bold_input):
 	# plots the bold_signal obtained from Balloon-Windkessel model
 		
 	time = np.linspace(0, T, len(bold_input[0]) )	
-	fig = pl.figure(2)
+	
 	for key in bold_input.keys():
+		print "KEY " , key
+		print "bold_input[key]", bold_input[key]
 		pl.plot( time , bold_input[key])
 	pl.xlabel('t [s]')
 	pl.ylabel('$bold signal,  u_i(t)$')
@@ -285,20 +285,33 @@ iparams = invert_params(params)
 # initial conditions for the bold differential equations
 x_init = np.array([0 , 1, 1, 1])		
 
-input_name = sys.argv[1]
+input_name      = sys.argv[1]
 
-out_basename = sb.get_dat_basename(input_name)
+out_basename    = sb.get_dat_basename(input_name)
+
 [timeseries, T] = fhn_timeseries(input_name)
 
 print "T : " , T, " [seconds]"
-deneme = normalize_timeseries(timeseries)
 
-pl.figure(1)
-fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
-pl.figure(2)
-pl.plot(deneme)
-pl.figure(3)
-plot_timeseries(t_start , t_range , deneme)
+N_timeseries   = normalize_timeseries(timeseries)
+
+#pl.figure(1)
+#plot_timeseries(t_start , t_range , timeseries)
+#pl.figure(2)
+#pl.plot(N_timeseries)
+#pl.figure(3)
+#plot_timeseries(t_start , t_range , N_timeseries)
+
+bold_signal     =   calc_bold(timeseries, T, out_basename)
+
+bold_signal_N   =   calc_bold(N_timeseries, T, out_basename)
+
+pl.figure(5)
+#pl.plot(bold_signal[1])
+plot_bold_signal(T , bold_signal)
+pl.figure(6)
+#pl.plot(bold_signal_N[1])
+plot_bold_signal(T , bold_signal_N)
 
 
 pl.show()
