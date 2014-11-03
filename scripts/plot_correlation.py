@@ -132,97 +132,102 @@ if __name__ == '__main__':
 		print usage
 		sys.exit(1)
 		
-## fMRI-BOLD input matrix load , this is a correlation matrix already
-#mtx_empiri		=		load_matrix(input_empiri)
+# fMRI-BOLD input matrix load , this is a correlation matrix already
+mtx_empiri		=		load_matrix(input_empiri)
 
-## loading correl. mtx. of fhn time series (output of correlation_fhn.py)
-#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-##name = 'acp_w_h_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+# loading correl. mtx. of fhn time series (output of correlation_fhn.py)
+name = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+#name = 'acp_w_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 
-#thr_array = np.array([54, 56, 58, 60, 62, 63, 64, 65, 66])					                        
-#vel_array = np.array([40, 50, 60, 70, 80])
-#sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
+thr_array = np.array([54,  56,  58,  60,  62,  64, 66])	
+#thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])					                        
+vel_array = np.array([40, 50, 60, 70, 80])
+sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
 
 ##thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 
 ##					  62, 64, 66, 72, 76, 82 ])
 ##vel_array = np.array([30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
 ##sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
 
-#R_thr =  {}
+R_thr =  {}
 
-#for THR in thr_array :
-	#R_temp = []
+for THR in thr_array :
+	R_temp = []
 	
-	#for VEL in vel_array :
-		#local_path = '../data/jobs_corr/'
-		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]	
- 		##input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[43:]		
-
-	##for SIG in sig_array :
-		##local_path = '../data/jobs_corr/'
-		##input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
+	local_path = '../data/jobs_corr/'
 	
-		#try:
-			#mtx_simuli = load_matrix(local_path + input_name)
-		#except :
-			#R_val      = np.nan
-		#else :
-			#R_val      = pearson_coef(mtx_empiri, mtx_simuli)
+	for VEL in vel_array :
+		
+		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]	
+ 		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[43:]		
+		
+	#for SIG in sig_array :
+		
+		#input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
+		
+		print input_name
+	
+		try:
+			mtx_simuli = load_matrix(local_path + input_name)
+		except :
+			R_val      = np.nan
+		else :
+			R_val      = pearson_coef(mtx_empiri, mtx_simuli)
 	
 		
-		#R_temp     = np.append(R_temp, R_val)
-	#R_thr[THR] 	   = np.array(R_temp)
+		R_temp     = np.append(R_temp, R_val)
+	R_thr[THR] 	   = np.array(R_temp)
 
 
 	
-#Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-##print "Ordered dict"
-##print Ordered_R
+Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
+#print "Ordered dict"
+#print Ordered_R
 
-#datam 		= np.array(Ordered_R.values())
+datam 		= np.array(Ordered_R.values())
 
-##print "check its numpy array version"
-##print datam
+#print "check its numpy array version"
+#print datam
 
-## PLOTTING BEGINS ! 
-#fig , ax = pl.subplots()
-#pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
-#cbar = pl.colorbar()
+# PLOTTING BEGINS ! 
+fig , ax = pl.subplots()
+pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
+cbar = pl.colorbar()
 
 ## PLOT PA OVER SIGMA
 #a = thr_array
 #b = sig_array
 ## title for fhn....
-#pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s] '+' T = 450 [s]',
-		 #fontsize=20)
+##pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s] '+' T = 450 [s]',
+##		 fontsize=20)
 ## title for bold...
 ##pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s]', fontsize=20)
 #pl.ylabel('$\sigma$ ', fontsize=20)
 
-### PLOT PA OVER VELOCITY
-##a = thr_array
-##b = vel_array
-#### title for fhn....
-###pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
-###		 fontsize=20)
-#### title for bold...
-###pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
-##pl.ylabel('v [m/s]', fontsize=20)
+# PLOT PA OVER VELOCITY
+a = thr_array
+b = vel_array
+## title for fhn....
+#pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
+#		 fontsize=20)
+## title for bold...
+#pl.title('A_aal_0...' + ' , BOLD , ' + '$\sigma$ = 0.2', fontsize=20)
+pl.ylabel('v [m/s]', fontsize=20)
 
-#pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
-#pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-#pl.xlabel('thr', fontsize = 20)
-#for t in cbar.ax.get_yticklabels():
-	#t.set_fontsize(15)
-#pl.xticks(fontsize = 15)
-#pl.yticks(fontsize = 15)
-#pl.show()		
+pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
+pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
+pl.xlabel('thr', fontsize = 20)
+for t in cbar.ax.get_yticklabels():
+	t.set_fontsize(15)
+pl.xticks(fontsize = 15)
+pl.yticks(fontsize = 15)
+pl.show()		
 
 #------------------------------------
-mtx_empiri			= 		load_matrix(input_empiri)		
+#mtx_empiri			= 		load_matrix(input_empiri)		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
 # plot_adj gets and "adjacency matrix"
-figure				=		plot_adj(mtx_empiri , input_empiri)
+#figure				=		plot_adj(mtx_empiri , input_empiri)
 #mtx_simuli			= 		load_matrix(input_simuli)
 
 
@@ -231,4 +236,4 @@ figure				=		plot_adj(mtx_empiri , input_empiri)
 #figure_name 		= 		input_simuli[0:-3] + str('eps')	
 #print figure_name
 #pl.title('A_aal, 0-V , FHN \nthr=0.53 , $\sigma$ = 0.02 , tmax=450[s] v = 7 [m/s]', fontsize=20)
-pl.show()
+#pl.show()
