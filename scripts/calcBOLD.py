@@ -8,7 +8,7 @@ import numpy as np
 import sys
 import math
 import pylab as pl
-
+import scipy.stats as sta
 from scipy.signal import  butter , filtfilt , correlate2d
 import scipy.integrate as integ
 from scipy.integrate import odeint
@@ -123,13 +123,20 @@ def plot_timeseries(t_start , t_range , timeseries):
 	# plots the timeseries in a specific time interval
 	# t_range corresponds to time interval
 	
-	fig = pl.figure(1)
 	pl.plot(timeseries[t_start : (t_start + t_range) , :])
 	pl.xlabel('t [ms]')
 	pl.ylabel('$u_i(t)$')
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
 	return			
+			
+def normalize_timeseries(timeseries):
+	print "SHAPE timeser" , np.shape(timeseries)
+	N_timeseries = sta.mstats.zscore(timeseries)
+	print "SHAPE norm timeser" , np.shape(timeseries)
+	np.savetxt('../data/tmp/bak_N_python.dat', N_timeseries,'%.6f',delimiter='\t')			
+	print N_timeseries
+	return N_timeseries
 			
 def calc_bold(timeseries , T, out_basename):
 	
@@ -268,8 +275,8 @@ params.k1 = 7.0 * params.Eo
 params.k2 = 2.0
 params.k3 = 2.0 * params.Eo - 0.2
 
-t_start = 325000;
-t_range = 500;
+t_start = 0;
+t_range = 10000;
 ds = 2.3  
 dtt = 0.001
 cut_percent = float(2) / 100
@@ -284,13 +291,22 @@ out_basename = sb.get_dat_basename(input_name)
 [timeseries, T] = fhn_timeseries(input_name)
 
 print "T : " , T, " [seconds]"
+deneme = normalize_timeseries(timeseries)
 
-#fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
+pl.figure(1)
+fhn_image      =   plot_timeseries(t_start , t_range , timeseries)
+pl.figure(2)
+pl.plot(deneme)
+pl.figure(3)
+plot_timeseries(t_start , t_range , deneme)
 
+
+pl.show()
 ### THIS NEEDS TO BE CHANGED !!! ################## 
 #timeseries      =   np.loadtxt(input_name)
 #T = 550.0
-bold_signal     =   calc_bold(timeseries, T, out_basename)
+
+#bold_signal     =   calc_bold(timeseries, T, out_basename)
 
 #signal_image    =   plot_bold_signal(T , bold_signal)
 
