@@ -88,7 +88,8 @@ def plot_corr_diag(corr_matrix, out_basename):
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )
 		
 	cmap   = pl.cm.jet
-	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.5, vmax=0.5, cmap='jet', aspect='auto')
+	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, cmap='jet', aspect='auto')
+	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-1.0, vmax=1.0, cmap='jet', aspect='auto')
 	cbar = pl.colorbar(cmap=cmap, norm=norm)
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
