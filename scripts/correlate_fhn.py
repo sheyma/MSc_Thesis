@@ -15,9 +15,11 @@ from scipy.signal import  butter , filtfilt , correlate2d
 	input  : job output from "fhn_time_delays.py" , m rows, n columns
 	
 	intermediate process : loading input, which has ".xz" or ".dat" 
-	extentions, deleting the first column of input, which is the time 
-	column, getting correlation coefficients between columns of input
-	matrix 
+	extentions, deleting the first (time) column of input, 
+	calculationg Pearson's correlat. coeff.s between columns of input
+	matrix, finding the best and worst correlated node pairs and 
+	plotting their time-series, fast-fourier-transform analysis of 
+	time series 
 	
 	output : correlation matrix of the input [n-1 rows, n-1 columns],
 	maximum and minumum correlation coefficients in this matrix and the 
@@ -176,14 +178,11 @@ plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
 pl.figure(3)
 plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
 
-# FHN model resolution dtt [ms] 
-params = {'dtt' : 0.001}
-
 rnd_node_1 = 7
 rnd_node_2 = 24
 
-[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dtt'])
-[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dtt'])
+[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dt'])
+[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dt'])
 pl.figure(4);
 pl.subplot(2,1,1)
 plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
