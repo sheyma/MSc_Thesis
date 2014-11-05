@@ -149,23 +149,23 @@ data_matrix = sb.load_matrix(input_name)
 out_basename = sb.get_dat_basename(input_name)
 
 corr_matrix = correl_matrix(data_matrix , out_basename)
-# real node index : add 1!
+## real node index : add 1!
 #[i, j, k , l ]  = 	    node_index(corr_matrix)
 #image = plot_corr_diag(corr_matrix, out_basename)
 
 ## BOLD activity of the nodes correlating the best
 #pl.figure(2)
-#plot_bold_signal(data_matrix, i+1,j+1)
+#plot_bold_signal(data_matrix, i,j)
 ## BOLD activity of the nodes correlating the worst
 #pl.figure(3)
-#plot_bold_signal(data_matrix, k+1,l+1)
+#plot_bold_signal(data_matrix, k,l)
 
-rnd_node_1 = 7
-rnd_node_2 = 24
+#rnd_node_1 = 7
+#rnd_node_2 = 24
 
-# bold signal parameters, dtt [ms] is resolution of bold signal
-params = {'dtt' : 0.001}
-print params['dtt']
+## bold signal parameters, dtt [ms] is resolution of bold signal
+#params = {'dtt' : 0.001}
+#print params['dtt']
 
 #[yfft_1, freq_1] = bold_fft(data_matrix, rnd_node_1-1, params['dtt'])
 #[yfft_2, freq_2] = bold_fft(data_matrix, rnd_node_2-1, params['dtt'])
