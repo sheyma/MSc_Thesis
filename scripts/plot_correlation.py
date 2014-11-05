@@ -137,15 +137,17 @@ mtx_empiri		=		load_matrix(input_empiri)
 
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
 #name = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-name = 'acp_w_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+#name = 'acp_w_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+name = 'A_aal_0_ADJ_thr_0.60_sigma=0.5_D=0.05_v=70.0_tmax=45000_Norm_BOLD_signal_corr.dat'
+#name = 'acp_w_0_ADJ_thr_0.60_sigma=0.5_D=0.05_v=70.0_tmax=45000_Norm_BOLD_signal_corr.dat'
 
 thr_array = np.array([ 54,  56,  58,  60,  62,  64, 66])	
-thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])					                        
+#thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])					                        
 vel_array = np.array([40, 50, 60, 70, 80, 90])
 sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
 
-##thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 
-##					  62, 64, 66, 72, 76, 82 ])
+#thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 
+#					  62, 64, 66, 72, 76, 82 ])
 ##vel_array = np.array([30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
 ##sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
 
@@ -200,7 +202,7 @@ cbar = pl.colorbar()
 ##pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s] '+' T = 450 [s]',
 ##		 fontsize=20)
 ## title for bold...
-#pl.title('acp_w_0...' + ' , FHN , ' + '  v = 7 [m/s]', fontsize=20)
+##pl.title('acp_w_0...' + ' , FHN , ' + '  v = 7 [m/s]', fontsize=20)
 #pl.ylabel('$\sigma$ ', fontsize=20)
 
 # PLOT PA OVER VELOCITY
@@ -210,7 +212,7 @@ b = vel_array/10
 #pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
 #		 fontsize=20)
 ## title for bold...
-pl.title('acp_w_0...' + ' , FHN , ' + '$\sigma$ = 0.5', fontsize=20)
+#pl.title('acp_w_0...' + ' , FHN , ' + '$\sigma$ = 0.5', fontsize=20)
 pl.ylabel('v [m/s]', fontsize=20)
 
 pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
