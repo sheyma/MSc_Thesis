@@ -102,7 +102,7 @@ dde = dde23(eqns=eqns,params=params)
 ## with noise :
 #dde = dde23(eqns=eqns,params=params, noise=noise)
 
-tfinal =100
+tfinal =250
 
 dde.set_sim_params(tfinal)
 
@@ -141,36 +141,43 @@ fig.suptitle('FHN - Local Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
 	      r'  $  \gamma$ = '+str(params['gamma']) + ' $   b$ = '+ 
 	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) ,
 	      #+ '  D = ' + str(params['D']) ,
-	      fontsize=14, fontweight='bold')
+	      fontsize=25)
 
-pl.subplot(121, xlabel='t', ylabel='x(t) , y(t)')
+
+pl.subplot(121)
+pl.xlabel('t' , fontsize = 25)
+pl.ylabel('x(t) , y(t)', fontsize = 25)
 pl.plot(t, x, 'r', label='$x(t)$')
 pl.plot(t, y, 'b', label='$y(t)$')
+pl.tick_params(labelsize=25)
 #pl.plot(sol_adap['t'],sol_adap['x'],'.r',linewidth=0.2)
 #pl.plot(sol_adap['t'],sol_adap['y'],'.b',linewidth=0.2)
 pl.axis([0, tfinal, -3, 3])
-lg = legend()
+lg = legend(prop={'size':25})
 lg.draw_frame(False)
 
-pl.subplot(122, xlabel='x', ylabel='y')
-pl.plot(x, y, 'r', label='$x,y$')
+pl.subplot(122)
+pl.xlabel('x', fontsize =25)
+pl.ylabel('y', fontsize =25)
+pl.plot(x, y, 'k', label='$x(t),y(t)$')
+pl.tick_params(labelsize=25)
 pl.plot(x[0], y[0], '.r')
 #pl.plot(x_, y_ , 'b',label='$x_{nullcline}$')
 #pl.plot(xx,yy,'k',label='$y_{nullcline}$')
 #pl.plot(-params['a'],(-params['a']+pow(params['a'],3)/3),'ok')
 #pl.plot(sol_adap['x'],sol_adap['y'],'.r',linewidth=0.2)
-pl.plot(x_range,nullcl_01(x_range),'b', label='$x_{nullcline}$')
+pl.plot(x_range,nullcl_01(x_range),'r'  , label='$x_{null}$')
 
 ##[GHO08a] and [VUK13] 
 #pl.plot(x_range,nullcl_02(x_range),'k',label='$y_{nullcline}$')
-pl.plot(x_range,nullcl_02(x_range),'k',label='$y_{nullcline}$')
+pl.plot(x_range,nullcl_02(x_range),'b' ,label='$y_{null}$')
 
 ### [PAN12]
 #pl.plot(nullcl_02(x_range)* np.ones(len(x_range)), x_range,'k',label='$y_{nullcline}$')
 
 pl.plot(X_int,Y_int, 'ok', linewidth=3)
 pl.axis([-2.3, 2.3, -2.5, 2.5])
-lg = legend()
+lg = legend(loc = 'upper left', prop={'size':25})
 lg.draw_frame(False)
 #pl.savefig("VUK13_local_dynamics.eps",format="eps")
 #pl.savefig("GHO08_local_dynamics.eps",format="eps")
