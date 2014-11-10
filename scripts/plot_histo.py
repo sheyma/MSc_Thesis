@@ -165,14 +165,45 @@ datam = zip(*datam)
 
 fig = pl.figure()
 ax  = fig.add_subplot(111,projection='3d')
-p   = ax.scatter(datam[0], datam[1], datam[2], c=datam[3], cmap='jet')
+p   = ax.scatter3D(datam[0], datam[1], datam[2], c=datam[3], cmap='jet')
 fig.colorbar(p, ax=ax)
 
 pl.xticks(thr_array)
 pl.yticks(sig_array)
 pl.autoscale(tight=True)
 
-pl.show()
-	
+#pl.show()
+from scipy.interpolate import griddata	
+data1=np.array(x)
+data2=np.array(y)
+data3=np.array(z)
+output=np.array(t)
 
+fig = pl.figure(2)
+
+xi = np.linspace(data1.min(),data1.max(),200)
+yi = np.linspace(data2.min(),data2.max(),200)
+wi = np.linspace(data3.min(),data3.max(),200)
+
+# Interpoling unstructured data 
+zi = griddata((data1, data2), output, (xi[None,:], yi[:,None]), method='cubic')
+# removing NaNs from the array
+zi = np.nan_to_num(zi)
+
+ax = fig.add_subplot(1, 1, 1, projection='3d', azim=210)
+
+xig, yig = np.meshgrid(xi, yi)
+
+#normalizing variable to interval 0-1
+#data3col=data3/data3.max()
+
+surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, cmap='jet', linewidth=0, antialiased=False, shade=False)
+#surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, facecolor=cm.jet(data3col), linewidth=0, antialiased=False, shade=False)
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+#fig.colorbar(surf, shrink=0.5, aspect=5)
+ax.set_zlim(0, 1)
+fig.colorbar(surf, ax=ax)
+pl.show()
 
