@@ -43,7 +43,7 @@ def corr_histo(corr_matrix):
 	bin_nu    = 100
 	# a normalized histogram is obtained
 	hist, bin_edges = np.histogram(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True)#, histtype='bar')
-	print hist
+	
 	#hist = pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True, histtype='bar')
 	#pl.title(simfile)
 	# type(hist) = <type 'tuple'> and len(hist) = 3
@@ -114,9 +114,9 @@ def chi2_hists(HA, HB):
 local_path   = '../data/jobs_corr/'		
 
 # simulations based on EMPIRICAL brain networks
-name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=90.0_tmax=45000_FHN_corr.dat'
+name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 # simulations based on RANDOMIZED brain networks
-name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.5_D=0.05_v=90.0_tmax=45000_FHN_corr.dat'
+name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 
 thr_array = np.array([ 54,  56,  58,  60,  62,  64, 66])	
 vel_array = np.array([40, 50, 60, 70, 80, 90])
@@ -127,12 +127,19 @@ R_thr =  {}
 for THR in thr_array :
 	R_temp = []
 	
-	for VEL in vel_array :
- 		input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
-		input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
-		print str(THR)
-		print local_path+input_empiri	
-		print local_path+input_simuli
+	#for VEL in vel_array :
+ 		#input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
+		#input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
+		##print str(THR) , VEL
+		##print local_path+input_empiri	
+		##print local_path+input_simuli
+
+	for SIG in sig_array :		
+		input_empiri = name_E[0:18] + str(THR) + name_E[20:27] + str(SIG) + name_E[30:]
+		input_simuli = name_R[0:18] + str(THR) + name_R[20:27] + str(SIG) + name_R[30:]
+		#print str(THR) , VEL
+		#print local_path+input_empiri	
+		#print local_path+input_simuli
 
 		try:
 			mtx_empiri = load_matrix(local_path + input_empiri)
@@ -140,15 +147,15 @@ for THR in thr_array :
 			mtx_simuli = load_matrix(local_path + input_simuli)
 			HistB      = corr_histo(mtx_simuli)
 		except :
-			R_vel      = np.nan
+			R_val      = np.nan
 		else :
-			R_vel      = intersec_hists(HistA, HistB)
-			R_vel      = chi2_hists(HistA, HistB)
-			R_vel      = bhatta_hists(HistA, HistB)
-			R_vel      = correl_hists(HistA, HistB)
-		print R_vel
+			#R_val      = intersec_hists(HistA, HistB)
+			#R_val      = chi2_hists(HistA, HistB)
+			R_val       = bhatta_hists(HistA, HistB)
+			#R_val      = correl_hists(HistA, HistB)
+		print "r - sigma - R : ", THR, SIG, R_val
 			
-		R_temp     = np.append(R_temp, R_vel)
+		R_temp     = np.append(R_temp, R_val)
 	R_thr[THR] 	   = np.array(R_temp)	
 	
 Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
@@ -163,48 +170,24 @@ datam 		= np.array(Ordered_R.values())
 ## PLOTTING BEGINS ! 
 fig, ax = pl.subplots()
 cmap    = pl.cm.jet
-##pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', vmin=0.0, vmax=0.48, aspect='auto')
 pl.imshow((np.transpose(datam)), interpolation='nearest', cmap='jet', aspect='auto')
-cbar = pl.colorbar()
-pl.show()
-### PLOT PA OVER SIGMA
-##a = thr_array
-##b = sig_array
-### title for fhn....
-##pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s] '+' T = 450 [s]',
-		 ##fontsize=20)
-### title for bold...
-###pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s]', fontsize=20)
-##pl.ylabel('$\sigma$ ', fontsize=20)
+cbar    = pl.colorbar()
+
+# PLOT PA OVER SIGMA
+a = thr_array
+b = sig_array
+pl.ylabel('$\sigma$ ', fontsize=20)
 
 ## PLOT PA OVER VELOCITY
 #a = thr_array
 #b = vel_array
-## title for fhn....
-##pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
-##		 fontsize=20)
-#pl.title('A_aal_0...' + ' , FHN , correl. test, bins=100' + '$\sigma$ = 0.5', fontsize=20)
 #pl.ylabel('v [m/s]', fontsize=20)
 
-#pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
-#pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-#pl.xlabel('thr', fontsize = 20)
-#for t in cbar.ax.get_yticklabels():
-	#t.set_fontsize(15)
-#pl.xticks(fontsize = 15)
-#pl.yticks(fontsize = 15)
-#pl.show()		
-
-#mtx_empiri			= 		load_matrix(local_path+input_empiri)		
-#mtx_simuli			= 		load_matrix(local_path+input_simuli)
-#pl.figure(1)
-#HistA = corr_histo(mtx_empiri, input_empiri)
-#pl.figure(2)
-#HistB = corr_histo(mtx_simuli, input_simuli)
-#print intersec_hists(HistA, HistB)
-
-#print chi2_hists(HistA, HistB)
-#print "Bahttta : ", bhatta_hists(HistA, HistB)
-#print correl_hists(HistA, HistB)
-#pl.show()
-
+pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
+pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
+pl.xlabel('thr', fontsize = 20)
+for t in cbar.ax.get_yticklabels():
+	t.set_fontsize(15)
+pl.xticks(fontsize = 15)
+pl.yticks(fontsize = 15)
+pl.show()		
