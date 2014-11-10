@@ -12,6 +12,7 @@ import glob
 import os
 import scipy.stats as sistat
 import collections
+from mpl_toolkits.mplot3d import Axes3D
 
 # check the loaded matrix if it is symmetric
 def load_matrix(file):
@@ -114,9 +115,9 @@ def chi2_hists(HA, HB):
 local_path   = '../data/jobs_corr/'		
 
 # simulations based on EMPIRICAL brain networks
-name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=40.0_tmax=45000_FHN_corr.dat'
 # simulations based on RANDOMIZED brain networks
-name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=40.0_tmax=45000_FHN_corr.dat'
 
 thr_array = np.array([ 54,  56,  58,  60,  62,  64, 66])	
 vel_array = np.array([40, 50, 60, 70, 80, 90])
@@ -124,70 +125,54 @@ sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
 
 R_thr =  {}
 
+x = []
+y = []
+z = []
+t = []
+
 for THR in thr_array :
 	R_temp = []
 	
-	#for VEL in vel_array :
- 		#input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
-		#input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
-		##print str(THR) , VEL
-		##print local_path+input_empiri	
-		##print local_path+input_simuli
-
 	for SIG in sig_array :		
 		input_empiri = name_E[0:18] + str(THR) + name_E[20:27] + str(SIG) + name_E[30:]
 		input_simuli = name_R[0:18] + str(THR) + name_R[20:27] + str(SIG) + name_R[30:]
-		#print str(THR) , VEL
-		#print local_path+input_empiri	
-		#print local_path+input_simuli
-
-		try:
-			mtx_empiri = load_matrix(local_path + input_empiri)
-			HistA      = corr_histo(mtx_empiri)
-			mtx_simuli = load_matrix(local_path + input_simuli)
-			HistB      = corr_histo(mtx_simuli)
-		except :
-			R_val      = np.nan
-		else :
-			#R_val      = intersec_hists(HistA, HistB)
-			#R_val      = chi2_hists(HistA, HistB)
-			R_val       = bhatta_hists(HistA, HistB)
-			#R_val      = correl_hists(HistA, HistB)
-		print "r - sigma - R : ", THR, SIG, R_val
+		
+		for VEL in vel_array :
+			input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
+			input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
 			
-		R_temp     = np.append(R_temp, R_val)
-	R_thr[THR] 	   = np.array(R_temp)	
+			try:
+				mtx_empiri = load_matrix(local_path + input_empiri)
+				HistA      = corr_histo(mtx_empiri)
+				mtx_simuli = load_matrix(local_path + input_simuli)
+				HistB      = corr_histo(mtx_simuli)
+			except :
+				R_val      = np.nan
+			else :
+				#R_val      = intersec_hists(HistA, HistB)
+				#R_val      = chi2_hists(HistA, HistB)
+				R_val       = bhatta_hists(HistA, HistB)
+				#R_val      = correl_hists(HistA, HistB)
+			
+			x = np.append(x, THR)
+			y = np.append(y, SIG)
+			z = np.append(z, VEL)
+			t = np.append(t, R_val)
+
+datam = []
+datam.append([x, y, z, t])			
+datam = zip(*datam)
+
+fig = pl.figure()
+ax  = fig.add_subplot(111,projection='3d')
+p   = ax.scatter(datam[0], datam[1], datam[2], c=datam[3], cmap='jet')
+fig.colorbar(p, ax=ax)
+
+pl.xticks(thr_array)
+pl.yticks(sig_array)
+pl.autoscale(tight=True)
+
+pl.show()
 	
-Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-#print "Ordered dict"
-#print Ordered_R
 
-datam 		= np.array(Ordered_R.values())
 
-#print "check its numpy array version"
-#print datam
-
-## PLOTTING BEGINS ! 
-fig, ax = pl.subplots()
-cmap    = pl.cm.jet
-pl.imshow((np.transpose(datam)), interpolation='nearest', cmap='jet', aspect='auto')
-cbar    = pl.colorbar()
-
-# PLOT PA OVER SIGMA
-a = thr_array
-b = sig_array
-pl.ylabel('$\sigma$ ', fontsize=20)
-
-## PLOT PA OVER VELOCITY
-#a = thr_array
-#b = vel_array
-#pl.ylabel('v [m/s]', fontsize=20)
-
-pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a)
-pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-pl.xlabel('thr', fontsize = 20)
-for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(15)
-pl.xticks(fontsize = 15)
-pl.yticks(fontsize = 15)
-pl.show()		
