@@ -24,7 +24,7 @@ def load_matrix(file):
 	return AT
 
 
-def corr_histo(corr_matrix, simfile):
+def corr_histo(corr_matrix):
 		
 	#corr_flat = []
 	## removing the diagonal elements in both matrices to get
@@ -54,46 +54,37 @@ def corr_histo(corr_matrix, simfile):
 # intersection method to compare two histograms
 # HA and HB must be normalized histograms
 def intersec_hists(HA, HB):
-	y_axis    = 0
-	HA_norm = HA
-	HB_norm = HB
 	minsum  = 0
-	for i in range(0, len(HA_norm)) :
-		minsum = minsum + min(HA_norm[i], HB_norm[i])
+	for i in range(0, len(HA)) :
+		minsum = minsum + min(HA[i], HB[i])
 	# normalize minsum 
-	minsum  = float(minsum) /  sum(HB_norm) 
+	minsum  = float(minsum) /  sum(HB) 
 	return minsum
 	
 def correl_hists(HA, HB):
-	y_axis    = 0
-	HA_norm = HA[y_axis]
-	HB_norm = HB[y_axis]
-	N  = len(HA_norm)
-	HA_bar  = sum(HA_norm) / float(N)
-	HB_bar  = sum(HB_norm) / float(N)
+	N  = len(HA)
+	HA_bar  = sum(HA) / float(N)
+	HB_bar  = sum(HB) / float(N)
 	tmp1    = 0 
 	tmp2    = 0
 	tmp3	= 0
 	for i in range(0, N) : 
-		tmp1 = tmp1 + (HA_norm[i] - HA_bar) * (HB_norm[i] - HB_bar)
-		tmp2 = tmp2 + pow((HA_norm[i] - HA_bar) , 2)
-		tmp3 = tmp3 + pow((HB_norm[i] - HB_bar) , 2)
+		tmp1 = tmp1 + (HA[i] - HA_bar) * (HB[i] - HB_bar)
+		tmp2 = tmp2 + pow((HA[i] - HA_bar) , 2)
+		tmp3 = tmp3 + pow((HB[i] - HB_bar) , 2)
 	d = float(tmp1) / sqrt(tmp2 * tmp3)
 	return d 
 	
 # Bhattacharyya method to compare two histograms
 # HA and HB must be normalized histograms
 def bhatta_hists(HA, HB):
-	y_axis    = 0
-	HA_norm = HA
-	HB_norm = HB
-	N  = len(HA_norm)
-	HA_bar  = sum(HA_norm) / float(N)
-	HB_bar  = sum(HB_norm) / float(N)
+	N  = len(HA)
+	HA_bar  = sum(HA) / float(N)
+	HB_bar  = sum(HB) / float(N)
 	S1      = 1./ sqrt(HA_bar*HB_bar*N*N)
 	S2      = 0
 	for i in range(0, N) :
-		S2 = S2 + sqrt(HA_norm[i]*HB_norm[i])
+		S2 = S2 + sqrt(HA[i]*HB[i])
 	
 	S3  = sqrt(1 - S1*S2)	
 	return S3
@@ -101,14 +92,11 @@ def bhatta_hists(HA, HB):
 
 def chi2_hists(HA, HB):
 	# compute the chi-squared distance
-	y_axis    = 0
-	HA_norm = HA[y_axis]
-	HB_norm = HB[y_axis]
 	squsum  = 0
 	eps = 1e-10
-	for i in range(0, len(HA_norm)) :
-		tmp1 = pow((HA_norm[i] - HB_norm[i]) , 2) 
-		tmp2 = HA_norm[i] + HB_norm[i]
+	for i in range(0, len(HA)) :
+		tmp1 = pow((HA[i] - HB[i]) , 2) 
+		tmp2 = HA[i] + HB[i]
 		if tmp2 == 0 :
 			tmp2 = eps
 		squsum = squsum + tmp1 / float(tmp2)
@@ -148,16 +136,16 @@ for THR in thr_array :
 
 		try:
 			mtx_empiri = load_matrix(local_path + input_empiri)
-			HistA      = corr_histo(mtx_empiri, input_empiri)
+			HistA      = corr_histo(mtx_empiri)
 			mtx_simuli = load_matrix(local_path + input_simuli)
-			HistB      = corr_histo(mtx_simuli, input_simuli)
+			HistB      = corr_histo(mtx_simuli)
 		except :
 			R_vel      = np.nan
 		else :
-			#R_vel      = intersec_hists(HistA, HistB)
-			#R_vel      = chi2_hists(HistA, HistB)
+			R_vel      = intersec_hists(HistA, HistB)
+			R_vel      = chi2_hists(HistA, HistB)
 			R_vel      = bhatta_hists(HistA, HistB)
-			#R_vel      = correl_hists(HistA, HistB)
+			R_vel      = correl_hists(HistA, HistB)
 		print R_vel
 			
 		R_temp     = np.append(R_temp, R_vel)
