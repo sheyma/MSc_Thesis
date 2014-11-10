@@ -96,11 +96,11 @@ Y_int = nullcl_01(X_int)
 x_limit = 2.5
 x_range = np.linspace(-x_limit,x_limit,500)
 
-# without noise :
-dde = dde23(eqns=eqns,params=params)
+## without noise :
+#dde = dde23(eqns=eqns,params=params)
 
-## with noise :
-#dde = dde23(eqns=eqns,params=params, noise=noise)
+# with noise :
+dde = dde23(eqns=eqns,params=params, noise=noise)
 
 tfinal =250
 
@@ -139,8 +139,8 @@ fig = pl.figure(num=None, figsize=(13.5, 6), dpi=100, facecolor='w', edgecolor='
 ## [GHO08a], [VUK13]
 fig.suptitle('FHN - Local Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
 	      r'  $  \gamma$ = '+str(params['gamma']) + ' $   b$ = '+ 
-	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) ,
-	      #+ '  D = ' + str(params['D']) ,
+	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) +
+	      '  D = ' + str(params['D']) , 
 	      fontsize=25)
 
 

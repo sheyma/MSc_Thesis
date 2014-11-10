@@ -22,9 +22,9 @@ params = {  'gamma': 1.0,
 			'alpha': 0.85,  
 			'b'    : 0.2,
             'TAU'  : 1.25, 
-	        'sigma': 0.3,  
+	        'sigma': 0.5,  
 			'D'    : 0.05,  			# noise strength
-			'v'    : 70.0, } 			# velocity in 0.1 m/s 
+			'v'    : 10.0, } 			# velocity in 0.1 m/s 
 
 # gaussian white noise distribution
 noise = {'x': 'D * gwn()', 'y': 'D * gwn()'} 
@@ -54,8 +54,8 @@ print "max delay in time delay matrix", T.max()
 max_tau = math.ceil(T.max())
 
 
-coupling = '-{G:.6f}*{H}*({var}(t-{tau})-{self})'
-
+coupling = '-{G:.6f}*{H}*{var}(t-{tau})'
+#coupling = '-{G:.1f}*{H}*{var}(t-{tau})'
 neuronetz = simnet(eqns, G, H, T, params, coupling, noise)
  
 thist = np.linspace(0, max_tau, 10000)
@@ -137,35 +137,38 @@ fig.suptitle('FHN - time series :  '+r'$\alpha$ = '
 		+ str(params['alpha']) +r'  $\gamma$ = '+str(params['gamma']) 
 		+ ' $ b$ = '+  str(params['b'])+' ' + 
 		r'$\tau$ = '+str(params['TAU'])+'  C = ' + str(params['sigma'])
+		+ '  D = 0.05 '  +  '  v = 1 [m/s] '
 		 +'  '    + r'$\Delta\tau_{ij}$=$d_{ij}/v$'
 	      #'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
 	      #str(params['tau'])#
-	      , fontsize=14, fontweight='bold')
+	      , fontsize=25)
 
-pl.subplot(2,1,1)
-pl.plot(sol_samp1['t'],sol_samp1['x0'], 'r',label='x(t)')
-pl.plot(sol_samp1['t'],sol_samp1['y0'], 'b',label='y(t)')
+pl.figure(1)
+#pl.subplot(2,1,1)
+pl.plot(sol_samp1['t'],sol_samp1['x1'], 'r',label='x(t)')
+pl.plot(sol_samp1['t'],sol_samp1['y1'], 'b',label='y(t)')
 #pl.plot(sol_adap['t'],sol_adap['x0'],'.r',linewidth=0.05)
 #pl.plot(sol_adap['t'][10573:10758],sol_adap['y0'][10573:10758],'.b',linewidth=0.05)
-pl.xlabel('$t$')
-pl.ylabel('$x_1,y_1$')
-lg = legend(loc=2)
+pl.xlabel('t', fontsize = 25)
+pl.ylabel('$x_1(t) , y_1(t)$', fontsize = 25)
+pl.tick_params(labelsize=25)
+lg = legend(loc=2, prop={'size':20})
 lg.draw_frame(False)
 
-pl.subplot(212)
-pl.plot(sol_samp1['x0'],sol_samp1['y0'], 'r')
-pl.plot(sol_samp1['x0'][0],sol_samp1['y0'][0], 'or')
-#pl.plot(sol_adap['x'],sol_calc['y'],'or')
-pl.plot(x_range,nullcl_01(x_range),'b', label='$x_{nullcline}$')
-pl.plot(x_range,nullcl_02(x_range),'k',label='$y_{nullcline}$')
-pl.plot(X_int[0],Y_int[0], 'ok', linewidth=5)
-#pl.axis([-2.3, 2.3, -1.5, 1.5])
-lg = legend(loc=2)
-lg.draw_frame(False)
-pl.axis([-5, 5, -5 ,5])
-#pl.axis([-2.3, 2.3, -1, 1])
-pl.xlabel('$x_1$')
-pl.ylabel('$y_1$')
+#pl.subplot(212)
+#pl.plot(sol_samp1['x1'],sol_samp1['y1'], 'r')
+#pl.plot(sol_samp1['x1'][0],sol_samp1['y1'][0], 'or')
+##pl.plot(sol_adap['x'],sol_calc['y'],'or')
+#pl.plot(x_range,nullcl_01(x_range),'b', label='$x_{nullcline}$')
+#pl.plot(x_range,nullcl_02(x_range),'k',label='$y_{nullcline}$')
+#pl.plot(X_int[0],Y_int[0], 'ok', linewidth=5)
+##pl.axis([-2.3, 2.3, -1.5, 1.5])
+#lg = legend(loc=2)
+#lg.draw_frame(False)
+#pl.axis([-5, 5, -5 ,5])
+##pl.axis([-2.3, 2.3, -1, 1])
+#pl.xlabel('$x_1$')
+#pl.ylabel('$y_1$')
 
 #pl.savefig("FHN_time_series_C_small.eps",format="eps")
 pl.show()

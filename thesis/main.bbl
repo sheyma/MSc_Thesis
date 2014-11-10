@@ -1,0 +1,148 @@
+\begin{thebibliography}{23}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Barab{\'a}si et~al.(2009)]{XYZ09}
+Albert-L{\'a}szl{\'o} Barab{\'a}si et~al.
+\newblock Scale-free networks: a decade and beyond.
+\newblock \emph{Science}, 325\penalty0 (5939):\penalty0 412--413, 2009.
+
+\bibitem[Rubinov and Sporns(2010)]{RUB10}
+Mikail Rubinov and O.~Sporns.
+\newblock Complex network measures of brain connectivity: uses and
+  interpretations.
+\newblock \emph{NeuroImage}, 52\penalty0 (3):\penalty0 1059--1069, 2010.
+
+\bibitem[Friston(1994)]{XYZ94}
+Karl~J Friston.
+\newblock Functional and effective connectivity in neuroimaging: a synthesis.
+\newblock \emph{Human brain mapping}, 2\penalty0 (1-2):\penalty0 56--78, 1994.
+
+\bibitem[Latora and Marchiori(2001)]{LAT01}
+Vito Latora and Massimo Marchiori.
+\newblock Efficient behavior of small-world networks.
+\newblock \emph{Phys. Rev. Lett.}, 87\penalty0 (19):\penalty0 198701, 2001.
+\newblock \doi{10.1103/physrevlett.87.198701}.
+
+\bibitem[Watts and Strogatz(1998)]{WAT98}
+D.~J. Watts and S.~H. Strogatz.
+\newblock {{C}ollective dynamics of 'small-world' networks}.
+\newblock \emph{Nature}, 393:\penalty0 440--442, 1998.
+
+\bibitem[Newman(2003)]{NEW03}
+M.~E.~J. Newman.
+\newblock The structure and function of complex networks.
+\newblock \emph{SIAM Review}, 45\penalty0 (2):\penalty0 167--256, 2003.
+\newblock \doi{10.1137/s0036144503}.
+
+\bibitem[Humphries and Gurney(2008)]{HUM08}
+Mark~D Humphries and Kevin Gurney.
+\newblock Network 'small-world-ness' : a quantitative method for determining
+  canonical network equivalence.
+\newblock \emph{PLoS One}, 3\penalty0 (4):\penalty0 e0002051, 2008.
+
+\bibitem[Bullmore and Sporns(2009)]{BUL09}
+E.~T. Bullmore and O.~Sporns.
+\newblock Complex brain networks: graph theoretical analysis of structural and
+  functional systems.
+\newblock \emph{Nat. Rev. Neurosci.}, 10\penalty0 (3):\penalty0 186--198, 2009.
+
+\bibitem[Rubinov et~al.(2009)Rubinov, Sporns, Van~Leeuwen, and
+  Breakspear]{RUB09}
+Mikail Rubinov, O.~Sporns, Cees Van~Leeuwen, and M.~Breakspear.
+\newblock Symbiotic relationship between brain structure and dynamics.
+\newblock \emph{BMC Neuroscience}, 10\penalty0 (1):\penalty0 55, 2009.
+
+\bibitem[van~den Heuvel and Sporns(2011)]{HEU11}
+M.~P. van~den Heuvel and O.~Sporns.
+\newblock Rich-club organization of the human connectome.
+\newblock \emph{The Journal of Neuroscience}, 31\penalty0 (44):\penalty0
+  15775--15786, 2011.
+
+\bibitem[Vuksanovi\'{c} and H{\"o}vel(2014)]{VUK14}
+V.~Vuksanovi\'{c} and P.~H{\"o}vel.
+\newblock Functional connectivity of distant cortical regions: Role of remote
+  synchronization and symmetry in interactions.
+\newblock \emph{NeuroImage}, 97:\penalty0 1--8, 2014.
+\newblock \doi{10.1016/j.neuroimage.2014.04.039}.
+
+\bibitem[Bullmore and Bassett(2011)]{BUL11a}
+E.~T. Bullmore and D.~S. Bassett.
+\newblock Brain graphs: graphical models of the human brain connectome.
+\newblock \emph{Annual review of clinical psychology}, 7:\penalty0 113--140,
+  2011.
+
+\bibitem[Tzourio-Mazoyer et~al.(2002)Tzourio-Mazoyer, Landeau, Papathanassiou,
+  Crivello, Etard, Delcroix, Mazoyer, and Joliot]{TZO02}
+N.~Tzourio-Mazoyer, B.~Landeau, D.~Papathanassiou, F.~Crivello, O.~Etard,
+  N.~Delcroix, B.~Mazoyer, and M.~Joliot.
+\newblock Automated anatomical labeling of activations in {SPM} using a
+  macroscopic anatomical parcellation of the {MNI MRI} single-subject brain.
+\newblock \emph{Neuroimage}, 15\penalty0 (1):\penalty0 273--289, 2002.
+
+\bibitem[Iturria-Medina et~al.(2008)Iturria-Medina, Sotero,
+  Canales-Rodr{\'\i}guez, Alem{\'a}n-G{\'o}mez, and Melie-Garc{\'\i}a]{ITU08}
+Yasser Iturria-Medina, Roberto~C Sotero, Erick~J Canales-Rodr{\'\i}guez, Yasser
+  Alem{\'a}n-G{\'o}mez, and Lester Melie-Garc{\'\i}a.
+\newblock Studying the human brain anatomical network via diffusion-weighted
+  mri and graph theory.
+\newblock \emph{Neuroimage}, 40\penalty0 (3):\penalty0 1064--1076, 2008.
+
+\bibitem[Xia et~al.(2013)Xia, Wang, and He]{XYZ13}
+Mingrui Xia, Jinhui Wang, and Yong He.
+\newblock Brainnet viewer: a network visualization tool for human brain
+  connectomics.
+\newblock \emph{PLoS One}, 8\penalty0 (7):\penalty0 e68910, 2013.
+
+\bibitem[Barabasi and Albert(1999)]{BAR99a}
+A.~L. Barabasi and R.~Albert.
+\newblock Emergence of scaling in random networks.
+\newblock \emph{Science}, 286:\penalty0 509, 1999.
+
+\bibitem[Buckner et~al.(2009)Buckner, Sepulcre, Talukdar, Krienen, Liu, Hedden,
+  Andrews-Hanna, Sperling, and Johnson]{XYZ2009}
+Randy~L Buckner, Jorge Sepulcre, Tanveer Talukdar, Fenna~M Krienen, Hesheng
+  Liu, Trey Hedden, Jessica~R Andrews-Hanna, Reisa~A Sperling, and Keith~A
+  Johnson.
+\newblock Cortical hubs revealed by intrinsic functional connectivity: mapping,
+  assessment of stability, and relation to alzheimer's disease.
+\newblock \emph{The Journal of Neuroscience}, 29\penalty0 (6):\penalty0
+  1860--1873, 2009.
+
+\bibitem[Damoiseaux and Greicius(2009)]{DAM09}
+J~S Damoiseaux and Michael~D Greicius.
+\newblock Greater than the sum of its parts: a review of studies combining
+  structural connectivity and resting-state functional connectivity.
+\newblock \emph{Brain Structure and Function}, 213\penalty0 (6):\penalty0
+  525--533, 2009.
+
+\bibitem[Newman(2010)]{NEW10}
+M.~E.~J. Newman.
+\newblock \emph{Networks: an introduction}.
+\newblock Oxford University Press, Inc., New York, 2010.
+
+\bibitem[Abakumov et~al.(1977)Abakumov, Kreshchuk, and Yassievich]{ABA77}
+V.~N. Abakumov, L.~N. Kreshchuk, and I.~N. Yassievich.
+\newblock Carrier capture by attractive centers in strong electric fields.
+\newblock \emph{Sov.~Phys.~Semicond.}, 12\penalty0 (2):\penalty0 152, 1977.
+
+\bibitem[Abakumov et~al.(1978)Abakumov, Perel, and Yassievich]{ABA78}
+V.~N. Abakumov, V.~I. Perel, and I.~N. Yassievich.
+\newblock Capture of carriers by attractive centers in semiconductors.
+\newblock \emph{Sov.~Phys.~Semicond.}, 12\penalty0 (1):\penalty0 1, 1978.
+
+\bibitem[Abarbanel et~al.(1996)Abarbanel, Rulkov, and Sushchik]{ABA96}
+H.~D.~I. Abarbanel, N.~F. Rulkov, and M.~M. Sushchik.
+\newblock Generalized synchronization of chaos: The auxiliary system approach.
+\newblock \emph{Phys. Rev.~E}, 53\penalty0 (5):\penalty0 4528--4535, 1996.
+
+\bibitem[Biktashev and Holden(1994)]{BIK94}
+V.~N. Biktashev and A.~V. Holden.
+\newblock Design principles of a low voltage cardiac defibrillator based on the
+  effect of feedback resonant drift.
+\newblock \emph{J. Theor. Biol.}, 169\penalty0 (2):\penalty0 101--112, 1994.
+
+\end{thebibliography}
