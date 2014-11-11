@@ -1,4 +1,4 @@
-\begin{thebibliography}{23}
+\begin{thebibliography}{36}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -62,11 +62,11 @@ M.~P. van~den Heuvel and O.~Sporns.
 \newblock \emph{The Journal of Neuroscience}, 31\penalty0 (44):\penalty0
   15775--15786, 2011.
 
-\bibitem[Vuksanovi\'{c} and H{\"o}vel(2014)]{VUK14}
+\bibitem[Vuksanovi\'{c} and H{\"o}vel(2014{\natexlab{a}})]{VUK14}
 V.~Vuksanovi\'{c} and P.~H{\"o}vel.
 \newblock Functional connectivity of distant cortical regions: Role of remote
   synchronization and symmetry in interactions.
-\newblock \emph{NeuroImage}, 97:\penalty0 1--8, 2014.
+\newblock \emph{NeuroImage}, 97:\penalty0 1--8, 2014{\natexlab{a}}.
 \newblock \doi{10.1016/j.neuroimage.2014.04.039}.
 
 \bibitem[Bullmore and Bassett(2011)]{BUL11a}
@@ -123,6 +123,99 @@ J~S Damoiseaux and Michael~D Greicius.
 M.~E.~J. Newman.
 \newblock \emph{Networks: an introduction}.
 \newblock Oxford University Press, Inc., New York, 2010.
+
+\bibitem[Biswal et~al.(1995)Biswal, Yetkin, Haughton, and Hyde]{BIS95}
+B~Biswal, F~Z Yetkin, V~M Haughton, and J~S Hyde.
+\newblock Functional connectivity in the motor cortex of resting human brain
+  using echo-planar mri.
+\newblock \emph{Magnetic Resonance in Medicine}, 34\penalty0 (4):\penalty0
+  537--541, 1995.
+
+\bibitem[Damoiseaux et~al.(2006)Damoiseaux, Rombouts, Barkhof, Scheltens, Stam,
+  Smith, and Beckmann]{DAM06}
+J~S Damoiseaux, S~A R~B Rombouts, F~Barkhof, P~Scheltens, C.~J. Stam, S~M
+  Smith, and C~F Beckmann.
+\newblock Consistent resting-state networks across healthy subjects.
+\newblock \emph{Proc. Natl. Acad. Sci. U.S.A.}, 103\penalty0 (37):\penalty0
+  13848--13853, 2006.
+
+\bibitem[Vincent et~al.(2007)Vincent, Patel, Fox, Snyder, Baker, Van~Essen,
+  Zempel, Snyder, Corbetta, and Raichle]{VIN07a}
+J.~L. Vincent, G.~H. Patel, M.~D. Fox, A.~Z. Snyder, J.~T. Baker, D.~C.
+  Van~Essen, J.~M. Zempel, L.~H. Snyder, M.~Corbetta, and M.~E. Raichle.
+\newblock Intrinsic functional architecture in the anaesthetized monkey brain.
+\newblock \emph{Nature}, 447\penalty0 (7140):\penalty0 83--86, 2007.
+
+\bibitem[Vuksanovi\'{c} and H{\"o}vel(2014{\natexlab{b}})]{VUK13}
+V.~Vuksanovi\'{c} and P.~H{\"o}vel.
+\newblock Large-scale neural network model for functional networks of the human
+  cortex.
+\newblock In A.~Pelster and G~Wunner, editors, \emph{{Selforganization in
+  Complex Systems: The Past, Present, and Future of Synergetics, Proc. of the
+  International Symposium, Hanse Institute of Advanced Studies Delmenhorst}},
+  Berlin, 2014{\natexlab{b}}. Springer.
+
+\bibitem[FitzHugh(1961)]{FIT61}
+R.~FitzHugh.
+\newblock Impulses and physiological states in theoretical models of nerve
+  membrane.
+\newblock \emph{Biophys. J.}, 1:\penalty0 445--466, 1961.
+
+\bibitem[Nagumo et~al.(1962)Nagumo, Arimoto, and Yoshizawa.]{NAG62}
+J.~Nagumo, S.~Arimoto, and S.~Yoshizawa.
+\newblock An active pulse transmission line simulating nerve axon.
+\newblock \emph{Proc. IRE}, 50:\penalty0 2061--2070, 1962.
+
+\bibitem[Ghosh et~al.(2008{\natexlab{a}})Ghosh, Rho, McIntosh, K{\"o}tter, and
+  Jirsa]{GHO08}
+A.~Ghosh, Y.~Rho, A.~R. McIntosh, R.~K{\"o}tter, and V.~K. Jirsa.
+\newblock Noise during rest enables the exploration of the brain's dynamic
+  repertoire.
+\newblock \emph{PLoS Comput Biol}, 4\penalty0 (10):\penalty0 e1000196,
+  2008{\natexlab{a}}.
+\newblock \doi{10.1371/journal.pcbi.1000196}.
+
+\bibitem[Ghosh et~al.(2008{\natexlab{b}})Ghosh, Rho, McIntosh, K{\"o}tter, and
+  Jirsa]{GHO08a}
+A.~Ghosh, Y~Rho, A~R McIntosh, R~K{\"o}tter, and V.~K. Jirsa.
+\newblock Cortical network dynamics with time delays reveals functional
+  connectivity in the resting brain.
+\newblock \emph{Cogn. Neurodyn.}, 2\penalty0 (2):\penalty0 115--120,
+  2008{\natexlab{b}}.
+\newblock \doi{10.1007/s11571-008-9044-2}.
+
+\bibitem[Deco et~al.(2009)Deco, Jirsa, McIntosh, Sporns, and K{\"o}tter]{DEC09}
+G.~Deco, V.~K. Jirsa, A.~R. McIntosh, O.~Sporns, and R.~K{\"o}tter.
+\newblock {Key role of coupling, delay, and noise in resting brain
+  fluctuations}.
+\newblock \emph{Proc. Natl. Acad. Sci. U.S.A.}, 106\penalty0 (25):\penalty0
+  10302--10307, 2009.
+\newblock \doi{10.1073/pnas.0901831106}.
+
+\bibitem[Friston et~al.(2000)Friston, Mechelli, Turner, and Price]{FRI00}
+K.~Friston, A~Mechelli, R~Turner, and C~J Price.
+\newblock Nonlinear responses in {fMRI}: The balloon model, {Volterra} kernels,
+  and other hemodynamics.
+\newblock \emph{NeuroImage}, 12\penalty0 (4):\penalty0 466--477, 2000.
+
+\bibitem[Kaiser and Hilgetag(2006)]{KAI06}
+Marcus Kaiser and C.~C. Hilgetag.
+\newblock Nonoptimal component placement, but short processing paths, due to
+  long-distance projections in neural systems.
+\newblock \emph{PLoS Comput. Biol.}, 2\penalty0 (7):\penalty0 e95, 2006.
+
+\bibitem[Flunkert and Sch{\"o}ll(2009)]{FLU09a}
+V.~Flunkert and E.~Sch{\"o}ll.
+\newblock pydelay -- a python tool for solving delay differential equations.
+\newblock arXiv:0911.1633~[nlin.CD], 2009.
+
+\bibitem[Bogacki and Shampine(1989)]{BOG89}
+P.~Bogacki and L.~F. Shampine.
+\newblock A {3(2)} pair of runge - kutta formulas.
+\newblock \emph{Applied Mathematics Letters}, 2\penalty0 (4):\penalty0
+  321--325, 1989.
+\newblock ISSN 0893-9659.
+\newblock \doi{doi: 10.1016/0893-9659(89)90079-7}.
 
 \bibitem[Abakumov et~al.(1977)Abakumov, Kreshchuk, and Yassievich]{ABA77}
 V.~N. Abakumov, L.~N. Kreshchuk, and I.~N. Yassievich.
