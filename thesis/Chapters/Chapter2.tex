@@ -322,22 +322,36 @@ The degree of transitivity is one of the fundamental differences between real wo
 
 \section{FitzHugh-Nagumo Model for Neuronal Activity Simulation}
 
+An fMRI-BOLD experiment reveals the correlation coefficients between timeseries of BOLD activity among pre-defined brain regions. The empirical functional connectivity matrix (FCM) derived from fMRI-BOLD technique in this project reflects those coefficients among $N=90$ AAL regions at the resting state of human brain, i.e. no stimulus driving approach is introduced to the subject. Despite lack of any stimulus, the observed fMRI-BOLD signal in the mammalian brain is highly structural and robust at low frequency fluctuations ($<$0.1 Hz) \citep{BIS95, DAM06, VIN07a}. However, the underlying reason of these well organized spatio-temporal dynamics has not yet been completely resolved. The existing models of resting-brain dynamics hypothize that functional interactions result from a complex interplay between intrinsic brain dynamics and anatomical connections \citep{RUB09}. This section proposes a modeling approach for the ongoing neuronal activity at brain's resting state, i.e. how  underlying correlated behavior among distant cortical brain regions arise \citep{VUK13}. Once the model is fulfilled with bio-physically plausible parameter ranges with the help of previous studies, the timeseries of nodes in brain graphs will be extracted by means of model simulations as well as in randomly constructed networks. 
+
+The theoretical model of choice for the neuronal activity is FitzHugh-Nagumo (FHN) systems describing physiological states of nerve membrane potential \citep{FIT61, NAG62}. FHN model will be used to represent the neuronal activity of a nerve cell population, in other words, an AAL node in this project. Local dynamics of a single node will then be globalized in the whole brain network via mutual time delayed interactions among nodes. Here, time delay $\delta \tau_{ij}$ is assumed to arise from a limited signal propagation velocity $v$ between nodes $i$ and $j$, furthermore, time delayed interactions are scaled with a coupling strength $c$ \citep{GHO08, GHO08a, DEC09}. Another important parameter for FHN simulations is threshold $r$ or probability $p$ values used to extract adjacency matrices from FCM and ACM. The first objective is to investigate such plausible $c$, $v$, and $r$ or $p$ ranges at which our simulated neuronal activity of brain graphs are similar to the empirical fMRI-BOLD data. 
+
+FHN model will also be applied on randomly constructed graphs described in the previous section. The second objective is to identify such regions in the explored parameter space for which the simulated timeseries of the empirically obtained networks are distinguishable than that of randomly constructed graphs. The effects of $c$, $v$, $r$ or $p$ as well as network characteristics of graphs will be taken into consideration. At the end, it is aimed to gain further insight into the key features of anatomical brain structures by comparing to randomized networks.  
+ 
+The FHN model is designed to reflect the neuronal activity as simulated timeseries, it is not corresponding the BOLD activity. The comparison of simulated BOLD activity to the fMRI-BOLD signal would be ahead of timeseries comparison approach. The last objective of FHN model is the following: the simulated neuronal activity will be finally used to infer the BOLD signal via the Baloon-Windkessel hemodynamic model in the last section \citep{FRI00}. 
+
+Subsections will describe set of non-linear differential equations for the FHN local dynamics and carry out a stability analysis. Dynamics of a single node will then be globalized via mutual couplings with a second node and the effect of time delay interactions will be demonstrated. The last part will embed complete FHN simulation to a simple graph and the first exemplary timeseries of a node will be illustrated. 
+
+
+
+
+
 \subsection{FHN Model Local Dynamics}
 
-This section aims to demonstrate local dynamics of a brain node with FHN model. Here, the node is assumed to be isolated, meaning that it is not connected to any other node at all in the brain. FHN model has an activator variable $x$ and an inhibitor variable $y$, their time evolution is represented with the following equation,
+This section aims to demonstrate local dynamics of a brain node with FHN model. Here, the node is assumed to be isolated, meaning that it is not connected to any other node at all in the brain. FHN model has an activator variable $x$ and an inhibitor variable $y$, their time evolution is represented with the same implementation as in \citep{GHO08, GHO08a} in following non-linear differential equations,
 \begin{subequations}
 \begin{align}\dot{x} = \tau (y + \gamma x - \frac{x^3}{3})  \label{eqn: frobenius 1}\\  \dot{y} = -\frac{1}{\tau} (x - \alpha + b y - I ) \label{eqn: frobenius 2}   \end{align} 
 \end{subequations}
-where $\tau$ denotes the time constant accelerating $x$, $I$ is the external stimulus parameter, which is made equal to zero in order to get a transient state and $\gamma$, $\alpha$, $b$ are other parameters. Non of the activator or the inhibitor variables includes any coupling parameter.
+where $\tau$ denotes the time constant accelerating $x$, $I$ is the external stimulus parameter and $\gamma$, $\alpha$, $b$ are other system parameters. $x$ and $y$ are considered to be counteracting variables capturing membranous potential alterations on a neuronal population around $10^9$ cells. Non of the activator or the inhibitor variables includes any coupling parameter for the described local activity and additionally $I$ is chosen to be 0 \citep{GHO08}.
 
-The \textit{fixed point} $(x_f, y_f)$ of the system is defined such that there is no change in variables over time $\dot{y} =\dot{x} = 0 $. The fixed point condition yields set of $nullcline$ equations, 
+The \textit{fixed point} $(x_f, y_f)$ of the system is defined such that there is no change in variables over time $\dot{y} =\dot{x} = 0 $. The fixed point condition substituted back into equations (2.6a) abd (2.b6) yields set of $nullcline$ equations, 
 \begin{subequations}
 \begin{align}  y = \frac{x^3}{3} - \gamma x
               \label{eqn: frobenius 3}\\  
                x = \alpha - b y
                \label{eqn: frobenius 4}   \end{align} 
 \end{subequations}
-The stability analysis is performed by calculating eigenvalues of the \textit{Jacobian Matrix}, \textbf{J} at the fixed point. The  linearization of given equations helps us to find  \textbf{J} straightforward,
+where equation (2.7a) will be called as $y-nullcline$ and (2.7b) as $x-nullcline$ from now on. The stability analysis is performed by calculating eigenvalues of the \textit{Jacobian Matrix}, \textbf{J} at the intersection of nullclines, $(x_f, y_f)$. The  linearization of equations (2.6a) and (2.6b) helps to find  \textbf{J} straightforward,
 \begin{equation}
 %
     \begin{pmatrix}
@@ -375,7 +389,7 @@ Eigenvalues of \textbf{J} are calculated as the following,
                \end{align} 
 \end{subequations}
 
-Parameters chosen for FHN model dynamics are $\alpha = 0.85$, $b=0.2$, $\gamma=1.0$ and $\tau=1.25$. The solution of the condition $\dot{y}=\dot{x}=0$ gives coordinates of $(x_f, \, y_f) = (0.98 \, , -0.67 )$. All parameters plugged in eigenvalue equation results in $\lambda_1 = -0.056 + 0.996 i$ and $\lambda_2 = -0.056 - 0.996 i$. Since real parts of both eigenvalues stand below zero, the fixed point is said to be \textit{stable}. Variables $x$ and $y$ are expected to relax onto the fixed point over time.  
+Parameters in FHN model are tuned so that solutions would render a damped oscillatory behavior for each node locally;  $\alpha = 0.85$, $b=0.2$, $\gamma=1.0$ and $\tau=1.25$ \citep{VUK13}. The solution of the condition $\dot{y}=\dot{x}=0$ gives coordinates of $(x_f, \, y_f) = (0.98 \, , -0.67 )$, which is calculated numerically here. All parameters plugged in eigenvalue equation (2.10d) results in $\lambda_1 = -0.056 + 0.996 i$ and $\lambda_2 = -0.056 - 0.996 i$. Since real parts of both eigenvalues stand below zero, the fixed point is said to be \textit{stable}. $\lambda_1$ and $\lambda_2$ are complex conjugate pairs, the fixed point can be alternatively called as a \textit{stable focus}. Variables $x$ and $y$ are expected to relax onto the fixed point over time.  
 
 \begin{figure}[htbp]
   \centering
@@ -386,31 +400,31 @@ Parameters chosen for FHN model dynamics are $\alpha = 0.85$, $b=0.2$, $\gamma=1
   \label{fig:FHN Local}	
 \end{figure}
 
-The time evolution of $x$ and $y$ resembles damped oscillations at the beginning. Following to a rapid excitation and inhibition, both variables relax on to the fixed point by oscillations. State space illustrates this relaxation over nullclines, starting from a randomly chosen $(x_0, y_0)$. The system is in quiescent state. The scale of change in $x$  is more pronounced than $y$ due to $\tau$ proportionality in the definition of FHN model.  
+The time evolution of $x$ and $y$ resembles damped oscillations at the beginning. Following to a rapid excitation and inhibition, both variables converge to the fixed point. State space illustrates this relaxation over nullclines, a clockwise trajectory starting from a randomly chosen $(x_0, y_0)$ and felling on $(x_f, y_f)$ with smaller and smaller amplitude oscillations. The system is in quiescent state, but can also be said to be at the onset of instability. The scale of change in $x$  is more pronounced than $y$ due to $\tau$ proportionality in the definition of $\dot{x}$ in FHN model.  
  
 \subsection{Noise Effect}
 
-The FHN model can be extended with an additional noise factor, 
+The local dynamics of a node can be extended with an additional noise factor, 
 \begin{subequations}
 \begin{align}\dot{x} = \tau (y + \gamma x - \frac{x^3}{3}) + Dn_x  \label{eqn: frobenius 12}\\  \dot{y} = -\frac{1}{\tau} (x - \alpha + b y - I ) + Dn_y \label{eqn: frobenius 13}   \end{align} 
 \end{subequations}
-where $D$ is the noise strength, $n_x$ and $n_y$ represent Gaussian white noises. Neither coordinates of the fixed point or eigenvalues are affected due to the noise factor. However, system dynamics still go under a change. 
+where $D$ is the noise strength, $n_x$ and $n_y$ represent Gaussian white noises. Neither coordinates of the fixed point or eigenvalues are affected due to the noise factor. However, dynamics of the system is forced to go under a change such that the stability will be lost. 
 
 \begin{figure}[htbp]
   \centering
 	\includegraphics[width=\textwidth]{Figures/FHN_noise.eps}
  
     \rule{35em}{0.5pt}
-    \caption[FHN Noise]{Local dynamics of two variables $x$ and  $y$ with same parameters as in previous model, an additional Gaussian white noise with strength $D=0.05$ is added. The fixed point $(x_f, \, y_f) = (0.98 \, , -0.67 )$ is drawn with a black dot in state space where two nullclines intersect.   }
+    \caption[FHN Noise]{Local dynamics of two variables $x$ and  $y$ with same parameters as previously stated, an additional Gaussian white noise with strength $D=0.05$ is added. The fixed point $(x_f, \, y_f) = (0.98 \, , -0.67 )$ is drawn with a black dot in state space where two nullclines intersect.   }
   \label{fig:FHN Noise}	
 \end{figure}
 
-The noise causes sub-threshold oscillations in the time evolution of activator and inhibitor. It prevents $x$ and $y$ variables from relaxing on the fixed point, instead, they fluctuate around it. This dynamics happen at the onset of instability, and it is called "type II excitation" in terms of neuronal dynamics.
+The noise drives sub-threshold oscillations as realized in the time evolution of activator and inhibitor. It prevents $x$ and $y$ variables from relaxing on the fixed point, instead, they fluctuate around it. This dynamics remarks the onset of instability, and it is called "type II excitation" in terms of neuronal dynamics. 
 
 
 \subsection{Global Dynamics}
 
-Now, we consider two nodes connected to each other, either functionally or structurally as in FCM or in ACM. The effect of this connection is represented with global coupling term and time delayed interactions, 
+This section demonstrates the effect of mutual coupling between two exemplary nodes with FHN model. Now, we consider two nodes connected to each other, either functionally or structurally as in FCM or in ACM. The effect of this connection is captured theoretically with a global coupling term and time delayed interactions, 
 
 \begin{subequations}
  \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x^3}{3}) + C [x_2(t-\tau_{12})] +Dn_{x1} \label{eqn: frobenius 14}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1 - I )+ Dn_{y1} \label{eqn: frobenius 15} \\ \dot{x_2} = \tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_{21})] + Dn_{x2} \label{eqn: frobenius 16} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + b y_2 - I ) + Dn_{y2}\end{align} 
@@ -427,22 +441,24 @@ where $C$ is the coupling strength, subindices 1 and 2 stand for corresponding n
   \label{fig:FHN Global}	
 \end{figure}
 
-The mutual coupling between nodes pushes both systems $(x_1,y_1)$ and $(x_2,y_2)$ to be oscillatory with visibly larger amplitudes in comparison to local dynamics and noise effect. The system does not fell on to the fixed point anymore, indicating the loss in stability. 
+The mutual coupling between nodes pushes both systems $(x_1,y_1)$ and $(x_2,y_2)$ to be oscillatory with visibly larger amplitudes in comparison to local dynamics and noise effect in previous figures. The system does not fall on to the fixed point anymore, indicating loss of the stability. 
 
 \subsection{FHN Time Series}
+
+After introducing the local and global dynamical models of nodes, the final version of FHN model to be simulated as the neuronal activity in the complete brain graph or random network is denoted with the following notation \citep{VUK13},  
  
 \begin{subequations}
- \begin{align}\dot{x_i} = \tau (y_i + \gamma x_i - \frac{x_i^3}{3}) -c \sum_{j=1}^N f_{ij}x_j(t - \Delta t_{ij}) +Dn_x \label{eqn: frobenius 17}\\  \dot{y_i} = -\frac{1}{\tau} (x_i - \alpha + b y_i - I ) +Dn_y \label{eqn: frobenius 18}   \end{align} 
+ \begin{align}\dot{x_i} = \tau (y_i + \gamma x_i - \frac{x_i^3}{3}) -c \sum_{j=1}^N a_{ij}x_j(t - \Delta t_{ij}) +Dn_x \label{eqn: frobenius 17}\\  \dot{y_i} = -\frac{1}{\tau} (x_i - \alpha + b y_i - I ) +Dn_y \label{eqn: frobenius 18}   \end{align} 
 \end{subequations}
 
-where $c$ is coupling strength, $f_{ij}$ is corresponding element in the connectivity matrix. If nodes are connected, $f_{ij}=1$, otherwise $f_{ij}=0$. $\Delta t_{ij}$ is the time delay factor emerging from finite axonal signal propagation in the brain. $\Delta t_{ij}$ is calculated as $\Delta t_{ij}=\frac{d_{ij}}{\nu}$, Euclidean distance matrix divided by signal propagation velocity. The external stimulus is again $I=0$.
+where the index $i$ represents any node among $N=90$ AAL regions, $c$ is coupling strength, $a_{ij}$ is corresponding connectivity unit between nodes $i$ and $j$ in adjacency matrix. This is the crucial link between network analysis part and FHN section. If nodes are connected in a given network, then $a_{ij}=1$, otherwise $a_{ij}=0$. $\Delta t_{ij}$ is the time delay factor arising from finite signal propagation velocity $v$ among nodes. $\Delta t_{ij}$ is calculated as $\Delta t_{ij}=\frac{d_{ij}}{\nu}$ \citep{GHO08, GHO08a, DEC09}, where $d_{ij}$ is the matrix of Euclidean distances between centers of brain regions from which BOLD time series are extracted \citep{KAI06}. The external stimulus is again set to zero $I=0$. The noise ($n_x$, $n_y$) factors are Gaussian white noise distributions, the strength of noise is $D=0.05$, large noise.
  
 \begin{figure}[htbp]
   \centering
 	\includegraphics[width=\textwidth]{Figures/FHN_graph.eps}
  
     \rule{35em}{0.5pt}
-    \caption[FHN Graph]{Two sample graphs to be simulated with FHN model, node 1 is not connected at all in first graph (on the left) and connected by 3 edges in second graph (on the right).  }
+    \caption[FHN Graph]{Two sample graphs to be simulated with FHN model, the upper-most node, say node 1 is not connected at all in first graph (on the left) and connected by 3 edges in second graph (on the right).  }
   \label{fig:FHN Graph}	
 \end{figure}
 
@@ -452,11 +468,19 @@ where $c$ is coupling strength, $f_{ij}$ is corresponding element in the connect
 	\includegraphics[width=\textwidth]{Figures/FHN_time_1.eps}
  	\includegraphics[width=\textwidth]{Figures/FHN_time_2.eps}
     \rule{35em}{0.5pt}
-    \caption[FHN Time Series]{The activator-inhibitor time series of node 1 chosen from graphs illustrated in previous figure. Timeseries at top is of the unconnected node, at down is of 3-edge connected node. The noise ($n_x$, $n_y$) here is a Gaussian white noise distribution, the strength of noise is $D=0.05$, large noise. Differential equation set is solved numerically with PYTHON-module PYDELAY for $t=100s$. The propagation velocity is fixed to $v=1m/s$ for simplicity now to calculate the time delays among the nodes, $\Delta t_{ij} = d_{ij} /v$. }
+    \caption[FHN Time Series]{Analogous time series of node 1 chosen from graphs illustrated in previous figure. Timeseries at top is of the unconnected node, at down is of 3-edge connected node. All parameters besides $d_{ij}$ matrix are chosen to be biologically plausible. An unrealistic $d_{ij}$ is filled out for corresponding sample graphs in previous figure.  }
   \label{fig:FHN Time Series}	
 \end{figure}
 
-FHN timeseries of node 1, having no edge connections in first graph, is oscillatory, but the scale of oscillations seem to be small. However, when node 1 is connected to 3 other nodes in second graph, then larger scaled oscillatory patterns of activator and inhibitor can be observed due to mutual couplings among connected nodes. 
+The time delay coupled set of ordinary differential equations is solved numerically with \textsc{PYTHON}-module \textsc{PYDELAY}-algorithm based on Bogacki-Sampine method \citep{FLU09a, BOG89}. 
+
+
+FHN timeseries of node 1, having no edge connections in first graph, is oscillatory, but the scale of oscillations seem to be small. Its dynamical view is in agreement with FHN local dynamics with noise effect. However, when node 1 is connected to 3 other nodes in second graph, then large scaled oscillatory patterns of its activator and inhibitor variables can be observed as a consequence of global coupling terms. 
+
+This section proposed to describe the chosen theoretical model for the neuronal activity. The next step is to study the introduced neuronal dynamics on empirically derived and randomly constructed graphs. $N=90$ nodes  in any given network will be simulated with the complete FHN timseries notation for 7.5 minutes. Then, Pearson correlation coefficients between simulated timeseries of node pairs will be calculated for one graph. A $90X90$ correlation matrix will raise for each FHN simulated network.
+
+FHN model is involved in crucial steps in this Master's project: parameter analysis, distinguishing brain graphs and random graphs and finally extracting BOLD activity. Simulations on brain graphs obtained from FCM and ACM matrices will be compared to the original fMRI-BOLD data in parameter spaces by tuning three parameters in bio-physically plausible ranges: coupling strength $c$ and velocity $v$ as well as a threshold $r$ or probability $p$ value, which is used while constructing adjacency matrices $a_{ij}$ of given graphs. Simulations on random graphs will be used to identify regions in the explored parameter space for which the empirical data differ from that of the random graphs. Not only the effect of tuned parameters $c$, $v$ and $r$ or $p$, but also the contribution of topological measurements of graphs will be taken into account. At the end, FHN timeseries of brain graphs will be simulated further with another theoretical model to capture the BOLD signal, which will be introduced in the next session.   
+
 
 
 \section{Balloon-Windkessel Model for BOLD Activity Simulation} 
