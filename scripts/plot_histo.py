@@ -13,6 +13,8 @@ import os
 import scipy.stats as sistat
 import collections
 from mpl_toolkits.mplot3d import Axes3D
+from scipy.interpolate import griddata	
+from matplotlib import cm
 
 # check the loaded matrix if it is symmetric
 def load_matrix(file):
@@ -115,13 +117,65 @@ def chi2_hists(HA, HB):
 local_path   = '../data/jobs_corr/'		
 
 # simulations based on EMPIRICAL brain networks
-name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=40.0_tmax=45000_FHN_corr.dat'
+name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
 # simulations based on RANDOMIZED brain networks
-name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=40.0_tmax=45000_FHN_corr.dat'
+name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
 
 thr_array = np.array([ 54,  56,  58,  60,  62,  64, 66])	
 vel_array = np.array([40, 50, 60, 70, 80, 90])
 sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
+
+x = []
+y = []
+z = []
+
+for THR in thr_array :
+	for VEL in vel_array :
+		input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
+		input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
+
+	#for SIG in sig_array :
+		#input_empiri = name_E[0:18] + str(THR) + name_E[20:27] + str(SIG) + name_E[30:]
+		#input_simuli = name_R[0:18] + str(THR) + name_R[20:27] + str(SIG) + name_R[30:]
+		
+		try:
+			mtx_empiri = load_matrix(local_path + input_empiri)
+			HistA      = corr_histo(mtx_empiri)
+			mtx_simuli = load_matrix(local_path + input_simuli)
+			HistB      = corr_histo(mtx_simuli)
+		except :
+			R_val      = np.nan
+		else :
+			#R_val      = intersec_hists(HistA, HistB)
+			#R_val      = chi2_hists(HistA, HistB)
+			R_val       = bhatta_hists(HistA, HistB)
+			#R_val      = correl_hists(HistA, HistB)
+		
+		x = np.append(x, THR)
+		y = np.append(y, VEL)
+		#y = np.append(y, SIG)
+		z = np.append(z, R_val)
+
+xi = np.linspace(x.min(), x.max(), 100)
+yi = np.linspace(y.min(), y.max(), 100)
+zi = griddata( (x,y), z, (xi[None,:], yi[:,None]), method='cubic') 
+zi = np.nan_to_num(zi)
+xig, yig = np.meshgrid(xi, yi)
+fig = pl.figure(2)
+ax = fig.add_subplot(1,1,1, projection='3d', azim=210)
+surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, cmap=cm.jet ) 
+fig.colorbar(surf, ax=ax)
+pl.xticks(thr_array)
+pl.yticks(vel_array)
+pl.autoscale(tight=True)
+
+ax.set_xlabel('r', fontsize=25)
+ax.set_ylabel('v', fontsize=25)
+ax.set_zlabel('Bhatta', fontsize=25)
+ax.text2D(0.05, 0.95, 'Bhatta comparison (c=0.3) : 0 - a : A_aal', transform=ax.transAxes)
+
+pl.show()
+
 
 R_thr =  {}
 
@@ -158,57 +212,64 @@ for THR in thr_array :
 			y = np.append(y, SIG)
 			z = np.append(z, VEL)
 			t = np.append(t, R_val)
+#np.savetxt('temp.dat', t,'%.6f',delimiter='\t')
+#datam = []
+#datam.append([x, y, z, t])			
+#datam = zip(*datam)
 
-datam = []
-datam.append([x, y, z, t])			
-datam = zip(*datam)
+#fig = pl.figure(1)
+#ax  = fig.add_subplot(111,projection='3d')
+#p   = ax.scatter3D(datam[0], datam[1], datam[2], c=datam[3], cmap='jet')
+#fig.colorbar(p, ax=ax)
 
-fig = pl.figure()
-ax  = fig.add_subplot(111,projection='3d')
-p   = ax.scatter3D(datam[0], datam[1], datam[2], c=datam[3], cmap='jet')
-fig.colorbar(p, ax=ax)
+#pl.xticks(thr_array)
+#pl.yticks(sig_array)
+#pl.autoscale(tight=True)
 
-pl.xticks(thr_array)
-pl.yticks(sig_array)
-pl.autoscale(tight=True)
-
-ax.set_xlabel('r', fontsize=25)
-ax.set_ylabel('c', fontsize=25)
-ax.set_zlabel('v', fontsize=25)
-ax.text2D(0.05, 0.95, 'Bhatta comparison : 0 - a : A_aal', transform=ax.transAxes)
+#ax.set_xlabel('r', fontsize=25)
+#ax.set_ylabel('c', fontsize=25)
+#ax.set_zlabel('v', fontsize=25)
+#ax.text2D(0.05, 0.95, 'Bhatta comparison : 0 - a : A_aal', transform=ax.transAxes)
 #pl.show()
 
-from scipy.interpolate import griddata	
 data1=np.array(x)
 data2=np.array(y)
 data3=np.array(z)
 output=np.array(t)
 
-fig = pl.figure(2)
+#fig = pl.figure(2)
 
-xi = np.linspace(data1.min(),data1.max(),200)
-yi = np.linspace(data2.min(),data2.max(),200)
-wi = np.linspace(data3.min(),data3.max(),200)
+#xi = np.linspace(data1.min(),data1.max(),200)
+#yi = np.linspace(data2.min(),data2.max(),200)
+#wi = np.linspace(data3.min(),data3.max(),200)
 
-# Interpoling unstructured data 
-zi = griddata((data1, data2), output, (xi[None,:], yi[:,None]), method='cubic')
-# removing NaNs from the array
-zi = np.nan_to_num(zi)
+## Interpoling unstructured data 
+#zi = griddata((data1, data2), output, (xi[None,:], yi[:,None]), method='cubic')
+## removing NaNs from the array
+#zi = np.nan_to_num(zi)
 
-ax = fig.add_subplot(1, 1, 1, projection='3d', azim=210)
+#ax = fig.add_subplot(1, 1, 1, projection='3d', azim=210)
 
-xig, yig = np.meshgrid(xi, yi)
+#xig, yig = np.meshgrid(xi, yi)
 
-#normalizing variable to interval 0-1
+##normalizing variable to interval 0-1
 #data3col=data3/data3.max()
 
-surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, cmap='jet', linewidth=0, antialiased=False, shade=False)
-#surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, facecolor=cm.jet(data3col), linewidth=0, antialiased=False, shade=False)
-ax.set_xlabel('X Label')
-ax.set_ylabel('Y Label')
-ax.set_zlabel('Z Label')
-#fig.colorbar(surf, shrink=0.5, aspect=5)
-ax.set_zlim(0, 1)
-fig.colorbar(surf, ax=ax)
-pl.show()
+#surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, facecolor=cm.jet(data3col), cmap='jet', linewidth=0, antialiased=False, shade=False)
+##surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, facecolor=cm.jet(data3col), linewidth=0, antialiased=False, shade=False)
+#ax.set_xlabel('X Label')
+#ax.set_ylabel('Y Label')
+#ax.set_zlabel('Z Label')
+##fig.colorbar(surf, shrink=0.5, aspect=5)
+##ax.set_zlim(data3.min(), data3.max())
+#fig.colorbar(surf, ax=ax)
+#pl.show()
+
+x = np.array(x)
+y = np.array(y)
+z = np.array(z)
+F = np.array(t)
+
+
+
 
