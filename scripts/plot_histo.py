@@ -172,7 +172,12 @@ pl.xticks(thr_array)
 pl.yticks(sig_array)
 pl.autoscale(tight=True)
 
+ax.set_xlabel('r', fontsize=25)
+ax.set_ylabel('c', fontsize=25)
+ax.set_zlabel('v', fontsize=25)
+ax.text2D(0.05, 0.95, 'Bhatta comparison : 0 - a : A_aal', transform=ax.transAxes)
 #pl.show()
+
 from scipy.interpolate import griddata	
 data1=np.array(x)
 data2=np.array(y)
