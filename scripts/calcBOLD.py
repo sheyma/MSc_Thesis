@@ -156,7 +156,7 @@ def calc_bold(timeseries , T, out_basename):
 		if count_nan > 0:
 			print "u_N, nu. of NaNs:", Bold_signal[key][col], count_nan
 	# exporting BOLD signal 
-	file_name = str(out_basename + '_Norm_BOLD_signal.dat')
+	file_name = str(out_basename + '_BOLD_signal.dat')
 	print file_name
 	f = open(file_name,'w')	
 	for row in range( 0, len(Bold_signal[0]) ):
@@ -292,7 +292,7 @@ out_basename    = sb.get_dat_basename(input_name)
 
 print "T : " , T, " [seconds]"
 
-Norm_timeseries   = normalize_timeseries(timeseries)
+#Norm_timeseries   = normalize_timeseries(timeseries)
 
 #pl.figure(1)
 #plot_timeseries(t_start , t_range , timeseries)
@@ -301,9 +301,9 @@ Norm_timeseries   = normalize_timeseries(timeseries)
 #pl.figure(3)
 #plot_timeseries(t_start , t_range , N_timeseries)
 
-#bold_signal     =   calc_bold(timeseries, T, out_basename)
+bold_signal     =   calc_bold(timeseries, T, out_basename)
 
-Norm_bold_signal   =   calc_bold(Norm_timeseries, T, out_basename)
+#Norm_bold_signal   =   calc_bold(Norm_timeseries, T, out_basename)
 
 #pl.figure(5)
 #pl.plot(bold_signal[1])
