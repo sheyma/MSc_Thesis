@@ -77,11 +77,8 @@ def plot_corr_diag(corr_matrix, out_basename):
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 20)
 	pl.yticks(fontsize = 20)
-	#pl.suptitle("BOLD-signal correlation matrix", fontsize=20)
-	#pl.title('Method : 0 , ' + '$r$ = ' +'0.65'  +
-				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
-				#'0.05' + '  $v$ = '+'7 [m/s]',	
-				#fontsize=14, fontweight='bold')
+	pl.suptitle("BOLD-signal correlation matrix", fontsize=20)
+	pl.title(out_basename)
 	pl.xlabel('Nodes', fontsize = 20)
 	pl.ylabel('Nodes', fontsize = 20)
 	image_name = str(out_basename + '_CORR.eps')
@@ -149,36 +146,37 @@ data_matrix = sb.load_matrix(input_name)
 out_basename = sb.get_dat_basename(input_name)
 
 corr_matrix = correl_matrix(data_matrix , out_basename)
-## real node index : add 1!
-#[i, j, k , l ]  = 	    node_index(corr_matrix)
-#image = plot_corr_diag(corr_matrix, out_basename)
+#corr_matrix = data_matrix
+# real node index : add 1!
+[i, j, k , l ]  = 	    node_index(corr_matrix)
+image = plot_corr_diag(corr_matrix, out_basename)
+pl.show()
+# BOLD activity of the nodes correlating the best
+pl.figure(2)
+plot_bold_signal(data_matrix, i,j)
+# BOLD activity of the nodes correlating the worst
+pl.figure(3)
+plot_bold_signal(data_matrix, k,l)
 
-## BOLD activity of the nodes correlating the best
-#pl.figure(2)
-#plot_bold_signal(data_matrix, i,j)
-## BOLD activity of the nodes correlating the worst
-#pl.figure(3)
-#plot_bold_signal(data_matrix, k,l)
+rnd_node_1 = 7
+rnd_node_2 = 24
 
-#rnd_node_1 = 7
-#rnd_node_2 = 24
+# bold signal parameters, dtt [ms] is resolution of bold signal
+params = {'dtt' : 0.001}
+print params['dtt']
 
-## bold signal parameters, dtt [ms] is resolution of bold signal
-#params = {'dtt' : 0.001}
-#print params['dtt']
-
-#[yfft_1, freq_1] = bold_fft(data_matrix, rnd_node_1-1, params['dtt'])
-#[yfft_2, freq_2] = bold_fft(data_matrix, rnd_node_2-1, params['dtt'])
-#pl.figure(4);
-#pl.subplot(2,1,1)
-#plot_bold_signal(data_matrix, rnd_node_1-1, rnd_node_2-1)
-#pl.subplot(2,1,2)
-#pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
-#pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
-#pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
-#pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
-#lg = legend()
-#pl.title('Fourier Transformed Signal', fontsize=25)
-#pl.xlabel('frequency [Hz]' , fontsize = 25 )
-#pl.ylabel('bold signal (f)' , fontsize = 25 )
-#pl.show()
+[yfft_1, freq_1] = bold_fft(data_matrix, rnd_node_1-1, params['dtt'])
+[yfft_2, freq_2] = bold_fft(data_matrix, rnd_node_2-1, params['dtt'])
+pl.figure(4);
+pl.subplot(2,1,1)
+plot_bold_signal(data_matrix, rnd_node_1-1, rnd_node_2-1)
+pl.subplot(2,1,2)
+pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
+pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
+pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
+lg = legend()
+pl.title('Fourier Transformed Signal', fontsize=25)
+pl.xlabel('frequency [Hz]' , fontsize = 25 )
+pl.ylabel('bold signal (f)' , fontsize = 25 )
+pl.show()
