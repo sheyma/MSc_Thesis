@@ -136,20 +136,18 @@ if __name__ == '__main__':
 mtx_empiri		=		load_matrix(input_empiri)
 
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
-#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
-#name = 'A_aal_0_ADJ_thr_0.60_sigma=0.1_D=0.05_v=70.0_tmax=45000_Norm_BOLD_signal_corr.dat'
+#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+#name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+name = 'A_aal_0_ADJ_thr_0.66_sigma=0.2_D=0.05_v=70.0_tmax=45000_BOLD_signal_corr.dat'
+
+#name = 'A_aal_0_ADJ_thr_0.60_sigma=0.1_D=0.05_v=70.0_tmax=45000_NORM_BOLD_signal_corr.dat'
 #name = 'acp_w_0_ADJ_thr_0.60_sigma=0.9_D=0.05_v=30.0_tmax=45000_Norm_BOLD_signal_corr.dat'
 
-#thr_array = np.array([ 52, 53, 54, 55, 56, 57, 58, 59, 60,  61, 62, 63, 64, 65, 66])	
-vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170])
+thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])	
+#vel_array = np.array([20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
 sig_array = np.array([0.018, 0.02, 0.025, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 
-thr_array = np.array([22,  26,  30,   34, 
-						 38,  42, 44, 46, 48, 50, 52, 54,
-						56, 58,  60,  62,  64,  66, 
-						68,  70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
-						80, 81, 82, 83])
+#thr_array = np.arange(4, 86, 1)
 #vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
 #sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
 
@@ -158,7 +156,8 @@ R_thr =  {}
 for THR in thr_array :
 	R_temp = []
 	
-	local_path = '../data/jobs_corr/'
+	#local_path = '../data/jobs_corr/'
+	local_path = '../data/jobs_corr_bold/'
 	
 	#for VEL in vel_array :
 		
@@ -193,7 +192,7 @@ datam 		= np.array(Ordered_R.values())
 #print datam
 
 # PLOTTING BEGINS ! 
-fig , ax = pl.subplots(figsize=(25,18))
+fig , ax = pl.subplots(figsize=(18,15))
 pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
