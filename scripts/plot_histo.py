@@ -117,13 +117,24 @@ def chi2_hists(HA, HB):
 local_path   = '../data/jobs_corr/'		
 
 # simulations based on EMPIRICAL brain networks
-name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
+#name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
+name_E = 'acp_w_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
 # simulations based on RANDOMIZED brain networks
-name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
+#name_R = 'A_aal_g_ADJ_thr_0.54_sigma=0.3_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
+name_R = 'acp_w_a_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
 
-thr_array = np.array([ 54,  56,  58,  60,  62,  64, 66])	
-vel_array = np.array([40, 50, 60, 70, 80, 90])
-sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
+#thr_array = np.array([ 54,  56,  58,  60,  62,  64, 66])	
+#vel_array = np.array([40, 50, 60, 70, 80, 90])
+#sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
+
+thr_array = np.array([22,  26,  30,   34, 
+						 38,  42, 44, 46, 48, 50, 52, 54,
+						56, 58,  60,  62,  64,  66, 
+						68,  70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
+						80, 81, 82, 83])
+vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
+sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+
 
 x = []
 y = []
@@ -172,7 +183,8 @@ pl.autoscale(tight=True)
 ax.set_xlabel('r', fontsize=25)
 ax.set_ylabel('v', fontsize=25)
 ax.set_zlabel('Bhatta', fontsize=25)
-ax.text2D(0.05, 0.95, 'Bhatta comparison (c=0.3) : 0 - a : A_aal', transform=ax.transAxes)
+#ax.text2D(0.05, 0.95, 'Bhatta comparison (c=0.3) : 0 - g : A_aal', transform=ax.transAxes)
+ax.text2D(0.05, 0.95, 'Bhatta comparison (c=0.3) : 0 - a : acp_w', transform=ax.transAxes)
 
 pl.show()
 
@@ -184,35 +196,35 @@ y = []
 z = []
 t = []
 
-for THR in thr_array :
-	R_temp = []
+#for THR in thr_array :
+	#R_temp = []
 	
-	for SIG in sig_array :		
-		input_empiri = name_E[0:18] + str(THR) + name_E[20:27] + str(SIG) + name_E[30:]
-		input_simuli = name_R[0:18] + str(THR) + name_R[20:27] + str(SIG) + name_R[30:]
+	#for SIG in sig_array :		
+		#input_empiri = name_E[0:18] + str(THR) + name_E[20:27] + str(SIG) + name_E[30:]
+		#input_simuli = name_R[0:18] + str(THR) + name_R[20:27] + str(SIG) + name_R[30:]
 		
-		for VEL in vel_array :
-			input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
-			input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
+		#for VEL in vel_array :
+			#input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
+			#input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
 			
-			try:
-				mtx_empiri = load_matrix(local_path + input_empiri)
-				HistA      = corr_histo(mtx_empiri)
-				mtx_simuli = load_matrix(local_path + input_simuli)
-				HistB      = corr_histo(mtx_simuli)
-			except :
-				R_val      = np.nan
-			else :
-				#R_val      = intersec_hists(HistA, HistB)
-				#R_val      = chi2_hists(HistA, HistB)
-				R_val       = bhatta_hists(HistA, HistB)
-				#R_val      = correl_hists(HistA, HistB)
+			#try:
+				#mtx_empiri = load_matrix(local_path + input_empiri)
+				#HistA      = corr_histo(mtx_empiri)
+				#mtx_simuli = load_matrix(local_path + input_simuli)
+				#HistB      = corr_histo(mtx_simuli)
+			#except :
+				#R_val      = np.nan
+			#else :
+				##R_val      = intersec_hists(HistA, HistB)
+				##R_val      = chi2_hists(HistA, HistB)
+				#R_val       = bhatta_hists(HistA, HistB)
+				##R_val      = correl_hists(HistA, HistB)
 			
-			x = np.append(x, THR)
-			y = np.append(y, SIG)
-			z = np.append(z, VEL)
-			t = np.append(t, R_val)
-#np.savetxt('temp.dat', t,'%.6f',delimiter='\t')
+			#x = np.append(x, THR)
+			#y = np.append(y, SIG)
+			#z = np.append(z, VEL)
+			#t = np.append(t, R_val)
+##np.savetxt('temp.dat', t,'%.6f',delimiter='\t')
 #datam = []
 #datam.append([x, y, z, t])			
 #datam = zip(*datam)
@@ -265,11 +277,18 @@ output=np.array(t)
 #fig.colorbar(surf, ax=ax)
 #pl.show()
 
-x = np.array(x)
-y = np.array(y)
-z = np.array(z)
-F = np.array(t)
+#x = (np.array([x])).T
+#y = (np.array([y])).T
+#z = (np.array([z])).T
+#F = np.array(t)
 
+#points = np.concatenate( (x,y,z), axis=1)
 
+#grid_x, grid_y, grid_z = np.mgrid[54:66:100j, 0.3:0.7:100j, 40:90:100j   ]
 
+#grid_F = griddata(points, F, (grid_x, grid_y, grid_z), method='linear')
 
+#fig = pl.figure(5)
+#ax = fig.gca(projection='3d')
+#surf = ax.plot_surface(grid_x, grid_y, rstride=1, cstride=1, cmap=cm.coolwarm,
+        #linewidth=0, antialiased=False)
