@@ -93,16 +93,13 @@ def plot_corr_diag(corr_matrix, out_basename):
 	cbar = pl.colorbar(cmap=cmap, norm=norm)
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
-	pl.xticks(fontsize = 50)
-	pl.yticks(fontsize = 50)
+	pl.xticks(fontsize = 25)
+	pl.yticks(fontsize = 25)
 	
-	#pl.suptitle("FHN correlation matrix", fontsize=20)
-	#pl.title('Method : 0 , ' + '$r$ = ' +'0.64'  +
-				#r'  $  \sigma$ = '+'0.025'+ ' $   D$ = '+ 
-				#'0.05' + '  $v$ = '+'7 [m/s]',	
-				#fontsize=14, fontweight='bold')
-	pl.xlabel('Nodes', fontsize = 50)
-	pl.ylabel('Nodes', fontsize = 50)
+	pl.suptitle("FHN correlation matrix", fontsize=20)
+	pl.title(out_basename)
+	pl.xlabel('Nodes', fontsize = 25)
+	pl.ylabel('Nodes', fontsize = 25)
 	image_name = str(out_basename + '_FHN_CORR.eps')
 	#pl.savefig('FHN_corr_r_0_64_si_0_030.eps', format="eps")
 	#pl.show()
@@ -161,47 +158,62 @@ if __name__ == '__main__':
 	except:
 		sys.exit(1)
 
+## if input is already a correlation matrix ::
+#corr_matrix = sb.load_matrix(input_name)
+#out_basename  = sb.get_dat_basename(input_name)
+#pl.figure(1)
+#plot_corr_diag(corr_matrix, out_basename)
+#pl.show()
+## node indexes, not forget to subtract 1 
+#[i, j, k , l ]		=   node_index(corr_matrix)
+
 data_matrix   = sb.load_matrix(input_name)
 out_basename  = sb.get_dat_basename(input_name)
 [u_matrix , T, dt, tvec]    =	fhn_timeseries(data_matrix)
 corr_matrix                 =   correl_matrix(u_matrix, out_basename)
-#pl.figure(1)
-#plot_corr_diag(corr_matrix, out_basename)
-#[i, j, k , l ]		        =   node_index(corr_matrix)
-#print i,j,k,l
-## user defined time range for timeseries plots
-#t_start = 1650
-#t_final = 1700
-## plot the timeseries of best correlated nodes
-#pl.figure(2)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
-##plot the timeseries of worst correlated nodes
-#pl.figure(3)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
+[i, j, k , l ]		        =   node_index(corr_matrix)
+print i,j,k,l
+# user defined time range for timeseries plots
+t_start = 1650
+t_final = 1700
+# plot the timeseries of best correlated nodes
+pl.figure(2)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
+#plot the timeseries of worst correlated nodes
+pl.figure(3)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
 
-#rnd_node_1 = 7
-#rnd_node_2 = 24
+rnd_node_1 = 7
+rnd_node_2 = 24
 
-#[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dt'])
-#[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dt'])
-#pl.figure(4);
-#pl.subplot(2,1,1)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
-#pl.subplot(2,1,2)
-#pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
-#pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
-#pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
-#pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
-#lg = legend()
-#pl.title('Fourier Transformed Signal', fontsize=25)
-#pl.xlabel('frequency [Hz]' , fontsize = 25 )
-#pl.ylabel('timeseries (f)' , fontsize = 25 )
-##pl.axis([-1, 70, 0, 0.5])
+[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dt'])
+[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dt'])
+pl.figure(4);
+pl.subplot(2,1,1)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
+pl.subplot(2,1,2)
+pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
+pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
+pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
+lg = legend()
+pl.title('Fourier Transformed Signal', fontsize=25)
+pl.xlabel('frequency [Hz]' , fontsize = 25 )
+pl.ylabel('timeseries (f)' , fontsize = 25 )
+#pl.axis([-1, 70, 0, 0.5])
+pl.show()
+
+#Y = []
+#for N in range(0,90):
+	#[Y_tmp, F_tmp] = fhn_fft(u_matrix, N, params['dt'])
+	#Y = np.append(Y, Y_tmp)
+	
+#corr_flat = np.ndarray.flatten(Y) 
+#F_max  = 100
+#F_min  = 0
+#bin_nu    = 100
+## a normalized histogram is obtained
+##hist, bin_edges = np.histogram(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True)#, histtype='bar')
+	
+#hist = pl.hist(corr_flat, bins=bin_nu, range=[F_min, F_max], normed =True, histtype='bar')
 #pl.show()
-
-## if correlation matrix is given directly :
-#corr_matrix			=   load_matrix(infile)
-#pl.figure(1)
-#plot_corr_diag(corr_matrix, out_basename )
-## node indexes, not forget to subtract 1 
-#[i, j, k , l ]		=   node_index(corr_matrix)
