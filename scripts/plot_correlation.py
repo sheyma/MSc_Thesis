@@ -136,20 +136,22 @@ if __name__ == '__main__':
 mtx_empiri		=		load_matrix(input_empiri)
 
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
-name = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-#name = 'acp_w_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-#name = 'A_aal_0_ADJ_thr_0.60_sigma=0.5_D=0.05_v=70.0_tmax=45000_Norm_BOLD_signal_corr.dat'
-#name = 'acp_w_0_ADJ_thr_0.60_sigma=0.5_D=0.05_v=70.0_tmax=45000_Norm_BOLD_signal_corr.dat'
+#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+#name = 'A_aal_0_ADJ_thr_0.60_sigma=0.1_D=0.05_v=70.0_tmax=45000_Norm_BOLD_signal_corr.dat'
+#name = 'acp_w_0_ADJ_thr_0.60_sigma=0.9_D=0.05_v=30.0_tmax=45000_Norm_BOLD_signal_corr.dat'
 
-thr_array = np.array([ 52, 53, 54, 55, 56, 57, 58, 59, 60,  61, 62, 63, 64, 65, 66])	
-#thr_array = np.array([52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])					                        
-#vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90])
+#thr_array = np.array([ 52, 53, 54, 55, 56, 57, 58, 59, 60,  61, 62, 63, 64, 65, 66])	
+vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170])
 sig_array = np.array([0.018, 0.02, 0.025, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 
-#thr_array = np.array([16, 22, 26, 32, 36, 42, 46, 52, 54, 56, 58, 60, 
-#					  62, 64, 66, 72, 76, 82 ])
-##vel_array = np.array([30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
-##sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+thr_array = np.array([22,  26,  30,   34, 
+						 38,  42, 44, 46, 48, 50, 52, 54,
+						56, 58,  60,  62,  64,  66, 
+						68,  70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
+						80, 81, 82, 83])
+#vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
+#sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
 
 R_thr =  {}
 
@@ -191,7 +193,7 @@ datam 		= np.array(Ordered_R.values())
 #print datam
 
 # PLOTTING BEGINS ! 
-fig , ax = pl.subplots(figsize=(18,18))
+fig , ax = pl.subplots(figsize=(25,18))
 pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
@@ -199,22 +201,21 @@ cbar = pl.colorbar()
 a = thr_array
 b = sig_array
 # title for fhn....
-pl.title('A_aal_0...' + ' , FHN , ' + '  v = 7 [m/s] ', fontsize=20)
+#pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s] ', fontsize=20)
 # title for bold...
-#pl.title('acp_w_0...' + ' , FHN , ' + '  v = 7 [m/s]', fontsize=20)
+#pl.title('acp_w_0...' + ' , BOLD , ' + '  v = 3 [m/s]', fontsize=20)
 pl.ylabel('$c$ ', fontsize=20)
 
-## PLOT PA OVER VELOCITY
+##PLOT PA OVER VELOCITY
 #a = thr_array
 #b = vel_array/10
-### title for fhn....
-##pl.title('acp_w_0_...' + ' , FHN , ' + '$\sigma$ = 0.5 '+' T = 450 [s]',
-##		 fontsize=20)
-### title for bold...
-##pl.title('acp_w_0...' + ' , FHN , ' + '$\sigma$ = 0.5', fontsize=20)
+##title for fhn....
+##pl.title('A_aal_0_...' + ' , BOLD , ' + '$c$ = 0.5 ', fontsize=20)
+##title for bold...
+##pl.title('acp_w_0...' + ' , BOLD , ' + '$c$ = 0.1', fontsize=20)
 #pl.ylabel('v [m/s]', fontsize=20)
 
-pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a/float(100) )
+pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a )
 pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
 pl.xlabel('r', fontsize = 20)
 for t in cbar.ax.get_yticklabels():
