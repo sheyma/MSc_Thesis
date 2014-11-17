@@ -1,4 +1,4 @@
-\begin{thebibliography}{36}
+\begin{thebibliography}{39}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -216,6 +216,26 @@ P.~Bogacki and L.~F. Shampine.
   321--325, 1989.
 \newblock ISSN 0893-9659.
 \newblock \doi{doi: 10.1016/0893-9659(89)90079-7}.
+
+\bibitem[Buxton et~al.(1998)Buxton, Wong, and Frank]{XYZ98}
+Richard~B Buxton, Eric~C Wong, and Lawrence~R Frank.
+\newblock Dynamics of blood flow and oxygenation changes during brain
+  activation: the balloon model.
+\newblock \emph{Magnetic resonance in medicine}, 39\penalty0 (6):\penalty0
+  855--864, 1998.
+
+\bibitem[Blockley et~al.(2013)Blockley, Griffeth, Simon, and Buxton]{XYZ2013}
+Nicholas~P Blockley, Valerie~EM Griffeth, Aaron~B Simon, and Richard~B Buxton.
+\newblock A review of calibrated blood oxygenation level-dependent (bold)
+  methods for the measurement of task-induced changes in brain oxygen
+  metabolism.
+\newblock \emph{NMR in Biomedicine}, 26\penalty0 (8):\penalty0 987--1003, 2013.
+
+\bibitem[Seth et~al.(2013)Seth, Chorley, and Barnett]{SET12}
+Anil~K Seth, Paul Chorley, and Lionel~C Barnett.
+\newblock Granger causality analysis of fmri bold signals is invariant to
+  hemodynamic convolution but not downsampling.
+\newblock \emph{Neuroimage}, 65:\penalty0 540--555, 2013.
 
 \bibitem[Abakumov et~al.(1977)Abakumov, Kreshchuk, and Yassievich]{ABA77}
 V.~N. Abakumov, L.~N. Kreshchuk, and I.~N. Yassievich.
