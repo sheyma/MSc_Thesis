@@ -485,29 +485,90 @@ FHN model is involved in crucial steps in this Master's project: parameter analy
 
 \section{Balloon-Windkessel Model for BOLD Activity Simulation} 
 
+Blood oxygen level dependent (BOLD) effect is one of the underlying contrast mechanisms of fMRI to map brain activity at resting state. BOLD signal is thought to arise from interactions between neuronal activity and regional changes in the surrounding of those active neurons such as blood volume, blood flow and  oxygenation level in capillaries. When neuronal activity increases, the blood flow in blood vessels surrounding this neuronal region rises, causing a change in relative amounts of deoxygenated and oxygenated forms of Hemoglobin (dHB and Hb). The difference in magnetic properties of dHb (paramagnetic) and Hb (diamagnetic) is the key ingredient to the observed changes in magnetic resonance signal. A better understanding of the resting state BOLD signal is required to better interpret neuronal activity. The previous section proposed already a model for the neuronal activity, FHN model. This section will introduce a hemodynamic process to capture BOLD activity with a mathematical model known as Balloon model \citep{XYZ98}. 
+
+In addition to the variations in magnetic properties of the blood caused by blood flow in vessels, there are other physiological changes during alteration in neuronal activity that affect the temporal dynamics of BOLD signal, i.e. cerebral blood flow (CBF), cerebral blood volume (CBV), cerebral metabolic rate of oxygen consumption (CMR$O_2$). Moreover, the BOLD response is subject dependent: the physiological baseline state of the individual under examination is used to scale BOLD response and this fact brings another difficulty to interpret the BOLD signal, when the baseline state varies \citep{XYZ2013}. The sensitivity of BOLD signal to the variations in vascular and metabolic physiology brings a great complexity to interpret it accurately. The biophysical descriptions of the BOLD signal are still not fully satisfactory for the resting state. 
+
+Changes in the BOLD signal obtained in an fMRI experiment represent an indirect measure of underlying neuronal activity \citep{VUK14}. The modeled neuronal activity can be used to infer the BOLD signal observed in the fMRI data via Baloon-Windkessel hemodynamic process, which mediates between a non-linear timeseries and measured BOLD response \citep{FRI00}. In short, the Baloon-Windkessel model picks an input signal from neuronal activity timeseries and turnouts the BOLD activity timeseries as a function of changes in CBF, CBV, CMR$O_2$. The main input of Baloon-Windkessel model is a neuronal signal in the form of either a spiking rate or a local field potential \citep{SET12}. The neuronal signal in this project will be normalized FHN timeseries of activator variable, which describes the excitatory membrane potential dynamics of a neuronal population.       
+
+The study of Friston et al. shows that it is possible to capture ultra-slow frequency oscillations ($<0.1$) in the hemodynamic process, given a higher frequency neuronal input for event related responses \citep{FRI00}. Here, the same model will be tested for the resting state activity to find out whether it is possible to extract BOLD activity from FHN modeled $N=90$ AAL brain nodes. Each brain graph obtained from FCM and ACM data sets will be embedded into Baloon-Windkessel model, and a new parameter analysis will be carried out while comparing resultant BOLD simulations to the fMRI-BOLD empirical data set.
+
+This section is designed to review the Ballon-Windkessel hemodynamic model  demonstrate its input-state-output description very briefly \citep{FRI00}.    
+
+\subsection{Hemodynamic Model}
+
+\begin{figure}[htbp]
+  \centering
+	\includegraphics[width=\textwidth]{Figures/BOLD_Hemo.eps}
+ 	\rule{35em}{0.5pt}
+    \caption[Hemodynamic Model]{The hemodynamic model for the BOLD activity illustrated in Friston et al. \citep{FRI00}  }
+  \label{fig:Hemodynamic Model}	
+\end{figure}
+
+
+\begin{table}[h]
+\begin{center}
+\caption[BOLD Abbreviations]{Abbreviations for used in hemodynamic model }
+\begin{tabular}{ l | c }
+  Abbreviation & Description \\
+  \hline  \hline                     
+  $u(t)$ &      nonlinear input signal  
+\\ \hline
+
+  s & blood flow inducing signal 
+\\ \hline
+  $\tau_s$ & time constant to describe $\dot{s}$  
+\\ \hline  
+  $f_{in}$ & cerebral blood inflow      
+\\ \hline
+ $\tau_f$  & time constant to describe $\dot{f_{in}}$ 
+\\ \hline  
+ $v$    & CBV    
+\\ \hline
+ $\tau_0$  & time constant to describe $\dot{v}$    
+\\ \hline 
+ $\alpha$  & a parameter to describe flow-volume relationship
+\\ \hline 
+
+  $f_{out}(v, \alpha)$ & cerebral blood outflow function
+\\ \hline
+ $E_0$  & resting net $O_2$ extraction rate 
+\\ \hline
+ $E(f_{in}, E_0)$    & fraction of $O_2$ extracted from $f_{in}$    
+\\ \hline
+ $q$    &  dHB content in voxel 
+\\ \hline
+ $y(t)$    &  output BOLD signal          \\
+\hline  
+  \hline 
+ 
+%  \hline  
+\end{tabular}
+\label{table:BOLD Abbreviations}
+\end{center}
+\end{table}	
+
+
+\begin{subequations}
+ \begin{align} \dot{s} = \epsilon u(t)- \frac{s}{\tau_s} - \frac{f_{in} -1 }{\tau_f}  \label{eqn: frobenius 18}\\  \dot{f_{in}} = s
+\label{eqn: frobenius 19} \\ \dot{v} = \frac{f_{in}}{\tau_0} - \frac{f_{out}(v, \alpha)}{\tau_0} 
+\label{eqn: frobenius 20} \\ \dot{q} = \frac{f_{in} E(f_{in}, E_0)}{\tau_0 E_0}- \frac{f_{out}(v, \alpha)}{\tau_0}  \frac{q}{v}  
+\
+\end{align} 
+\end{subequations}
+
+\begin{subequations}
+ \begin{align} f_{out}(v, \alpha) = v^{1/ \alpha}
+ \label{eqn: frobenius 21}\\  E(f_{in} , E_0) = 1- (1-E_0)^{1/f_{in}} \
+\end{align} 
+\end{subequations}
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\begin{equation}
+y(t)= \lambda (v,q,E_0) = V_0 (k_1(1-q) + k_2(1- \frac{q}{v}) + k_3(1-v)))
+\end{equation} 
 
 
 
