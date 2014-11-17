@@ -493,9 +493,12 @@ Changes in the BOLD signal obtained in an fMRI experiment represent an indirect 
 
 The study of Friston et al. shows that it is possible to capture ultra-slow frequency oscillations ($<0.1$) in the hemodynamic process, given a higher frequency neuronal input for event related responses \citep{FRI00}. Here, the same model will be tested for the resting state activity to find out whether it is possible to extract BOLD activity from FHN modeled $N=90$ AAL brain nodes. Each brain graph obtained from FCM and ACM data sets will be embedded into Baloon-Windkessel model, and a new parameter analysis will be carried out while comparing resultant BOLD simulations to the fMRI-BOLD empirical data set.
 
-This section is designed to review the Ballon-Windkessel hemodynamic model by demonstrating its input-state-output description very briefly \citep{FRI00}.    
+  
 
 \subsection{Hemodynamic Model}
+
+This section is designed to review the Ballon-Windkessel hemodynamic model explained in Friston et al \citep{FRI00}.  
+
 
 \begin{figure}[htbp]
   \centering
@@ -508,7 +511,7 @@ This section is designed to review the Ballon-Windkessel hemodynamic model by de
 
 \begin{table}[h]
 \begin{center}
-\caption[BOLD Abbreviations]{Abbreviations for used in hemodynamic model }
+\caption[BOLD Abbreviations]{Notations and their brief descriptions for hemodynamics in Friston et al. }
 \begin{tabular}{ l | c }
   Abbreviation & Description \\
   \hline  \hline                     
@@ -519,18 +522,18 @@ This section is designed to review the Ballon-Windkessel hemodynamic model by de
 \\ \hline
   $\tau_s$ & time constant to describe $\dot{s}$  
 \\ \hline  
-  $f_{in}$ & cerebral blood inflow      
-\\ \hline
- $\tau_f$  & time constant to describe $\dot{f_{in}}$ 
+  $f_{in}$ & CBF (inflow) 
+ \\ \hline
+ $\tau_f$  & feedback time constant 
 \\ \hline  
  $v$    & CBV    
 \\ \hline
- $\tau_0$  & time constant to describe $\dot{v}$    
+ $\tau_0$  & mean transit time $\dot{v}$    
 \\ \hline 
- $\alpha$  & a parameter to describe flow-volume relationship
+ $\alpha$  & stiffness exponent
 \\ \hline 
 
-  $f_{out}(v, \alpha)$ & cerebral blood outflow function
+  $f_{out}(v, \alpha)$ & CBF (outflow) 
 \\ \hline
  $E_0$  & resting net $O_2$ extraction rate 
 \\ \hline
@@ -549,30 +552,35 @@ This section is designed to review the Ballon-Windkessel hemodynamic model by de
 \end{table}	
 
 
+The CBF is denoted by two symbols based on its flow direction: $f_{in}$ and $f_{out}$, venous blood inflow and outflow, respectively. The nonlinear neuronal activity $u(t)$ and $f_{in}$ are thought to accomplish the blood flow inducing signal $s$. Equation (2.14a) represents time dependent change of this signal $\dot{s}$ depending on $u(t)$, $f_{in}$ and $s$. Three system parameters $\epsilon$, $\tau_s$ and $\tau_f$ are described as following: an efficacy parameter for $u(t)$ to raise up $s$, a time constant for $s$ decay, and another time constant for autoregulatory feedback from CBF \citep{XYZ1994, XYZ1998}.
 
+Hemodynamics in brain assumes that alterations in regional CBF is shaped by an underlying neuronal activity. Equation (2.14b) presents the rate of change of $f_{in}$ with a linear transformation on $s$, which can originate from a nonlinear neuronal activity model \citep{XYZ00, XYZFR}. 
 
+The alteration in cerebral blood volume $\dot{v}$ is basically formulated by subtracting $f_{out}$ from $f_{in}$, both rated physiologically with a time constant $\tau_0$, which is also referred as \textit{mean transit time} \citep{XYZ99}. The Windkessel model contributes to the brain hemodynamics while modeling CBF through CBV:  equation (2.15a) describes a function for $f_{out}$ depending on $v$ and a parameter $\alpha$, namely \textit{stiffness exponent} \citep{XYZ99}.    
+
+The change in magnetic properties of blood is expressed with the difference between dHb uptake and release. dHb uptake is proportional to the blood inflow $f_{in}$ to the venous compartment and available $O_2$ to be coupled to Hb. The amount of $O_2$ carried with blood inflow is estimated with a function $E(f_{in}, E_0)$ divided by resting net $O_2$ extraction rate $E_0$ as given in equation (2.15b) \citep{XYZ98}. dHb release is proportional to the blood outflow $f_{out}$ and the concentration of dHb in corresponding voxel volume $v$.     
 
 \begin{subequations}
- \begin{align} \dot{s} = \epsilon u(t)- \frac{s}{\tau_s} - \frac{f_{in} -1 }{\tau_f}  \label{eqn: frobenius 18}\\  \dot{f_{in}} = s
-\label{eqn: frobenius 19} \\ \dot{v} = \frac{f_{in}}{\tau_0} - \frac{f_{out}(v, \alpha)}{\tau_0} 
-\label{eqn: frobenius 20} \\ \dot{q} = \frac{f_{in} E(f_{in}, E_0)}{\tau_0 E_0}- \frac{f_{out}(v, \alpha)}{\tau_0}  \frac{q}{v}  
+ \begin{align} \dot{s} = \epsilon u(t)- \frac{s}{\tau_s} - \frac{f_{in} -1 }{\tau_f}  \label{eqn: frobenius 19}\\  \dot{f_{in}} = s
+\label{eqn: frobenius 20} \\ \dot{v} = \frac{f_{in}}{\tau_0} - \frac{f_{out}(v, \alpha)}{\tau_0} 
+\label{eqn: frobenius 21} \\ \dot{q} = \frac{f_{in} E(f_{in}, E_0)}{\tau_0 E_0}- \frac{f_{out}(v, \alpha)}{\tau_0}  \frac{q}{v}  
 \
 \end{align} 
 \end{subequations}
 
 \begin{subequations}
  \begin{align} f_{out}(v, \alpha) = v^{1/ \alpha}
- \label{eqn: frobenius 21}\\  E(f_{in} , E_0) = 1- (1-E_0)^{1/f_{in}} \
+ \label{eqn: frobenius 22}\\  E(f_{in} , E_0) = 1- (1-E_0)^{1/f_{in}} \
 \end{align} 
 \end{subequations}
 
-
-
+Finally, the output BOLD signal is modeled as a function depending on variables $v$, $q$ and parameter $E_0$,  
 
 \begin{equation}
 y(t)= \lambda (v,q,E_0) = V_0 (k_1(1-q) + k_2(1- \frac{q}{v}) + k_3(1-v)))
 \end{equation} 
 
+where $k_1 = 7E_0$, $k_2 = 2$  and $k_3 = 2E_0 - 0.2$, $V_0$ is resting blood volume fraction. The set of differential equations for ${\dot{s}, \dot{f_{in}}, \dot{v}, \dot{q}}$ are all solved with simple Euler's method algorithm with step size $dt=0.001$ numerically. The six unknown parameters $\epsilon$, $\alpha$, $\tau_0$, $\tau_f$, $\tau_s$ and $E_0$ are picked up from proper ranges given in Friston et al. 
 
 
 
