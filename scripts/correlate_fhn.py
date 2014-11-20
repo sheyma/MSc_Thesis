@@ -57,10 +57,16 @@ def correl_matrix(matrix , out_basename):
 # finding the index of max and min values in a given correlation matrix
 def node_index(matrix):
 	# ignore diagonal elements by assigning it to 0
+	
 	for i in range(0,np.shape(matrix)[0]):
 		for j in range(0,np.shape(matrix)[1]):
-			if i==j:
+			if matrix[i,j] >= 0.1 and matrix[i,j] < 0.2:
+				tmp_x = i
+				tmp_y = j
+			if i == j:
 				matrix[i,j] = 0
+			
+		
 	print "max. corr. coef. in the correlation matrix:", matrix.max()
 	print "min. corr. coef. in the correlation matrix:", matrix.min()
 
@@ -72,14 +78,15 @@ def node_index(matrix):
 	# nodes start from 1, not from 0, therefore add 1 to the index
 	print "nodes ",nx+1," and ",ny+1," best correlated  : ", matrix[nx,ny] 
 	print "nodes ",mx+1," and ",my+1," worst correlated : ", matrix[mx,my]
-
+	print "nodes ", tmp_x, "and" , tmp_y, "zero correlated : ", matrix[tmp_x, tmp_y]
+	
 	# assign diagonal elements back to 1 
 	for i in range(0,np.shape(matrix)[0]):
 		for j in range(0,np.shape(matrix)[1]):
 			if i == j :
 				matrix[i,j] = 1.0
 	
-	return nx, ny , mx, my
+	return nx, ny , mx, my, tmp_x, tmp_y
 
 # plots the correlation matrix of SIMULATED signal
 # input: any output of fhn_time_delays.py or output of calcBOLD.py 
@@ -89,15 +96,15 @@ def plot_corr_diag(corr_matrix, out_basename):
 		
 	cmap   = pl.cm.jet
 	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, cmap='jet', aspect='auto')
-	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-1.0, vmax=1.0, cmap='jet', aspect='auto')
+	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.6, vmax=0.8, cmap='jet', aspect='auto')
 	cbar = pl.colorbar(cmap=cmap, norm=norm)
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 25)
 	pl.yticks(fontsize = 25)
 	
-	pl.suptitle("FHN correlation matrix", fontsize=20)
-	pl.title(out_basename)
+	pl.suptitle("FHN correlation matrix, FCM", fontsize=20)
+	pl.title('r=0.58, ' + ' c = 0.2, ' + ' v = 7 [m/s]')
 	pl.xlabel('Nodes', fontsize = 25)
 	pl.ylabel('Nodes', fontsize = 25)
 	image_name = str(out_basename + '_FHN_CORR.eps')
@@ -121,15 +128,15 @@ def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
 	
 	# plot the timeseries of two nodes in specific interval
 	# tvec multiplied by 0.01 to make dimensiion equal to [ms]
-	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f], marker='.', linestyle='-',color='r',label=('node '+str(x+1)))
-	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f], marker='.', linestyle='-',color='b',label=('node '+str(y+1)))
+	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f], linestyle='-',color='r',label=('node '+str(x+1)))
+	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f], linestyle='-',color='b',label=('node '+str(y+1)))
 	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
 	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
 	lg = legend()
 	pl.xlabel('t [s]', fontsize=25)
-	pl.ylabel('$u_i(t)$', fontsize=25)
-	pl.title(('FHN - timeseries, corr. coeff. of nodes : ' 
-				+ str("%.2f" % R_pearson)), fontsize=25)
+	pl.ylabel('$u_{' + str(x+1) + '}(t)$ , ' + ' $u_{' + str(y+1) + '}(t)$' ,fontsize=25)
+	pl.suptitle('FHN - timeseries, $\\rho_{'+ str(x+1) + ',' +str(y+1) + '}$' + '$=' + str("%.2f" % R_pearson) + '$',fontsize=25)
+	#pl.title('FHN - timeseries, $\\rho_{' + str(x+1) + ',' +  str(y+1) +'}$' ,  fontsize=25)    # str("%.2f" % R_pearson) + '}$'), fontsize=25)
 	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
 	#pl.show()
 	return	
@@ -158,62 +165,61 @@ if __name__ == '__main__':
 	except:
 		sys.exit(1)
 
-## if input is already a correlation matrix ::
-#corr_matrix = sb.load_matrix(input_name)
-#out_basename  = sb.get_dat_basename(input_name)
-#pl.figure(1)
-#plot_corr_diag(corr_matrix, out_basename)
-#pl.show()
-## node indexes, not forget to subtract 1 
-#[i, j, k , l ]		=   node_index(corr_matrix)
-
-data_matrix   = sb.load_matrix(input_name)
+# if input is already a correlation matrix ::
+corr_matrix = sb.load_matrix(input_name)
 out_basename  = sb.get_dat_basename(input_name)
-[u_matrix , T, dt, tvec]    =	fhn_timeseries(data_matrix)
-corr_matrix                 =   correl_matrix(u_matrix, out_basename)
-[i, j, k , l ]		        =   node_index(corr_matrix)
-print i,j,k,l
-# user defined time range for timeseries plots
-t_start = 1650
-t_final = 1700
-# plot the timeseries of best correlated nodes
-pl.figure(2)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
-#plot the timeseries of worst correlated nodes
-pl.figure(3)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
-
-rnd_node_1 = 7
-rnd_node_2 = 24
-
-[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dt'])
-[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dt'])
-pl.figure(4);
-pl.subplot(2,1,1)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
-pl.subplot(2,1,2)
-pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
-pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
-pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
-pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
-lg = legend()
-pl.title('Fourier Transformed Signal', fontsize=25)
-pl.xlabel('frequency [Hz]' , fontsize = 25 )
-pl.ylabel('timeseries (f)' , fontsize = 25 )
-#pl.axis([-1, 70, 0, 0.5])
+pl.figure(1)
+plot_corr_diag(corr_matrix, out_basename)
 pl.show()
+# node indexes, not forget to subtract 1 
+[i, j, k , l, x0, y0 ]		=   node_index(corr_matrix)
+##node_index(corr_matrix)
+#data_matrix   = sb.load_matrix(input_name)
+#out_basename  = sb.get_dat_basename(input_name)
+#[u_matrix , T, dt, tvec]    =	fhn_timeseries(data_matrix)
+#corr_matrix                 =   correl_matrix(u_matrix, out_basename)
+#[i, j, k , l, x0, y0 ]      =   node_index(corr_matrix)
+#print i,j,k,l, x0, y0
+## user defined time range for timeseries plots
+#t_start = 1650
+#t_final = 1700
+## plot the timeseries of best correlated nodes
+#pl.figure(2)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
+##plot the timeseries of best ANTI correlated nodes
+#pl.figure(3)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
+##plot the timeseries of worst correlated nodes
+#pl.figure(4)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, x0,y0)
 
-#Y = []
+#rnd_node_1 = 7
+#rnd_node_2 = 24
+
+##[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dt'])
+##[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dt'])
+##pl.figure(5);
+##pl.subplot(2,1,1)
+##plot_timeseries(t_start, t_final, dt, u_matrix, tvec, rnd_node_1-1, rnd_node_2-1)
+##pl.subplot(2,1,2)
+##pl.plot(freq_1, yfft_1, 'r',label=('node '+str(rnd_node_1)))
+##pl.plot(freq_2, yfft_2, 'b',label=('node '+str(rnd_node_2)))
+##pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
+##pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
+##lg = legend()
+##pl.title('Fourier Transformed Signal', fontsize=25)
+##pl.xlabel('frequency [Hz]' , fontsize = 25 )
+##pl.ylabel('timeseries (f)' , fontsize = 25 )
+###pl.axis([-1, 70, 0, 0.5])
+
+
+#Y = 0
 #for N in range(0,90):
 	#[Y_tmp, F_tmp] = fhn_fft(u_matrix, N, params['dt'])
-	#Y = np.append(Y, Y_tmp)
-	
-#corr_flat = np.ndarray.flatten(Y) 
-#F_max  = 100
-#F_min  = 0
-#bin_nu    = 100
-## a normalized histogram is obtained
-##hist, bin_edges = np.histogram(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True)#, histtype='bar')
-	
-#hist = pl.hist(corr_flat, bins=bin_nu, range=[F_min, F_max], normed =True, histtype='bar')
+	#Y = Y + Y_tmp
+#pl.figure(6);	
+#pl.plot(F_tmp, Y_tmp)
+#pl.suptitle('FCM, Fourier Transformed FHN', fontsize=25)
+#pl.xlabel('frequency [Hz]' , fontsize = 25 )
+#pl.ylabel('|U(t)|' , fontsize = 25 )
 #pl.show()
