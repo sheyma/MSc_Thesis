@@ -60,7 +60,7 @@ def node_index(matrix):
 	
 	for i in range(0,np.shape(matrix)[0]):
 		for j in range(0,np.shape(matrix)[1]):
-			if matrix[i,j] >= 0.1 and matrix[i,j] < 0.2:
+			if matrix[i,j] >= 0.1 and matrix[i,j] < 0.18:
 				tmp_x = i
 				tmp_y = j
 			if i == j:
@@ -95,16 +95,16 @@ def plot_corr_diag(corr_matrix, out_basename):
 	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )
 		
 	cmap   = pl.cm.jet
-	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, cmap='jet', aspect='auto')
-	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.6, vmax=0.8, cmap='jet', aspect='auto')
+	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend, cmap='jet', aspect='auto')
+	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.5, vmax=0.5, cmap='jet', aspect='auto')
 	cbar = pl.colorbar(cmap=cmap, norm=norm)
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(15)
 	pl.xticks(fontsize = 25)
 	pl.yticks(fontsize = 25)
 	
-	pl.suptitle("FHN correlation matrix, FCM", fontsize=20)
-	pl.title('r=0.58, ' + ' c = 0.2, ' + ' v = 7 [m/s]')
+	pl.suptitle("FHN correlation matrix, ACM", fontsize=20)
+	pl.title('r=0.60, ' + ' c = 0.3, ' + ' v = 6 [m/s]')
 	pl.xlabel('Nodes', fontsize = 25)
 	pl.ylabel('Nodes', fontsize = 25)
 	image_name = str(out_basename + '_FHN_CORR.eps')
@@ -171,9 +171,9 @@ out_basename  = sb.get_dat_basename(input_name)
 pl.figure(1)
 plot_corr_diag(corr_matrix, out_basename)
 pl.show()
-# node indexes, not forget to subtract 1 
-[i, j, k , l, x0, y0 ]		=   node_index(corr_matrix)
-##node_index(corr_matrix)
+## node indexes, not forget to subtract 1 
+#[i, j, k , l, x0, y0 ]		=   node_index(corr_matrix)
+
 #data_matrix   = sb.load_matrix(input_name)
 #out_basename  = sb.get_dat_basename(input_name)
 #[u_matrix , T, dt, tvec]    =	fhn_timeseries(data_matrix)
@@ -219,7 +219,7 @@ pl.show()
 	#Y = Y + Y_tmp
 #pl.figure(6);	
 #pl.plot(F_tmp, Y_tmp)
-#pl.suptitle('FCM, Fourier Transformed FHN', fontsize=25)
+#pl.suptitle('ACM, Fourier Transformed FHN', fontsize=25)
 #pl.xlabel('frequency [Hz]' , fontsize = 25 )
 #pl.ylabel('|U(t)|' , fontsize = 25 )
 #pl.show()
