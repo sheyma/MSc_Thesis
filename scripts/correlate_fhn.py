@@ -60,25 +60,22 @@ def node_index(matrix):
 	
 	for i in range(0,np.shape(matrix)[0]):
 		for j in range(0,np.shape(matrix)[1]):
-			if matrix[i,j] >= 0.1 and matrix[i,j] < 0.18:
-				tmp_x = i
-				tmp_y = j
+			if matrix[i,j] >= 0.1 and matrix[i,j] < 0.18 and i<45 and j<45:
+				mx = i
+				my = j
+			if matrix[i,j] >= 0.85 and matrix[i,j] < 0.92:
+				nx = i
+				ny = j
 			if i == j:
 				matrix[i,j] = 0
 			
 		
-	print "max. corr. coef. in the correlation matrix:", matrix.max()
-	print "min. corr. coef. in the correlation matrix:", matrix.min()
+	print "some good correlation :", matrix[nx,ny]
+	print "some bad correlation :", matrix[mx, my]
 
-	# index of maximum value in matrix
-	[nx , ny] = np.unravel_index(matrix.argmax() , matrix.shape)
-	# index of maximum value in matrix
-	[mx , my] = np.unravel_index(matrix.argmin() , matrix.shape)
-	
 	# nodes start from 1, not from 0, therefore add 1 to the index
-	print "nodes ",nx+1," and ",ny+1," best correlated  : ", matrix[nx,ny] 
-	print "nodes ",mx+1," and ",my+1," worst correlated : ", matrix[mx,my]
-	print "nodes ", tmp_x, "and" , tmp_y, "zero correlated : ", matrix[tmp_x, tmp_y]
+	print "nodes ",nx," and ",ny," good correlated  : ", matrix[nx,ny] 
+	print "nodes ",mx," and ",my," bad correlated : ", matrix[mx,my]
 	
 	# assign diagonal elements back to 1 
 	for i in range(0,np.shape(matrix)[0]):
@@ -86,7 +83,7 @@ def node_index(matrix):
 			if i == j :
 				matrix[i,j] = 1.0
 	
-	return nx, ny , mx, my, tmp_x, tmp_y
+	return nx, ny , mx, my
 
 # plots the correlation matrix of SIMULATED signal
 # input: any output of fhn_time_delays.py or output of calcBOLD.py 
@@ -128,8 +125,8 @@ def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
 	
 	# plot the timeseries of two nodes in specific interval
 	# tvec multiplied by 0.01 to make dimensiion equal to [ms]
-	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f], linestyle='-',color='r',label=('node '+str(x+1)))
-	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f], linestyle='-',color='b',label=('node '+str(y+1)))
+	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f], linestyle='-',color='r',label=('$u_{' + str(x+1) + '}(t)$'))
+	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f], linestyle='-',color='b',label=('$u_{' + str(y+1) + '}(t)$'))
 	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
 	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
 	lg = legend()
@@ -165,34 +162,32 @@ if __name__ == '__main__':
 	except:
 		sys.exit(1)
 
-# if input is already a correlation matrix ::
-corr_matrix = sb.load_matrix(input_name)
-out_basename  = sb.get_dat_basename(input_name)
-pl.figure(1)
-plot_corr_diag(corr_matrix, out_basename)
-pl.show()
+## if input is already a correlation matrix ::
+#corr_matrix = sb.load_matrix(input_name)
+#out_basename  = sb.get_dat_basename(input_name)
+#pl.figure(1)
+#plot_corr_diag(corr_matrix, out_basename)
+#pl.show()
 ## node indexes, not forget to subtract 1 
 #[i, j, k , l, x0, y0 ]		=   node_index(corr_matrix)
 
-#data_matrix   = sb.load_matrix(input_name)
-#out_basename  = sb.get_dat_basename(input_name)
-#[u_matrix , T, dt, tvec]    =	fhn_timeseries(data_matrix)
-#corr_matrix                 =   correl_matrix(u_matrix, out_basename)
-#[i, j, k , l, x0, y0 ]      =   node_index(corr_matrix)
-#print i,j,k,l, x0, y0
-## user defined time range for timeseries plots
-#t_start = 1650
-#t_final = 1700
-## plot the timeseries of best correlated nodes
-#pl.figure(2)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
-##plot the timeseries of best ANTI correlated nodes
-#pl.figure(3)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
-##plot the timeseries of worst correlated nodes
-#pl.figure(4)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, x0,y0)
-
+data_matrix   = sb.load_matrix(input_name)
+out_basename  = sb.get_dat_basename(input_name)
+[u_matrix , T, dt, tvec]    =	fhn_timeseries(data_matrix)
+corr_matrix                 =   correl_matrix(u_matrix, out_basename)
+[i, j, k , l]      =   node_index(corr_matrix)
+print i,j,k,l
+# user defined time range for timeseries plots
+t_start = 1650
+t_final = 1700
+# plot the timeseries of best correlated nodes
+pl.figure(2)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
+#plot the timeseries of best ANTI correlated nodes
+pl.figure(3)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
+pl.show()
+#plot the timeseries of worst correlated nodes
 #rnd_node_1 = 7
 #rnd_node_2 = 24
 
