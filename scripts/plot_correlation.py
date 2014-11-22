@@ -38,22 +38,27 @@ def load_matrix(file):
 	return AT
 	
 # plots colorbar coded EMRPIRICAL correlation matrix 
-def plot_corr(adj_matrix, simfile ):	
+def plot_corr(corr_matrix, simfile ):	
 	N_col  = np.shape(corr_matrix)[1]
-	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
-	pl.imshow(corr_matrix, interpolation='nearest', vmin=0.0, vmax=1.0, extent=extend)
+	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )
+	fig , ax = pl.subplots(figsize=(15, 12))
+	ax.tick_params('both', length=15, width=8, which='major')
+	pl.subplots_adjust(left=0.10, right=0.95, top=0.95, bottom=0.12)	
+	for i in range(0,N_col):
+		for j in range(0, N_col):
+			if i==j:
+				corr_matrix[i,j] = 1
+			
+	pl.imshow(corr_matrix, interpolation='nearest',  extent=extend)
+	## vmin & vmax for EMPIRICAL data corr matrix :
+	#pl.imshow(corr_matrix, interpolation='nearest', vmin=0.0, vmax=1.0, extent=extend)
 	cbar = pl.colorbar()
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(50)
 	pl.xticks(fontsize = 50)
 	pl.yticks(fontsize = 50)
-	pl.suptitle('ACM (DW-MRI)', fontsize= 50)
-	#pl.suptitle('FCM (fMRI-BOLD)', fontsize= 50)
 	pl.xlabel('Nodes', fontsize = 50)
 	pl.ylabel('Nodes', fontsize = 50)
-	#image_name = simfile[0:-4] + '_CORR.eps'	
-	#pl.savefig(simfile[0:-4]+'.eps', format="eps")
-	#pl.show()
 	return  	
 
 # plots ADJACENCY matrix black - white 
@@ -220,12 +225,14 @@ ax.tick_params('both', length=12, width=5, which='major')
 pl.show()		
 
 #------------------------------------
-#mtx_empiri			= 		load_matrix(input_empiri)		
+#mtx_empiri			= 		load_matrix(input_empiri)
+#pl.figure(4)		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
 # plot_adj gets and "adjacency matrix"
 #figure				=		plot_adj(mtx_empiri , input_empiri)
 #mtx_simuli			= 		load_matrix(input_simuli)
-
+#pl.figure(5)
+#figure				=		plot_corr(mtx_simuli , input_simuli)
 
 #R_pearson			= 	    pearson_coef(mtx_empiri , mtx_simuli)
 #print "Pearson corr. coef. between empir.-simul. : " , R_pearson
