@@ -25,6 +25,7 @@ import glob
 import os
 import scipy.stats as sistat
 import collections
+from matplotlib import rc
 
 # check the loaded matrix if it is symmetric
 def load_matrix(file):
@@ -136,16 +137,16 @@ if __name__ == '__main__':
 mtx_empiri		=		load_matrix(input_empiri)
 
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
-#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 #name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
-name = 'A_aal_0_ADJ_thr_0.66_sigma=0.2_D=0.05_v=70.0_tmax=45000_BOLD_signal_corr.dat'
+#name = 'A_aal_0_ADJ_thr_0.66_sigma=0.2_D=0.05_v=70.0_tmax=45000_BOLD_signal_corr.dat'
 
 #name = 'A_aal_0_ADJ_thr_0.60_sigma=0.1_D=0.05_v=70.0_tmax=45000_NORM_BOLD_signal_corr.dat'
 #name = 'acp_w_0_ADJ_thr_0.60_sigma=0.9_D=0.05_v=30.0_tmax=45000_Norm_BOLD_signal_corr.dat'
 
 thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])	
-#vel_array = np.array([20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
-sig_array = np.array([0.018, 0.02, 0.025, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+vel_array = np.array([150, 140, 130, 120, 110, 90, 80, 70, 60, 50, 40, 30])
+sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.03, 0.02, 0.018 ])
 
 #thr_array = np.arange(4, 86, 1)
 #vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
@@ -156,8 +157,8 @@ R_thr =  {}
 for THR in thr_array :
 	R_temp = []
 	
-	#local_path = '../data/jobs_corr/'
-	local_path = '../data/jobs_corr_bold/'
+	local_path = '../data/jobs_corr/'
+	#local_path = '../data/jobs_corr_bold/'
 	
 	#for VEL in vel_array :
 		
@@ -167,7 +168,7 @@ for THR in thr_array :
 		
 		input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
 		
-		print input_name
+		#print input_name
 	
 		try:
 			mtx_simuli = load_matrix(local_path + input_name)
@@ -192,35 +193,36 @@ datam 		= np.array(Ordered_R.values())
 #print datam
 
 # PLOTTING BEGINS ! 
-fig , ax = pl.subplots(figsize=(18,15))
+#rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+#rc('font',**{'family':'serif','serif':['Palatino']})
+#rc('text', usetex=True)
+import matplotlib as mpl
+mpl.rcParams['text.usetex']=True
+mpl.rcParams['text.latex.unicode']=True
+
+fig , ax = pl.subplots(figsize=(81, 60))
 pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
-# PLOT PA OVER SIGMA
+#PLOT PA OVER SIGMA
 a = thr_array
 b = sig_array
-# title for fhn....
-#pl.title('A_aal_0...' + ' , BOLD , ' + '  v = 7 [m/s] ', fontsize=20)
-# title for bold...
-#pl.title('acp_w_0...' + ' , BOLD , ' + '  v = 3 [m/s]', fontsize=20)
-pl.ylabel('$c$ ', fontsize=20)
 
 ##PLOT PA OVER VELOCITY
-#a = thr_array
 #b = vel_array/10
-##title for fhn....
-##pl.title('A_aal_0_...' + ' , BOLD , ' + '$c$ = 0.5 ', fontsize=20)
-##title for bold...
-##pl.title('acp_w_0...' + ' , BOLD , ' + '$c$ = 0.1', fontsize=20)
-#pl.ylabel('v [m/s]', fontsize=20)
 
-pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a )
+a = np.array([0.55,  0.57, 0.59, 0.61, 0.63, 0.65])	
+pl.setp(ax , xticks=np.arange(1,len(thr_array),2), xticklabels = a )
+
 pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-pl.xlabel('r', fontsize = 20)
+pl.ylabel('$c$ ', fontsize=200)
+pl.xlabel('$r$', fontsize = 200)
 for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(15)
-pl.xticks(fontsize = 15)
-pl.yticks(fontsize = 15)
+	t.set_fontsize(165)
+pl.xticks(fontsize = 165)
+pl.yticks(fontsize = 165)
+ax.tick_params('both', length=40, width=20, which='major')
 pl.show()		
 
 #------------------------------------
