@@ -60,10 +60,10 @@ def node_index(matrix):
 	
 	for i in range(0,np.shape(matrix)[0]):
 		for j in range(0,np.shape(matrix)[1]):
-			if matrix[i,j] >= 0.1 and matrix[i,j] < 0.18 and i<45 and j<45:
+			if matrix[i,j] >= 0.1 and matrix[i,j] < 0.18 :
 				mx = i
 				my = j
-			if matrix[i,j] >= 0.85 and matrix[i,j] < 0.92:
+			if matrix[i,j] >= 0.85 and matrix[i,j] < 0.90 and i<45 and j<45:
 				nx = i
 				ny = j
 			if i == j:
@@ -74,7 +74,7 @@ def node_index(matrix):
 	print "some bad correlation :", matrix[mx, my]
 
 	# nodes start from 1, not from 0, therefore add 1 to the index
-	print "nodes ",nx," and ",ny," good correlated  : ", matrix[nx,ny] 
+	print "nodes ",nx+1," and ",ny," good correlated  : ", matrix[nx,ny] 
 	print "nodes ",mx," and ",my," bad correlated : ", matrix[mx,my]
 	
 	# assign diagonal elements back to 1 
@@ -125,17 +125,18 @@ def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
 	
 	# plot the timeseries of two nodes in specific interval
 	# tvec multiplied by 0.01 to make dimensiion equal to [ms]
+	fig , ax = pl.subplots(figsize=(25, 5))
+	pl.subplots_adjust(left=0.08, right=0.98, top=0.94, bottom=0.20)
+
 	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f], linestyle='-',color='r',label=('$u_{' + str(x+1) + '}(t)$'))
 	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f], linestyle='-',color='b',label=('$u_{' + str(y+1) + '}(t)$'))
-	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
-	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
-	lg = legend()
-	pl.xlabel('t [s]', fontsize=25)
-	pl.ylabel('$u_{' + str(x+1) + '}(t)$ , ' + ' $u_{' + str(y+1) + '}(t)$' ,fontsize=25)
-	pl.suptitle('FHN - timeseries, $\\rho_{'+ str(x+1) + ',' +str(y+1) + '}$' + '$=' + str("%.2f" % R_pearson) + '$',fontsize=25)
-	#pl.title('FHN - timeseries, $\\rho_{' + str(x+1) + ',' +  str(y+1) +'}$' ,  fontsize=25)    # str("%.2f" % R_pearson) + '}$'), fontsize=25)
-	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
-	#pl.show()
+	pl.setp(pl.gca().get_xticklabels(), fontsize = 30)
+	pl.setp(pl.gca().get_yticklabels(), fontsize = 30)
+	
+	pl.legend(prop={'size':35})
+
+	pl.xlabel('t [s]', fontsize=30)
+	pl.ylabel('$u_{' + str(x+1) + '}(t)$ , ' + ' $u_{' + str(y+1) + '}(t)$' ,fontsize=40)
 	return	
 
 def fhn_fft(matrix, x, dtt) :
