@@ -160,13 +160,13 @@ for THR in thr_array :
 	local_path = '../data/jobs_corr/'
 	#local_path = '../data/jobs_corr_bold/'
 	
-	#for VEL in vel_array :
+	for VEL in vel_array :
 		
-		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
 		
-	for SIG in sig_array :
+	#for SIG in sig_array :
 		
-		input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
+		#input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
 		
 		#print input_name
 	
@@ -193,36 +193,30 @@ datam 		= np.array(Ordered_R.values())
 #print datam
 
 # PLOTTING BEGINS ! 
-#rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-## for Palatino and other serif fonts use:
-#rc('font',**{'family':'serif','serif':['Palatino']})
-#rc('text', usetex=True)
-import matplotlib as mpl
-mpl.rcParams['text.usetex']=True
-mpl.rcParams['text.latex.unicode']=True
 
-fig , ax = pl.subplots(figsize=(81, 60))
+fig , ax = pl.subplots(figsize=(18, 19))
+pl.subplots_adjust(left=0.15, right=1.0, top=0.98, bottom=0.12)
 pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
-#PLOT PA OVER SIGMA
-a = thr_array
-b = sig_array
+##PLOT PA OVER SIGMA
+#b = sig_array
 
-##PLOT PA OVER VELOCITY
-#b = vel_array/10
+#PLOT PA OVER VELOCITY
+b = vel_array/10
 
-a = np.array([0.55,  0.57, 0.59, 0.61, 0.63, 0.65])	
-pl.setp(ax , xticks=np.arange(1,len(thr_array),2), xticklabels = a )
+a = np.array([0.55,  0.58, 0.61, 0.64])	
+pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
 
 pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-pl.ylabel('$c$ ', fontsize=200)
-pl.xlabel('$r$', fontsize = 200)
+pl.ylabel('$v$ [m/s]', fontsize=65)
+#pl.ylabel('$c$', fontsize=65)
+pl.xlabel('$r$', fontsize = 65)
 for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(165)
-pl.xticks(fontsize = 165)
-pl.yticks(fontsize = 165)
-ax.tick_params('both', length=40, width=20, which='major')
+	t.set_fontsize(50)
+pl.xticks(fontsize = 50)
+pl.yticks(fontsize = 50)
+ax.tick_params('both', length=12, width=5, which='major')
 pl.show()		
 
 #------------------------------------
