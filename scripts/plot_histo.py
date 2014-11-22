@@ -117,38 +117,38 @@ def chi2_hists(HA, HB):
 local_path   = '../data/jobs_corr/'		
 
 # simulations based on EMPIRICAL brain networks
-#name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
-name_E = 'acp_w_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
+name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+#name_E = 'acp_w_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
 # simulations based on RANDOMIZED brain networks
-#name_R = 'A_aal_g_ADJ_thr_0.54_sigma=0.3_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
-name_R = 'acp_w_a_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
+name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+#name_R = 'acp_w_a_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
 
-#thr_array = np.array([ 54,  56,  58,  60,  62,  64, 66])	
-#vel_array = np.array([40, 50, 60, 70, 80, 90])
-#sig_array = np.array([0.3, 0.4, 0.5, 0.6, 0.7])
+thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])	
+sig_array = np.array([0.018, 0.02, 0.025, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+sig_array = np.append(sig_array[-1:0:-1] , sig_array[0])
+print sig_array
 
-thr_array = np.array([22,  26,  30,   34, 
-						 38,  42, 44, 46, 48, 50, 52, 54,
-						56, 58,  60,  62,  64,  66, 
-						68,  70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
-						80, 81, 82, 83])
-vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
-sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+#thr_array = np.array([22,  26,  30,   34, 
+						 #38,  42, 44, 46, 48, 50, 52, 54,
+						#56, 58,  60,  62,  64,  66, 
+						#68,  70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
+						#80, 81, 82, 83])
+#vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
+#sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
 
-
-x = []
-y = []
-z = []
+R_thr = {}
 
 for THR in thr_array :
-	for VEL in vel_array :
-		input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
-		input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
+	R_temp = []
+	#for VEL in vel_array :
+		#input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
+		#input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
 
-	#for SIG in sig_array :
-		#input_empiri = name_E[0:18] + str(THR) + name_E[20:27] + str(SIG) + name_E[30:]
-		#input_simuli = name_R[0:18] + str(THR) + name_R[20:27] + str(SIG) + name_R[30:]
+	for SIG in sig_array :
+		input_empiri = name_E[0:18] + str(THR) + name_E[20:27] + str(SIG) + name_E[30:]
+		input_simuli = name_R[0:18] + str(THR) + name_R[20:27] + str(SIG) + name_R[30:]
 		
+		#print input_empiri
 		try:
 			mtx_empiri = load_matrix(local_path + input_empiri)
 			HistA      = corr_histo(mtx_empiri)
@@ -162,39 +162,43 @@ for THR in thr_array :
 			R_val       = bhatta_hists(HistA, HistB)
 			#R_val      = correl_hists(HistA, HistB)
 		
-		x = np.append(x, THR)
-		y = np.append(y, VEL)
-		#y = np.append(y, SIG)
-		z = np.append(z, R_val)
+		#print R_val
+		
+		R_temp     = np.append(R_temp, R_val)
+	R_thr[THR] 	   = np.array(R_temp)
 
-xi = np.linspace(x.min(), x.max(), 100)
-yi = np.linspace(y.min(), y.max(), 100)
-zi = griddata( (x,y), z, (xi[None,:], yi[:,None]), method='cubic') 
-zi = np.nan_to_num(zi)
-xig, yig = np.meshgrid(xi, yi)
-fig = pl.figure(2)
-ax = fig.add_subplot(1,1,1, projection='3d', azim=210)
-surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, cmap=cm.jet ) 
-fig.colorbar(surf, ax=ax)
-pl.xticks(thr_array)
-pl.yticks(vel_array)
-pl.autoscale(tight=True)
+#print R_thr		
 
-ax.set_xlabel('r', fontsize=25)
-ax.set_ylabel('v', fontsize=25)
-ax.set_zlabel('Bhatta', fontsize=25)
-#ax.text2D(0.05, 0.95, 'Bhatta comparison (c=0.3) : 0 - g : A_aal', transform=ax.transAxes)
-ax.text2D(0.05, 0.95, 'Bhatta comparison (c=0.3) : 0 - a : acp_w', transform=ax.transAxes)
+Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
+#print "Ordered dict"
+#print Ordered_R
+
+datam 		= np.array(Ordered_R.values())
+
+#print "check its numpy array version"
+#print datam
+
+# PLOTTING BEGINS ! 
+fig , ax = pl.subplots(figsize=(18,15))
+pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
+cbar = pl.colorbar()
+
+# PLOT PA OVER SIGMA
+a = thr_array
+b = sig_array
+pl.ylabel('$c$', fontsize=25)
+
+pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a )
+pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
+pl.xlabel('r', fontsize = 20)
+for t in cbar.ax.get_yticklabels():
+	t.set_fontsize(15)
+pl.xticks(fontsize = 15)
+pl.yticks(fontsize = 15)
+pl.show()		
+
 
 pl.show()
-
-
-R_thr =  {}
-
-x = []
-y = []
-z = []
-t = []
 
 #for THR in thr_array :
 	#R_temp = []
@@ -244,10 +248,6 @@ t = []
 #ax.text2D(0.05, 0.95, 'Bhatta comparison : 0 - a : A_aal', transform=ax.transAxes)
 #pl.show()
 
-data1=np.array(x)
-data2=np.array(y)
-data3=np.array(z)
-output=np.array(t)
 
 #fig = pl.figure(2)
 
