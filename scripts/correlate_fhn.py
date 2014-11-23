@@ -10,6 +10,9 @@ import matplotlib.pyplot as pl
 from matplotlib import colors
 from pylab import *
 from scipy.signal import  butter , filtfilt , correlate2d
+from mpl_toolkits.mplot3d import Axes3D
+from scipy.interpolate import griddata	
+from matplotlib import cm
 
 """ 
 	input  : job output from "fhn_time_delays.py" , m rows, n columns
@@ -176,21 +179,61 @@ data_matrix   = sb.load_matrix(input_name)
 out_basename  = sb.get_dat_basename(input_name)
 [u_matrix , T, dt, tvec]    =	fhn_timeseries(data_matrix)
 corr_matrix                 =   correl_matrix(u_matrix, out_basename)
-[i, j, k , l]      =   node_index(corr_matrix)
-print i,j,k,l
-# user defined time range for timeseries plots
-t_start = 1650
-t_final = 1700
-# plot the timeseries of best correlated nodes
-pl.figure(2)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
-#plot the timeseries of best ANTI correlated nodes
-pl.figure(3)
-plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
+#[i, j, k , l]      =   node_index(corr_matrix)
+#print i,j,k,l
+## user defined time range for timeseries plots
+#t_start = 1650
+#t_final = 1700
+## plot the timeseries of some good correlated nodes
+#pl.figure(2)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
+##plot the timeseries of some bad correlated nodes
+#pl.figure(3)
+#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
+#pl.show()
+
+# plot FAST FOURIER TRANSFORM of each node at surface
+N_nodes = np.shape(corr_matrix)[1]
+step = 25000
+YFFT = []
+N = []
+F = []
+for i in range(0,N_nodes):
+	[yfft, freq] = fhn_fft(u_matrix, i, params['dt'])
+	tmp = yfft[0:step]
+	f_tmp = freq[0:step]
+	YFFT = np.append(YFFT, tmp)
+	for j in range(0, len(tmp)):
+		N = np.append(N, np.array([i]))
+		F = np.append(F, f_tmp[j])
+		
+# converting YFFT into logarithmic scale
+FFT = np.log(YFFT)	
+
+xi = np.arange(N.min(),N.max(),0.1)
+yi = np.arange(F.min(),F.max(),0.01)
+
+X , Y = np.meshgrid(xi,yi)
+print np.shape(X), np.shape(Y)
+
+Z = griddata((N,F), FFT, (xi[None,:], yi[:,None]), method='linear')
+
+fig = pl.figure()
+ax = fig.gca(projection='3d')
+surf = ax.plot_surface(X,Y,Z, cmap=cm.jet, linewidth=0)
+ax.set_zlim3d(np.min(Z), np.max(Z))
+fig.colorbar(surf)
 pl.show()
-#plot the timeseries of worst correlated nodes
-#rnd_node_1 = 7
-#rnd_node_2 = 24
+
+#ax.set_xlabel('X Label')
+#ax.set_ylabel('Y Label')
+#ax.set_zlabel('Z Label')
+##fig.colorbar(surf, shrink=0.5, aspect=5)
+##ax.set_zlim(data3.min(), data3.max())
+#fig.colorbar(surf, ax=ax)
+#pl.show()
+		
+	
 
 ##[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dt'])
 ##[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dt'])
@@ -208,14 +251,3 @@ pl.show()
 ##pl.ylabel('timeseries (f)' , fontsize = 25 )
 ###pl.axis([-1, 70, 0, 0.5])
 
-
-#Y = 0
-#for N in range(0,90):
-	#[Y_tmp, F_tmp] = fhn_fft(u_matrix, N, params['dt'])
-	#Y = Y + Y_tmp
-#pl.figure(6);	
-#pl.plot(F_tmp, Y_tmp)
-#pl.suptitle('ACM, Fourier Transformed FHN', fontsize=25)
-#pl.xlabel('frequency [Hz]' , fontsize = 25 )
-#pl.ylabel('|U(t)|' , fontsize = 25 )
-#pl.show()
