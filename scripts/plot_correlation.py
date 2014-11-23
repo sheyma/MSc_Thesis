@@ -142,20 +142,20 @@ if __name__ == '__main__':
 mtx_empiri		=		load_matrix(input_empiri)
 
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
-name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-#name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+#name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
 #name = 'A_aal_0_ADJ_thr_0.66_sigma=0.2_D=0.05_v=70.0_tmax=45000_BOLD_signal_corr.dat'
 
 #name = 'A_aal_0_ADJ_thr_0.60_sigma=0.1_D=0.05_v=70.0_tmax=45000_NORM_BOLD_signal_corr.dat'
 #name = 'acp_w_0_ADJ_thr_0.60_sigma=0.9_D=0.05_v=30.0_tmax=45000_Norm_BOLD_signal_corr.dat'
 
-thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])	
-vel_array = np.array([150, 140, 130, 120, 110, 90, 80, 70, 60, 50, 40, 30])
-sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.03, 0.02, 0.018 ])
+#thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])	
+#vel_array = np.array([150, 140, 130, 120, 110, 90, 80, 70, 60, 50, 40, 30])
+#sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.03, 0.02, 0.018 ])
 
-#thr_array = np.arange(4, 86, 1)
-#vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
-#sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+thr_array = np.arange(18, 86, 4)
+vel_array = np.array([20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
+sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.03, 0.02, 0.018 ])
 
 R_thr =  {}
 
@@ -165,15 +165,15 @@ for THR in thr_array :
 	local_path = '../data/jobs_corr/'
 	#local_path = '../data/jobs_corr_bold/'
 	
-	for VEL in vel_array :
+	#for VEL in vel_array :
 		
-		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
 		
-	#for SIG in sig_array :
+	for SIG in sig_array :
 		
-		#input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
+		input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
 		
-		#print input_name
+		print input_name
 	
 		try:
 			mtx_simuli = load_matrix(local_path + input_name)
@@ -204,18 +204,23 @@ pl.subplots_adjust(left=0.15, right=1.0, top=0.98, bottom=0.12)
 pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
-##PLOT PA OVER SIGMA
-#b = sig_array
+#PLOT PA OVER SIGMA
+b = sig_array
 
-#PLOT PA OVER VELOCITY
-b = vel_array/10
+##PLOT PA OVER VELOCITY
+#b = vel_array/10
 
-a = np.array([0.55,  0.58, 0.61, 0.64])	
+# acp_w_0 thr range, XTICKS: 
+a = np.array([0.22, 0.34, 0.46, 0.58, 0.70, 0.82])
 pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
 
+## A_aal_0 thr range, XTICKS : 
+#a = np.array([0.55,  0.58, 0.61, 0.64])	
+#pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
+
 pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-pl.ylabel('$v$ [m/s]', fontsize=65)
-#pl.ylabel('$c$', fontsize=65)
+#pl.ylabel('$v$ [m/s]', fontsize=65)
+pl.ylabel('$c$', fontsize=65)
 pl.xlabel('$r$', fontsize = 65)
 for t in cbar.ax.get_yticklabels():
 	t.set_fontsize(50)
