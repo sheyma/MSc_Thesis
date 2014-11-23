@@ -31,7 +31,7 @@ def correl_matrix(matrix , out_basename):
 	tr_matrix = np.transpose(matrix)
 	cr_matrix = np.corrcoef(tr_matrix)
 	file_name = str(out_basename + '_corr.dat')
-	np.savetxt(file_name, cr_matrix, '%.6f',delimiter='\t')
+	#np.savetxt(file_name, cr_matrix, '%.6f',delimiter='\t')
 	return cr_matrix
 
 # find the max and min values and their index in the correlation matrix
@@ -39,51 +39,60 @@ def node_index(matrix):
 	# ignore diagonal elements by assigning it to zero
 	for i in range(0,np.shape(matrix)[0]):
 		for j in range(0,np.shape(matrix)[1]):
+			if matrix[i,j] >= 0.1 and matrix[i,j] < 0.18 :
+				mx = i
+				my = j
+
 			if i == j :
 				matrix[i,j] = 0
-	print "max. corr. coef. in the correlation matrix:", matrix.max()
-	print "min. corr. coef. in the correlation matrix:", matrix.min()
+	
+	print "some good correlation :", matrix.max()
+	print "some bad correlation :", matrix[mx, my]
 
 	# index of maximum value in matrix
 	[nx , ny] = np.unravel_index(matrix.argmax() , matrix.shape)
-	# index of maximum value in matrix
-	[mx , my] = np.unravel_index(matrix.argmin() , matrix.shape)
-	
+		
 	# assign diagonal elements back to one 
 	for i in range(0,np.shape(matrix)[0]):
 		for j in range(0,np.shape(matrix)[1]):
 			if i == j :
 				matrix[i,j] = 1
-	#nodes start from 1, not from 0 on figure !
-	print "nodes ",nx+1," and ",ny+1," best corr. : ", corr_matrix[nx,ny] 
-	print "nodes ",mx+1," and ",my+1," worst corr.: ", corr_matrix[mx,my]
+
+	# nodes start from 1, not from 0, therefore add 1 to the index
+	print "nodes ",nx+1," and ",ny+1," good correlated  : ", matrix[nx,ny] 
+	print "nodes ",mx+1," and ",my+1," bad correlated : ", matrix[mx,my]
+	
 	return nx, ny , mx, my
 
 # plots the correlation matrix of SIMULATED signal
 # input: any output of fhn_time_delays.py or output of calcBOLD.py 
 # trick: remove 1's to 0's along the diagonals 
 def plot_corr_diag(corr_matrix, out_basename):
+	
 	N_col  = np.shape(corr_matrix)[1]
-	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
-	#for i in range(0,N_col):
-		#for j in range(0,N_col):
-			#if i==j :
-				#corr_matrix[i,j] = 1
-	cmap   = pl.cm.jet
-	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend, cmap='jet', aspect='auto')
-	pl.imshow(corr_matrix, interpolation='nearest', extent=extend, vmin=-0.5, vmax=0.5, cmap='jet', aspect='auto')
+	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )
+	fig , ax = pl.subplots(figsize=(15, 12))
+	ax.tick_params('both', length=15, width=8, which='major')
+	pl.subplots_adjust(left=0.10, right=0.95, top=0.95, bottom=0.12)	
+	
+	for i in range(0,N_col):
+		for j in range(0, N_col):
+			if i==j:
+				corr_matrix[i,j] = 1
+			
+	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
+	pl.imshow(corr_matrix, interpolation='nearest', vmin=-0.5, vmax=0.5, extent=extend)
+	
+	## vmin & vmax for EMPIRICAL data corr matrix :
+	#pl.imshow(corr_matrix, interpolation='nearest', vmin=0.0, vmax=1.0, extent=extend)
+	
 	cbar = pl.colorbar()
 	for t in cbar.ax.get_yticklabels():
-		t.set_fontsize(15)
-	pl.xticks(fontsize = 20)
-	pl.yticks(fontsize = 20)
-	pl.suptitle("BOLD-signal correlation matrix", fontsize=20)
-	pl.title(out_basename)
-	pl.xlabel('Nodes', fontsize = 20)
-	pl.ylabel('Nodes', fontsize = 20)
-	image_name = str(out_basename + '_CORR.eps')
-	#pl.savefig(image_name, format="eps")
-	#pl.show()
+		t.set_fontsize(50)
+	pl.xticks(fontsize = 50)
+	pl.yticks(fontsize = 50)
+	pl.xlabel('Nodes', fontsize = 50)
+	pl.ylabel('Nodes', fontsize = 50)	
 	return
 	
 def plot_bold_signal(timeseries, x, y):
@@ -103,18 +112,22 @@ def plot_bold_signal(timeseries, x, y):
 	#pl.plot(time_bds, v2, 'b',label=('node '+str(y)))
 	
 	# if no downsampling :
-	pl.plot(time, v1, 'r',label=('node '+str(x+1)))
-	pl.plot(time, v2, 'b',label=('node '+str(y+1)))
+
+	fig , ax = pl.subplots(figsize=(25, 5))
+	pl.subplots_adjust(left=0.08, right=0.98, top=0.94, bottom=0.20)
+
+	pl.plot(time, v1, 'm', label=('$u_{' + str(x+1) + '}(t)$'))
+	pl.plot(time, v2, 'g', label=('$u_{' + str(y+1) + '}(t)$'))
+	pl.setp(pl.gca().get_xticklabels(), fontsize = 30)
+	pl.setp(pl.gca().get_yticklabels(), fontsize = 30)
 	
-	pl.setp(pl.gca().get_xticklabels(), fontsize = 15)
-	pl.setp(pl.gca().get_yticklabels(), fontsize = 15)
-	lg = legend()
-	pl.xlabel('t [min]', fontsize=25)
-	pl.ylabel('BOLD change', fontsize=25)
-	pl.title(('BOLD activity, corr. coeff. of nodes : ' 
-			   +str("%.2f" % R_pearson)),fontsize=25)
-	#pl.savefig(simfile[:-4]+"_timeseries.eps",format="eps")
-	#pl.show()
+	ax.set_ylim(-v1.max()-0.05, v1.max()+0.05)
+	
+	pl.legend(prop={'size':35})
+
+	pl.xlabel('t [min]', fontsize=30)
+	pl.ylabel('BOLD % change' ,fontsize=40)
+	
 	return	
 
 def bold_fft(matrix, x, dtt) :
@@ -146,17 +159,18 @@ data_matrix = sb.load_matrix(input_name)
 out_basename = sb.get_dat_basename(input_name)
 
 corr_matrix = correl_matrix(data_matrix , out_basename)
+
 #corr_matrix = data_matrix
+image = plot_corr_diag(corr_matrix, out_basename)
 # real node index : add 1!
-#[i, j, k , l ]  = 	    node_index(corr_matrix)
-#image = plot_corr_diag(corr_matrix, out_basename)
-#pl.show()
-## BOLD activity of the nodes correlating the best
-#pl.figure(2)
-#plot_bold_signal(data_matrix, i,j)
-## BOLD activity of the nodes correlating the worst
-#pl.figure(3)
-#plot_bold_signal(data_matrix, k,l)
+[i, j, k , l ]  = 	    node_index(corr_matrix)
+# BOLD activity of the nodes correlating the best
+pl.figure(2)
+plot_bold_signal(data_matrix, i,j)
+# BOLD activity of the nodes correlating the worst
+pl.figure(3)
+plot_bold_signal(data_matrix, k,l)
+pl.show()
 
 #rnd_node_1 = 7
 #rnd_node_2 = 24
