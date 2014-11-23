@@ -220,17 +220,26 @@ Z = griddata((N,F), FFT, (xi[None,:], yi[:,None]), method='linear')
 
 fig = pl.figure()
 ax = fig.gca(projection='3d')
+
 surf = ax.plot_surface(X,Y,Z, cmap=cm.jet, linewidth=0)
-ax.set_zlim3d(np.min(Z), np.max(Z))
-fig.colorbar(surf)
+
+cbar = fig.colorbar(surf, shrink=0.5, aspect=10)
+for t in cbar.ax.get_yticklabels():
+	t.set_fontsize(30)
+	
+ax.set_xlabel('Nodes', fontsize=40)
+ax.set_ylabel('$\\nu$ [Hz]', fontsize=40)
+ax.set_zlabel('$\\log\\widehat{f(}\\nu)$' , fontsize=40)
+
+pl.setp(pl.gca().get_xticklabels(), fontsize = 30)
+pl.setp(pl.gca().get_yticklabels(), fontsize = 30)
+pl.setp(pl.gca().get_zticklabels(), fontsize = 30)
+
 pl.show()
 
-#ax.set_xlabel('X Label')
-#ax.set_ylabel('Y Label')
-#ax.set_zlabel('Z Label')
-##fig.colorbar(surf, shrink=0.5, aspect=5)
-##ax.set_zlim(data3.min(), data3.max())
-#fig.colorbar(surf, ax=ax)
+
+
+
 #pl.show()
 		
 	
