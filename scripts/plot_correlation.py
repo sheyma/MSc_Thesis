@@ -49,9 +49,12 @@ def plot_corr(corr_matrix, simfile ):
 			if i==j:
 				corr_matrix[i,j] = 1
 			
-	pl.imshow(corr_matrix, interpolation='nearest',  extent=extend)
+	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
+	pl.imshow(corr_matrix, interpolation='nearest', vmin=0, vmax=1.0, extent=extend)
+	
 	## vmin & vmax for EMPIRICAL data corr matrix :
 	#pl.imshow(corr_matrix, interpolation='nearest', vmin=0.0, vmax=1.0, extent=extend)
+	
 	cbar = pl.colorbar()
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(50)
@@ -231,17 +234,14 @@ pl.show()
 
 #------------------------------------
 #mtx_empiri			= 		load_matrix(input_empiri)
-#pl.figure(4)		
+#pl.figure()		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
-# plot_adj gets and "adjacency matrix"
+## plot_adj gets and "adjacency matrix"
 #figure				=		plot_adj(mtx_empiri , input_empiri)
 #mtx_simuli			= 		load_matrix(input_simuli)
-#pl.figure(5)
+#pl.figure()
 #figure				=		plot_corr(mtx_simuli , input_simuli)
 
 #R_pearson			= 	    pearson_coef(mtx_empiri , mtx_simuli)
 #print "Pearson corr. coef. between empir.-simul. : " , R_pearson
-#figure_name 		= 		input_simuli[0:-3] + str('eps')	
-#print figure_name
-#pl.title('A_aal, 0-V , FHN \nthr=0.53 , $\sigma$ = 0.02 , tmax=450[s] v = 7 [m/s]', fontsize=20)
 #pl.show()
