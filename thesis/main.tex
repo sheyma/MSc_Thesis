@@ -46,7 +46,7 @@
 
 \pagestyle{fancy} % Finally, use the "fancy" page style to implement the FancyHdr headers
 
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % New command to make the lines in the title page
+\newcommand{\HRule}{\rule{\linewidth}{0.3mm}} % New command to make the lines in the title page
 
 % PDF meta-data
 \hypersetup{pdftitle={\ttitle}}
@@ -71,22 +71,25 @@
 \begin{minipage}{0.4\textwidth}
 \begin{flushleft} \large
 \emph{Author:}\\
-\href{http://www.johnsmith.com}{\authornames} % Author name - remove the \href bracket to remove the link
+\href{https://github.com/sheyma}{\authornames} % Author name - remove the \href bracket to remove the link
 \end{flushleft}
 \end{minipage}
 \begin{minipage}{0.4\textwidth}
 \begin{flushright} \large
-\emph{Supervisor:} \\
-\href{http://www.jamessmith.com}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+\emph{Supervisors:} \\
+\href{http://kobi.nat.uni-magdeburg.de/user/29 }{\supnamea}\\ % Supervisor name - remove the \href bracket to remove the link  
+\href{https://www.itp.tu-berlin.de/bccn-nachwuchsgruppe_nonlinear_dynamics_and_control_in_neuroscience/hoevel/mitglieder/phoevel/}{\supnameb} \\
+\href{https://www.itp.tu-berlin.de/bccn-nachwuchsgruppe_nonlinear_dynamics_and_control_in_neuroscience/hoevel/mitglieder/promovierte_mitarbeiterinnen/dr_vesna_vuksanovic/}{\supnamec}
 \end{flushright}
 \end{minipage}\\[3cm]
  
-\large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of \degreename}\\[0.3cm] % University requirement text
-\textit{in the}\\[0.4cm]
+\large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of \degreename \, in the}\\[0.3cm] % University requirement text
+%\textit{in the}\\[0.4cm]
 \groupname\\\deptname\\[2cm] % Research group name and department name
  
-{\large \today}\\[4cm] % Date
-%\includegraphics{Logo} % University/department logo - uncomment to place it
+{\large \today}\\[1cm] % Date
+\includegraphics[width=6cm]{logo_ovgu.png} % University/department logo - uncomment to place it
+\includegraphics[width=8cm]{logo_bccn.png} % University/department logo - uncomment to place it
  
 \vfill
 \end{center}
@@ -118,6 +121,7 @@ Signed:\\
  
 Date:\\
 \rule[1em]{25em}{0.5pt} % This prints a line to write the date
+
 }
 
 \clearpage % Start a new page
@@ -130,10 +134,10 @@ Date:\\
 
 \null\vfill % Add some space to move the quote down the page a bit
 
-\textit{``Thanks to my solid academic training, today I can write hundreds of words on virtually any topic without possessing a shred of information, which is how I got a good job in journalism."}
+\textit{``Ich brauche keine Waffe. Ich ermittle ausschlie{\ss}lich mit dem Gehirn."}
 
 \begin{flushright}
-Dave Barry
+Helge Schneider
 \end{flushright}
 
 \vfill\vfill\vfill\vfill\vfill\vfill\null % Add some space at the bottom to position the quote just right
@@ -191,23 +195,38 @@ The acknowledgements and the people to thank go here, don't forget to include yo
 \lhead{\emph{Abbreviations}} % Set the left side page header to "Abbreviations"
 \listofsymbols{ll} % Include a list of Abbreviations (a table of two columns)
 {
-\textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere \\
-%\textbf{Acronym} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or \\
+
+\textbf{AAL} & \textbf{A}utomated \textbf{A}natomical \textbf{L}abeling \\
+\textbf{AC} & \textbf{A}natomical \textbf{C}onnectivity \\
+\textbf{ACM} & \textbf{A}natomical \textbf{C}orrelation \textbf{M}atrix \\
+\textbf{AM} & \textbf{A}djacency \textbf{M}atrix \\
+\textbf{BOLD} & \textbf{B}lood \textbf{O}xygen \textbf{L}evel \textbf{D}ependent \\
+\textbf{CBF} & \textbf{C}erebral \textbf{B}lood \textbf{F}low \\
+\textbf{CBV} & \textbf{C}erebral \textbf{B}lood \textbf{V}olume \\
+\textbf{CMR$O_2$} & \textbf{C}erebral \textbf{M}etabolic \textbf{R}ate (of) \textbf{$O_2$} (consumption) \\
+\textbf{dHb} & \textbf{d}eoxygenated \textbf{H}emoglo\textbf{b}in \\
+\textbf{DW-MRI} & \textbf{D}iffusion \textbf{W}eighted \textbf{M}agnetic \textbf{R}esonance \textbf{I}maging \\
+\textbf{FC} & \textbf{F}unctional \textbf{C}onnectivity \\
+\textbf{FCM} & \textbf{F}unctional \textbf{C}orrelation \textbf{M}atrix \\
+\textbf{fMRI} & \textbf{f}unctional \textbf{M}agnetic \textbf{R}esonance \textbf{I}maging \\
+\textbf{FHN} & \textbf{F}itz\textbf{H}ugh-\textbf{N}agumo \\
+\textbf{Hb} & (oxygenated) \textbf{H}emoglo\textbf{b}in \\
+
 }
 
-%----------------------------------------------------------------------------------------
-%	PHYSICAL CONSTANTS/OTHER DEFINITIONS
-%----------------------------------------------------------------------------------------
-
-\clearpage % Start a new page
-
-\lhead{\emph{Physical Constants}} % Set the left side page header to "Physical Constants"
-
-\listofconstants{lrcl} % Include a list of Physical Constants (a four column table)
-{
-Speed of Light & $c$ & $=$ & $2.997\ 924\ 58\times10^{8}\ \mbox{ms}^{-\mbox{s}}$ (exact)\\
-% Constant Name & Symbol & = & Constant Value (with units) \\
-}
+%%----------------------------------------------------------------------------------------
+%%	PHYSICAL CONSTANTS/OTHER DEFINITIONS
+%%----------------------------------------------------------------------------------------
+%
+%\clearpage % Start a new page
+%
+%\lhead{\emph{Physical Constants}} % Set the left side page header to "Physical Constants"
+%
+%\listofconstants{lrcl} % Include a list of Physical Constants (a four column table)
+%{
+%Speed of Light & $c$ & $=$ & $2.997\ 924\ 58\times10^{8}\ \mbox{ms}^{-\mbox{s}}$ (exact)\\
+%% Constant Name & Symbol & = & Constant Value (with units) \\
+%}
 
 %----------------------------------------------------------------------------------------
 %	SYMBOLS
@@ -219,14 +238,43 @@ Speed of Light & $c$ & $=$ & $2.997\ 924\ 58\times10^{8}\ \mbox{ms}^{-\mbox{s}}$
 
 \listofnomenclature{lll} % Include a list of Symbols (a three column table)
 {
-$a$ & distance & m \\
-$P$ & power & W (Js$^{-1}$) \\
 % Symbol & Name & Unit \\
-
-& & \\ % Gap to separate the Roman symbols from the Greek
-
-$\omega$ & angular frequency & rads$^{-1}$ \\
-% Symbol & Name & Unit \\
+$r$  & threshold &  \\
+$p$  & probability & \\
+$N$  & total number of nodes & \\
+$L$  & total number of edges & \\
+$k_i$ & degree of node $i$ & \\
+$\langle k \rangle$ & average degree & \\
+$P(k)$ & degree distribution & \\
+$\kappa$ & network density & \\
+$C_i$ & clustering coefficient of node $i$ & \\
+$C$ & average clustering coefficient & \\ 
+$t_i$ & number of triangles around node $i$ & \\
+$T$ & transitivity & \\ 
+$E$ & global efficiency & \\
+$E_{loc}$ & local efficiency & \\
+$S$ & small worldness & \\
+$A$ & assortativity & \\
+$a_{ij}$ & adjacency matrix element & 1 or 0 \\
+$d_{ij}$ & distance matrix element & \\
+\textbf{J} & Jacobian matrix & \\
+$\lambda$ & eigenvalue & \\
+$c$ &coupling strength & \\
+$v$ & axonal signal propagation velocity & m/s \\
+$\Delta t_{ij}$ & time delay between nodes $i$ and $j$ & \\
+$\tau$ & time constant of FHN model & \\
+$D$ & strength of Gaussian white noise & \\
+$I$ & external stimulus & \\
+$\nu$ & frequency & Hz \\  
+$s$ & blood flow inducing signal & \\ 
+$\tau_s$ & time constant to describe $\dot{s}$ & \\  
+$f_{in}$ & CBF (inflow) & \\ 
+$\tau_f$  & feedback time constant & \\  
+$V$    & CBV & \\    
+$\tau_0$  & mean transit time & \\    
+$f_{out}$ & CBF (outflow) & \\ 
+$E_0$  & resting net $O_2$ extraction rate & \\ 
+$q$    &  dHB content in voxel & \\ 
 }
 
 %----------------------------------------------------------------------------------------
@@ -272,7 +320,7 @@ $\omega$ & angular frequency & rads$^{-1}$ \\
 % Uncomment the lines as you write the Appendices
 
 \input{Appendices/AppendixA}
-%\input{Appendices/AppendixB}
+\input{Appendices/AppendixB}
 %\input{Appendices/AppendixC}
 
 \addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics

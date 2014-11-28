@@ -156,7 +156,9 @@
 \pdfstringdefDisableCommands{
    \let\\\space
 }
-\newcommand*{\supervisor}[1]{\def\supname{#1}}
+\newcommand*{\supervisora}[1]{\def\supnamea{#1}}
+\newcommand*{\supervisorb}[1]{\def\supnameb{#1}}
+\newcommand*{\supervisorc}[1]{\def\supnamec{#1}}
 \newcommand*{\thesistitle}[1]{\def\ttitle{#1}}
 \newcommand*{\examiner}[1]{\def\examname{#1}}
 \newcommand*{\degree}[1]{\def\degreename{#1}}
@@ -183,7 +185,11 @@
 
 \thesistitle{Simulation of Brain Functional and Structural Connectivity on Empirical and Randomized Complex Networks} % Your thesis title - this is used in the title and abstract
 %-------------------------------------------------  
-\supervisor{Prof. Jochen \textsc{Braun}\\ Dr. Philipp \textsc{H\"{o}vel} \\ Dr. Vesna \textsc{Vuksanovi\'c}} % You supervisor's name - this is used in the title page
+ % Your supervisor's names - this is used in the title page
+\supervisora{Prof. Dr. Jochen \textsc{Braun}}
+\supervisorb{Dr. Philipp \textsc{H\"{o}vel}}
+\supervisorc{Dr. Vesna \textsc{Vuksanovi\'c}}
+
 %-------------------------------------------------   
 \examiner{} % Your examiner's name - this is not currently used anywhere in the template, cite it with \examname if you want it
 %-------------------------------------------------   
@@ -201,29 +207,29 @@
                 {Otto von Guericke Universit\"{a}t Magdeburg}} % Your university's name - this is currently used in the title page
                 {Otto von Guericke Universit\"{a}t Magdeburg}}
 %-------------------------------------------------   
-\UNIVERSITY{\texorpdfstring{\href{University Web Site URL Here (include http://)} % Your university's URL
-                {UNIVERSITY NAME (IN BLOCK CAPITALS)}} % Your university's name in capitals - this is currently used in the abstract page
-                {UNIVERSITY NAME (IN BLOCK CAPITALS)}}
+\UNIVERSITY{\texorpdfstring{\href{https://www.uni-magdeburg.de/} % Your university's URL
+                {OTTO VON GUERICKE UNIVERSIT\"{A}T MAGDEBURG}} % Your university's name in capitals - this is currently used in the abstract page
+                {OTTO VON GUERICKE UNIVERSIT\"{A}T MAGDEBURG}}
 %-------------------------------------------------                
 \department{\texorpdfstring{\href{http://neurosci.uni-magdeburg.de/} % Your department's URL
-                {Integrative Neuroscience}} % Your department's name - used in the title page and abstract
-                {Integrative Neuroscience}}
+                {Department, Integrative Neuroscience}} % Your department's name - used in the title page and abstract
+                {Department, Integrative Neuroscience}}
 %-------------------------------------------------                
-\DEPARTMENT{\texorpdfstring{\href{Department or School Web Site URL Here (include http://)} % Your department's URL
-                {DEPARTMENT OR SCHOOL NAME (IN BLOCK CAPITALS)}} % Your department's name in capitals - this is not currently used anywhere in the template, cite it with \DEPTNAME if you want it
-                {DEPARTMENT OR SCHOOL NAME (IN BLOCK CAPITALS)}}
+\DEPARTMENT{\texorpdfstring{\href{http://neurosci.uni-magdeburg.de/} % Your department's URL
+                {INTEGRATIVE NEUROSCIENCE}} % Your department's name in capitals - this is not currently used anywhere in the template, cite it with \DEPTNAME if you want it
+                {INTEGRATIVE NEUROSCIENCE}}
 %-------------------------------------------------                
 \group{\texorpdfstring{\href{http://www.itp.tu-berlin.de/bccn-nachwuchsgruppe_nonlinear_dynamics_and_control_in_neuroscience/hoevel/mitglieder/} % Your research group's URL
-                {Bernstein Center for Computational Neuroscience Nachwuchsgruppe: Nonlinear Dynamics and Control in Neuroscience}} % Your research group's name - this is currently used in the title page 
-                {Research Group Name}}
+                {Research Group, Bernstein Center for Computational Neuroscience Nachwuchsgruppe, \textit{Nonlinear Dynamics and Control in Neuroscience}}} % Your research group's name - this is currently used in the title page 
+                {Research Group, Bernstein Center for Computational Neuroscience Nachwuchsgruppe, \textit{Nonlinear Dynamics and Control in Neuroscience}}}
 %-------------------------------------------------                
 \GROUP{\texorpdfstring{\href{Research Group Web Site URL Here (include http://)} % Your research group's URL
                 {RESEARCH GROUP NAME (IN BLOCK CAPITALS)}} % Your research group's name in capitals - this is not currently used anywhere in the template, cite it with \GROUPNAME if you want it
                 {RESEARCH GROUP NAME (IN BLOCK CAPITALS)}}
 %-------------------------------------------------                
-\faculty{\texorpdfstring{\href{Faculty Web Site URL Here (include http://)} % Your faculty's URL
-                {Faculty Name}} % Your faculty's name - this is currently used in the abstract page
-                {Faculty Name}}
+\faculty{\texorpdfstring{\href{http://www.fnw.ovgu.de/} % Your faculty's URL
+                {Faculty of Medicine and Faculty of Natural Sciences}} % Your faculty's name - this is currently used in the abstract page
+                {Faculty of Medicine and Faculty of Natural Sciences}}
 %-------------------------------------------------                
 \FACULTY{\texorpdfstring{\href{Faculty Web Site URL Here (include http://)} % Your faculty's URL
                 {FACULTY NAME (IN BLOCK CAPITALS)}} % Your faculty's name in capitals - this is not currently used anywhere in the template, cite it with \FACNAME if you want it

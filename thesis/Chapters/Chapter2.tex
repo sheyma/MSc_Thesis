@@ -24,7 +24,7 @@ Methods of graph theory applied to structural and functional systems have shown 
 In this section, the construction of brain graphs based on empirical functional connectivity matrix (FCM) and anatomical connectivity matrix (ACM) will be first introduced. Then, the topological characteristics of all graphs will be statistically measured and those topological measures will be interpreted neuro-biologically. In particular, it is aimed to explore under which conditions that brain network topologies distinguish from random networks. This approach is expected to provide a deeper insight into the underlying process involved in the observed functional and structural brain connectivity. 
 
 
-\section{Empirical functional and anatomical connectivity matrices}
+\section{Empirical Functional and Anatomical Connectivity Data}
 
 The functional-magnetic-resonance-imaging (fMRI) is a widely used method to detect the blood-oxygen-level-dependent (BOLD) contrast in the brain. The fMRI-BOLD contrast is used to interpret the neuronal activity in the respective voxel, which can be considered as a rectangular volume in brain defined for the imaging studies. The ongoing firing activity of neurons requires energy and it is supplied by neighboring blood cells via oxygen and glucose release into the nerve cells. The deviations in deoxygenation level, cerebral flow and volume in blood vessels due to neuronal activity, known as \textit{hemodynamic process}, cause a change in the detected fMRI-BOLD signal strength. The functional connectivity matrix (FCM) represents correlation coefficients of these fMRI-BOLD signals detected from the pre-defined brain regions with voxels. 
 
@@ -140,7 +140,7 @@ The \textit{degree distribution} is the probability distribution of node degrees
 
 \subsection{Preserved-Degree-Distribution Type Randomization}
 
-The preserved-degree-distribution method randomizes a given network by adding-removing or rewiring its edges randomly while recovering its degree distribution $P(k)$. The idea is to reassign edge indices in the graph, meaning that the degree of individual nodes may change. P(k) is defined with the following equation,
+The preserved-degree-distribution method randomizes a given network by adding, removing or rewiring its edges randomly while recovering its degree distribution $P(k)$. The idea is to reassign edge indices in the graph, meaning that the degree of individual nodes may change. P(k) is defined with the following equation,
 
 \begin{equation}
 P(k) = \sum_{k' \geq k} p(k')
@@ -245,10 +245,10 @@ The \textit{average degree} $\langle k \rangle$ of a network is proportional to 
 \langle k \rangle = \frac{2L}{N}.
 \end{equation}
 
-It should be noted that in order to not count each edge twice, the total number of edges is divided by $N/2$ instead of $N$. The \textit{density} $D$ of a network is a scaled version of average degree measurement. It is formulated as the ratio between $L$ and maximum number of possible edges ${N \choose 2}$,
+It should be noted that in order to not count each edge twice, the total number of edges is divided by $N/2$ instead of $N$. The \textit{density} $\kappa$ of a network is a scaled version of average degree measurement. It is formulated as the ratio between $L$ and maximum number of possible edges $\binom{N}{2}$,
 
 \begin{equation}
-D = \frac{2L}{N(N-1)}.
+\kappa = \frac{2L}{N(N-1)}.
 \end{equation}	
 
 The measure of network density can be referred to as the total \textit{wiring cost} of the network \citep{RUB10}. The degree, average degree and network density are key scalar measures to characterize the topology of a network. There is for instance clinical evidence that reductions in nodal degree are associated with greater severity of local amyloid deposition in patients with Alzheimer's disease \citep{XYZ2009}. 
@@ -265,9 +265,9 @@ The measure of network density can be referred to as the total \textit{wiring co
 \end{figure}
 
 
-The network density $D$ can be considered a probability for all graphs in corresponding threshold $r$ and $p$ ranges. The random networks are built in such ways that they have the same number of nodes and almost the same $D$ as in the brain graphs. However, the $D$ is not a unique metric identifying a network.
+The network density $\kappa$ can be considered a probability for all graphs in corresponding threshold $r$ and $p$ ranges. The random networks are built in such ways that they have the same number of nodes and almost the same $\kappa$ as in the brain graphs. However, the $\kappa$ is not a unique metric identifying a network.
 
-All networks for FCM and ACM are densely connected for low $r$ and $p$. For the brain graph and randomized graphs of FCM, $D$ decreases sigmoidally with $r$. In comparison, $D$ decreases slower with $p$ for ACM graphs. It should be noted that all graphs have almost the same $D$ values. 
+All networks for FCM and ACM are densely connected for low $r$ and $p$. For the brain graph and randomized graphs of FCM, $\kappa$ decreases sigmoidally with $r$. In comparison, $\kappa$ decreases slower with $p$ for ACM graphs. It should be noted that all graphs have almost the same $\kappa$ values. 
 
 Functional networks are likely to be denser than anatomical networks, as they will typically contain numerous connections between anatomically unconnected regions \citep{DAM09}. 
 
@@ -292,7 +292,7 @@ where $t_i$ is the number of triangles around node $i$ and $k_i$ is the degree o
  %\end{tabular}	
 \end{figure}
 
-The clustering coefficient $C_i$ of a node $i$ is a measure of local connectivity and is highly correlated with the local efficiency of the information transfer \citep{LAT01}. The $C_i$ is formulated as the ratio of $t_i$ over all possible edges of the node $i$; ${k_i \choose 2} $. The average clustering coefficient $C$ is a normalized version of $C_i$ for the whole network, yielding now a global property. All $C$ values are between 0 and 1. Figure 2.7 shows that at lower binarization thresholds, nodes tend to cluster more due to higher number of existing edges. The empirically obtained brain networks of FCM and ACM have the highest $C$ compared to random graphs. The local information transfer seems to be more efficient in the brain graphs.  The randomized graphs of ACM $Ra$, $Rd$, $Rh$ and $Rk$ share more nodes with lower degrees compared to $R0$.
+The clustering coefficient $C_i$ of a node $i$ is a measure of local connectivity and is highly correlated with the local efficiency of the information transfer \citep{LAT01}. The $C_i$ is formulated as the ratio of $t_i$ over all possible edges of the node $i$; $\binom{k_i}{2} $. The average clustering coefficient $C$ is a normalized version of $C_i$ for the whole network, yielding now a global property. All $C$ values are between 0 and 1. Figure 2.7 shows that at lower binarization thresholds, nodes tend to cluster more due to higher number of existing edges. The empirically obtained brain networks of FCM and ACM have the highest $C$ compared to random graphs. The local information transfer seems to be more efficient in the brain graphs.  The randomized graphs of ACM $Ra$, $Rd$, $Rh$ and $Rk$ share more nodes with lower degrees compared to $R0$.
 
 \subsection{Transitivity}
 
@@ -324,7 +324,7 @@ The degree of transitivity is one of the fundamental differences between real wo
 
 An fMRI-BOLD experiment reveals the correlation coefficients between timeseries of BOLD activity among pre-defined brain regions. The empirical functional connectivity matrix (FCM) derived from fMRI-BOLD technique in this project reflects those coefficients among $N=90$ AAL regions at the resting state of human brain, i.e. no stimulus driving approach is introduced to the subject. Despite lack of any stimulus, the observed fMRI-BOLD signal in the mammalian brain is highly structural and robust at low frequency fluctuations ($<$0.1 Hz) \citep{BIS95, DAM06, VIN07a}. However, the underlying reason of these well organized spatio-temporal dynamics has not yet been completely resolved. The existing models of resting-brain dynamics hypothize that functional interactions result from a complex interplay between intrinsic brain dynamics and anatomical connections \citep{RUB09}. This section proposes a modeling approach for the ongoing neuronal activity at brain's resting state, i.e. how  underlying correlated behavior among distant cortical brain regions arise \citep{VUK13}. Once the model is fulfilled with bio-physically plausible parameter ranges with the help of previous studies, the timeseries of nodes in brain graphs will be extracted by means of model simulations as well as in randomly constructed networks. 
 
-The theoretical model of choice for the neuronal activity is FitzHugh-Nagumo (FHN) systems describing physiological states of nerve membrane potential \citep{FIT61, NAG62}. FHN model will be used to represent the neuronal activity of a nerve cell population, in other words, an AAL node in this project. Local dynamics of a single node will then be globalized in the whole brain network via mutual time delayed interactions among nodes. Here, time delay $\delta \tau_{ij}$ is assumed to arise from a limited signal propagation velocity $v$ between nodes $i$ and $j$, furthermore, time delayed interactions are scaled with a coupling strength $c$ \citep{GHO08, GHO08a, DEC09}. Another important parameter for FHN simulations is threshold $r$ or probability $p$ values used to extract adjacency matrices from FCM and ACM. The first objective is to investigate such plausible $c$, $v$, and $r$ or $p$ ranges at which our simulated neuronal activity of brain graphs are similar to the empirical fMRI-BOLD data. 
+The theoretical model of choice for the neuronal activity is FitzHugh-Nagumo (FHN) systems describing physiological states of nerve membrane potential \citep{FIT61, NAG62}. FHN model will be used to represent the neuronal activity of a nerve cell population, in other words, an AAL node in this project. Local dynamics of a single node will then be globalized in the whole brain network via mutual time delayed interactions among nodes. Here, time delay $\Delta t_{ij}$ is assumed to arise from a limited signal propagation velocity $v$ between nodes $i$ and $j$, furthermore, time delayed interactions are scaled with a coupling strength $c$ \citep{GHO08, GHO08a, DEC09}. Another important parameter for FHN simulations is threshold $r$ or probability $p$ values used to extract adjacency matrices from FCM and ACM. The first objective is to investigate such plausible $c$, $v$, and $r$ or $p$ ranges at which our simulated neuronal activity of brain graphs are similar to the empirical fMRI-BOLD data. 
 
 FHN model will also be applied on randomly constructed graphs described in the previous section. The second objective is to identify such regions in the explored parameter space for which the simulated timeseries of the empirically obtained networks are distinguishable than that of randomly constructed graphs. The effects of $c$, $v$, $r$ or $p$ as well as network characteristics of graphs will be taken into consideration. At the end, it is aimed to gain further insight into the key features of anatomical brain structures by comparing to randomized networks.  
  
@@ -427,10 +427,10 @@ The noise drives sub-threshold oscillations as realized in the time evolution of
 This section demonstrates the effect of mutual coupling between two exemplary nodes with FHN model. Now, we consider two nodes connected to each other, either functionally or structurally as in FCM or in ACM. The effect of this connection is captured theoretically with a global coupling term and time delayed interactions, 
 
 \begin{subequations}
- \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x^3}{3}) + C [x_2(t-\tau_{12})] +Dn_{x1} \label{eqn: frobenius 14}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1 - I )+ Dn_{y1} \label{eqn: frobenius 15} \\ \dot{x_2} = \tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + C [x_1(t-\tau_{21})] + Dn_{x2} \label{eqn: frobenius 16} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + b y_2 - I ) + Dn_{y2}\end{align} 
+ \begin{align}\dot{x_1} = \tau (y_1 + \gamma x_1 - \frac{x^3}{3}) + c [x_2(t-\tau_{12})] +Dn_{x1} \label{eqn: frobenius 14}\\  \dot{y_1} = -\frac{1}{\tau} (x_1 - \alpha + b y_1 - I )+ Dn_{y1} \label{eqn: frobenius 15} \\ \dot{x_2} = \tau (y_2 + \gamma x_2 - \frac{x_2^3}{3}) + c [x_1(t-\tau_{21})] + Dn_{x2} \label{eqn: frobenius 16} \\  \dot{y_2} = -\frac{1}{\tau} (x_2 - \alpha + b y_2 - I ) + Dn_{y2}\end{align} 
 \end{subequations}
  
-where $C$ is the coupling strength, subindices 1 and 2 stand for corresponding nodes, $\tau_{12}$ and $\tau_{21}$ are time delays required for coupled node interactions and $D$ is the Gaussian white noise strength. For simplicity, the global dynamics are illustrated with same local parameters as before, while time delays are taken to be homogeneous, $\tau_{12}=\tau_{21}=0.5$.
+where $c$ is the coupling strength, subindices 1 and 2 stand for corresponding nodes, $\tau_{12}$ and $\tau_{21}$ are time delays required for coupled node interactions and $D$ is the Gaussian white noise strength. For simplicity, the global dynamics are illustrated with same local parameters as before, while time delays are taken to be homogeneous, $\tau_{12}=\tau_{21}=0.5$.
 
 \begin{figure}[htbp]
   \centering
@@ -491,7 +491,7 @@ In addition to the variations in magnetic properties of the blood caused by bloo
 
 Changes in the BOLD signal obtained in an fMRI experiment represent an indirect measure of underlying neuronal activity \citep{VUK14}. The modeled neuronal activity can be used to infer the BOLD signal observed in the fMRI data via Baloon-Windkessel hemodynamic process, which mediates between a non-linear timeseries and measured BOLD response \citep{FRI00}. In short, the Baloon-Windkessel model picks an input signal from neuronal activity timeseries and turnouts the BOLD activity timeseries as a function of changes in CBF, CBV, CMR$O_2$. The main input of Baloon-Windkessel model is a neuronal signal in the form of either a spiking rate or a local field potential \citep{SET12}. The neuronal signal in this project will be normalized FHN timeseries of activator variable, which describes the excitatory membrane potential dynamics of a neuronal population.       
 
-The study of Friston et al. shows that it is possible to capture ultra-slow frequency oscillations ($<0.1$) in the hemodynamic process, given a higher frequency neuronal input for event related responses \citep{FRI00}. Here, the same model will be tested for the resting state activity to find out whether it is possible to extract BOLD activity from FHN modeled $N=90$ AAL brain nodes. Each brain graph obtained from FCM and ACM data sets will be embedded into Baloon-Windkessel model, and a new parameter analysis will be carried out while comparing resultant BOLD simulations to the fMRI-BOLD empirical data set.
+The study of Friston et al. shows that it is possible to capture ultra-slow frequency oscillations ($<0.1[Hz]$) in the hemodynamic process, given a higher frequency neuronal input for event related responses \citep{FRI00}. Here, the same model will be tested for the resting state activity to find out whether it is possible to extract BOLD activity from FHN modeled $N=90$ AAL brain nodes. Each brain graph obtained from FCM and ACM data sets will be embedded into Baloon-Windkessel model, and a new parameter analysis will be carried out while comparing resultant BOLD simulations to the fMRI-BOLD empirical data set.
 
   
 
