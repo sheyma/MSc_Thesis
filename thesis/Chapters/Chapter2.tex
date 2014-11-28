@@ -322,15 +322,15 @@ The degree of transitivity is one of the fundamental differences between real wo
 
 \section{FitzHugh-Nagumo Model for Neuronal Activity Simulation}
 
-An fMRI-BOLD experiment reveals the correlation coefficients between timeseries of BOLD activity among pre-defined brain regions. The empirical functional connectivity matrix (FCM) derived from fMRI-BOLD technique in this project reflects those coefficients among $N=90$ AAL regions at the resting state of human brain, i.e. no stimulus driving approach is introduced to the subject. Despite lack of any stimulus, the observed fMRI-BOLD signal in the mammalian brain is highly structural and robust at low frequency fluctuations ($<$0.1 Hz) \citep{BIS95, DAM06, VIN07a}. However, the underlying reason of these well organized spatio-temporal dynamics has not yet been completely resolved. The existing models of resting-brain dynamics hypothize that functional interactions result from a complex interplay between intrinsic brain dynamics and anatomical connections \citep{RUB09}. This section proposes a modeling approach for the ongoing neuronal activity at brain's resting state, i.e. how  underlying correlated behavior among distant cortical brain regions arise \citep{VUK13}. Once the model is fulfilled with bio-physically plausible parameter ranges with the help of previous studies, the timeseries of nodes in brain graphs will be extracted by means of model simulations as well as in randomly constructed networks. 
+An fMRI-BOLD experiment reveals the correlation coefficients between timeseries of BOLD activity among pre-defined brain regions. The empirical functional connectivity matrix (FCM) derived from fMRI-BOLD technique in this project reflects those coefficients among $N=90$ AAL regions at the resting state of the human brain, i.e. no stimulus is introduced to the subject. Despite the lack of any stimulus, the observed fMRI-BOLD signal in the mammalian brain is highly structural and robust at low frequency fluctuations ($<$0.1 Hz) \citep{BIS95, DAM06, VIN07a}. However, the underlying reason of these well organized spatio-temporal dynamics has not yet been completely resolved. The existing models of resting-brain dynamics hypothesize that functional interactions result from a complex interplay between intrinsic brain dynamics and anatomical connections \citep{RUB09}. This section proposes a modeling approach for the ongoing neuronal activity at the brain's resting state, i.e. how  underlying correlated behavior among distant cortical brain regions arises \citep{VUK13}. Once the model is provided with bio-physically plausible parameter ranges with the help of previous studies, the timeseries of nodes in brain graphs will be extracted by means of model simulations and compared to randomly constructed networks. 
 
-The theoretical model of choice for the neuronal activity is FitzHugh-Nagumo (FHN) systems describing physiological states of nerve membrane potential \citep{FIT61, NAG62}. FHN model will be used to represent the neuronal activity of a nerve cell population, in other words, an AAL node in this project. Local dynamics of a single node will then be globalized in the whole brain network via mutual time delayed interactions among nodes. Here, time delay $\Delta t_{ij}$ is assumed to arise from a limited signal propagation velocity $v$ between nodes $i$ and $j$, furthermore, time delayed interactions are scaled with a coupling strength $c$ \citep{GHO08, GHO08a, DEC09}. Another important parameter for FHN simulations is threshold $r$ or probability $p$ values used to extract adjacency matrices from FCM and ACM. The first objective is to investigate such plausible $c$, $v$, and $r$ or $p$ ranges at which our simulated neuronal activity of brain graphs are similar to the empirical fMRI-BOLD data. 
+The theoretical model of choice for the neuronal activity is the FitzHugh-Nagumo (FHN) system describing physiological states of nerve membrane potential \citep{FIT61, NAG62}. The FHN model will be used to represent the neuronal activity of a nerve cell population, in other words, an AAL node in this project. Local dynamics of a single node will then be globalized in the whole brain network via mutual time delayed interactions among nodes. Here, the time delay $\Delta t_{ij}$ is assumed to arise from a limited signal propagation velocity $v$ between nodes $i$ and $j$. Time delayed interactions are scaled with a coupling strength $c$ \citep{GHO08, GHO08a, DEC09}. Another important parameter for FHN simulations is the threshold $r$ or the probability $p$, values used to extract adjacency matrices from FCM and ACM. The first objective is to investigate plausible $c$, $v$, and $r$ or $p$ ranges at which our simulated neuronal activity of brain graphs is similar to the empirical fMRI-BOLD data. 
 
-FHN model will also be applied on randomly constructed graphs described in the previous section. The second objective is to identify such regions in the explored parameter space for which the simulated timeseries of the empirically obtained networks are distinguishable than that of randomly constructed graphs. The effects of $c$, $v$, $r$ or $p$ as well as network characteristics of graphs will be taken into consideration. At the end, it is aimed to gain further insight into the key features of anatomical brain structures by comparing to randomized networks.  
+The FHN model will also be applied to randomly constructed graphs described in the previous section. The second objective is to identify such regions in the explored parameter space for which the simulated timeseries of the empirically obtained networks are distinguishable from that of randomly constructed graphs. The effects of $c$, $v$, $r$ or $p$ as well as the network characteristics of graphs will be taken into consideration. At the end, it is aimed to gain further insight into the key features of anatomical brain structures by a comparison to randomized networks.  
  
-The FHN model is designed to reflect the neuronal activity as simulated timeseries, it is not corresponding the BOLD activity. The comparison of simulated BOLD activity to the fMRI-BOLD signal would be ahead of timeseries comparison approach. The last objective of FHN model is the following: the simulated neuronal activity will be finally used to infer the BOLD signal via the Baloon-Windkessel hemodynamic model in the last section \citep{FRI00}. 
+The FHN model is designed to reflect the neuronal activity as a simulated time-series, it does not correspond to the BOLD activity. The last objective of the FHN model is the following: the simulated neuronal activity will be used to infer the BOLD signal via the Baloon-Windkessel hemodynamic model in the last section \citep{FRI00}. 
 
-Subsections will describe set of non-linear differential equations for the FHN local dynamics and carry out a stability analysis. Dynamics of a single node will then be globalized via mutual couplings with a second node and the effect of time delay interactions will be demonstrated. The last part will embed complete FHN simulation to a simple graph and the first exemplary timeseries of a node will be illustrated. 
+Subsections 2.5.1 and 2.5.2 will describe a set of non-linear differential equations for the FHN local dynamics, carry out a stability analysis, and introduce a Gaussian white noise effect on the system. The dynamics of a single node will then be globalized via mutual couplings with a second node and the effect of time delay interactions will be demonstrated in Subsection 2.5.3. The last subsection 2.5.4 will embed the complete FHN simulation into a simple graph and the first exemplary time-series of a node will be illustrated. 
 
 
 
@@ -338,20 +338,20 @@ Subsections will describe set of non-linear differential equations for the FHN l
 
 \subsection{FHN Model Local Dynamics}
 
-This section aims to demonstrate local dynamics of a brain node with FHN model. Here, the node is assumed to be isolated, meaning that it is not connected to any other node at all in the brain. FHN model has an activator variable $x$ and an inhibitor variable $y$, their time evolution is represented with the same implementation as in \citep{GHO08, GHO08a} in following non-linear differential equations,
+This section aims to demonstrate the local dynamics of a brain node with the FHN model. Here, the node is assumed to be isolated, meaning that it is not connected to any other node in the brain. The FHN model has an activator variable $x$ and an inhibitor variable $y$. Their time evolution is represented with the same implementation as in \citep{GHO08, GHO08a} in the following non-linear differential equations:
 \begin{subequations}
 \begin{align}\dot{x} = \tau (y + \gamma x - \frac{x^3}{3})  \label{eqn: frobenius 1}\\  \dot{y} = -\frac{1}{\tau} (x - \alpha + b y - I ) \label{eqn: frobenius 2}   \end{align} 
 \end{subequations}
-where $\tau$ denotes the time constant accelerating $x$, $I$ is the external stimulus parameter and $\gamma$, $\alpha$, $b$ are other system parameters. $x$ and $y$ are considered to be counteracting variables capturing membranous potential alterations on a neuronal population around $10^9$ cells. Non of the activator or the inhibitor variables includes any coupling parameter for the described local activity and additionally $I$ is chosen to be 0 \citep{GHO08}.
+where $\tau$ denotes the time constant accelerating $x$ and decelerating $y$, $I$ is the external stimulus parameter and $\gamma$, $\alpha$, $b$ are system parameters. $x$ and $y$ are considered to be counteracting variables capturing alterations of the membrane potential of a neuronal population of around $10^9$ cells. None of the activator or the inhibitor variables include any coupling parameter for the described local activity and additionally $I$ is chosen to be 0 \citep{GHO08}.
 
-The \textit{fixed point} $(x_f, y_f)$ of the system is defined such that there is no change in variables over time $\dot{y} =\dot{x} = 0 $. The fixed point condition substituted back into equations (2.6a) abd (2.b6) yields set of $nullcline$ equations, 
+The \textit{fixed point} $(x_f, y_f)$ of the system is defined such that there is no change in the variables over time $\dot{y} =\dot{x} = 0 $. The fixed point condition substituted back into equations (2.6a) and (2.6b) yields a set of $nullcline$ equations, 
 \begin{subequations}
 \begin{align}  y = \frac{x^3}{3} - \gamma x
               \label{eqn: frobenius 3}\\  
                x = \alpha - b y
                \label{eqn: frobenius 4}   \end{align} 
 \end{subequations}
-where equation (2.7a) will be called as $y-nullcline$ and (2.7b) as $x-nullcline$ from now on. The stability analysis is performed by calculating eigenvalues of the \textit{Jacobian Matrix}, \textbf{J} at the intersection of nullclines, $(x_f, y_f)$. The  linearization of equations (2.6a) and (2.6b) helps to find  \textbf{J} straightforward,
+where equation (2.7a) will be called $y-nullcline$ and (2.7b) $x-nullcline$ from now on. The stability analysis is performed by calculating eigenvalues of the \textit{Jacobian Matrix}, \textbf{J} at the intersection of nullclines, $(x_f, y_f)$. The  linearization of equations (2.6a) and (2.6b) helps to find  \textbf{J} straightforwardly,
 \begin{equation}
 %
     \begin{pmatrix}
@@ -376,7 +376,7 @@ where,
                \label{eqn: frobenius 7}                 
                \end{align} 
 \end{subequations}
-Eigenvalues of \textbf{J} are calculated as the following,
+. Eigenvalues of \textbf{J} are calculated as the following,
 \begin{subequations}
 \begin{align} \det \begin{pmatrix} \textbf{J} - \lambda \textbf{I} \end{pmatrix} = 0
               \label{eqn: frobenius 8}\\  
@@ -389,7 +389,7 @@ Eigenvalues of \textbf{J} are calculated as the following,
                \end{align} 
 \end{subequations}
 
-Parameters in FHN model are tuned so that solutions would render a damped oscillatory behavior for each node locally;  $\alpha = 0.85$, $b=0.2$, $\gamma=1.0$ and $\tau=1.25$ \citep{VUK13}. The solution of the condition $\dot{y}=\dot{x}=0$ gives coordinates of $(x_f, \, y_f) = (0.98 \, , -0.67 )$, which is calculated numerically here. All parameters plugged in eigenvalue equation (2.10d) results in $\lambda_1 = -0.056 + 0.996 i$ and $\lambda_2 = -0.056 - 0.996 i$. Since real parts of both eigenvalues stand below zero, the fixed point is said to be \textit{stable}. $\lambda_1$ and $\lambda_2$ are complex conjugate pairs, the fixed point can be alternatively called as a \textit{stable focus}. Variables $x$ and $y$ are expected to relax onto the fixed point over time.  
+The parameters in the FHN model are tuned so that solutions would render a damped oscillatory behavior for each node locally;  $\alpha = 0.85$, $b=0.2$, $\gamma=1.0$ and $\tau=1.25$ \citep{VUK13}. The solution of the condition $\dot{y}=\dot{x}=0$ gives coordinates of $(x_f, \, y_f) = (0.98 \, , -0.67 )$, which is calculated numerically here. All parameters plugged in eigenvalue equation (2.10d) results in $\lambda_1 = -0.056 + 0.996 i$ and $\lambda_2 = -0.056 - 0.996 i$. Since the real parts of both eigenvalues stand below zero, the fixed point is said to be \textit{stable} and since $\lambda_1$ and $\lambda_2$ are complex conjugate pairs, the fixed point can be alternatively called a \textit{stable focus}. Variables $x$ and $y$ are expected to relax onto the fixed point over time.  
 
 \begin{figure}[htbp]
   \centering
@@ -400,15 +400,15 @@ Parameters in FHN model are tuned so that solutions would render a damped oscill
   \label{fig:FHN Local}	
 \end{figure}
 
-The time evolution of $x$ and $y$ resembles damped oscillations at the beginning. Following to a rapid excitation and inhibition, both variables converge to the fixed point. State space illustrates this relaxation over nullclines, a clockwise trajectory starting from a randomly chosen $(x_0, y_0)$ and felling on $(x_f, y_f)$ with smaller and smaller amplitude oscillations. The system is in quiescent state, but can also be said to be at the onset of instability. The scale of change in $x$  is more pronounced than $y$ due to $\tau$ proportionality in the definition of $\dot{x}$ in FHN model.  
+The time evolution of $x$ and $y$ resembles damped oscillations at the beginning. Following a rapid excitation and inhibition, both variables converge to the fixed point. The state space illustrates this relaxation over nullclines, a clockwise trajectory starting from a randomly chosen $(x_0, y_0)$ and falling on $(x_f, y_f)$ with smaller and smaller amplitude oscillations. The system is identified in a  quiescent state, or, it is said to be at the onset of instability. The scale of change in $x$  is more pronounced than $y$ due to $\tau$ proportionality in the definition of $\dot{x}$ in the FHN model.  
  
 \subsection{Noise Effect}
 
-The local dynamics of a node can be extended with an additional noise factor, 
+The local dynamics of a node can be extended by  additional noise terms, 
 \begin{subequations}
 \begin{align}\dot{x} = \tau (y + \gamma x - \frac{x^3}{3}) + Dn_x  \label{eqn: frobenius 12}\\  \dot{y} = -\frac{1}{\tau} (x - \alpha + b y - I ) + Dn_y \label{eqn: frobenius 13}   \end{align} 
 \end{subequations}
-where $D$ is the noise strength, $n_x$ and $n_y$ represent Gaussian white noises. Neither coordinates of the fixed point or eigenvalues are affected due to the noise factor. However, dynamics of the system is forced to go under a change such that the stability will be lost. 
+where $D$ is the noise strength, and $n_x$ and $n_y$ represent Gaussian white noises. Neither the coordinates of the fixed point nor the eigenvalues are affected by the noise. However, dynamics of the system goes under a change such that the stability will be lost. 
 
 \begin{figure}[htbp]
   \centering
@@ -419,7 +419,7 @@ where $D$ is the noise strength, $n_x$ and $n_y$ represent Gaussian white noises
   \label{fig:FHN Noise}	
 \end{figure}
 
-The noise drives sub-threshold oscillations as realized in the time evolution of activator and inhibitor. It prevents $x$ and $y$ variables from relaxing on the fixed point, instead, they fluctuate around it. This dynamics remarks the onset of instability, and it is called "type II excitation" in terms of neuronal dynamics. 
+The noise drives sub-threshold oscillations as realized in the time evolution of activator and inhibitor. It prevents $x$ and $y$ variables from relaxing on the fixed point, instead, they fluctuate around it. This dynamics marks the onset of instability, and is called "type II excitation" in terms of neuronal dynamics. 
 
 
 \subsection{Global Dynamics}
@@ -485,19 +485,19 @@ FHN model is involved in crucial steps in this Master's project: parameter analy
 
 \section{Balloon-Windkessel Model for BOLD Activity Simulation} 
 
-Blood oxygen level dependent (BOLD) effect is one of the underlying contrast mechanisms of fMRI to map brain activity at resting state. BOLD signal is thought to arise from interactions between neuronal activity and regional changes in the surrounding of those active neurons such as blood volume, blood flow and  oxygenation level in capillaries. When neuronal activity increases, the blood flow in blood vessels surrounding this neuronal region rises, causing a change in relative amounts of deoxygenated and oxygenated forms of Hemoglobin (dHB and Hb). The difference in magnetic properties of dHb (paramagnetic) and Hb (diamagnetic) is the key ingredient to the observed changes in magnetic resonance signal. A better understanding of the resting state BOLD signal is required to better interpret neuronal activity. The previous section proposed already a model for the neuronal activity, FHN model. This section will introduce a hemodynamic process to capture BOLD activity with a mathematical model known as Balloon model \citep{XYZ98}. 
+Blood oxygen level dependent (BOLD) contrast imaging is one of the underlying contrast mechanisms of fMRI to map brain activity at resting state. A BOLD signal is thought to arise from interactions between neuronal activity and regional changes in the surrounding of those active neurons such as blood volume, blood flow and  oxygen level in capillaries. When neuronal activity increases, the blood flow in blood vessels surrounding this neuronal region rises, causing a change in relative amounts of deoxygenated and oxygenated forms of Hemoglobin (dHB and Hb). The difference in magnetic properties of dHb (paramagnetic) and Hb (diamagnetic) is the key ingredient to the observed changes in the magnetic resonance signal. A better understanding of the resting state BOLD signal is required to better interpret neuronal activity. The previous section already proposed  a model for the neuronal activity, the FHN model. This section will introduce a hemodynamic process to capture BOLD activity with a mathematical model known as Balloon model \citep{XYZ98}. 
 
-In addition to the variations in magnetic properties of the blood caused by blood flow in vessels, there are other physiological changes during alteration in neuronal activity that affect the temporal dynamics of BOLD signal, i.e. cerebral blood flow (CBF), cerebral blood volume (CBV), cerebral metabolic rate of oxygen consumption (CMR$O_2$). Moreover, the BOLD response is subject dependent: the physiological baseline state of the individual under examination is used to scale BOLD response and this fact brings another difficulty to interpret the BOLD signal, when the baseline state varies \citep{XYZ2013}. The sensitivity of BOLD signal to the variations in vascular and metabolic physiology brings a great complexity to interpret it accurately. The biophysical descriptions of the BOLD signal are still not fully satisfactory for the resting state. 
+In addition to the variations in magnetic properties of the blood caused by blood flow in vessels, there are other physiological changes during alteration in neuronal activity that affect the temporal dynamics of BOLD signal, i.e. cerebral blood flow (CBF), cerebral blood volume (CBV) and cerebral metabolic rate of oxygen consumption (CMR$O_2$). Moreover, the BOLD response is subject-dependent: the physiological baseline state of the individual under examination is used to scale its BOLD response, which makes it difficult to interpret the BOLD signal when the baseline state varies \citep{XYZ2013}. Moreover, the sensitivity of a BOLD signal to variations in vascular and metabolic physiology complicates an accurate interpretation. The biophysical descriptions of the BOLD signal are still not fully satisfactory for the resting state. 
 
-Changes in the BOLD signal obtained in an fMRI experiment represent an indirect measure of underlying neuronal activity \citep{VUK14}. The modeled neuronal activity can be used to infer the BOLD signal observed in the fMRI data via Baloon-Windkessel hemodynamic process, which mediates between a non-linear timeseries and measured BOLD response \citep{FRI00}. In short, the Baloon-Windkessel model picks an input signal from neuronal activity timeseries and turnouts the BOLD activity timeseries as a function of changes in CBF, CBV, CMR$O_2$. The main input of Baloon-Windkessel model is a neuronal signal in the form of either a spiking rate or a local field potential \citep{SET12}. The neuronal signal in this project will be normalized FHN timeseries of activator variable, which describes the excitatory membrane potential dynamics of a neuronal population.       
+Changes in the BOLD signal obtained in an fMRI experiment represent an indirect measure of underlying neuronal activity \citep{VUK14}. The modeled neuronal activity can be used to infer the BOLD signal observed in the fMRI data via the Baloon-Windkessel hemodynamic process, which mediates between a non-linear timeseries and all the measured BOLD response \citep{FRI00}. In short, the Baloon-Windkessel model picks an input signal from neuronal activity timeseries and generates the BOLD activity timeseries as a function of changes in CBF, CBV, CMR$O_2$. The main input of the Baloon-Windkessel model is a neuronal signal in the form of either a spiking rate or a local field potential \citep{SET12}. The neuronal signal in this project will be the normalized FHN timeseries of an activator variable, which describes the excitatory membrane potential dynamics of a neuronal population.       
 
-The study of Friston et al. shows that it is possible to capture ultra-slow frequency oscillations ($<0.1[Hz]$) in the hemodynamic process, given a higher frequency neuronal input for event related responses \citep{FRI00}. Here, the same model will be tested for the resting state activity to find out whether it is possible to extract BOLD activity from FHN modeled $N=90$ AAL brain nodes. Each brain graph obtained from FCM and ACM data sets will be embedded into Baloon-Windkessel model, and a new parameter analysis will be carried out while comparing resultant BOLD simulations to the fMRI-BOLD empirical data set.
+The study of Friston et al. shows that it is possible to capture ultra-slow frequency oscillations ($<0.1[Hz]$) in the hemodynamic process, given a higher frequency neuronal input for event related responses \citep{FRI00}. Here, the same model will be tested for the resting state activity to find out whether it is possible to extract BOLD activity from FHN-modeled $N=90$ AAL brain nodes. Each brain graph obtained from FCM and ACM data sets will be embedded into the Baloon-Windkessel model, and a parameter analysis will be carried out while comparing resultant BOLD simulations to the fMRI-BOLD empirical data set.
 
   
 
 \subsection{Hemodynamic Model}
 
-This section is designed to review the Ballon-Windkessel hemodynamic model explained in Friston et al \citep{FRI00}.  
+This section is designed to review the Ballon-Windkessel hemodynamic model introduced in Friston et al \citep{FRI00}.  
 
 
 \begin{figure}[htbp]
@@ -518,7 +518,7 @@ This section is designed to review the Ballon-Windkessel hemodynamic model expla
   $u(t)$ &      nonlinear input signal  
 \\ \hline
 
-  s & blood flow inducing signal 
+  s & blood-flow inducing signal 
 \\ \hline
   $\tau_s$ & time constant to describe $\dot{s}$  
 \\ \hline  
@@ -552,13 +552,13 @@ This section is designed to review the Ballon-Windkessel hemodynamic model expla
 \end{table}	
 
 
-The CBF is denoted by two symbols based on its flow direction: $f_{in}$ and $f_{out}$, venous blood inflow and outflow, respectively. The nonlinear neuronal activity $u(t)$ and $f_{in}$ are thought to accomplish the blood flow inducing signal $s$. Equation (2.14a) represents time dependent change of this signal $\dot{s}$ depending on $u(t)$, $f_{in}$ and $s$. Three system parameters $\epsilon$, $\tau_s$ and $\tau_f$ are described as following: an efficacy parameter for $u(t)$ to raise up $s$, a time constant for $s$ decay, and another time constant for autoregulatory feedback from CBF \citep{XYZ1994, XYZ1998}.
+The CBF is denoted by two symbols based on its flow direction: $f_{in}$ and $f_{out}$, venous blood inflow and outflow, respectively. The nonlinear neuronal activity $u(t)$ and $f_{in}$ are thought to trigger the blood flow inducing signal $s$. Equation (2.14a) represents time dependent change of this signal $\dot{s}$ depending on $u(t)$, $f_{in}$ and $s$. The three system parameters $\epsilon$, $\tau_s$ and $\tau_f$ are described as following: an efficacy parameter for $u(t)$ to raise up $s$, a time constant for $s$ decay, and another time constant for autoregulatory feedback from CBF, respectively \citep{XYZ1994, XYZ1998}.
 
-Hemodynamics in brain assumes that alterations in regional CBF is shaped by an underlying neuronal activity. Equation (2.14b) presents the rate of change of $f_{in}$ with a linear transformation on $s$, which can originate from a nonlinear neuronal activity model \citep{XYZ00, XYZFR}. 
+Hemodynamics in the brain assumes that alterations in regional CBF are shaped by an underlying neuronal activity. Equation (2.14b) presents the rate of change of $f_{in}$ with a linear transformation on $s$, which can originate from a nonlinear neuronal activity model \citep{XYZ00, XYZFR}. 
 
-The alteration in cerebral blood volume $\dot{v}$ is basically formulated by subtracting $f_{out}$ from $f_{in}$, both rated physiologically with a time constant $\tau_0$, which is also referred as \textit{mean transit time} \citep{XYZ99}. The Windkessel model contributes to the brain hemodynamics while modeling CBF through CBV:  equation (2.15a) describes a function for $f_{out}$ depending on $v$ and a parameter $\alpha$, namely \textit{stiffness exponent} \citep{XYZ99}.    
+The alteration in cerebral blood volume $\dot{v}$ is basically formulated by subtracting $f_{out}$ from $f_{in}$, both rated physiologically with a time constant $\tau_0$, which is also referred to as \textit{mean transit time} \citep{XYZ99}. The Windkessel model contributes to the brain hemodynamics while modeling CBF through CBV:  equation (2.15a) describes a function for $f_{out}$ depending on $v$ and a parameter $\alpha$ (the  \textit{stiffness exponent}) \citep{XYZ99}.    
 
-The change in magnetic properties of blood is expressed with the difference between dHb uptake and release. dHb uptake is proportional to the blood inflow $f_{in}$ to the venous compartment and available $O_2$ to be coupled to Hb. The amount of $O_2$ carried with blood inflow is estimated with a function $E(f_{in}, E_0)$ divided by resting net $O_2$ extraction rate $E_0$ as given in equation (2.15b) \citep{XYZ98}. dHb release is proportional to the blood outflow $f_{out}$ and the concentration of dHb in corresponding voxel volume $v$.     
+The change in magnetic properties of blood is expressed with the difference between dHb uptake and release. The dHb uptake is proportional to the blood inflow $f_{in}$ to the venous compartment and available oxygen to be coupled to Hb. The amount of oxygen carried with blood inflow is estimated with a function $E(f_{in}, E_0)$ divided by resting net oxygen extraction rate $E_0$ as given in equation (2.15b) \citep{XYZ98}. The dHb release is proportional to the blood outflow $f_{out}$ and the concentration of dHb in corresponding voxel volume $v$.     
 
 \begin{subequations}
  \begin{align} \dot{s} = \epsilon u(t)- \frac{s}{\tau_s} - \frac{f_{in} -1 }{\tau_f}  \label{eqn: frobenius 19}\\  \dot{f_{in}} = s
@@ -577,10 +577,10 @@ The change in magnetic properties of blood is expressed with the difference betw
 Finally, the output BOLD signal is modeled as a function depending on variables $v$, $q$ and parameter $E_0$,  
 
 \begin{equation}
-y(t)= \lambda (v,q,E_0) = V_0 (k_1(1-q) + k_2(1- \frac{q}{v}) + k_3(1-v)))
+y(t)= \lambda (v,q,E_0) = V_0 (k_1(1-q) + k_2(1- \frac{q}{v}) + k_3(1-v))),
 \end{equation} 
 
-where $k_1 = 7E_0$, $k_2 = 2$  and $k_3 = 2E_0 - 0.2$, $V_0$ is resting blood volume fraction. The set of differential equations for ${\dot{s}, \dot{f_{in}}, \dot{v}, \dot{q}}$ are all solved with simple Euler's method algorithm with step size $dt=0.001$ numerically. The six unknown parameters $\epsilon$, $\alpha$, $\tau_0$, $\tau_f$, $\tau_s$ and $E_0$ are picked up from proper ranges given in Friston et al. 
+where $k_1 = 7E_0$, $k_2 = 2$, $k_3 = 2E_0 - 0.2$, and $V_0$ is the resting blood volume fraction. The set of differential equations for ${\dot{s}, \dot{f_{in}}, \dot{v}, \dot{q}}$ is numerically integrated with Euler's method with step size $dt=10^{-3}$ numerically. The six unknown parameters $\epsilon$, $\alpha$, $\tau_0$, $\tau_f$, $\tau_s$ and $E_0$ are picked up from realistic ranges given in Friston et al  \citep{FRI00}. 
 
 
 
