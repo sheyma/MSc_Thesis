@@ -129,7 +129,7 @@ print "simulation time : ", tfinal
 print "Sampling time interval : " , dt
 print "intersection of nullclines (x_0, y_0): ", X_int, Y_int
 
-fig = pl.figure(num=None, figsize=(13.5, 6), dpi=100, facecolor='w', edgecolor='k')
+fig = pl.figure(num=None, figsize=(18, 8), dpi=100, facecolor='w', edgecolor='k')
 
 ### [PAN12]
 #fig.suptitle('FHN - Local Dynamics :  '+ 'a=' +str(params['a']) +
@@ -137,11 +137,11 @@ fig = pl.figure(num=None, figsize=(13.5, 6), dpi=100, facecolor='w', edgecolor='
 	      #fontsize=14, fontweight='bold')
 
 ## [GHO08a], [VUK13]
-fig.suptitle('FHN - Local Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
-	      r'  $  \gamma$ = '+str(params['gamma']) + ' $   b$ = '+ 
-	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) +
-	      '  D = ' + str(params['D']) , 
-	      fontsize=25)
+#fig.suptitle('FHN - Local Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
+	      #r'  $  \gamma$ = '+str(params['gamma']) + ' $   b$ = '+ 
+	      #str(params['b']) + r'  $\tau$ = '+str(params['TAU']) +
+	      #'  D = ' + str(params['D']) , 
+	      #fontsize=25)
 
 
 pl.subplot(121)
