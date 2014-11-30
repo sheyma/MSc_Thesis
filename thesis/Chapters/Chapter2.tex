@@ -35,8 +35,8 @@ The diffusion-weighted magnetic-resonance-imaging (DW-MRI) technique estimates t
 \begin{figure}[htbp]
  
   \centering
-	 \includegraphics[width=0.49\textwidth]{Figures/FCM.eps} 
-	 \includegraphics[width=0.49\textwidth]{Figures/ACM.eps} 
+	 \includegraphics[width=0.49\textwidth]{Figures/cor_FCM_exp.eps} 
+	 \includegraphics[width=0.49\textwidth]{Figures/cor_ACM_exp.eps} 
 	
     \rule{35em}{0.5pt}
   \caption[Empirical FCM and ACM]{Empirical functional and anatomical connectivity maps of human cortex, FCM obtained from fMRI-BOLD technique (on the left) and ACM obtained from DW-MRI (on the right). The colorbars exhibit correlation coefficients and probability values in FCM and ACM, respectively. }
@@ -51,7 +51,7 @@ The diffusion-weighted magnetic-resonance-imaging (DW-MRI) technique estimates t
 	 \includegraphics[width=0.49\textwidth]{Figures/FCM_brain.eps} 
 	 \includegraphics[width=0.49\textwidth]{Figures/ACM_brain.eps} 
     \rule{35em}{0.5pt}
-  \caption[Empirical FCM and ACM in cortex]{3D sagittal visualization of FCM and ACM on the human cortex with the \textsc{BrainNet Viewer} \citep{XYZ13}. } 
+  \caption[Empirical FCM and ACM in cortex]{3D sagittal visualization of empirical FCM (on the left) and ACM (on the right) on the human cortex with the \textsc{BrainNet Viewer} \citep{XYZ13}. } 
   \label{fig:Empirical FCM and ACM in cortex}
  	
 \end{figure} 
@@ -70,13 +70,13 @@ The brain graphs in this project are generated through binarizing the functional
 \begin{figure}[htbp]
  %\begin{tabular}{cc}
   \centering
-	 \includegraphics[width=0.45\textwidth]{Figures/FCM.eps} 
+	 \includegraphics[width=0.45\textwidth]{Figures/cor_FCM_exp.eps} 
 	 \includegraphics[width=0.45\textwidth]{Figures/Sample_Adj.eps} 
 	\includegraphics[width=0.45\textwidth]{Figures/Sample_Adj_brain.eps}  
    \includegraphics[width=0.45\textwidth]{Figures/brain_graph.png}      
 
     \rule{35em}{0.5pt}
-  \caption[Binarizing via thresholding]{How to build a brain graph : The empirical data matrix derived from fMRI-BOLD technique (on the upper left) is binarized via a threshold value $r=0.55$ and its corresponding adjacency matrix (on the upper right). The black spots represent 1's indicating edges between nodes, whereas the white squares represent 0's implying no edge at all. The adjacency matrix is embedded on human cortex axially (on the lower left) with \textsc{BrainNet Viewer} \citep{XYZ13} and the brain graph derived from the adjacency matrix with \textsc{NETWORKX} (on the lower right).}
+  \caption[Binarizing via thresholding]{How to build a brain graph : The empirical data matrix derived from fMRI-BOLD technique (on the upper left) is binarized via a threshold value $r=0.55$ and its corresponding adjacency matrix (on the upper right). The black spots represent 1's indicating edges between nodes, whereas the white squares represent 0's implying no edge at all. The adjacency matrix is embedded on human cortex axially (on the lower left) with \textsc{BrainNet Viewer} \citep{XYZ13} and the brain graph derived from the adjacency matrix with \textsc{NetworkX} \citep{XYZNETW}(on the lower right).}
   \label{fig:Binarizing via thresholding}
  %\end{tabular}	
 \end{figure}
@@ -172,7 +172,7 @@ The algorithm is thought to add-remove new nodes to a given graph while preservi
  %\end{tabular}	
 \end{figure}
 
-$P(k)$ is a global topological measure for a network, it can be illustrated over all nodes in the whole graph as in Figure 2.7. Node indexes are labeled on $x$ axis on heat maps, threshold $r$ values for adjacency matrices are given on $y$ axis. The preserved-degree-distribution method generates successfully a random graph with the same $P(k)$ as in the brain graph. 
+$P(k)$ is a global topological measure for a network, it can be illustrated over all nodes in the whole graph as in Figure 2.7. Node indexes are labeled on $x$ axis on heat maps, threshold $r$ values for adjacency matrices are given on $y$ axis. The preserved-degree-distribution method generates successfully a random graph with the same $P(k)$ as in the brain graph. The method is adapted from Brain Connectivity Toolbox (\textsc{BCT}) \citep{XYZBCT}.
 
 
 \subsection{Configuration Model Randomization}
@@ -224,12 +224,12 @@ The brain graph and randomly generated graphs will be identified in terms of the
 \begin{tabular}{ l | c | r }
   Abbreviation & Description & method \\
   \hline  \hline                     
-  R0 & the brain graph						  & \textsc{networkx} \\ \hline
-  Ra & Erd\H{o}s-R\'{e}nyi, G(N,L)            & \textsc{networkx} \\ \hline
-  Rd & double-edge-swap            			  & \textsc{networkx} \\ \hline
-  Rh & preserved-degree-distribution		  & \textsc{BCT} 	 \\ \hline  
-  Rg & configuration model       			  & \textsc{networkx} \\ \hline
-  Rk & partial randomization            	  & \textsc{BCT} 	 \\ \hline  
+  $R_{BG}$ & the brain graph						  & \textsc{NetworkX} \\ \hline
+  $R_{ER}$ & Erd\H{o}s-R\'{e}nyi, G(N,L)            & \textsc{NetworkX} \\ \hline
+  $R_{DES}$ & double-edge-swap            			  & \textsc{NetworkX} \\ \hline
+  $R_{PDD}$ & preserved-degree-distribution		  & \textsc{BCT} 	 \\ \hline  
+  $R_{CM}$ & configuration model       			  & \textsc{NetworkX} \\ \hline
+  $R_{PR}$ & partial randomization            	  & \textsc{BCT} 	 \\ \hline  
   \hline  
 \end{tabular}
 \label{table:Abbreviations}
@@ -396,7 +396,7 @@ The parameters in the FHN model are tuned so that solutions would render a dampe
 	\includegraphics[width=\textwidth]{Figures/FHN_local.eps}
  
     \rule{35em}{0.5pt}
-    \caption[FHN Local]{Local dynamics of an isolated node: time evolution of $x$ and  $y$ (on the left) and nullclines on state space together with $x(t),y(t)$ (on the right). The fixed point $(x_f, \, y_f) = (0.98 \, , -0.67 )$ is drawn with a black dot at the intersection of nullclines and initial point $(x_0, y_0)$ is illustrated with a red dot.  }
+    \caption[FHN Local]{FHN local dynamics of an isolated node, $\alpha=0.85$, $\gamma=1.0$, $b=0.2$, $\tau=1.25$. Time evolution of $x$ and  $y$ (on the left) and nullclines together with $x(t),y(t)$ in state space (on the right). The fixed point $(x_f, \, y_f) = (0.98 \, , -0.67 )$ is drawn with a black dot at the intersection of nullclines and initial point $(x_0, y_0)$ is illustrated with a red dot.  }
   \label{fig:FHN Local}	
 \end{figure}
 
@@ -415,7 +415,7 @@ where $D$ is the noise strength, and $n_x$ and $n_y$ represent Gaussian white no
 	\includegraphics[width=\textwidth]{Figures/FHN_noise.eps}
  
     \rule{35em}{0.5pt}
-    \caption[FHN Noise]{Local dynamics of two variables $x$ and  $y$ with same parameters as previously stated, an additional Gaussian white noise with strength $D=0.05$ is added. The fixed point $(x_f, \, y_f) = (0.98 \, , -0.67 )$ is drawn with a black dot in state space where two nullclines intersect.   }
+    \caption[FHN Noise]{FHN local dynamics of an isolated node with a Gaussian white noise factor, $\alpha=0.85$, $\gamma=1.0$, $b=0.2$, $\tau=1.25$, $D=0.05$. Time evolution of $x$ and  $y$ (on the left), nullclines together with $x(t),y(t)$ in state space (on the right). The fixed point $(x_f, \, y_f) = (0.98 \, , -0.67 )$ is drawn with a black dot at the intersection of nullclines.  }
   \label{fig:FHN Noise}	
 \end{figure}
 
@@ -437,7 +437,7 @@ where $c$ is the coupling strength, subindices 1 and 2 stand for corresponding n
 	\includegraphics[width=\textwidth]{Figures/FHN_global.eps}
  
     \rule{35em}{0.5pt}
-    \caption[FHN Global]{Global dynamics of two nodes with variables $x_1,y_1$ and  $x_2,y_2$. The fixed point is the same for both systems $(x_f, \, y_f) = (0.98 \, , -0.67 )$, it is drawn with a black dot at the intersection of nullclines in state space.}
+    \caption[FHN Global]{FHN global dynamics of two nodes with variables $x_1,y_1$ (at upper left) and  $x_2,y_2$ (at lower left),  parameters of the model $\alpha=0.85$, $\gamma=1.0$, $b=0.2$, $\tau=1.25$, $D=0.05$, $\tau_{12} = \tau_{21}=0.5$. The fixed point is the same for both systems $(x_f, \, y_f) = (0.98 \, , -0.67 )$, it is drawn with a black dot at the intersection of nullclines in state space.}
   \label{fig:FHN Global}	
 \end{figure}
 
@@ -468,7 +468,7 @@ where the index $i$ represents any node among $N=90$ AAL regions, $c$ is couplin
 	\includegraphics[width=\textwidth]{Figures/FHN_time_1.eps}
  	\includegraphics[width=\textwidth]{Figures/FHN_time_2.eps}
     \rule{35em}{0.5pt}
-    \caption[FHN Time Series]{Analogous time series of node 1 chosen from graphs illustrated in previous figure. Timeseries at top is of the unconnected node, at down is of 3-edge connected node. All parameters besides $d_{ij}$ matrix are chosen to be biologically plausible. An unrealistic $d_{ij}$ is filled out for corresponding sample graphs in previous figure.  }
+    \caption[FHN Time Series]{Analogous FHN time-series of an unconnected node (at the top) and that of a connected node (at the bottom). Node 1 is chosen for both time-series from the both graphs in Figure 2.16. FHN parameters are  $\alpha=0.85$, $\gamma=1.0$, $b=0.2$, $\tau=1.25$, $D=0.05$, $\Delta \tau_{ij} = \frac{ d_{ij}}{v}$, where a sample $d_{ij}$ is generated for corresponding sample graphs in Figure 2.16.  }
   \label{fig:FHN Time Series}	
 \end{figure}
 
