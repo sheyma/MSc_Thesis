@@ -54,6 +54,23 @@ def corr_histo(corr_matrix):
 	# x_axis : hist[1] , start points of bins 
 	return hist
 
+def plot_histog(corr_matrix, STRING):
+	corr_flat = np.ndarray.flatten(corr_matrix) 
+	corr_max  = float(1.0)
+	corr_min  = float(-1.0)
+	bin_nu    = 100
+	# a normalized histogram is obtained
+	pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True, histtype='bar', align='mid')
+	pl.xlim(corr_min-0.01, corr_max+0.01)
+	pl.ylim(0.0, 2.2)	
+	pl.xticks(fontsize=20)
+	pl.yticks(fontsize=20)
+	pl.text(-0.5, 2.0, STRING,
+				horizontalalignment='center',
+				verticalalignment='center', fontsize=30)
+
+	#pl.xlabel('$\\rho$', fontsize=25)
+
 # intersection method to compare two histograms
 # HA and HB must be normalized histograms
 def intersec_hists(HA, HB):
@@ -105,190 +122,280 @@ def chi2_hists(HA, HB):
 		squsum = squsum + tmp1 / float(tmp2)
 	return squsum
 		
-#if __name__ == '__main__':
-	#usage = 'Usage: %s method correlation_matrix [threshold]' % sys.argv[0]
-	#try:
-		#input_empiri = sys.argv[1]
-		#input_simuli = sys.argv[2]
-	#except:
-		#print usage
-		#sys.exit(1)
+
 
 local_path   = '../data/jobs_corr/'		
 
-# simulations based on EMPIRICAL brain networks
-name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-#name_E = 'acp_w_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
-# simulations based on RANDOMIZED brain networks
-name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-#name_R = 'acp_w_a_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
+O = load_matrix(local_path + 'A_aal_0_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
+A = load_matrix(local_path + 'A_aal_a_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
+D = load_matrix(local_path + 'A_aal_d_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
+G = load_matrix(local_path + 'A_aal_g_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
+H = load_matrix(local_path + 'A_aal_h_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
+K = load_matrix(local_path + 'A_aal_k_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
 
-thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])	
-sig_array = np.array([0.018, 0.02, 0.025, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
-sig_array = np.append(sig_array[-1:0:-1] , sig_array[0])
-print sig_array
+#O = load_matrix(local_path + 'acp_w_0_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
+#A = load_matrix(local_path + 'acp_w_a_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
+#D = load_matrix(local_path + 'acp_w_d_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
+#G = load_matrix(local_path + 'acp_w_g_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
+#H = load_matrix(local_path + 'acp_w_h_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
+#K = load_matrix(local_path + 'acp_w_k_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
 
-#thr_array = np.array([22,  26,  30,   34, 
-						 #38,  42, 44, 46, 48, 50, 52, 54,
-						#56, 58,  60,  62,  64,  66, 
-						#68,  70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
-						#80, 81, 82, 83])
-#vel_array = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150])
-#sig_array = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+w0 = load_matrix(local_path + 'acp_w_0_ADJ_thr_0.42_sigma=0.5_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
 
-R_thr = {}
+##fig , axes = pl.subplots(5,2,sharex=True,sharey=True,figsize=(12,15))
+#fig, ax = pl.subplots(nrows=3, ncols=3, sharex=True, sharey=True, figsize=(14,12))
+##pl.subplots_adjust(left=0.11, right=0.95, top=0.98, bottom=0.06)
+#fig.text(0.5, 0.02, '$\\rho$', ha='center', fontsize=30 )
+#fig.text(0.04, 0.5, 'number of pair of nodes', va='center', rotation='vertical',fontsize=25)
 
-for THR in thr_array :
-	R_temp = []
-	#for VEL in vel_array :
-		#input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
-		#input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
+#pl.subplot(3,2,1)
+#plot_histog(O, '$R_{BG}$')
+#pl.subplot(3,2,2)
+#plot_histog(A, '$R_{ER}$')
+#pl.subplot(3,2,3)
+#plot_histog(D, '$R_{DES}$')
+#pl.subplot(3,2,4)
+#plot_histog(G, '$R_{CM}$')
+#pl.subplot(3,2,5)
+#plot_histog(H, '$R_{PDD}$')
+#pl.subplot(3,2,6)
+#plot_histog(K, '$R_{PR}$')
 
-	for SIG in sig_array :
-		input_empiri = name_E[0:18] + str(THR) + name_E[20:27] + str(SIG) + name_E[30:]
-		input_simuli = name_R[0:18] + str(THR) + name_R[20:27] + str(SIG) + name_R[30:]
-		
-		#print input_empiri
-		try:
-			mtx_empiri = load_matrix(local_path + input_empiri)
-			HistA      = corr_histo(mtx_empiri)
-			mtx_simuli = load_matrix(local_path + input_simuli)
-			HistB      = corr_histo(mtx_simuli)
-		except :
-			R_val      = np.nan
-		else :
-			#R_val      = intersec_hists(HistA, HistB)
-			#R_val      = chi2_hists(HistA, HistB)
-			R_val       = bhatta_hists(HistA, HistB)
-			#R_val      = correl_hists(HistA, HistB)
-		
-		#print R_val
-		
-		R_temp     = np.append(R_temp, R_val)
-	R_thr[THR] 	   = np.array(R_temp)
-
-#print R_thr		
-
-Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-#print "Ordered dict"
-#print Ordered_R
-
-datam 		= np.array(Ordered_R.values())
-
-#print "check its numpy array version"
-#print datam
-
-# PLOTTING BEGINS ! 
-fig , ax = pl.subplots(figsize=(18,15))
-pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
-cbar = pl.colorbar()
-
-# PLOT PA OVER SIGMA
-a = thr_array
-b = sig_array
-pl.ylabel('$c$', fontsize=25)
-
-pl.setp(ax , xticks=np.arange(0,len(a),1), xticklabels = a )
-pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-pl.xlabel('r', fontsize = 20)
-for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(15)
-pl.xticks(fontsize = 15)
-pl.yticks(fontsize = 15)
-pl.show()		
-
+fig, ax = pl.subplots(figsize=(12,6))
+pl.subplot(1,2,1)
+pl.xlabel('$\\rho$', fontsize = 30)
+pl.ylabel('number of pair of nodes', fontsize = 25)
+plot_histog(O, '$R_{BG}$')
+pl.subplot(1,2,2)
+pl.xlabel('$\\rho$', fontsize = 30)
+#pl.ylabel('number of pair of nodes', fontsize = 25)
+plot_histog(w0, '$R_{BG}$')
 
 pl.show()
 
+### simulations based on EMPIRICAL brain networks
+##name_E = 'A_aal_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+###name_E = 'acp_w_0_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
+### simulations based on RANDOMIZED brain networks
+##name_Ra = 'A_aal_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+##name_Rd = 'A_aal_d_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+##name_Rg = 'A_aal_g_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+##name_Rh = 'A_aal_h_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+##name_Rk = 'A_aal_k_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+###name_R = 'A_aal_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
+###name_R = 'acp_w_a_ADJ_thr_0.54_sigma=0.5_D=0.05_v=30.0_tmax=45000_FHN_corr.dat'
+
+#thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])	
+#sig_array = np.array([0.018, 0.02, 0.025, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+#sig_array = np.append(sig_array[-1:0:-1] , sig_array[0])
+#print sig_array
+
+name_E  = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+name_Ra = 'acp_w_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+name_Rd = 'acp_w_d_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+name_Rg = 'acp_w_g_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+name_Rh = 'acp_w_h_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+name_Rk = 'acp_w_k_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+
+
+#thr_array = np.arange(38, 86, 4)
+##vel_array = np.array([20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
+#sig_array = np.array([0.8,   0.5,  0.2, 0.1, 0.05, 0.02])
+
+
+#R_thr_a = {}
+#R_thr_d = {}
+#R_thr_g = {}
+#R_thr_h = {}
+#R_thr_k = {}
+
 #for THR in thr_array :
-	#R_temp = []
-	
-	#for SIG in sig_array :		
+	#R_temp_a = []
+	#R_temp_d = []
+	#R_temp_g = []
+	#R_temp_h = []
+	#R_temp_k = []
+
+	##for VEL in vel_array :
+		##input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
+		##input_simuli = name_Ra[0:18] + str(THR) + name_Ra[20:40] + str(VEL) + name_Ra[42:]
+
+	#for SIG in sig_array :
 		#input_empiri = name_E[0:18] + str(THR) + name_E[20:27] + str(SIG) + name_E[30:]
-		#input_simuli = name_R[0:18] + str(THR) + name_R[20:27] + str(SIG) + name_R[30:]
+		#input_simuli_a = name_Ra[0:18] + str(THR) + name_Ra[20:27] + str(SIG) + name_Ra[30:]
+		#input_simuli_d = name_Rd[0:18] + str(THR) + name_Rd[20:27] + str(SIG) + name_Rd[30:]
+		#input_simuli_g = name_Rg[0:18] + str(THR) + name_Rg[20:27] + str(SIG) + name_Rg[30:]
+		#input_simuli_h = name_Rh[0:18] + str(THR) + name_Rh[20:27] + str(SIG) + name_Rh[30:]
+		#input_simuli_k = name_Rk[0:18] + str(THR) + name_Rk[20:27] + str(SIG) + name_Rk[30:]
 		
-		#for VEL in vel_array :
-			#input_empiri = name_E[0:18] + str(THR) + name_E[20:40] + str(VEL) + name_E[42:]		
-			#input_simuli = name_R[0:18] + str(THR) + name_R[20:40] + str(VEL) + name_R[42:]
-			
-			#try:
-				#mtx_empiri = load_matrix(local_path + input_empiri)
-				#HistA      = corr_histo(mtx_empiri)
-				#mtx_simuli = load_matrix(local_path + input_simuli)
-				#HistB      = corr_histo(mtx_simuli)
-			#except :
-				#R_val      = np.nan
-			#else :
-				##R_val      = intersec_hists(HistA, HistB)
-				##R_val      = chi2_hists(HistA, HistB)
-				#R_val       = bhatta_hists(HistA, HistB)
-				##R_val      = correl_hists(HistA, HistB)
-			
-			#x = np.append(x, THR)
-			#y = np.append(y, SIG)
-			#z = np.append(z, VEL)
-			#t = np.append(t, R_val)
-##np.savetxt('temp.dat', t,'%.6f',delimiter='\t')
-#datam = []
-#datam.append([x, y, z, t])			
-#datam = zip(*datam)
+		##print input_empiri
+		
+		#mtx_empiri = load_matrix(local_path + input_empiri)
+		#HistA      = corr_histo(mtx_empiri)
+		
+		#try:	
+			#mtx_simuli_a = load_matrix(local_path + input_simuli_a)
+			#HistBa      = corr_histo(mtx_simuli_a)			
+		#except :
+			#R_val_a      = np.nan
+		#else :
+			#R_val_a       = bhatta_hists(HistA, HistBa)
+		#R_temp_a     = np.append(R_temp_a, R_val_a)	
+		
+		#try:			
+			#mtx_simuli_d = load_matrix(local_path + input_simuli_d)
+			#HistBd      = corr_histo(mtx_simuli_d)
+		#except :
+			#R_val_d      = np.nan
+		#else :
+			#R_val_d       = bhatta_hists(HistA, HistBd)
+		#R_temp_d     = np.append(R_temp_d, R_val_d)	
 
-#fig = pl.figure(1)
-#ax  = fig.add_subplot(111,projection='3d')
-#p   = ax.scatter3D(datam[0], datam[1], datam[2], c=datam[3], cmap='jet')
-#fig.colorbar(p, ax=ax)
+		#try:					
+			#mtx_simuli_g = load_matrix(local_path + input_simuli_g)
+			#HistBg      = corr_histo(mtx_simuli_g)
+		#except :
+			#R_val_g      = np.nan
+		#else :
+			#R_val_g       = bhatta_hists(HistA, HistBg)
+		#R_temp_g     = np.append(R_temp_g, R_val_g)
+		
+		#try:					
+			#mtx_simuli_h = load_matrix(local_path + input_simuli_h)
+			#HistBh      = corr_histo(mtx_simuli_h)
+		#except :
+			#R_val_h      = np.nan
+		#else :
+			#R_val_h       = bhatta_hists(HistA, HistBh)
+		#R_temp_h     = np.append(R_temp_h, R_val_h)
+		
+		#try:					
+			#mtx_simuli_k = load_matrix(local_path + input_simuli_k)
+			#HistBk      = corr_histo(mtx_simuli_k)
+		#except :
+			#R_val_k      = np.nan
+		#else :
+			#R_val_k       = bhatta_hists(HistA, HistBk)
+		#R_temp_k     = np.append(R_temp_k, R_val_k)
+		
+	#R_thr_a[THR] 	   = np.array(R_temp_a)
+	#R_thr_d[THR] 	   = np.array(R_temp_d)
+	#R_thr_g[THR] 	   = np.array(R_temp_g)
+	#R_thr_h[THR] 	   = np.array(R_temp_h)
+	#R_thr_k[THR] 	   = np.array(R_temp_k)
+	
+#Ordered_R_a   = collections.OrderedDict(sorted(R_thr_a.items()))	
+#Ordered_R_d   = collections.OrderedDict(sorted(R_thr_d.items()))
+#Ordered_R_g   = collections.OrderedDict(sorted(R_thr_g.items()))
+#Ordered_R_h   = collections.OrderedDict(sorted(R_thr_h.items()))
+#Ordered_R_k   = collections.OrderedDict(sorted(R_thr_k.items()))
+##print "Ordered dict"
+##print Ordered_R
 
-#pl.xticks(thr_array)
-#pl.yticks(sig_array)
-#pl.autoscale(tight=True)
+#datam_a 		= np.array(Ordered_R_a.values())
+#datam_d 		= np.array(Ordered_R_d.values())
+#datam_g 		= np.array(Ordered_R_g.values())
+#datam_h 		= np.array(Ordered_R_h.values())
+#datam_k 		= np.array(Ordered_R_k.values())
 
-#ax.set_xlabel('r', fontsize=25)
-#ax.set_ylabel('c', fontsize=25)
-#ax.set_zlabel('v', fontsize=25)
-#ax.text2D(0.05, 0.95, 'Bhatta comparison : 0 - a : A_aal', transform=ax.transAxes)
+##print "check its numpy array version"
+##print datam
+
+## PLOTTING BEGINS ! 
+
+#thr_array = np.arange(38, 86, 4)
+#a = np.array([0.42,  0.50, 0.58, 0.66, 0.74, 0.82])	
+##a = np.array([0.55,  0.58, 0.61, 0.64])	
+#b = sig_array
+
+#fig , ax = pl.subplots(figsize=(18, 20))
+#pl.subplots_adjust(left=0.11, right=0.95, top=0.98, bottom=0.06)
+
+
+#pl.subplot(3,2,1)
+#pl.imshow(np.transpose(datam_a), interpolation='nearest', vmin= 0.05, vmax = 1.0, cmap='jet', aspect='auto')
+##pl.imshow(np.transpose(datam_a), interpolation='nearest', vmin= 0.05, vmax = 0.85, cmap='jet', aspect='auto')
+#cbar = pl.colorbar()
+
+#pl.ylabel('$c$', fontsize=30)
+#pl.xlabel('r', fontsize = 25)
+
+#pl.xticks(np.arange(1,len(thr_array),2),  a)
+##pl.xticks(np.arange(1,len(thr_array),3),  a)
+#pl.yticks(np.arange(0,len(b),1),  b)
+
+#for t in cbar.ax.get_yticklabels():
+	#t.set_fontsize(25)
+#pl.xticks(fontsize = 25)
+#pl.yticks(fontsize = 20)
+
+#pl.subplot(3,2,2)
+#pl.imshow(np.transpose(datam_d), interpolation='nearest', vmin= 0.05, vmax = 1.0, cmap='jet', aspect='auto')
+##pl.imshow(np.transpose(datam_d), interpolation='nearest', vmin= 0.05, vmax = 0.85, cmap='jet', aspect='auto')
+#cbar = pl.colorbar()
+
+#pl.ylabel('$c$', fontsize=30)
+#pl.xlabel('r', fontsize = 25)
+
+#pl.xticks(np.arange(1,len(thr_array),2),  a)
+##pl.xticks(np.arange(1,len(thr_array),3),  a)
+#pl.yticks(np.arange(0,len(b),1),  b)
+
+#for t in cbar.ax.get_yticklabels():
+	#t.set_fontsize(25)
+#pl.xticks(fontsize = 25)
+#pl.yticks(fontsize = 20)
+
+#pl.subplot(3,2,3)
+#pl.imshow(np.transpose(datam_g), interpolation='nearest', vmin= 0.05, vmax = 1.0, cmap='jet', aspect='auto')
+##pl.imshow(np.transpose(datam_g), interpolation='nearest', vmin= 0.05, vmax = 0.85, cmap='jet', aspect='auto')
+#cbar = pl.colorbar()
+
+#pl.ylabel('$c$', fontsize=30)
+#pl.xlabel('r', fontsize = 25)
+
+#pl.xticks(np.arange(1,len(thr_array),2),  a)
+##pl.xticks(np.arange(1,len(thr_array),3),  a)
+#pl.yticks(np.arange(0,len(b),1),  b)
+
+#for t in cbar.ax.get_yticklabels():
+	#t.set_fontsize(25)
+#pl.xticks(fontsize = 25)
+#pl.yticks(fontsize = 20)
+
+#pl.subplot(3,2,4)
+#pl.imshow(np.transpose(datam_h), interpolation='nearest', vmin= 0.05, vmax = 1.0, cmap='jet', aspect='auto')
+##pl.imshow(np.transpose(datam_h), interpolation='nearest', vmin= 0.05, vmax = 0.85, cmap='jet', aspect='auto')
+#cbar = pl.colorbar()
+
+#pl.ylabel('$c$', fontsize=30)
+#pl.xlabel('r', fontsize = 25)
+
+#pl.xticks(np.arange(1,len(thr_array),2),  a)
+##pl.xticks(np.arange(1,len(thr_array),3),  a)
+#pl.yticks(np.arange(0,len(b),1),  b)
+
+#for t in cbar.ax.get_yticklabels():
+	#t.set_fontsize(25)
+#pl.xticks(fontsize = 25)
+#pl.yticks(fontsize = 20)
+
+#pl.subplot(3,2,5)
+#pl.imshow(np.transpose(datam_k), interpolation='nearest', vmin= 0.05, vmax = 1.0, cmap='jet', aspect='auto')
+##pl.imshow(np.transpose(datam_k), interpolation='nearest', vmin= 0.05, vmax = 0.85, cmap='jet', aspect='auto')
+#cbar = pl.colorbar()
+
+#pl.ylabel('$c$', fontsize=30)
+#pl.xlabel('r', fontsize = 25)
+
+#pl.xticks(np.arange(1,len(thr_array),2),  a)
+##pl.xticks(np.arange(1,len(thr_array),3),  a)
+#pl.yticks(np.arange(0,len(b),1),  b)
+
+#for t in cbar.ax.get_yticklabels():
+	#t.set_fontsize(25)
+#pl.xticks(fontsize = 25)
+#pl.yticks(fontsize = 20)
+	
 #pl.show()
 
-
-#fig = pl.figure(2)
-
-#xi = np.linspace(data1.min(),data1.max(),200)
-#yi = np.linspace(data2.min(),data2.max(),200)
-#wi = np.linspace(data3.min(),data3.max(),200)
-
-## Interpoling unstructured data 
-#zi = griddata((data1, data2), output, (xi[None,:], yi[:,None]), method='cubic')
-## removing NaNs from the array
-#zi = np.nan_to_num(zi)
-
-#ax = fig.add_subplot(1, 1, 1, projection='3d', azim=210)
-
-#xig, yig = np.meshgrid(xi, yi)
-
-##normalizing variable to interval 0-1
-#data3col=data3/data3.max()
-
-#surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, facecolor=cm.jet(data3col), cmap='jet', linewidth=0, antialiased=False, shade=False)
-##surf = ax.plot_surface(xig, yig, zi, rstride=1, cstride=1, facecolor=cm.jet(data3col), linewidth=0, antialiased=False, shade=False)
-#ax.set_xlabel('X Label')
-#ax.set_ylabel('Y Label')
-#ax.set_zlabel('Z Label')
-##fig.colorbar(surf, shrink=0.5, aspect=5)
-##ax.set_zlim(data3.min(), data3.max())
-#fig.colorbar(surf, ax=ax)
-#pl.show()
-
-#x = (np.array([x])).T
-#y = (np.array([y])).T
-#z = (np.array([z])).T
-#F = np.array(t)
-
-#points = np.concatenate( (x,y,z), axis=1)
-
-#grid_x, grid_y, grid_z = np.mgrid[54:66:100j, 0.3:0.7:100j, 40:90:100j   ]
-
-#grid_F = griddata(points, F, (grid_x, grid_y, grid_z), method='linear')
-
-#fig = pl.figure(5)
-#ax = fig.gca(projection='3d')
-#surf = ax.plot_surface(grid_x, grid_y, rstride=1, cstride=1, cmap=cm.coolwarm,
-        #linewidth=0, antialiased=False)

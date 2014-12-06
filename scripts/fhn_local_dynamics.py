@@ -96,11 +96,11 @@ Y_int = nullcl_01(X_int)
 x_limit = 2.5
 x_range = np.linspace(-x_limit,x_limit,500)
 
-## without noise :
-#dde = dde23(eqns=eqns,params=params)
+# without noise :
+dde = dde23(eqns=eqns,params=params)
 
-# with noise :
-dde = dde23(eqns=eqns,params=params, noise=noise)
+## with noise :
+#dde = dde23(eqns=eqns,params=params, noise=noise)
 
 tfinal =250
 
@@ -145,23 +145,23 @@ fig = pl.figure(num=None, figsize=(18, 8), dpi=100, facecolor='w', edgecolor='k'
 
 
 pl.subplot(121)
-pl.xlabel('t' , fontsize = 25)
-pl.ylabel('x(t) , y(t)', fontsize = 25)
+pl.xlabel('t' , fontsize = 30)
+pl.ylabel('x(t) , y(t)', fontsize = 30)
 pl.plot(t, x, 'r', label='$x(t)$')
 pl.plot(t, y, 'b', label='$y(t)$')
-pl.tick_params(labelsize=25)
+pl.tick_params(labelsize=30)
 #pl.plot(sol_adap['t'],sol_adap['x'],'.r',linewidth=0.2)
 #pl.plot(sol_adap['t'],sol_adap['y'],'.b',linewidth=0.2)
 pl.axis([0, tfinal, -3, 3])
-lg = legend(prop={'size':25})
+lg = legend(prop={'size':30})
 lg.draw_frame(False)
 
 pl.subplot(122)
-pl.xlabel('x', fontsize =25)
-pl.ylabel('y', fontsize =25)
+pl.xlabel('x', fontsize =30)
+pl.ylabel('y', fontsize =30)
 pl.plot(x, y, 'k', label='$x(t),y(t)$')
-pl.tick_params(labelsize=25)
-pl.plot(x[0], y[0], '.r')
+pl.tick_params(labelsize=30)
+pl.plot(x[0], y[0], '.r', markersize=25)
 #pl.plot(x_, y_ , 'b',label='$x_{nullcline}$')
 #pl.plot(xx,yy,'k',label='$y_{nullcline}$')
 #pl.plot(-params['a'],(-params['a']+pow(params['a'],3)/3),'ok')
@@ -175,9 +175,10 @@ pl.plot(x_range,nullcl_02(x_range),'b' ,label='$y_{null}$')
 ### [PAN12]
 #pl.plot(nullcl_02(x_range)* np.ones(len(x_range)), x_range,'k',label='$y_{nullcline}$')
 
-pl.plot(X_int,Y_int, 'ok', linewidth=3)
+pl.plot(X_int,Y_int,  'ok',  markersize=10)
+#pl.plot(X_int,Y_int,  'ow',  markersize=25)
 pl.axis([-2.3, 2.3, -2.5, 2.5])
-lg = legend(loc = 'upper left', prop={'size':25})
+lg = legend(loc = 'upper left', prop={'size':30})
 lg.draw_frame(False)
 #pl.savefig("VUK13_local_dynamics.eps",format="eps")
 #pl.savefig("GHO08_local_dynamics.eps",format="eps")

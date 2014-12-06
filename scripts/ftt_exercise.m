@@ -48,13 +48,64 @@ t_y   = 0:length(y)-1;
 dlmwrite('t_y_matlab.dat', t_y, 'delimiter','\t', 'precision', '%.6f');
 dlmwrite('y_matlab.dat', y, 'delimiter','\t', 'precision', '%.6f');
 
-M     = length(y)
-M_pow = 2^nextpow2(M)
-yfft  = fft(y , M_pow) /M;
-yfft  = 2*abs(yfft(1:M_pow /2 +1)) ; 
+% LOAD a sample FHN time series, extract 1st column 
+%A_ =load('A_aal_0_ADJ_thr_0.60_sigma=0.2_D=0.05_v=70.0_tmax=45000.dat');
+A_ =load('acp_w_0_ADJ_thr_0.50_sigma=0.3_D=0.05_v=60.0_tmax=45000.dat');
+A  = A_(:,2:91);
+
+% LOAD a sample BOLD time series, there is no time column in it
+%A = load('A_aal_0_ADJ_thr_0.66_sigma=0.03_D=0.05_v=70.0_tmax=45000_NORM_BOLD_signal.dat');
+A = load('acp_w_0_ADJ_thr_0.54_sigma=0.03_D=0.05_v=30.0_tmax=45000_NORM_BOLD_signal.dat');
+
+M     = length(A(:,1));
+M_pow = 2^nextpow2(M);
 freq  = f_s/2 * linspace(0,1, M_pow/2 + 1);
-dlmwrite('freq_matlab.dat', freq, 'delimiter','\t', 'precision', '%.6f');
-dlmwrite('yfft_matlab.dat', yfft, 'delimiter','\t', 'precision', '%.6f');
+YFFT  = [];
+%iter = 25000 ; % FHN
+iter = 1000; %BOLD
+N = [];
+F = [];
+k = 1; 
+
+f  = freq(1:iter);
+for i=1:90;
+    
+    yfft  = fft(A(:,i) , M_pow) /M;
+    yfft  = 2*abs(yfft(1:M_pow /2 +1)) ; 
+    yfft  = yfft(1:iter);   
+    YFFT  = [YFFT, yfft'] ;
+     
+    for j=1:length(yfft);
+        N(k) = i;
+        F(k) = f(j);
+        k = k+1;
+    end
+    yfft=[];
+end
+
+FFT = log(YFFT); 
+
+[xq, yq] = meshgrid(min(N):0.01:max(N),min(F):0.01:max(F));
+vq = griddata(N,F,FFT, xq, yq);
+
+figure(3) ; mesh(xq, yq, vq); colorbar
+%set(gca,'ZScale','log');
+zlabel('$\log \hat{f}(\nu)$', 'Interpreter', 'Latex', 'fontsize',30)
+xlabel('Nodes', 'fontsize' , 25)
+ylabel('$\nu$[Hz]', 'Interpreter', 'Latex', 'fontsize',25)
+set(gca, 'fontsize', 25)
+
+figure(4) ; surf(xq,yq,vq);
+
+
+    
+%dlmwrite('freq_matlab.dat', freq, 'delimiter','\t', 'precision', '%.6f');
+%dlmwrite('yfft_matlab.dat', yfft, 'delimiter','\t', 'precision', '%.6f');
+
+
+
+
+
 
 [Bs,As] = butter(5,f_c/f_N,'low');
 y_filt  = filtfilt(Bs,As,y);

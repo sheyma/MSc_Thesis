@@ -26,6 +26,7 @@ import os
 import scipy.stats as sistat
 import collections
 from matplotlib import rc
+import copy
 
 # check the loaded matrix if it is symmetric
 def load_matrix(file):
@@ -65,29 +66,34 @@ def plot_corr(corr_matrix, simfile ):
 	return  	
 
 # plots ADJACENCY matrix black - white 
-def plot_adj(corr_matrix, simfile ):	
+def plot_adj(corr_matrix, simfile ):
+
 	N_col  = np.shape(corr_matrix)[1]
-	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )	
+	
+	for i in range(0,N_col):
+		for j in range(0, N_col):
+			if i==j:
+				corr_matrix[i,j] = 1
+				print i,j
+
+	extend = (0.5 , N_col+0.5 , N_col+0.5, 0.5 )
+	fig , ax = pl.subplots(figsize=(15, 12))
+	ax.tick_params('both', length=15, width=8, which='major')
+	pl.subplots_adjust(left=0.10, right=0.95, top=0.95, bottom=0.12)				
 	cmap = colors.ListedColormap(['white', 'black'])
 	bounds=[0, 0.5, 1]
 	norm = colors.BoundaryNorm(bounds, cmap.N)
-	img = pl.imshow(corr_matrix, interpolation='nearest', origin='lower',
-                    cmap=cmap, norm=norm)
 
-	# make a color bar
+	img = pl.imshow(corr_matrix, interpolation='nearest', vmin=0, vmax=1.0, extent=extend, cmap=cmap, norm=norm)
 	cbar = pl.colorbar(img, cmap=cmap, norm=norm, boundaries=bounds, ticks=[0, 1])
 	
 	for t in cbar.ax.get_yticklabels():
 		t.set_fontsize(50)
 	pl.xticks(fontsize = 50)
 	pl.yticks(fontsize = 50)
-	pl.suptitle('Adjacency Matrix, r=0.55', fontsize= 50)
-	##pl.suptitle('FCM (fMRI-BOLD)', fontsize= 50)
 	pl.xlabel('Nodes', fontsize = 50)
 	pl.ylabel('Nodes', fontsize = 50)
-	#image_name = simfile[0:-4] + '_CORR.eps'	
-	##pl.savefig(simfile[0:-4]+'.eps', format="eps")
-	##pl.show()
+
 	return  
 
 
@@ -147,17 +153,16 @@ mtx_empiri		=		load_matrix(input_empiri)
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
 #name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
 name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
-#name = 'A_aal_0_ADJ_thr_0.66_sigma=0.2_D=0.05_v=70.0_tmax=45000_BOLD_signal_corr.dat'
 
 #name = 'A_aal_0_ADJ_thr_0.60_sigma=0.1_D=0.05_v=70.0_tmax=45000_NORM_BOLD_signal_corr.dat'
-#name = 'acp_w_0_ADJ_thr_0.60_sigma=0.9_D=0.05_v=30.0_tmax=45000_Norm_BOLD_signal_corr.dat'
+#name = 'acp_w_0_ADJ_thr_0.60_sigma=0.9_D=0.05_v=30.0_tmax=45000_NORM_BOLD_signal_corr.dat'
 
 #thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])	
 #vel_array = np.array([150, 140, 130, 120, 110, 90, 80, 70, 60, 50, 40, 30])
 #sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.03, 0.02, 0.018 ])
 
 thr_array = np.arange(18, 86, 4)
-vel_array = np.array([20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
+vel_array = np.array([110, 90, 80, 70, 60, 50, 40, 30, 20])
 sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.03, 0.02, 0.018 ])
 
 R_thr =  {}
@@ -168,13 +173,13 @@ for THR in thr_array :
 	local_path = '../data/jobs_corr/'
 	#local_path = '../data/jobs_corr_bold/'
 	
-	#for VEL in vel_array :
+	for VEL in vel_array :
 		
-		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
 		
-	for SIG in sig_array :
+	#for SIG in sig_array :
 		
-		input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
+		#input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
 		
 		print input_name
 	
@@ -207,11 +212,14 @@ pl.subplots_adjust(left=0.15, right=1.0, top=0.98, bottom=0.12)
 pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
-#PLOT PA OVER SIGMA
-b = sig_array
+##PLOT PA OVER SIGMA
+#b = sig_array
+#pl.ylabel('$c$', fontsize=65)
 
-##PLOT PA OVER VELOCITY
-#b = vel_array/10
+#PLOT PA OVER VELOCITY
+b = vel_array/10
+pl.ylabel('$v$ [m/s]', fontsize=65)
+
 
 # acp_w_0 thr range, XTICKS: 
 a = np.array([0.22, 0.34, 0.46, 0.58, 0.70, 0.82])
@@ -222,9 +230,8 @@ pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
 #pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
 
 pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-#pl.ylabel('$v$ [m/s]', fontsize=65)
-pl.ylabel('$c$', fontsize=65)
-pl.xlabel('$r$', fontsize = 65)
+#pl.xlabel('$r$', fontsize = 65)
+pl.xlabel('$p$', fontsize = 65)
 for t in cbar.ax.get_yticklabels():
 	t.set_fontsize(50)
 pl.xticks(fontsize = 50)
@@ -236,7 +243,7 @@ pl.show()
 #mtx_empiri			= 		load_matrix(input_empiri)
 #pl.figure()		
 #figure				=		plot_corr(mtx_empiri , input_empiri)
-## plot_adj gets and "adjacency matrix"
+# plot_adj gets and "adjacency matrix"
 #figure				=		plot_adj(mtx_empiri , input_empiri)
 #mtx_simuli			= 		load_matrix(input_simuli)
 #pl.figure()

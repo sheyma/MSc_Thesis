@@ -224,17 +224,17 @@ x2 = sol['x2']
 y2 = sol['y2']
 t  = sol['t']
 
-fig = pl.figure(num=None, figsize=(14, 6), dpi=100, facecolor='w', edgecolor='k')
+fig = pl.figure(num=None, figsize=(19, 12), dpi=100, facecolor='w', edgecolor='k')
 ### [GHO08a] and [VUK13]############################################
 #fig.suptitle('[GHO08a]- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
-fig.suptitle('FHN- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
-	      r'  $\gamma$ = '+str(params['gamma']) + ' $ b$ = '+ 
-	      str(params['b']) + r'  $\tau$ = '+str(params['TAU']) + 
-	      '  C = '+ str(params['C']) +'  '  + r'$\tau_{12}=\tau_{21}$= '
-	       +str(params['delay']) + ' D = ' + str(params['D']) #+
-	      #'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
-	      #str(params['tau'])#
-	      , fontsize=25)
+#fig.suptitle('FHN- Global Dynamics :  '+r'$\alpha$ = ' +str(params['alpha'])+
+	      #r'  $\gamma$ = '+str(params['gamma']) + ' $ b$ = '+ 
+	      #str(params['b']) + r'  $\tau$ = '+str(params['TAU']) + 
+	      #'  C = '+ str(params['C']) +'  '  + r'$\tau_{12}=\tau_{21}$= '
+	       #+str(params['delay']) + ' D = ' + str(params['D']) #+
+	      ##'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
+	      ##str(params['tau'])#
+	      #, fontsize=25)
 
 index = np.arange(0,len(t),10)
 
@@ -242,46 +242,46 @@ pl.subplot(221)
 pl.plot(t[index], x1[index], 'r',label='$x_1(t), x_2(t)$')
 pl.plot(t[index], y1[index], 'b',label='$y_1(t), y_2(t)$')
 #pl.xlabel('t' , fontsize = 25)
-pl.ylabel('$x_1(t) , y_1(t)$', fontsize = 25)
-pl.tick_params(labelsize=25)
+pl.ylabel('$x_1(t) , y_1(t)$', fontsize = 35)
+pl.tick_params(labelsize=22)
 pl.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-           ncol=2, mode="expand", borderaxespad=0. , prop={'size':20})
+           ncol=2, mode="expand", borderaxespad=0. , prop={'size':30})
 #lg.draw_frame(False)
 
 pl.subplot(222)
 pl.plot(x1[index], y1[index], 'k')
-pl.plot(x_range, nullcl_01(x_range),'r', label='$y_{nullcline}$')
-pl.plot(x_range, nullcl_02(x_range),'b', label='$x_{nullcline}$')
+pl.plot(x_range, nullcl_01(x_range),'r', label='$y_{null}$')
+pl.plot(x_range, nullcl_02(x_range),'b', label='$x_{null}$')
 pl.plot(X_int,Y_int, 'ok', linewidth=3)
 pl.plot(x1[0], y1[0], '.r')
-pl.xlabel('$x_1$' , fontsize = 25)
-pl.ylabel('$y_1$', fontsize = 25)
-pl.tick_params(labelsize=25)
+pl.xlabel('$x_1$' , fontsize = 30)
+pl.ylabel('$y_1$', fontsize = 30)
+pl.tick_params(labelsize=22)
 pl.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-           ncol=2, mode="expand", borderaxespad=0. , prop={'size':20})
+           ncol=2, mode="expand", borderaxespad=0. , prop={'size':30})
 #lg.draw_frame(False)
 pl.axis([-2.5, 2.5, -2.5, 2.5])
 
 pl.subplot(223)
 pl.plot(t[index], x2[index], 'r',label='$x_2(t)$')
 pl.plot(t[index], y2[index], 'b',label='$y_2(t)$')
-pl.xlabel('t', fontsize = 25)
-pl.ylabel('$x_2(t) , y_2(t)$', fontsize = 25)
-pl.tick_params(labelsize=25)
+pl.xlabel('t', fontsize = 30)
+pl.ylabel('$x_2(t) , y_2(t)$', fontsize = 35)
+pl.tick_params(labelsize=22)
 
 #lg = legend(prop={'size':25})
 #lg.draw_frame(False)
 
 pl.subplot(224)
 pl.plot(x2[index], y2[index], 'k')
-pl.xlabel('$x_2$', fontsize = 25)
-pl.ylabel('$y_2$', fontsize = 25)
+pl.xlabel('$x_2$', fontsize = 30)
+pl.ylabel('$y_2$', fontsize = 30)
 pl.plot(x_range, nullcl_01(x_range),'r')
 pl.plot(x_range, nullcl_02(x_range),'b')
 pl.plot(X_int,Y_int, 'ok', linewidth=3)
 pl.plot(x2[0], y2[0], '.r')
 pl.axis([-2.5, 2.5, -2.5, 2.5])
-pl.tick_params(labelsize=25)
+pl.tick_params(labelsize=22)
 #lg = legend(prop={'size':25})
 #lg.draw_frame(False)
 pl.show()

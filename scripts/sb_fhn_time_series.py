@@ -127,32 +127,32 @@ print "intersection of nullclines", X_int, Y_int
 #f.close()
 
 
-fig = pl.figure(num=None, figsize=(8, 6), dpi=100, facecolor='w', edgecolor='k')
+fig = pl.figure(num=None, figsize=(15, 8), dpi=100, facecolor='w', edgecolor='k')
 #fig.suptitle('[PAN12] Global Dynamics :  a = '+str(params['a'])+
 	      #r'  $\varepsilon$'+' = '+str(params['eps']) +
 	      #'  C = '+ str(params['C']) +'  '  + r'$\tau^C$= '+
 	      #str(params['tau'])+ '  K = '+ str(params['K']) +'  '  + 
 	      #r'$\tau^K$= '+ str(params['tau']),fontsize=14, fontweight='bold')
-fig.suptitle('FHN - time series :  '+r'$\alpha$ = ' 
-		+ str(params['alpha']) +r'  $\gamma$ = '+str(params['gamma']) 
-		+ ' $ b$ = '+  str(params['b'])+' ' + 
-		r'$\tau$ = '+str(params['TAU'])+'  C = ' + str(params['sigma'])
-		+ '  D = 0.05 '  +  '  v = 1 [m/s] '
-		 +'  '    + r'$\Delta\tau_{ij}$=$d_{ij}/v$'
-	      #'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
-	      #str(params['tau'])#
-	      , fontsize=25)
+#fig.suptitle('FHN - time series :  '+r'$\alpha$ = ' 
+		#+ str(params['alpha']) +r'  $\gamma$ = '+str(params['gamma']) 
+		#+ ' $ b$ = '+  str(params['b'])+' ' + 
+		#r'$\tau$ = '+str(params['TAU'])+'  C = ' + str(params['sigma'])
+		#+ '  D = 0.05 '  +  '  v = 1 [m/s] '
+		 #+'  '    + r'$\Delta\tau_{ij}$=$d_{ij}/v$'
+	      ##'  K = '+ str(params['K']) +'  '  + r'$\tau^K$= '+
+	      ##str(params['tau'])#
+	      #, fontsize=25)
 
 pl.figure(1)
 #pl.subplot(2,1,1)
-pl.plot(sol_samp1['t'],sol_samp1['x1'], 'r',label='x(t)')
-pl.plot(sol_samp1['t'],sol_samp1['y1'], 'b',label='y(t)')
+pl.plot(sol_samp1['t'],sol_samp1['x2'], 'r',label='$x_1(t)$')
+pl.plot(sol_samp1['t'],sol_samp1['y2'], 'b',label='$y_1(t)$')
 #pl.plot(sol_adap['t'],sol_adap['x0'],'.r',linewidth=0.05)
 #pl.plot(sol_adap['t'][10573:10758],sol_adap['y0'][10573:10758],'.b',linewidth=0.05)
 pl.xlabel('t', fontsize = 25)
-pl.ylabel('$x_1(t) , y_1(t)$', fontsize = 25)
-pl.tick_params(labelsize=25)
-lg = legend(loc=2, prop={'size':20})
+pl.ylabel('$x_1(t) , y_1(t)$', fontsize = 30)
+pl.tick_params(labelsize=20)
+lg = legend(loc=2, prop={'size':25})
 lg.draw_frame(False)
 
 #pl.subplot(212)

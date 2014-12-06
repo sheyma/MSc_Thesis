@@ -77,8 +77,8 @@ def node_index(matrix):
 	print "some bad correlation :", matrix[mx, my]
 
 	# nodes start from 1, not from 0, therefore add 1 to the index
-	print "nodes ",nx+1," and ",ny," good correlated  : ", matrix[nx,ny] 
-	print "nodes ",mx," and ",my," bad correlated : ", matrix[mx,my]
+	print "nodes ",nx+1," and ",ny+1," good correlated  : ", matrix[nx,ny] 
+	print "nodes ",mx+1," and ",my+1," bad correlated : ", matrix[mx,my]
 	
 	# assign diagonal elements back to 1 
 	for i in range(0,np.shape(matrix)[0]):
@@ -131,8 +131,8 @@ def plot_timeseries(t_start , t_final, dt, timeseries, tvec, x, y):
 	fig , ax = pl.subplots(figsize=(25, 5))
 	pl.subplots_adjust(left=0.08, right=0.98, top=0.94, bottom=0.20)
 
-	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f], linestyle='-',color='r',label=('$u_{' + str(x+1) + '}(t)$'))
-	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f], linestyle='-',color='b',label=('$u_{' + str(y+1) + '}(t)$'))
+	pl.plot(0.01*tvec[i_s:i_f], v1[i_s : i_f], linestyle='-',color='m',label=('$u_{' + str(x+1) + '}(t)$'))
+	pl.plot(0.01*tvec[i_s:i_f], v2[i_s : i_f], linestyle='-',color='g',label=('$u_{' + str(y+1) + '}(t)$'))
 	pl.setp(pl.gca().get_xticklabels(), fontsize = 30)
 	pl.setp(pl.gca().get_yticklabels(), fontsize = 30)
 	
@@ -179,70 +179,63 @@ data_matrix   = sb.load_matrix(input_name)
 out_basename  = sb.get_dat_basename(input_name)
 [u_matrix , T, dt, tvec]    =	fhn_timeseries(data_matrix)
 corr_matrix                 =   correl_matrix(u_matrix, out_basename)
-#[i, j, k , l]      =   node_index(corr_matrix)
-#print i,j,k,l
-## user defined time range for timeseries plots
-#t_start = 1650
-#t_final = 1700
-## plot the timeseries of some good correlated nodes
-#pl.figure(2)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
-##plot the timeseries of some bad correlated nodes
-#pl.figure(3)
-#plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
-#pl.show()
-
-# plot FAST FOURIER TRANSFORM of each node at surface
-N_nodes = np.shape(corr_matrix)[1]
-step = 25000
-YFFT = []
-N = []
-F = []
-for i in range(0,N_nodes):
-	[yfft, freq] = fhn_fft(u_matrix, i, params['dt'])
-	tmp = yfft[0:step]
-	f_tmp = freq[0:step]
-	YFFT = np.append(YFFT, tmp)
-	for j in range(0, len(tmp)):
-		N = np.append(N, np.array([i]))
-		F = np.append(F, f_tmp[j])
-		
-# converting YFFT into logarithmic scale
-FFT = np.log(YFFT)	
-
-xi = np.arange(N.min(),N.max(),0.1)
-yi = np.arange(F.min(),F.max(),0.01)
-
-X , Y = np.meshgrid(xi,yi)
-print np.shape(X), np.shape(Y)
-
-Z = griddata((N,F), FFT, (xi[None,:], yi[:,None]), method='linear')
-
-fig = pl.figure()
-ax = fig.gca(projection='3d')
-
-surf = ax.plot_surface(X,Y,Z, cmap=cm.jet, linewidth=0)
-
-cbar = fig.colorbar(surf, shrink=0.5, aspect=10)
-for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(30)
-	
-ax.set_xlabel('Nodes', fontsize=40)
-ax.set_ylabel('$\\nu$ [Hz]', fontsize=40)
-ax.set_zlabel('$\\log\\widehat{f(}\\nu)$' , fontsize=40)
-
-pl.setp(pl.gca().get_xticklabels(), fontsize = 30)
-pl.setp(pl.gca().get_yticklabels(), fontsize = 30)
-pl.setp(pl.gca().get_zticklabels(), fontsize = 30)
-
+[i, j, k , l]      =   node_index(corr_matrix)
+print i,j,k,l
+# user defined time range for timeseries plots
+t_start = 1650
+t_final = 1700
+# plot the timeseries of some good correlated nodes
+pl.figure(2)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, i, j)
+#plot the timeseries of some bad correlated nodes
+pl.figure(3)
+plot_timeseries(t_start, t_final, dt, u_matrix, tvec, k, l)
 pl.show()
 
+## plot FAST FOURIER TRANSFORM of each node at surface
+#N_nodes = np.shape(corr_matrix)[1]
+#step = 25000
+#YFFT = []
+#N = []
+#F = []
+#for i in range(0,N_nodes):
+	#[yfft, freq] = fhn_fft(u_matrix, i, params['dt'])
+	#tmp = yfft[0:step]
+	#f_tmp = freq[0:step]
+	#YFFT = np.append(YFFT, tmp)
+	#for j in range(0, len(tmp)):
+		#N = np.append(N, np.array([i]))
+		#F = np.append(F, f_tmp[j])
+		
+## converting YFFT into logarithmic scale
+#FFT = np.log(YFFT)	
 
+#xi = np.arange(N.min(),N.max(),0.5)
+#yi = np.arange(F.min(),F.max(),0.1)
 
+#X , Y = np.meshgrid(xi,yi)
+#print np.shape(X), np.shape(Y)
+
+#Z = griddata((N,F), FFT, (xi[None,:], yi[:,None]), method='linear')
+
+#fig = pl.figure()
+#ax = fig.gca(projection='3d')
+
+#surf = ax.plot_surface(X,Y,Z, cmap=cm.jet, linewidth=0)
+
+#cbar = fig.colorbar(surf, shrink=0.5, aspect=10)
+#for t in cbar.ax.get_yticklabels():
+	#t.set_fontsize(30)
+	
+#ax.set_xlabel('Nodes', fontsize=40)
+#ax.set_ylabel('$\\nu$ [Hz]', fontsize=40)
+#ax.set_zlabel('$\\log\\widehat{f(}\\nu)$' , fontsize=40)
+
+#pl.setp(pl.gca().get_xticklabels(), fontsize = 30)
+#pl.setp(pl.gca().get_yticklabels(), fontsize = 30)
+#pl.setp(pl.gca().get_zticklabels(), fontsize = 30)
 
 #pl.show()
-		
-	
 
 ##[yfft_1, freq_1] = fhn_fft(u_matrix, rnd_node_1-1, params['dt'])
 ##[yfft_2, freq_2] = fhn_fft(u_matrix, rnd_node_2-1, params['dt'])
@@ -259,4 +252,4 @@ pl.show()
 ##pl.xlabel('frequency [Hz]' , fontsize = 25 )
 ##pl.ylabel('timeseries (f)' , fontsize = 25 )
 ###pl.axis([-1, 70, 0, 0.5])
-
+#pl.show()

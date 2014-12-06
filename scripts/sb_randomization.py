@@ -85,7 +85,7 @@ def get_random_graph_g(B):
 # reference : Brain Connectivity Toolbox, Rubinov & Sporns, 2009
 # ported script : "randmio_und_connected.m"
 def get_random_graph_h(B):
-	ITER = 1000						# ITERATION CAN BE CHANGED!
+	ITER = 200						# ITERATION CAN BE CHANGED!
 	n_col   = np.shape(B)[1]		# number of columns in array
 	new_B   = np.triu(B)			# upper triangle of array	
 	(j , i) = new_B.nonzero()		# (row,col) index of non-zero elem.
@@ -552,36 +552,36 @@ data_matrix     = load_matrix(input_name)
 print "input data is loaded! "
 method_k_matrix = load_matrix(name_k)
 
-thr = 0.1
-maxswap = 2
-Random_G = random_graph_methods[method](data_matrix,method_k_matrix, maxswap)
-export_adjacency_matrix(Random_G, method, input_name, thr)
-print (input_name[:-4] + '_' + method + '_ADJ_thr_'+str('%.2f' % (thr))+'.dat','w')
+#thr = 0.1
+#maxswap = 2
+#Random_G = random_graph_methods[method](data_matrix,method_k_matrix, maxswap)
+#export_adjacency_matrix(Random_G, method, input_name, thr)
+#print (input_name[:-4] + '_' + method + '_ADJ_thr_'+str('%.2f' % (thr))+'.dat','w')
 
 
 
-#for i in range(1,2):
-	#thr = float(i) / 100.0
-	#print "loop", i, thr
+for i in range(0,1):
+	thr = float(i) / 100.0
+	print "loop", i, thr
 	
-	#A = threshold_matrix(data_matrix, thr)
-	#try:
-		#if method == 'k':
+	A = threshold_matrix(data_matrix, thr)
+	try:
+		if method == 'k':
 			
-			##if thr < 0.09:
-				##maxswap = 0
-			##else:
-			#maxswap = 2				
+			#if thr < 0.09:
+				#maxswap = 0
+			#else:
+			maxswap = 2				
 			
-			#B        = threshold_matrix(method_k_matrix, thr) 
-			#Random_G = random_graph_methods[method](A,B,maxswap)
-		#else:
-			#Random_G = random_graph_methods[method](A)
-	#except:
-		#print "couldn't find a random graph", method, sys.exc_info()[0]
-		#continue
+			B        = threshold_matrix(method_k_matrix, thr) 
+			Random_G = random_graph_methods[method](A,B,maxswap)
+		else:
+			Random_G = random_graph_methods[method](A)
+	except:
+		print "couldn't find a random graph", method, sys.exc_info()[0]
+		continue
 	
-	#plot_graph(Random_G)
+	plot_graph(Random_G)
 	#print_adjacency_matrix(A)
 	#export_adjacency_matrix(Random_G, method, input_name, thr)
 	#get_single_network_measures(Random_G, thr)

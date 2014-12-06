@@ -81,7 +81,7 @@ def plot_corr_diag(corr_matrix, out_basename):
 				corr_matrix[i,j] = 1
 			
 	#pl.imshow(corr_matrix, interpolation='nearest', extent=extend)
-	pl.imshow(corr_matrix, interpolation='nearest', vmin=-0.5, vmax=0.5, extent=extend)
+	pl.imshow(corr_matrix, interpolation='nearest', vmin=-0.45, vmax=0.45, extent=extend)
 	
 	## vmin & vmax for EMPIRICAL data corr matrix :
 	#pl.imshow(corr_matrix, interpolation='nearest', vmin=0.0, vmax=1.0, extent=extend)
@@ -113,7 +113,7 @@ def plot_bold_signal(timeseries, x, y):
 	
 	# if no downsampling :
 
-	fig , ax = pl.subplots(figsize=(25, 5))
+	fig , ax = pl.subplots(figsize=(25, 5.5))
 	pl.subplots_adjust(left=0.08, right=0.98, top=0.94, bottom=0.20)
 
 	pl.plot(time, v1, 'm', label=('$u_{' + str(x+1) + '}(t)$'))
@@ -121,7 +121,8 @@ def plot_bold_signal(timeseries, x, y):
 	pl.setp(pl.gca().get_xticklabels(), fontsize = 30)
 	pl.setp(pl.gca().get_yticklabels(), fontsize = 30)
 	
-	ax.set_ylim(-v1.max()-0.05, v1.max()+0.05)
+	#ax.set_ylim(-v2.max()-0.05, v2.max()+0.05)
+	ax.set_ylim(-0.6, 0.6)
 	
 	pl.legend(prop={'size':35})
 
@@ -160,6 +161,7 @@ out_basename = sb.get_dat_basename(input_name)
 
 corr_matrix = correl_matrix(data_matrix , out_basename)
 
+## if data is already a correlation matrix :
 #corr_matrix = data_matrix
 image = plot_corr_diag(corr_matrix, out_basename)
 # real node index : add 1!
