@@ -204,24 +204,24 @@
 \keywords{} % Keywords for your thesis - this is not currently used anywhere in the template, cite it with \keywordnames if you want it
 %-------------------------------------------------   
 \university{\texorpdfstring{\href{https://www.uni-magdeburg.de/} % Your university's URL
-                {Otto von Guericke Universit\"{a}t Magdeburg}} % Your university's name - this is currently used in the title page
-                {Otto von Guericke Universit\"{a}t Magdeburg}}
+                {Otto-von-Guericke-Universit\"{a}t Magdeburg}} % Your university's name - this is currently used in the title page
+                {Otto-von-Guericke-Universit\"{a}t Magdeburg}}
 %-------------------------------------------------   
 \UNIVERSITY{\texorpdfstring{\href{https://www.uni-magdeburg.de/} % Your university's URL
-                {OTTO VON GUERICKE UNIVERSIT\"{A}T MAGDEBURG}} % Your university's name in capitals - this is currently used in the abstract page
-                {OTTO VON GUERICKE UNIVERSIT\"{A}T MAGDEBURG}}
+                {OTTO-VON-GUERICKE-UNIVERSIT\"{A}T MAGDEBURG}} % Your university's name in capitals - this is currently used in the abstract page
+                {OTTO-VON-GUERICKE-UNIVERSIT\"{A}T MAGDEBURG}}
 %-------------------------------------------------                
 \department{\texorpdfstring{\href{http://neurosci.uni-magdeburg.de/} % Your department's URL
-                {Department, Integrative Neuroscience}} % Your department's name - used in the title page and abstract
-                {Department, Integrative Neuroscience}}
+                {Department of Integrative Neuroscience}} % Your department's name - used in the title page and abstract
+                {Department of Integrative Neuroscience}}
 %-------------------------------------------------                
 \DEPARTMENT{\texorpdfstring{\href{http://neurosci.uni-magdeburg.de/} % Your department's URL
                 {INTEGRATIVE NEUROSCIENCE}} % Your department's name in capitals - this is not currently used anywhere in the template, cite it with \DEPTNAME if you want it
                 {INTEGRATIVE NEUROSCIENCE}}
 %-------------------------------------------------                
 \group{\texorpdfstring{\href{http://www.itp.tu-berlin.de/bccn-nachwuchsgruppe_nonlinear_dynamics_and_control_in_neuroscience/hoevel/mitglieder/} % Your research group's URL
-                {Research Group, Bernstein Center for Computational Neuroscience Nachwuchsgruppe, \textit{Nonlinear Dynamics and Control in Neuroscience}}} % Your research group's name - this is currently used in the title page 
-                {Research Group, Bernstein Center for Computational Neuroscience Nachwuchsgruppe, \textit{Nonlinear Dynamics and Control in Neuroscience}}}
+                {Bernstein Center for Computational Neuroscience Berlin, Nachwuchsgruppe, \textit{Nonlinear Dynamics and Control in Neuroscience}}} % Your research group's name - this is currently used in the title page 
+                {Bernstein Center for Computational Neuroscience Berlin, Nachwuchsgruppe, \textit{Nonlinear Dynamics and Control in Neuroscience}}}
 %-------------------------------------------------                
 \GROUP{\texorpdfstring{\href{Research Group Web Site URL Here (include http://)} % Your research group's URL
                 {RESEARCH GROUP NAME (IN BLOCK CAPITALS)}} % Your research group's name in capitals - this is not currently used anywhere in the template, cite it with \GROUPNAME if you want it
