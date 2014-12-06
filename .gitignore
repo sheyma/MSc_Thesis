@@ -1,17 +1,36 @@
+## subdirs
+/BrainNetViewer
+/data
+
+## generic files
 *~
 *.bak
 *.log
-*.aux
-*.pdf
-*.eps
-*.txt
-*.swp
-*.gz
-*.mat
-*.csv
 *.pyc
-*.xz
-*.jpg
+*.swp
+
+# doc files
 *.odt
+*.pdf
+
+# tex stuff
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.lof
+*.lot
+*.out
+*.toc
+
+# images
+*.eps
+*.jpg
+
+# data files
+*.csv
 *.dat
-/data
+*.mat
+*.txt
+*.gz
+*.xz
