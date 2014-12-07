@@ -212,7 +212,7 @@
                 {OTTO-VON-GUERICKE-UNIVERSIT\"{A}T MAGDEBURG}}
 %-------------------------------------------------                
 \department{\texorpdfstring{\href{http://neurosci.uni-magdeburg.de/} % Your department's URL
-                {Department of Integrative Neuroscience}} % Your department's name - used in the title page and abstract
+                {Department of Integrative Neuroscience, \\ Otto-von-Guericke-Universit\"{a}t Magdeburg }} % Your department's name - used in the title page and abstract
                 {Department of Integrative Neuroscience}}
 %-------------------------------------------------                
 \DEPARTMENT{\texorpdfstring{\href{http://neurosci.uni-magdeburg.de/} % Your department's URL
