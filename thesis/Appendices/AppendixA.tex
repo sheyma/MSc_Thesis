@@ -6,7 +6,15 @@
 
 \lhead{Appendix A. \emph{Automated Anatomical Labeling}} % This is for the header on each page - perhaps a shortened title
 
-\begin{table}[htbp]\tiny
+The human brain is segmented into $N=90$ cortical and sub-cortical regions according to the Tzourio-Mazoyer brain atlas with the automated anatomical labeling (AAL) template  \citep{TZO02}, such that regions with index $n=\{1,2,...,45\}$ lie on the right hemisphere, whereas $n=\{46,47,...,90\}$ are on the left. The fMRI-BOLD activity is measured from all voxels in an AAL region. FCM reveals the correlation of measured BOLD signal between pairwise combinations of AAL regions. The anatomical connectivity matrix (ACM) used in this project is obtained from the study of Iturria-Medina et al. \citep{ITU08} and it is based on the same $N=90$ AAL regions as in the FCM. Each value in ACM reveals the probability of any 2 AAL regions being connected via axonal fibers. Table A.1 describes AAL regions.
+  
+
+
+
+
+
+
+\begin{table}[htbp]\small
 \begin{center}
 \caption[Automated Anatomical Labeling for the Brain Regions]{Anatomical Description of Brain Nodes }
 \begin{tabular}{l | l | c}
