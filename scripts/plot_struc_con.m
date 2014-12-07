@@ -19,11 +19,10 @@
 % A_*_cc_and_degree_node.dat: # 1.node, 2.threshold, 3. clustering coef.
 %                                of each node, 4. degree of node
 
-% Network Density
-%random_G = ('0abdfc');
 random_G = ('0adghk');
-
 color='kmbcgr'; type = '-*o+*o';
+
+% Network Density
 input_name = 'acp_w_single_network_measures.dat';
 fig = figure(1);
 hold on
@@ -46,6 +45,7 @@ set(gcf, 'PaperPositionMode','auto')
 
 % Network Clustering Coefficient
 fig = figure(2);
+input_name = 'acp_w_single_network_measures.dat';
 hold on
 set(gca,'FontSize',45)
 %title('ACM')
@@ -55,7 +55,7 @@ for i =1:length(random_G)
     plot(A(:,1),A(:,4),strcat(color(i),type(i)),'LineWidth',3)    
 end
 %legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}')
-legend('R_{BG}', 'R_{ER}','R_{DES}','R_{PDD}','R_{CM}','R_{PR}','Location','north','Orientation','horizontal')
+legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','north','Orientation','horizontal')
 
 legend('boxoff')
 %set(legend,'FontSize',14)
@@ -66,8 +66,8 @@ set(fig, 'units', 'inches','position',[16 15 14 10])
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Clustering_Coefficient_Stru.eps','eps2c')
 
-
 % Average degree of network
+input_name = 'acp_w_single_network_measures.dat';
 figure(3);
 hold on
 set(gca,'FontSize',45)
@@ -84,11 +84,12 @@ legend('boxoff')
 xlabel('p')
 ylabel('<k>')
 hold off
-set(figure(3), 'units', 'inches','position',[16 15 15 10])
+set(figure(3), 'units', 'inches','position',[16 15 14 10]) 
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Degree_Average_Stru.eps','eps2c')
 
 % Number of Connected Components
+input_name = 'acp_w_single_network_measures.dat';
 figure(4);
 hold on
 set(gca,'FontSize',45)
@@ -97,17 +98,18 @@ for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
 end
-legend('R0', 'Ra','Rd','Rg','Rh','Rk','Location','NorthWest')
+legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','NorthWest')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('p')
-ylabel('Average Connected Components')
+ylabel('ACC')
 hold off
-set(figure(4), 'units', 'inches','position',[5 4 10 7]) 
+set(figure(4), 'units', 'inches','position',[16 15 14 10])
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Connected_Components_Average_Stru.eps','eps2c')
 
 % Shortest Pathway
+input_name = 'acp_w_single_network_measures.dat';
 figure(5);
 hold on
 set(gca,'FontSize',45)
@@ -116,13 +118,13 @@ for i =1:length(random_G)
     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
     plot(A(:,1),A(:,7),strcat(color(i),type(i)),'LineWidth',3) 
 end
-legend('R_{BG}', 'R_{ER}','R_{DES}','R_{PDD}','R_{CM}','R_{PR}','Location','north','Orientation','horizontal')
+legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','north','Orientation','horizontal')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('p')
 ylabel('d_{ij}')
 hold off
-set(figure(5), 'units', 'inches','position',[16 15 15 11]) 
+set(figure(5), 'units', 'inches','position',[16 15 14 10]) 
 axis([0 1 0 5])
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Shortest_Pathway_Stru.eps','eps2c')
@@ -137,14 +139,14 @@ for i = 1:length(random_G)
     A =load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
     plot(A(:,1),A(:,8),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('R_{BG}', 'R_{ER}','R_{DES}','R_{PDD}','R_{CM}','R_{PR}','Location','north','Orientation','horizontal')
+legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','north','Orientation','horizontal')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('p')
 ylabel('S')
 hold off
 axis([0 1 0 15])
-set(figure(6), 'units', 'inches','position',[16 15 15 10]) 
+set(figure(6), 'units', 'inches','position',[16 15 14 10])
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Small_Worldness_Stru.eps','eps2c')
 
@@ -158,13 +160,13 @@ for i = 1:length(random_G)
     A = load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('R_{BG}', 'R_{ER}','R_{DES}','R_{PDD}','R_{CM}','R_{PR}','Location','north','Orientation','horizontal')
+legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','north','Orientation','horizontal')
 
 legend('boxoff')
 xlabel('p')
 ylabel('T')
 hold off
-set(figure(7), 'units', 'inches','position',[16 15 15 10]) 
+set(figure(7), 'units', 'inches','position',[16 15 14 10]) 
 
 %set(figure(7), 'units', 'inches','position',[5 4 10 7]) 
 set(gcf, 'PaperPositionMode','auto')
@@ -181,13 +183,13 @@ for i = 1:length(random_G)
     A = load(a);
     plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('R_{BG}', 'R_{ER}','R_{DES}','R_{PDD}','R_{CM}','R_{PR}','Location','Southwest')
+legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','north','Orientation','horizontal')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('p')
 ylabel('E')
 hold off
-set(figure(8), 'units', 'inches','position',[16 15 16 12])
+set(figure(8), 'units', 'inches','position',[16 15 14 10])
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Global_Efficiency_Average_Stru.eps','eps2c')
 
@@ -201,13 +203,13 @@ for i = 1:length(random_G)
     A =load(strcat(input_name_4(1:6),'R',random_G(i),'_local_efficency_ave.dat'));
     plot(A(:,1),A(:,2),strcat(color(i),type(i)),'LineWidth',3)
 end
-legend('R_{BG}', 'R_{ER}','R_{DES}','R_{PDD}','R_{CM}','R_{PR}','Location','north','Orientation','horizontal')
+legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','north','Orientation','horizontal')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('p')
 ylabel('E_{loc}')
 hold off
-set(figure(9), 'units', 'inches','position',[16 15 15 10]) 
+set(figure(9), 'units', 'inches','position',[16 15 14 10])
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Local_Efficiency_Average_Stru.eps','eps2c')
 
@@ -221,14 +223,14 @@ for i = 1:length(random_G)
     A = load(strcat(in_name_5(1:6),'R',random_G(i),in_name_5(6:end)));
     plot(A(:,1),A(:,2),strcat(color(i),type(i)), 'Linewidth', 3)
 end
-legend('R_{BG}', 'R_{ER}','R_{DES}','R_{PDD}','R_{CM}','R_{PR}','Location','north','Orientation','horizontal')
+legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','north','Orientation','horizontal')
 %set(legend,'FontSize',14)
 legend('boxoff')
 xlabel('p')
 ylabel('A')
 hold off
 axis([0 1 -1 1])
-set(figure(10), 'units', 'inches','position',[16 15 15 10]) 
+set(figure(10), 'units', 'inches','position',[16 15 14 10])
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Assortativity_Stru.eps','eps2c')
 
@@ -547,12 +549,14 @@ for j = 1:length(random_G)
    
     a =strcat(in_name_8(1:6),'R',random_G(j),in_name_8(6:end));
     DD = load(a);
-    z_ = DD(:,3);
+    z_ = DD(:,4);
     z = zeros(size(DD,1)/100,90);
     
-    subplot(3,2,j)
-    set(gca, 'FontSize', 40)
+    linear_axes = subplot(3,2,j);
+    my_clim = [1e-2 1e1];
+    
     if random_G(j) =='0'
+        title('R_{BG}', 'fontsize', 25)
         for i = 1:size(DD,1)/90
             a = i-1;
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
@@ -560,15 +564,15 @@ for j = 1:length(random_G)
         n=(1:90);
         m=(0:0.01:0.99);
     
-        % Apply a logarithmic colorbar
-        log_plot = imagesc(n,m,log10(z));
-        colorbar_log([10^(0) 10^1])
-        h=colorbar; set(h,'fontsize',40);
+        linear_plot = imagesc( n,m,z);
+        colormap(jet(1024)), caxis(my_clim)
+        cbar = colorbar('peer', linear_axes, 'Yscale', 'log' ,'fontsize',10);
 
         set(gca,'YTick',[0 0.25 0.50 0.75 0.99])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
    
     elseif random_G(j) =='a'
+        title('R_{ER}', 'fontsize', 25)
         for i = 1:size(DD,1)/90
             a = i-1;
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
@@ -576,15 +580,15 @@ for j = 1:length(random_G)
         n=(1:90);
         m=(0:0.01:0.99);
     
-        % Apply a logarithmic colorbar
-        log_plot = imagesc(n,m,log10(z));
-        colorbar_log([10^(0) 10^1])
-        h=colorbar; set(h,'fontsize',40);
+        linear_plot = imagesc( n,m,z);
+        colormap(jet(1024)), caxis(my_clim)
+        cbar = colorbar('peer', linear_axes, 'Yscale', 'log' ,'fontsize',10);
 
         set(gca,'YTick',[0 0.25 0.50 0.75 0.99])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))
     
     elseif random_G(j) =='d'
+        title('R_{DES}', 'fontsize', 25)
         for i = 1:size(DD,1)/90
             a = i-1;
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
@@ -592,15 +596,15 @@ for j = 1:length(random_G)
         n=(1:90);
         m=(0.01:0.01:0.99);
     
-        % Apply a logarithmic colorbar
-        log_plot = imagesc(n,m,log10(z));
-        colorbar_log([10^(0) 10^1])
-        h=colorbar; set(h,'fontsize',40);
+        linear_plot = imagesc( n,m,z);
+        colormap(jet(1024)), caxis(my_clim)
+        cbar = colorbar('peer', linear_axes, 'Yscale', 'log' ,'fontsize',10);
 
         set(gca,'YTick',[0.01 0.25 0.50 0.75 0.99])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f')) 
         
    elseif random_G(j) == 'g'
+        title('R_{CM}', 'fontsize', 25)
         for i = 1:size(DD,1)/90
             a = i-1;
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
@@ -608,15 +612,15 @@ for j = 1:length(random_G)
         n=(1:90);
         m=(0:0.01:0.99);
     
-        % Apply a logarithmic colorbar
-        log_plot = imagesc(n,m,log10(z));
-        colorbar_log([10^(0) 10^1])
-        h=colorbar; set(h,'fontsize',40);
+        linear_plot = imagesc( n,m,z);
+        colormap(jet(1024)), caxis(my_clim)
+        cbar = colorbar('peer', linear_axes, 'Yscale', 'log' ,'fontsize',10);
 
         set(gca,'YTick',[0 0.25 0.50 0.75 0.99])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f')) 
     
    elseif random_G(j) == 'h'
+        title('R_{PDD}', 'fontsize', 25)
         for i = 1:size(DD,1)/90
             a = i-1;
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
@@ -624,18 +628,18 @@ for j = 1:length(random_G)
         n=(1:90);
         m=(0.05:0.01:0.99);
     
-        % Apply a logarithmic colorbar
-        log_plot = imagesc(n,m,log10(z));
-        colorbar_log([10^(0) 10^1])
-        h=colorbar; set(h,'fontsize',40);
+        linear_plot = imagesc( n,m,z);
+        colormap(jet(1024)), caxis(my_clim)
+        cbar = colorbar('peer', linear_axes, 'Yscale', 'log' ,'fontsize',10);
 
         set(gca,'YTick',[0.05 0.25 0.50 0.75 0.99])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f')) 
         
-        xlabel('Nodes')
+        xlabel('Nodes', 'fontsize', 25)
 
         
    elseif random_G(j) == 'k'
+        title('R_{PR}', 'fontsize', 25)
         for i = 1:size(DD,1)/90
             a = i-1;
            z(i,:) = z_( ( 90*a+1 :(90*a+90) ),:);
@@ -643,23 +647,21 @@ for j = 1:length(random_G)
         n=(1:90);
         m=(0.01:0.01:0.98);
     
-        % Apply a logarithmic colorbar
-        log_plot = imagesc(n,m,log10(z));
-        colorbar_log([10^(0) 10^1])
-        h=colorbar; set(h,'fontsize',40);
+        linear_plot = imagesc( n,m,z);
+        colormap(jet(1024)), caxis(my_clim)
+        cbar = colorbar('peer', linear_axes, 'Yscale', 'log' ,'fontsize',10);
 
         set(gca,'YTick',[0.01 0.25 0.50 0.75 0.98])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))   
-        xlabel('Nodes')
+        xlabel('Nodes', 'fontsize', 25)
         
     end   
    
-    set(gca,'XTick',15:15:90);
-    ylabel('p')
-    title(strcat('P(k), R', random_G(j)), 'FontSize',40)
-    
+    set(gca,'XTick',20:20:80);
+    ylabel('p', 'fontsize', 25)
+ 
 end
-set(figure(14), 'units', 'inches','position',[10 10 13 20]) 
+set(figure(14), 'units', 'inches','position',[20 10 18 20]) 
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Degree_Distribution_Stru.eps','eps2c')
 

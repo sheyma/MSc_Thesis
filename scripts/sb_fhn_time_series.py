@@ -145,8 +145,8 @@ fig = pl.figure(num=None, figsize=(15, 8), dpi=100, facecolor='w', edgecolor='k'
 
 pl.figure(1)
 #pl.subplot(2,1,1)
-pl.plot(sol_samp1['t'],sol_samp1['x2'], 'r',label='$x_1(t)$')
-pl.plot(sol_samp1['t'],sol_samp1['y2'], 'b',label='$y_1(t)$')
+pl.plot(sol_samp1['t'],sol_samp1['x3'], 'r',label='$x_1(t)$')
+pl.plot(sol_samp1['t'],sol_samp1['y3'], 'b',label='$y_1(t)$')
 #pl.plot(sol_adap['t'],sol_adap['x0'],'.r',linewidth=0.05)
 #pl.plot(sol_adap['t'][10573:10758],sol_adap['y0'][10573:10758],'.b',linewidth=0.05)
 pl.xlabel('t', fontsize = 25)
