@@ -155,16 +155,16 @@ Helge Schneider
 
 \abstract{\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
 
-Blood oxygen level dependent (BOLD) contrast imaging is one of the widely used fMRI techniques to map the brain activity at resting state, i.e. in the absence of any stimulus-driven task.  The BOLD fluctuations arising from changing neuronal activity at resting state have been observed to be complex but highly structured and robust \citep{BIS95, DAM06, BRE10b}. A well-explored BOLD response of the resting activity in the brain would potentially lead to easier diagnosis of neurodegenerative disorders such as Alzheimer's disease and Parkinson's disease. However, the underlying biophysical mechanism of the resting activity of the brain has not yet been completely uncovered. This master's project combines experimental and modeling approaches in order to investigate the temporal and structural dynamics of the brain at resting state. It is aimed to \textit{i)} demonstrate  how functionally correlated behavior among AAL regions emerge from  the structural connectivity, \textit{ii)} explore whether topological properties of brain network is distinguishable than that of its randomized networks. 
+Blood oxygen level dependent (BOLD) contrast imaging is one of the widely used fMRI techniques to map the brain activity at resting-state, i.e. in the absence of any stimulus-driven task.  The BOLD fluctuations arising from changing neuronal activity at resting-state have been observed to be complex but highly structured and robust \citep{BIS95, DAM06, BRE10b}. A well-explored BOLD response of in the brain would potentially lead to easier diagnosis of neurodegenerative disorders such as Alzheimer's disease and Parkinson's disease. However, the underlying biophysical mechanism of the resting-state activity of the brain has not yet been completely uncovered. This master's project combines experimental and modeling approaches in order to investigate the temporal and structural dynamics of the brain. It is aimed to \textit{i)} demonstrate  how functionally correlated behavior among cortical and subcortical brain regions emerge from  the structural connectivity, \textit{ii)} explore whether or not topological properties of brain network is distinguishable than that of its randomized networks. 
 
-The functional connectivity map derived from fMRI-BOLD measurement and anatomical connectivity map obtained from DW-MRI technique are main sources of the experimental data. Both empirical data structures are extracted by the measurements from the same cortical / sub-cortical brain regions, which are predefined by automated anatomical labeling (AAL) \citep{TZO02}. 
+The functional connectivity map derived from fMRI-BOLD measurement and anatomical connectivity map obtained from DW-MRI technique are main sources of the experimental data. Both empirical data structures are extracted by the measurements from the same cortical, sub-cortical brain regions, which are predefined by automated anatomical labeling (AAL) \citep{TZO02}. 
 
 \clearpage
 
-The modeling methods are drawn from nonlinear and network science. The temporal dynamics of  the neuronal activity is simulated with FitzHugh-Nagumo (FHN) oscillations  and the BOLD activity is inferred via the Baloon-Windkessel hemodynamic model \citep{VUK13, FRI00}. 
-The spatial dynamics of brain is analyzed by comparing brain graphs to the random networks. The brain graphs are constructed on the empirical imaging data. The random networks are generated with Erdos-Renyi-type and Configuration-Model algorithms applied to the brain graphs.  
+The modeling methods are drawn from nonlinear and network science. The temporal dynamics of  the neuronal activity is simulated with FitzHugh-Nagumo (FHN) network oscillations  and the BOLD activity is inferred via the Baloon-Windkessel hemodynamic model \citep{VUK13, FRI00}. 
+The spatial dynamics of brain is analyzed by comparing brain graphs to the random networks. The brain graphs are constructed on the empirical imaging data. The random networks are generated with Erdos-Renyi-type and configuration model algorithms applied to the brain graphs.  
 
-The major results are demonstrated in two main category; comparison of \textit{i)} simulated BOLD activity of anatomical connectivity map to the fMRI-BOLD data, \textit{ii)}  FHN modeled neuronal activity of brain graphs  to that of randomly generated networks.  Both comparisons are quantified with statistical methods on parameter spaces. The results indicate that, it is possible to explore such regions on parameter space, where \textit{i)} BOLD fluctuations are captured through structural brain connections \textit{ii)} network measures and temporal dynamics of brain graphs are different from that of random graphs.
+The major results are demonstrated in three main category; comparison of \textit{i)} simulated FHN network model time-series of brain networks to the empirical fMRI-BOLD and DW-MRI results, \textit{ii)} simulated BOLD fluctuations of anatomical connectivity map to the fMRI-BOLD data, \textit{iii)} the FHN  network modeled neuronal activity of brain graphs to that of randomly generated networks.  All comparisons are quantified with statistical methods on parameter spaces. The results indicate that, it is possible to explore such regions in the parameter spaces, where \textit{i)} BOLD fluctuations are captured through structural brain connections, \textit{ii)} network measures as well as temporal dynamics of brain graphs are different from that of random graphs.
 
 This project provides a deeper insight to the coupled relation between functional and anatomical brain connectivity: how the non-random dynamical process of brain's functional connectivity could be shaped by its structural topology.
 }
@@ -218,6 +218,7 @@ I would like to thank my supervisors, Dr. Philipp H\"{o}vel and Dr. Vesna Vuksan
 \textbf{BOLD} & \textbf{B}lood \textbf{O}xygen \textbf{L}evel \textbf{D}ependent \\
 \textbf{CBF} & \textbf{C}erebral \textbf{B}lood \textbf{F}low \\
 \textbf{CBV} & \textbf{C}erebral \textbf{B}lood \textbf{V}olume \\
+\textbf{CM} & \textbf{C}orrelation \textbf{M}atrix  \\
 \textbf{CMR$O_2$} & \textbf{C}erebral \textbf{M}etabolic \textbf{R}ate (of) \textbf{$O_2$} (consumption) \\
 \textbf{dHb} & \textbf{d}eoxygenated \textbf{H}emoglo\textbf{b}in \\
 \textbf{DW-MRI} & \textbf{D}iffusion \textbf{W}eighted \textbf{M}agnetic \textbf{R}esonance \textbf{I}maging \\
@@ -261,7 +262,8 @@ $N$  & total number of nodes & \\
 $L$  & total number of edges & \\
 $k_i$ & degree of node $i$ & \\
 $\langle k \rangle$ & average degree & \\
-$P(k)$ & degree distribution & \\
+$p(k)$ & degree distribution & \\
+$P(k)$ & cumulative degree distribution & \\
 $\kappa$ & network density & \\
 $C_i$ & clustering coefficient of node $i$ & \\
 $C$ & average clustering coefficient & \\ 
@@ -272,7 +274,9 @@ $E_{loc}$ & local efficiency & \\
 $S$ & small worldness & \\
 $A$ & assortativity & \\
 $a_{ij}$ & adjacency matrix element & $a_{ij} \,\, \in  \{0,1\}$ where $i,j=1,...,N$ \\
-$d_{ij}$ & distance matrix element & \\
+$d_{ij}$ & distance matrix element &  $i,j=1,...,N$ \\
+$rho$ & Pearson correlation coefficient &  \\
+$d(A,B)$ & Bhattacharya coeffient & $A,B$ are histograms\\
 \textbf{J} & Jacobian matrix & \\
 $\lambda$ & eigenvalue & \\
 $c$ &coupling strength & \\
@@ -287,7 +291,7 @@ $\tau_s$ & time constant of $s$ & \\
 $f_{in}$ & CBF (inflow) & \\ 
 $\tau_f$  & feedback time constant & \\  
 $V$    & CBV & \\    
-$\tau_0$  & mean transit time & \\    
+$\tau_0$  & mean transit time of $V$ & \\    
 $f_{out}$ & CBF (outflow) & \\ 
 $E_0$  & resting net $O_2$ extraction rate & \\ 
 $q$    &  dHB content in voxel & \\ 
