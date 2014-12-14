@@ -20,7 +20,9 @@
 *.dvi
 *.lof
 *.lot
+*.nav
 *.out
+*.snm
 *.toc
 
 # images
