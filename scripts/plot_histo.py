@@ -62,10 +62,10 @@ def plot_histog(corr_matrix, STRING):
 	# a normalized histogram is obtained
 	pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True, histtype='bar', align='mid')
 	pl.xlim(corr_min-0.01, corr_max+0.01)
-	pl.ylim(0.0, 17.0)	
+	pl.ylim(0.0, 9)	
 	pl.xticks(fontsize=20)
 	pl.yticks(fontsize=20)
-	pl.text(-0.5, 15.0, STRING,
+	pl.text(-0.5, 8, STRING,
 				horizontalalignment='center',
 				verticalalignment='center', fontsize=30)
 
@@ -126,8 +126,8 @@ def chi2_hists(HA, HB):
 
 local_path   = '../data/jobs_corr/'		
 
-O = load_matrix(local_path + 'A_aal_0_ADJ_thr_0.64_sigma=0.018_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
-A = load_matrix(local_path + 'A_aal_a_ADJ_thr_0.64_sigma=0.018_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
+O = load_matrix(local_path + 'A_aal_0_ADJ_thr_0.60_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
+A = load_matrix(local_path + 'A_aal_a_ADJ_thr_0.60_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
 #EMP = load_matrix('A_aal.txt')
 #D = load_matrix(local_path + 'A_aal_d_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
 #G = load_matrix(local_path + 'A_aal_g_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
@@ -310,8 +310,8 @@ datam_k 		= np.array(Ordered_R_k.values())
 # PLOTTING BEGINS ! 
 
 thr_array = np.arange(38, 86, 4)
-#a = np.array([0.42,  0.50, 0.58, 0.66, 0.74, 0.82])	
-a = np.array([0.55,  0.58, 0.61, 0.64])	
+a = np.array([0.42,  0.50, 0.58, 0.66, 0.74, 0.82])	
+#a = np.array([0.55,  0.58, 0.61, 0.64])	
 b = sig_array
 
 fig , ax = pl.subplots(figsize=(18, 20))
@@ -319,21 +319,21 @@ pl.subplots_adjust(left=0.11, right=0.95, top=0.98, bottom=0.06)
 
 
 pl.subplot(1,1,1)
-pl.imshow(np.transpose(datam_a), interpolation='nearest', vmin= 0.05, vmax = 0.8, cmap='jet', aspect='auto')
+pl.imshow(np.transpose(datam_a), interpolation='nearest', vmin= 0.05, vmax = 1.0, cmap='jet', aspect='auto')
 #pl.imshow(np.transpose(datam_a), interpolation='nearest', vmin= 0.05, vmax = 0.85, cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
-pl.ylabel('$c$', fontsize=50)
-pl.xlabel('r', fontsize = 50)
+pl.ylabel('$c$', fontsize=30)
+pl.xlabel('r', fontsize = 25)
 
-#pl.xticks(np.arange(1,len(thr_array),2),  a)
-pl.xticks(np.arange(1,len(thr_array),3),  a)
+pl.xticks(np.arange(1,len(thr_array),2),  a)
+#pl.xticks(np.arange(1,len(thr_array),3),  a)
 pl.yticks(np.arange(0,len(b),1),  b)
 
 for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(40)
-pl.xticks(fontsize = 40)
-pl.yticks(fontsize = 40)
+	t.set_fontsize(25)
+pl.xticks(fontsize = 25)
+pl.yticks(fontsize = 20)
 
 #pl.subplot(3,2,2)
 #pl.imshow(np.transpose(datam_d), interpolation='nearest', vmin= 0.05, vmax = 1.0, cmap='jet', aspect='auto')
@@ -403,5 +403,5 @@ pl.yticks(fontsize = 40)
 #pl.xticks(fontsize = 25)
 #pl.yticks(fontsize = 20)
 	
-pl.show()
+#pl.show()
 

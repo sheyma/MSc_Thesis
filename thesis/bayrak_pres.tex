@@ -50,12 +50,12 @@
      3. Randomization Methods \\
      4. Network Characterizations 
      5. Neuronal Activity Model \\
-		\textit{(FitzHugh-Nagumo Oscillators)}	 
+		\textit{(FitzHugh-Nagumo Oscillators  {\color{blue} [1, 2] } )  }	 
      \end{column}
      
      \begin{column}[T]{5cm} 
-	 6. BOLD Activity Model \\
-	 	\textit{(Balloon-Windkessel Hemodynamic Model)} \\
+	 6. BOLD Activity Model \\  
+	 	\textit{(Balloon-Windkessel Hemodynamic Model  {\color{blue} [3] })} \\
 	 7. Results \\
 	 8. Future Directions \\	
 	 9. Discussion     
@@ -98,12 +98,12 @@
 \begin{tabular}{ l | c | r }
   Abbreviation & Description & method \\
   \hline  \hline                     
-  $R_{BG}$ & the brain graph               & \textsc{NetworkX}  \\ \hline
-  $R_{ER}$ & Erd\H{o}s-R\'{e}nyi, G(N,L)   & \textsc{NetworkX} \\ \hline
-  $R_{DES}$ & double-edge-swap             & \textsc{NetworkX} \\ \hline
-  $R_{PDD}$ & preserved-degree-distribution& \textsc{BCT} 	 \\ \hline  
-  $R_{CM}$ & configuration model       	   & \textsc{NetworkX} \\ \hline
-  $R_{PR}$ & partial randomization         & \textsc{BCT} 	 \\ \hline  
+  $R_{BG}$ & the brain graph               & \textsc{NetworkX} {\color{blue} [4] }  \\ \hline
+  $R_{ER}$ & Erd\H{o}s-R\'{e}nyi, G(N,L)   & \textsc{NetworkX}{\color{blue} [4] } \\ \hline
+  $R_{DES}$ & double-edge-swap             & \textsc{NetworkX}{\color{blue} [4] } \\ \hline
+  $R_{PDD}$ & preserved-degree-distribution& \textsc{BCT} {\color{blue} [5] }	 \\ \hline  
+  $R_{CM}$ & configuration model       	   & \textsc{NetworkX}{\color{blue} [4] } \\ \hline
+  $R_{PR}$ & partial randomization         & \textsc{BCT}{\color{blue} [5] } 	 \\ \hline  
   \hline  
 \end{tabular}
 \label{table:Abbreviations of Randomization Methods}
@@ -115,7 +115,7 @@
 
 \begin{frame}{3.The Randomization Methods}
 
-\footnotesize{$R_{ER}$, Erd\H{o}s-R\'{e}nyi-Type Randomization, $G(N,L)$} 
+\footnotesize{$R_{ER}$, Erd\H{o}s-R\'{e}nyi-Type Randomization {\color{blue} [6]}, $G(N,L)$} 
 
 ($P$ : a binomial distribution for number of edges per node) 
 
@@ -169,7 +169,7 @@ $ L = \binom {N} {2}P $
 
 
 \begin{frame}{5.Neuronal Activity Model}
-\footnotesize{FitzHugh-Nagumo Oscillations, Network Dynamics }
+\footnotesize{FitzHugh-Nagumo Oscillations, Network Dynamics {\color{blue} [7,8]}}
 
 \begin{subequations}
  \begin{align}\dot{x_i} = \tau \left( y_i + \gamma x_i - \frac{x_i^3}{3} \right) -c \sum_{j=1}^N a_{ij}x_j(t - \Delta t_{ij}) +Dn_x \label{eqn: frobenius 3}\\  \dot{y_i} = -\frac{1}{\tau} (x_i - \alpha + b y_i  ) +Dn_y \label{eqn: frobenius 18}  , \end{align} 
@@ -182,7 +182,7 @@ $ L = \binom {N} {2}P $
 \end{frame}
 
 \begin{frame}{6.BOLD Activity Model}
-\footnotesize{Balloon-Windkessel Hemodynamic Model}
+\footnotesize{Balloon-Windkessel Hemodynamic Model [3]}
 
 \centering
 \includegraphics[width=0.7\textwidth]{Figures/BOLD_Hemo.eps}
@@ -243,10 +243,12 @@ Parameter Analysis
 \footnotesize{Comparing BOLD Simulations of Anatomical Brain Graphs to fMRI-BOLD Data} 
 \break
 	\centering
+	\break
+	\footnotesize{Simulated CM ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Empirical CM }
 	 \includegraphics[width=0.49\textwidth]{Figures/cor_BOLD_ACM_sim.eps} 
    	 \includegraphics[width=0.49\textwidth]{Figures/cor_FCM_exp.eps} 
 
-$c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
+$c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~ \rho_{e,s}=0.22$
 
 \end{frame}
 
@@ -280,17 +282,66 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 
 
 
+\begin{frame}{8.Future Directions}
+\begin{itemize}
+\item ... low coupling strengths ?
+\item ... comparison of temporal BOLD activities of $R_{BG}$ and $R_{ER}$ ?
+\end{itemize}
+\end{frame}
 
 
 
 
 \begin{frame}{Thanks}
+  \begin{columns}[T] % contents are top vertically aligned
+     \begin{column}[T]{4cm} % each column can also be its own environment
+     \centering
+	\includegraphics[width=0.35\textwidth]{Figures/philipphoevelimage.png}\\
+     Dr. Philipp H\"{o}vel$^1$ \\
+     \break
+     \end{column}
+     
+	     
+     
+     \begin{column}[T]{4cm}   
+     \centering
+    \includegraphics[width=0.5\textwidth]{Figures/vesna.jpg} \\
+     Dr. Vesna Vuksanovi\'c$^1$ \\
+     \end{column}
+
+
+     \begin{column}[T]{4cm}   
+     \centering
+	\includegraphics[width=0.4\textwidth]{Figures/braun.jpg} \\
+	Prof. Jochen Braun$^2$ \\
+     \end{column}
+\break
+  
+  \end{columns}
+\break
+
+\vspace{1in}
+
+\footnotesize{[1] TU Berlin, Institut f\"{u}r Theoretische Physik, BCCN-Nachwuchsgruppe: Nonlinear Dynamics and Control in Neuroscience \break
+[2] OVGU Magdeburg, Institute of Biology, Faculty of Science, Cognitive Biology Group}
 
 \end{frame}
 
 
 
 \begin{frame}{References}
+\begin{itemize}\footnotesize
+\item[1] Nagumo, J.  and Arimoto, S.  and Yoshizawa., S. 1962. An active pulse transmission line simulating nerve axon, \textit{ Proc. IRE}, 50:2061--2070
+\item[2] FitzHugh, R. 1961.Impulses and physiological states in theoretical models of nerve membrane, \textit{Biophys. J.}, 1:445--466
+\item[3] Friston, K.  and Mechelli, A. and Turner, R. and Price, C. J. 2000. Nonlinear responses in fMRI: The balloon model, Volterra kernels, and other hemodynamics, \textit{NeuroImage},  12:466--477
+\item[4] Hagberg, A. A. and Schult, D. A. and Swart, P. J. 2008. Exploring network structure, dynamics, and function using NetworkX, \textit{Proceedings of the 7th Python in Science Conference (SciPy2008)}
+\item[5] Rubinov, M. and Sporns, O., 2010. Complex network measures of brain connectivity: uses and interpretations, \textit{Neuroimage}, 52:1059--1069
+\item[6] Erd\H{o}s, P. and R\'{e}nyi, A. 1959. On Random Graphs. I, \textit{Publicationes Mathematicae}, 6:290–297
+\item[7] Vuksanovi\'{c}, V.  and H{\"o}vel, P. 2014. Large-scale neural network model for functional networks of the human cortex \textit{Selforganization in Complex Systems: The Past, Present, and Future of Synergetics, Proc. of the Int. Symp.} 
+\item[8] Ghosh, A.  and Rho, Y. and McIntosh, A. R. and K{\"o}tter, R. and Jirsa, V. K. 2008. Cortical network dynamics with time delays reveals functional connectivity in the resting brain, 2:115--120
+
+\end{itemize}
+
 
 \end{frame}
 
@@ -300,9 +351,22 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 \end{frame}
 
 
+\begin{frame}{Appendix}
+Research Proposals on the Schema...
+\footnotesize{\textit{i)How does functionally correlated behavior among cortical and subcortical brain regions emerge from the structural connectivity? }} 
+\break
+\break
+\footnotesize{\textit{ii)Does the topological properties as well as temporal dynamics of the brain graph differ from that of random graphs? }}
+
+\centering
+\includegraphics[width=0.6\textwidth]{Figures/presi_1.eps} 
+
+\end{frame}
 
 
-\begin{frame}{3.The Randomization Methods}
+\begin{frame}{Appendix}
+
+Randomization Methods...
 
 \footnotesize{Erd\H{o}s-R\'{e}nyi-Type Randomization, $G(N,L)$} 
 
@@ -319,8 +383,8 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 
 
 
-\begin{frame}{3.The Randomization Methods}
-
+\begin{frame}{Appendix}
+Randomization Methods...
 \footnotesize{Preserved-Degree-Distribution Type Randomization, $p(k)$} 
 	\centering	
 	\includegraphics[width=0.8\textwidth]{Figures/G_degree_dist_1.eps}  
@@ -331,7 +395,8 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 
 
 
-\begin{frame}{3.The Randomization Methods}
+\begin{frame}{Appendix}
+Randomization Methods...
 
 \footnotesize{Configuration Model Randomization} 
 	\centering	
@@ -348,7 +413,8 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 
 
 
-\begin{frame}{4.Network Characterizations}
+\begin{frame}{Appendix}
+Network Characterizations...
 
 {Network Density, $\kappa=\frac{2L}{N(N-1)}$} 
 \break
@@ -365,7 +431,8 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 
 
 
-\begin{frame}{4.Network Characterizations}
+\begin{frame}{Appendix}
+Network Characterizations...
 
 {Transitivity,  $T = \frac{2\sum\limits_{i \epsilon N}  t_i}{\sum\limits_{i \epsilon N}k_i (k_i - 1)}$ } 
 \break
@@ -379,11 +446,25 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 \end{frame}
 
 
+\begin{frame}{Appendix}
+Network Characterizations...
+
+{Average number of connected components } 
+\break
+\break
+\break
+\footnotesize{FCM related graphs ~~~~~~~~~~~~~ ACM related graphs}
+	\centering	
+	 \includegraphics[width=0.49\textwidth]{Figures/connec_compo_FCM.eps}
+	 \includegraphics[width=0.49\textwidth]{Figures/connec_compo_ACM.eps}
+	
+\end{frame}
 
 
-\begin{frame}{5.Neuronal Activity Model}
-\footnotesize{FitzHugh-Nagumo Oscillations, Local Dynamics with Gaussian White Noise Source }
 
+
+\begin{frame}{Appendix}
+\footnotesize{FitzHugh-Nagumo Oscillations, Local Dynamics with Gaussian White Noise Source (noise induced oscillations, system in excitable regime) }
 \begin{subequations}
 \begin{align}\dot{x} = \tau \left( y + \gamma x - \frac{x^3}{3} \right) + Dn_x  \label{eqn: frobenius 1}\\  \dot{y} = -\frac{1}{\tau} (x - \alpha + b y ) + Dn_y , \label{eqn: frobenius 2 }   \end{align} 
 \end{subequations}
@@ -401,19 +482,11 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 
 
 
-\begin{frame}{Research Proposals}
-\footnotesize{\textit{i)How does functionally correlated behavior among cortical and subcortical brain regions emerge from the structural connectivity? }} 
-\break
-\break
-\footnotesize{\textit{ii)Does the topological properties as well as temporal dynamics of the brain graph differ from that of random graphs? }}
-
-\centering
-\includegraphics[width=0.6\textwidth]{Figures/presi_1.eps} 
-
-\end{frame}
 
 
-\begin{frame}{7.Results}
+
+\begin{frame}{Appendix}
+Results...
 \footnotesize{Neuronal Activity Simulations of FCM Related Brain Graphs to fMRI-BOLD Data} 
 \break
 \break
@@ -427,7 +500,8 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 
 
 
-\begin{frame}{7.Results}
+\begin{frame}{Appendix}
+Results...\break
 \footnotesize{Neuronal Activity Simulations of ACM Related Brain Graphs to DW-MRI Data} 
 \break
 \break
@@ -439,7 +513,8 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 \end{frame}
 
 
-\begin{frame}{7.Results}
+\begin{frame}{Appendix}
+Results... \break
 \footnotesize{Neuronal Activity Simulations of ACM Related Brain Graphs to DW-MRI Data} 
 	\centering
 	 \includegraphics[width=0.35\textwidth]{Figures/cor_ACM_sim.eps}  
@@ -458,7 +533,8 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 
 
 
-\begin{frame}{7.Results}
+\begin{frame}{Appendix}
+Results...\break
 \footnotesize{Comparing BOLD Simulations of Anatomical Brain Graphs to fMRI-BOLD Data} 
 \break
 \break
@@ -473,7 +549,8 @@ $c=0.03, ~~~ v=3 m/s, ~~~ p=0.54, ~~~~, \rho_{e,s}=0.22$
 
 
 
-\begin{frame}{7.Results}
+\begin{frame}{Appendix}
+Statistical Method... \break
 \footnotesize{How to Compare the Modeled Temporal Dynamics of Brain Graphs to that of the Random Networks ? }
 
 \begin{itemize}
@@ -490,9 +567,50 @@ d(H_b, H_r) = \sqrt{1- \dfrac{1}{ \sqrt{\bar{H_r} \bar{H_b} N^2}} \sum_{i} \sqrt
 \end{frame}
 
 
+\begin{frame}{Appendix}
 
 
-\begin{frame}{7.Results}
+  \begin{columns}[T] % contents are top vertically aligned
+     \begin{column}[T]{8cm} % each column can also be its own environment
+ 	
+ 	\includegraphics[width=4cm]{Figures/cor_FCM_sim.eps} 
+    \includegraphics[width=4cm]{Figures/cor_FCM_exp.eps} \\
+    \includegraphics[width=8cm]{Figures/discuss_1.eps}
+   
+ 
+ 
+      \end{column}
+     
+     \begin{column}[T]{4cm} 
+	  $\rho_{e,s}=0.43$ \\    
+	  FitzHugh-Nagumo network model, \\
+	  simulation parameters : \\
+      $c=0.2$ \\
+      $v=7$ m/s \\
+      Brain Graph Topology : \\
+      $r=0.60$ \\ 
+	  \break
+	  \break
+	  Bhattacharya Coeff.: \\
+	  $d(H_b, H_r) \approx 0.50$  
+     \end{column}
+  
+  \end{columns}
+
+
+
+
+ 
+
+
+
+
+\end{frame}
+
+
+
+\begin{frame}{Appendix}
+Results...
 \footnotesize{Comparison of ACM Related Brain Graph to the Random Networks}
 
 \includegraphics[width=0.78\textwidth]{Figures/Random_ACM_PA.eps}
@@ -502,7 +620,8 @@ d(H_b, H_r) = \sqrt{1- \dfrac{1}{ \sqrt{\bar{H_r} \bar{H_b} N^2}} \sum_{i} \sqrt
 
 
 
-\begin{frame}{7.Results}
+\begin{frame}{Appendix}
+Results...
 \footnotesize{Comparison of ACM Related Brain Graph to the Random Networks}
 
 \includegraphics[width=0.8\textwidth, height = 7cm]{Figures/Random_ACM_histo.eps}
@@ -510,11 +629,15 @@ d(H_b, H_r) = \sqrt{1- \dfrac{1}{ \sqrt{\bar{H_r} \bar{H_b} N^2}} \sum_{i} \sqrt
 \end{frame}
 
 
-\begin{frame}{8.Future Directions}
-bla
+
+
+\begin{frame}{Appendix}
+Distance Matrices... $\Delta t_{ij} = d_{ij} / v$
+ \centering
+	 \includegraphics[width=0.49\textwidth]{Figures/distance_FCM.eps}
+	\includegraphics[width=0.49\textwidth]{Figures/distance_ACM.eps}		
+
 \end{frame}
-
-
 
 
 \end{document}
