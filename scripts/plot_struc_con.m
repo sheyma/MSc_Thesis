@@ -549,11 +549,11 @@ for j = 1:length(random_G)
    
     a =strcat(in_name_8(1:6),'R',random_G(j),in_name_8(6:end));
     DD = load(a);
-    z_ = DD(:,4);
+    z_ = DD(:,3);
     z = zeros(size(DD,1)/100,90);
     
     linear_axes = subplot(3,2,j);
-    my_clim = [1e-2 1e1];
+    my_clim = [1 1e1];
     
     if random_G(j) =='0'
         title('R_{BG}', 'fontsize', 25)
@@ -635,7 +635,7 @@ for j = 1:length(random_G)
         set(gca,'YTick',[0.05 0.25 0.50 0.75 0.99])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f')) 
         
-        xlabel('Nodes', 'fontsize', 25)
+        xlabel('k', 'fontsize', 25)
 
         
    elseif random_G(j) == 'k'
@@ -653,12 +653,13 @@ for j = 1:length(random_G)
 
         set(gca,'YTick',[0.01 0.25 0.50 0.75 0.98])
         set(gca, 'YTickLabel', num2str(get(gca,'YTick')','%.2f'))   
-        xlabel('Nodes', 'fontsize', 25)
+        xlabel('k', 'fontsize', 25)
         
     end   
    
     set(gca,'XTick',20:20:80);
     ylabel('p', 'fontsize', 25)
+
  
 end
 set(figure(14), 'units', 'inches','position',[20 10 18 20]) 
@@ -670,7 +671,7 @@ set(gcf, 'PaperPositionMode','auto')
 % Clustering Coeficient of Nodes
 in_name_8 = 'acp_w_cc_and_degree_node.dat';
 figure(15);
-title('ACM')
+%title('ACM')
 for j = 1:length(random_G)
    
     a =strcat(in_name_8(1:6),'R',random_G(j),in_name_8(6:end));
@@ -744,13 +745,35 @@ for j = 1:length(random_G)
         
     end    
         
-    set(gca,'XTick',15:15:90);
-    xlabel('Nodes')
-    ylabel('p')
-    title(strcat('C_{i}, R', random_G(j)), 'FontSize',20)
+    
+   set(gca,'XTick',20:20:80);
+   ylabel('p', 'fontsize', 25)
+  
+   if random_G(j) == '0'
+        title('R_{BG}', 'fontsize', 25)
+   
+   elseif random_G(j) == 'a'
+       title('R_{ER}', 'fontsize', 25)
+   
+   elseif random_G(j) == 'd'
+       title('R_{DES}', 'fontsize', 25)
+
+   elseif random_G(j) == 'g'
+       title('R_{CM}', 'fontsize', 25)
+
+   elseif random_G(j) == 'h'
+       title('R_{PDD}', 'fontsize', 25)
+
+   elseif random_G(j) == 'k'
+       title('R_{PR}', 'fontsize', 25)    
+   end
+
+   set(gca, 'fontsize', 25)   
+       
+    
     
 end
-set(figure(15), 'units', 'inches','position',[10 10 13 20]) 
+set(figure(15), 'units', 'inches','position',[20 10 18 20])
 set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Clustering_Coefficient_Node_Stru.eps','eps2c')
 
