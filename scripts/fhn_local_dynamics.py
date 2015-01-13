@@ -111,7 +111,8 @@ dde.hist_from_funcs( {'x': lambda t : -0.05, 'y': lambda t: -0.75 })
 dde.run()
 
 # user defined sampling rate
-dt = float(sys.argv[1])
+#dt = float(sys.argv[1])
+dt = 0.01	
 # sampled solution
 sol_sample = dde.sample(0,tfinal,dt)
 
