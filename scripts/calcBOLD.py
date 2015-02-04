@@ -275,8 +275,6 @@ params.k1 = 7.0 * params.Eo
 params.k2 = 2.0
 params.k3 = 2.0 * params.Eo - 0.2
 
-t_start = 0;
-t_range = 10000;
 ds = 2.3  
 dtt = 0.001
 cut_percent = float(2) / 100
@@ -293,50 +291,18 @@ out_basename    = sb.get_dat_basename(input_name)
 
 print "T : " , T, " [seconds]"
 
-Norm_timeseries   = normalize_timeseries(timeseries)
+N_timeseries   = normalize_timeseries(timeseries)
 
-#pl.figure(1)
-#plot_timeseries(t_start , t_range , timeseries)
-#pl.figure(2)
-#pl.plot(N_timeseries)
-#pl.figure(3)
-#plot_timeseries(t_start , t_range , N_timeseries)
+N_bold_signal   =   calc_bold(N_timeseries, T, out_basename)
 
-#bold_signal     =   calc_bold(timeseries, T, out_basename)
+t_start = 0;
+t_range = T*1000;
 
-Norm_bold_signal   =   calc_bold(Norm_timeseries, T, out_basename)
-
-#pl.figure(5)
-#pl.plot(bold_signal[1])
-#plot_bold_signal(T , bold_signal)
-#pl.figure(6)
-#pl.plot(bold_signal_N[1])
-#plot_bold_signal(T , Norm_bold_signal)
-
+pl.figure(1)
+plot_timeseries(t_start , t_range , timeseries)
+pl.figure(2)
+plot_timeseries(t_start , t_range , N_timeseries)
+pl.figure(3)
+plot_bold_signal(T , N_bold_signal)
 
 pl.show()
-### THIS NEEDS TO BE CHANGED !!! ################## 
-#timeseries      =   np.loadtxt(input_name)
-#T = 550.0
-
-#bold_signal     =   calc_bold(timeseries, T, out_basename)
-
-#signal_image    =   plot_bold_signal(T , bold_signal)
-
-#bold_filt		=   filter_bold(bold_signal, out_basename)
-#bold_filt       =   np.loadtxt('bold_filt_matlab.dat')
-#filt_image		=   plot_bold_filt(bold_filt)
-
-#bold_down =  down_sample(bold_filt , ds, dtt, out_basename)
-
-#bold_cut = keep_frames(bold_down ,cut_percent, out_basename)
-
-#pl.show()
-
-#######################################
-
-#bold_euler(T , R[1, :], iparams, x_init)
-
-#r_t = R[0,:]
-
-#bold_ode(T, R[1,:], iparams, x_init)
