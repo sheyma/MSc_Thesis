@@ -174,8 +174,6 @@ def plot_bold_signal(T, bold_input):
 	time = np.linspace(0, T, len(bold_input[0]) )	
 	
 	for key in bold_input.keys():
-		print "KEY " , key
-		print "bold_input[key]", bold_input[key]
 		pl.plot( time , bold_input[key])
 	pl.xlabel('t [s]')
 	pl.ylabel('$bold signal,  u_i(t)$')
