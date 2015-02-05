@@ -167,10 +167,8 @@ image = plot_corr_diag(corr_matrix, out_basename)
 # real node index : add 1!
 [i, j, k , l ]  = 	    node_index(corr_matrix)
 # BOLD activity of the nodes correlating the best
-pl.figure(2)
 plot_bold_signal(data_matrix, i,j)
 # BOLD activity of the nodes correlating the worst
-pl.figure(3)
 plot_bold_signal(data_matrix, k,l)
 pl.show()
 
