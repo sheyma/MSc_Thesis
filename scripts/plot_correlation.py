@@ -173,13 +173,13 @@ for THR in thr_array :
 	local_path = '../data/jobs_corr/'
 	#local_path = '../data/jobs_corr_bold/'
 	
-	for VEL in vel_array :
+	#for VEL in vel_array :
 		
-		input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
+		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
 		
-	#for SIG in sig_array :
+	for SIG in sig_array :
 		
-		#input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
+		input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
 		
 		print input_name
 	
@@ -207,31 +207,32 @@ datam 		= np.array(Ordered_R.values())
 
 # PLOTTING BEGINS ! 
 
-fig , ax = pl.subplots(figsize=(18, 19))
+fig , ax = pl.subplots(figsize=(20, 15))
 pl.subplots_adjust(left=0.15, right=1.0, top=0.98, bottom=0.12)
 pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
-##PLOT PA OVER SIGMA
-#b = sig_array
-#pl.ylabel('$c$', fontsize=65)
+#PLOT PA OVER SIGMA
+b = sig_array
+pl.ylabel('$c$', fontsize=65)
 
-#PLOT PA OVER VELOCITY
-b = vel_array/10
-pl.ylabel('$v$ [m/s]', fontsize=65)
+##PLOT PA OVER VELOCITY
+#b = vel_array/10
+#pl.ylabel('$v$ [m/s]', fontsize=65)
 
 
 # acp_w_0 thr range, XTICKS: 
 a = np.array([0.22, 0.34, 0.46, 0.58, 0.70, 0.82])
 pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
+pl.xlabel('$p$', fontsize = 65)
 
 ## A_aal_0 thr range, XTICKS : 
 #a = np.array([0.55,  0.58, 0.61, 0.64])	
 #pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
+#pl.xlabel('$r$', fontsize = 65)
 
 pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-#pl.xlabel('$r$', fontsize = 65)
-pl.xlabel('$p$', fontsize = 65)
+
 for t in cbar.ax.get_yticklabels():
 	t.set_fontsize(50)
 pl.xticks(fontsize = 50)
