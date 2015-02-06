@@ -152,10 +152,10 @@ mtx_empiri		=		load_matrix(input_empiri)
 
 # loading correl. mtx. of fhn time series (output of correlation_fhn.py)
 #name = 'A_aal_0_ADJ_thr_0.54_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat'
-name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
+#name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
 
 #name = 'A_aal_0_ADJ_thr_0.60_sigma=0.1_D=0.05_v=70.0_tmax=45000_NORM_BOLD_signal_corr.dat'
-#name = 'acp_w_0_ADJ_thr_0.60_sigma=0.9_D=0.05_v=30.0_tmax=45000_NORM_BOLD_signal_corr.dat'
+name = 'acp_w_0_ADJ_thr_0.60_sigma=0.1_D=0.05_v=30.0_tmax=45000_NORM_BOLD_signal_corr.dat'
 
 #thr_array = np.array([54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66])	
 #vel_array = np.array([150, 140, 130, 120, 110, 90, 80, 70, 60, 50, 40, 30])
@@ -163,15 +163,16 @@ name = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
 
 thr_array = np.arange(18, 86, 4)
 vel_array = np.array([110, 90, 80, 70, 60, 50, 40, 30, 20])
-sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.03, 0.02, 0.018 ])
+#sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.03, 0.02, 0.018 ])
+sig_array = np.array([0.1, 0.050, 0.045, 0.040, 0.030, 0.025, 0.020, 0.018, 0.015, 0.010, 0.005 ])
 
 R_thr =  {}
 
 for THR in thr_array :
 	R_temp = []
 	
-	local_path = '../data/jobs_corr/'
-	#local_path = '../data/jobs_corr_bold/'
+	#local_path = '../data/jobs_corr/'
+	local_path = '../data/jobs_corr_bold/'
 	
 	#for VEL in vel_array :
 		
