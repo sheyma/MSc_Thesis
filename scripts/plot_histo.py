@@ -62,7 +62,7 @@ def plot_histog(corr_matrix, STRING):
 	# a normalized histogram is obtained
 	pl.hist(corr_flat, bins=bin_nu, range=[corr_min, corr_max], normed =True, histtype='bar', align='mid')
 	pl.xlim(corr_min-0.01, corr_max+0.01)
-	pl.ylim(0.0, 9)	
+	pl.ylim(0.0, 15)	
 	pl.xticks(fontsize=20)
 	pl.yticks(fontsize=20)
 	pl.text(-0.5, 8, STRING,
@@ -122,59 +122,6 @@ def chi2_hists(HA, HB):
 		squsum = squsum + tmp1 / float(tmp2)
 	return squsum	
 
-#O = load_matrix(local_path + 'A_aal_0_ADJ_thr_0.60_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
-#A = load_matrix(local_path + 'A_aal_a_ADJ_thr_0.60_sigma=0.2_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
-#EMP = load_matrix('A_aal.txt')
-#D = load_matrix(local_path + 'A_aal_d_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
-#G = load_matrix(local_path + 'A_aal_g_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
-#H = load_matrix(local_path + 'A_aal_h_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
-#K = load_matrix(local_path + 'A_aal_k_ADJ_thr_0.61_sigma=0.1_D=0.05_v=70.0_tmax=45000_FHN_corr.dat')
-
-#O = load_matrix(local_path + 'acp_w_0_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
-#A = load_matrix(local_path + 'acp_w_a_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
-#D = load_matrix(local_path + 'acp_w_d_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
-#G = load_matrix(local_path + 'acp_w_g_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
-#H = load_matrix(local_path + 'acp_w_h_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
-#K = load_matrix(local_path + 'acp_w_k_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
-
-#w0 = load_matrix(local_path + 'acp_w_0_ADJ_thr_0.42_sigma=0.5_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
-
-##fig , axes = pl.subplots(5,2,sharex=True,sharey=True,figsize=(12,15))
-#fig, ax = pl.subplots(nrows=3, ncols=3, sharex=True, sharey=True, figsize=(14,7))
-##pl.subplots_adjust(left=0.11, right=0.95, top=0.98, bottom=0.06)
-##fig.text(0.5, 0.02, '$\\rho$', ha='center', fontsize=30 )
-#fig.text(0.04, 0.5, 'number of pair of nodes', va='center', rotation='vertical',fontsize=25)
-
-#pl.subplot(1,2,1)
-#plot_histog(O, '$R_{BG}$')
-#pl.xlabel('$\\rho$', fontsize=30 )
-#pl.subplot(1,2,2)
-#plot_histog(A, '$R_{ER}$')
-#pl.xlabel('$\\rho$', fontsize=30 )
-##plot_histog(EMP, '$emp$')
-
-#pl.subplot(3,2,3)
-#plot_histog(D, '$R_{DES}$')
-#pl.subplot(3,2,4)
-#plot_histog(G, '$R_{CM}$')
-#pl.subplot(3,2,5)
-#plot_histog(H, '$R_{PDD}$')
-#pl.subplot(3,2,6)
-#plot_histog(K, '$R_{PR}$')
-
-#fig, ax = pl.subplots(figsize=(12,6))
-#pl.subplot(1,2,1)
-#pl.xlabel('$\\rho$', fontsize = 30)
-#pl.ylabel('number of pair of nodes', fontsize = 25)
-#plot_histog(O, '$R_{BG}$')
-#pl.subplot(1,2,2)
-#pl.xlabel('$\\rho$', fontsize = 30)
-##pl.ylabel('number of pair of nodes', fontsize = 25)
-#plot_histog(w0, '$R_{BG}$')
-
-#pl.show()
-
-
 # comparing histohrams with Bhatta tool in parameter space
 def compare_hist(name_A, name_B, pathway, THR, SIG):
 	R_thr = {}
@@ -217,6 +164,8 @@ sig_array = np.array([1.0, 0.8, 0.5 , 0.2, 0.1,  0.050, 0.045, 0.040, 0.035, 0.0
 datam_a = compare_hist(name_E, name_Ra, local_path, thr_array, sig_array)
 
 # PLOTTING BEGINS ! 
+
+# Parameter Space Plot 
 fig , ax = pl.subplots(figsize=(16, 18))
 pl.subplots_adjust(left=0.11, right=0.95, top=0.98, bottom=0.1)
 
@@ -239,4 +188,21 @@ for t in cbar.ax.get_yticklabels():
 	t.set_fontsize(25)
 pl.xticks(fontsize = 25)
 pl.yticks(fontsize = 20)
+#pl.show()
+
+# Single Histogram Plot
+O = load_matrix(local_path + 'acp_w_0_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
+A = load_matrix(local_path + 'acp_w_a_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
+
+fig, ax = pl.subplots(nrows=3, ncols=3, sharex=True, sharey=True, figsize=(14,7))
+pl.subplots_adjust(left=0.11, right=0.95, top=0.95, bottom=0.15)
+fig.text(0.04, 0.5, 'number of pair of nodes', va='center', rotation='vertical',fontsize=25)
+pl.subplot(1,2,1)
+plot_histog(O, '$R_{BG}$')
+pl.xlabel('$\\rho$', fontsize=30 )
+pl.subplot(1,2,2)
+plot_histog(A, '$R_{ER}$')
+pl.xlabel('$\\rho$', fontsize=30 )
+
 pl.show()
+
