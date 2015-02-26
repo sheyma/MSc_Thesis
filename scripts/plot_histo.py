@@ -158,23 +158,21 @@ local_path   = '../data/jobs_corr/'
 name_E  = 'acp_w_0_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
 name_Ra = 'acp_w_a_ADJ_thr_0.54_sigma=0.3_D=0.05_v=60.0_tmax=45000_FHN_corr.dat'
 thr_array = np.arange(18, 86, 4)
-sig_array = np.array([1.0, 0.8, 0.5 , 0.2, 0.1,  0.050, 0.045, 0.040, 0.035, 0.030, 0.025, 0.020, 0.018, 0.015, 0.010, 0.005 ])
+sig_array = np.array([1.0, 0.8, 0.5 , 0.2, 0.1,  0.050, 0.045, 0.040, 0.035, 0.030, 0.025, 0.020,  0.015, 0.010, 0.005 ])
 #vel_array = np.array([20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
 
 datam_a = compare_hist(name_E, name_Ra, local_path, thr_array, sig_array)
 
-# PLOTTING BEGINS ! 
-
 # Parameter Space Plot 
-fig , ax = pl.subplots(figsize=(16, 18))
-pl.subplots_adjust(left=0.11, right=0.95, top=0.98, bottom=0.1)
+fig , ax = pl.subplots(figsize=(18,15))
+pl.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
 
 pl.subplot(1,1,1)
 pl.imshow(np.transpose(datam_a), interpolation='nearest', vmin= 0.05, vmax = 1.0, cmap='jet', aspect='auto')
 cbar = pl.colorbar()
 
-pl.ylabel('$c$', fontsize=30)
-pl.xlabel('p', fontsize = 25)
+pl.ylabel('$c$', fontsize=65)
+pl.xlabel('$p$', fontsize = 65)
 
 a = np.array([0.22, 0.34, 0.46, 0.58, 0.70, 0.82])	
 b = sig_array
@@ -185,24 +183,29 @@ pl.xticks(np.arange(1,len(thr_array), separ_xthick),  a)
 pl.yticks(np.arange(0,len(b),1),  b)
 
 for t in cbar.ax.get_yticklabels():
-	t.set_fontsize(25)
-pl.xticks(fontsize = 25)
-pl.yticks(fontsize = 20)
+	t.set_fontsize(50)
+pl.xticks(fontsize = 50)
+pl.yticks(fontsize = 50)
+ax.tick_params('both', length=12, width=5, which='major')
 #pl.show()
 
 # Single Histogram Plot
 O = load_matrix(local_path + 'acp_w_0_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
 A = load_matrix(local_path + 'acp_w_a_ADJ_thr_0.58_sigma=0.02_D=0.05_v=60.0_tmax=45000_FHN_corr.dat')
 
-fig, ax = pl.subplots(nrows=3, ncols=3, sharex=True, sharey=True, figsize=(14,7))
-pl.subplots_adjust(left=0.11, right=0.95, top=0.95, bottom=0.15)
-fig.text(0.04, 0.5, 'number of pair of nodes', va='center', rotation='vertical',fontsize=25)
+fig, ax = pl.subplots(nrows=3, ncols=3, sharex=True, sharey=True, figsize=(25,15))
+pl.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
+fig.text(0.04, 0.5, 'number of pair of nodes', va='center', rotation='vertical',fontsize=65)
 pl.subplot(1,2,1)
 plot_histog(O, '$R_{BG}$')
-pl.xlabel('$\\rho$', fontsize=30 )
+pl.xticks(fontsize = 50)
+pl.yticks(fontsize = 50)
+pl.xlabel('$\\rho$', fontsize=65 )
 pl.subplot(1,2,2)
 plot_histog(A, '$R_{ER}$')
-pl.xlabel('$\\rho$', fontsize=30 )
+pl.xlabel('$\\rho$', fontsize=65 )
+pl.xticks(fontsize = 50)
+pl.yticks(fontsize = 50)
 
 pl.show()
 
