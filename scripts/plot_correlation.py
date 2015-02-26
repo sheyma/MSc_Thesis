@@ -163,8 +163,9 @@ name = 'acp_w_0_ADJ_thr_0.60_sigma=0.1_D=0.05_v=30.0_tmax=45000_NORM_BOLD_signal
 
 thr_array = np.arange(18, 86, 4)
 vel_array = np.array([110, 90, 80, 70, 60, 50, 40, 30, 20])
-#sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.03, 0.02, 0.018 ])
-sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 , 0.1, 0.050, 0.0475 , 0.045, 0.0425,  0.040, 0.0375 , 0.035, 0.0325, 0.030, 0.0275 ,0.025, 0.0225 , 0.020,  0.0175 , 0.018, 0.015,  0.0125 ,0.010,      0.0075, 0.005 ])
+sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
+#sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 , 0.1, 0.050, 0.0475 , 0.045, 0.0425,  0.040, 0.0375 , 0.035, 0.0325, 0.030, 0.0275 ,0.025, 0.0225 , 0.020,  0.0175 , 0.018, 0.015,  0.0125 ,0.010,      0.0075, 0.005 ])
+#sig_array = np.array([0.1, 0.050, 0.045, 0.040, 0.035, 0.030, 0.025,  0.020,  0.015,  0.010,  0.005 ])
   
 
  
@@ -200,60 +201,64 @@ for THR in thr_array :
 
 	
 Ordered_R   = collections.OrderedDict(sorted(R_thr.items()))	
-#print "Ordered dict"
-#print Ordered_R
+print "Ordered dict"
+print Ordered_R
 
 datam 		= np.array(Ordered_R.values())
 
-#print "check its numpy array version"
-#print datam
+print "check its numpy array version"
+print datam
 
-## PLOTTING BEGINS ! 
-
-#fig , ax = pl.subplots(figsize=(20, 15))
-#pl.subplots_adjust(left=0.15, right=1.0, top=0.98, bottom=0.12)
-#pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
-#cbar = pl.colorbar()
-
-##PLOT PA OVER SIGMA
-#b = sig_array
-#pl.ylabel('$c$', fontsize=65)
-
-###PLOT PA OVER VELOCITY
-##b = vel_array/10
-##pl.ylabel('$v$ [m/s]', fontsize=65)
+# PLOTTING BEGINS ! 
 
 
-## acp_w_0 thr range, XTICKS: 
-#a = np.array([0.22, 0.34, 0.46, 0.58, 0.70, 0.82])
+
+fig , ax = pl.subplots(figsize=(18, 15))
+pl.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.15)
+pl.imshow(np.transpose(datam), interpolation='nearest', cmap='jet', aspect='auto')
+cbar = pl.colorbar()
+
+
+
+#PLOT PA OVER SIGMA
+b = sig_array
+pl.ylabel('$c$', fontsize=65)
+
+##PLOT PA OVER VELOCITY
+#b = vel_array/10
+#pl.ylabel('$v$ [m/s]', fontsize=65)
+
+
+# acp_w_0 thr range, XTICKS: 
+a = np.array([0.22, 0.34, 0.46, 0.58, 0.70, 0.82])
+pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
+pl.xlabel('$p$', fontsize = 65)
+
+## A_aal_0 thr range, XTICKS : 
+#a = np.array([0.55,  0.58, 0.61, 0.64])	
 #pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
-#pl.xlabel('$p$', fontsize = 65)
+#pl.xlabel('$r$', fontsize = 65)
 
-### A_aal_0 thr range, XTICKS : 
-##a = np.array([0.55,  0.58, 0.61, 0.64])	
-##pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
-##pl.xlabel('$r$', fontsize = 65)
+pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
 
-#pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
-
-#for t in cbar.ax.get_yticklabels():
-	#t.set_fontsize(50)
-#pl.xticks(fontsize = 50)
-#pl.yticks(fontsize = 50)
-#ax.tick_params('both', length=12, width=5, which='major')
-#pl.show()		
+for t in cbar.ax.get_yticklabels():
+	t.set_fontsize(50)
+pl.xticks(fontsize = 50)
+pl.yticks(fontsize = 50)
+ax.tick_params('both', length=12, width=5, which='major')
+pl.show()		
 
 #------------------------------------
-#mtx_empiri			= 		load_matrix(input_empiri)
-#pl.figure()		
+##mtx_empiri			= 		load_matrix(input_empiri)
+##pl.figure()		
 #plot_corr(mtx_empiri , input_empiri)
-#plot_adj gets and "adjacency matrix"
-mtx_empiri = load_matrix('../data/jobs_adj/acp_w_0_ADJ_thr_0.55.dat')
-figure				=		plot_adj(mtx_empiri , input_empiri)
-#mtx_simuli			= 		load_matrix(input_simuli)
-#pl.figure()
-#plot_corr(mtx_simuli , input_simuli)
+##plot_adj gets and "adjacency matrix"
+#mtx_empiri = load_matrix('../data/jobs_adj/acp_w_0_ADJ_thr_0.55.dat')
+#figure				=		plot_adj(mtx_empiri , input_empiri)
+##mtx_simuli			= 		load_matrix(input_simuli)
+##pl.figure()
+##plot_corr(mtx_simuli , input_simuli)
 
-##R_pearson			= 	    pearson_coef(mtx_empiri , mtx_simuli)
-##print "Pearson corr. coef. between empir.-simul. : " , R_pearson
-pl.show()
+###R_pearson			= 	    pearson_coef(mtx_empiri , mtx_simuli)
+###print "Pearson corr. coef. between empir.-simul. : " , R_pearson
+#pl.show()
