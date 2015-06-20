@@ -116,13 +116,13 @@ def plot_bold_signal(timeseries, x, y):
 	fig , ax = pl.subplots(figsize=(25, 5.5))
 	pl.subplots_adjust(left=0.08, right=0.98, top=0.94, bottom=0.20)
 
-	pl.plot(time, v1, 'm', label=('$u_{' + str(x+1) + '}(t)$'))
-	pl.plot(time, v2, 'g', label=('$u_{' + str(y+1) + '}(t)$'))
+	pl.plot(time, v1, 'r')
+	pl.plot(time, v2, 'b')
 	pl.setp(pl.gca().get_xticklabels(), fontsize = 30)
 	pl.setp(pl.gca().get_yticklabels(), fontsize = 30)
 	
-	#ax.set_ylim(-v2.max()-0.05, v2.max()+0.05)
-	ax.set_ylim(-0.6, 0.6)
+	ax.set_xlim(0, time.max()+0.05)
+	ax.set_ylim(-0.32, 0.32)
 	
 	pl.legend(prop={'size':35})
 
