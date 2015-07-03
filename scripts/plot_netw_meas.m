@@ -23,6 +23,7 @@ random_G = ('0a');
 color='kr'; type = '-o';
 
 % Network Density
+%ax = gca;
 input_name = 'acp_w_single_network_measures.dat';
 fig = figure(1);
 subplot(1,3,1)
@@ -32,13 +33,17 @@ set(gca,'FontSize',45)
 for i =1:length(random_G)
     a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
     A=load(a);
-    plot(A(:,1),A(:,3),strcat(color(i),type(i)),'LineWidth',3)   
+    plot(A(1:80,1),A(1:80,3),strcat(color(i),type(i)),'LineWidth',3)   
 end
 
 legend('R_{BG}', 'R_{ER}')
 legend('boxoff')
 %%set(legend,'FontSize',14)
 xlabel('p')
+set(gca,'XTick',[0, 0.2, 0.4, 0.6, 0.8])  
+set(gca,'YTick',[0, 0.2, 0.4, 0.6, 0.8, 1.0])  
+set(gca,'LineWidth',2,'TickLength',[0.01 0.025]);
+axis([0 0.8 0 1])
 ylabel('\kappa')
 hold off
 set(fig, 'units', 'inches','position',[16 15 14 10])
@@ -53,17 +58,23 @@ set(gca,'FontSize',45)
 for i =1:length(random_G)
     a=strcat(input_name(1:6),'R',random_G(i),input_name(6:end));
     A=load(a);
-    plot(A(:,1),A(:,4),strcat(color(i),type(i)),'LineWidth',3)    
+    plot(A(1:80,1),A(1:80,4),strcat(color(i),type(i)),'LineWidth',3)    
 end
 legend('R_{BG}', 'R_{ER}')
 legend('boxoff')
 %%set(legend,'FontSize',14)
 xlabel('p')
 ylabel('C')
+set(gca,'XTick',[0, 0.2, 0.4, 0.6, 0.8])  
+set(gca,'YTick',[0, 0.2, 0.4, 0.6, 0.8, 1.0])  
+set(gca,'LineWidth',2,'TickLength',[0.01 0.025]);
 hold off
 set(fig, 'units', 'inches','position',[16 15 14 10])
-
+axis([0 0.8 0 1])
 % Small Worldness
+random_G = ('0');
+color='k'; type = '-';
+
 input_name_2 = 'acp_w_small_worldness.dat';
 subplot(1,3,3)
 set(gca,'FontSize',45)
@@ -71,11 +82,15 @@ set(gca,'FontSize',45)
 hold on
 for i = 1:length(random_G)
     A =load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
-    plot(A(:,1),A(:,8),strcat(color(i),type(i)),'LineWidth',3)  
+    plot(A(1:79,1),A(1:79,8),strcat(color(i),type(i)),'LineWidth',3)  
 end
-legend('R_{BG}', 'R_{ER}','Location','North' ,'Orientation','horizontal')
+legend('R_{BG}','Location','South' ,'Orientation','horizontal')
 %%set(legend,'FontSize',14)
+axis([0 0.8 1 5])
 legend('boxoff')
+set(gca,'XTick',[0, 0.2, 0.4, 0.6, 0.8])  
+set(gca,'YTick',[1,2,3,4,5])  
+set(gca,'LineWidth',2,'TickLength',[0.01 0.025]);
 xlabel('p')
 ylabel('S')
 hold off
@@ -84,47 +99,47 @@ set(gcf, 'PaperPositionMode','auto')
 %saveas(gcf,'Small_Worldness_Fnc.eps','eps2c'
 
 
-% Transitivity
-input_name_2 = 'acp_w_small_worldness.dat';
-figure(7);
-set(gca,'FontSize',45)
-%title('FCM')
-hold on
-for i = 1:length(random_G)
-    a = strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end));
-    A = load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
-    plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)
-end
-legend('R_{BG}', 'R_{ER}','Location','SouthWest' )
-%%set(legend,'FontSize',14)
-legend('boxoff')
-xlabel('p')
-ylabel('T')
-hold off
-set(figure(7), 'units', 'inches','position',[16 15 14 10])
-set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Transitivity_Fnc.eps','eps2c')
-
-
-set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Clustering_Coefficient_Fnc.eps','eps2c')
-
-input_name = 'acp_w_single_network_measures.dat';
-figure(4);
-hold on
-set(gca,'FontSize',45)
-title('ACM')
-for i =1:length(random_G)
-    A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
-    plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
-end
-legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','NorthWest')
-%set(legend,'FontSize',14)
-legend('boxoff')
-xlabel('p')
-ylabel('ACC')
-hold off
-set(figure(4), 'units', 'inches','position',[16 15 14 10])
-set(gcf, 'PaperPositionMode','auto')
-%saveas(gcf,'Connected_Components_Average_Stru.eps','eps2c')
-
+% % Transitivity
+% input_name_2 = 'acp_w_small_worldness.dat';
+% figure(7);
+% set(gca,'FontSize',45)
+% %title('FCM')
+% hold on
+% for i = 1:length(random_G)
+%     a = strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end));
+%     A = load(strcat(input_name_2(1:6),'R',random_G(i),input_name_2(6:end)));
+%     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)
+% end
+% legend('R_{BG}', 'R_{ER}','Location','SouthWest' )
+% %%set(legend,'FontSize',14)
+% legend('boxoff')
+% xlabel('p')
+% ylabel('T')
+% hold off
+% set(figure(7), 'units', 'inches','position',[16 15 14 10])
+% set(gcf, 'PaperPositionMode','auto')
+% %saveas(gcf,'Transitivity_Fnc.eps','eps2c')
+% 
+% 
+% set(gcf, 'PaperPositionMode','auto')
+% %saveas(gcf,'Clustering_Coefficient_Fnc.eps','eps2c')
+% 
+% input_name = 'acp_w_single_network_measures.dat';
+% figure(4);
+% hold on
+% set(gca,'FontSize',45)
+% title('ACM')
+% for i =1:length(random_G)
+%     A=load(strcat(input_name(1:6),'R',random_G(i),input_name(6:end)));
+%     plot(A(:,1),A(:,6),strcat(color(i),type(i)),'LineWidth',3)     
+% end
+% legend('R_{BG}', 'R_{ER}','R_{DES}','R_{CM}','R_{PDD}','R_{PR}','Location','NorthWest')
+% %set(legend,'FontSize',14)
+% legend('boxoff')
+% xlabel('p')
+% ylabel('ACC')
+% hold off
+% set(figure(4), 'units', 'inches','position',[16 15 14 10])
+% set(gcf, 'PaperPositionMode','auto')
+% %saveas(gcf,'Connected_Components_Average_Stru.eps','eps2c')
+% 

@@ -165,7 +165,7 @@ thr_array = np.arange(34, 86, 4)
 vel_array = np.array([110, 90, 80, 70, 60, 50, 40, 30, 20])
 #sig_array = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
 #sig_array = np.array([0.050, 0.0475 , 0.045, 0.0425,  0.040, 0.0375 , 0.035, 0.0325, 0.030, 0.0275 ,0.025, 0.0225 , 0.020,  0.0175 ,  0.015,  0.0125 ,0.010,      0.0075, 0.005 ])
-sig_array = np.array([0.1, 0.050, 0.045, 0.040, 0.035, 0.030, 0.025,  0.020,  0.015,  0.010,  0.005 ])
+sig_array = np.array([0.050, 0.045, 0.040, 0.035, 0.030, 0.025,  0.020,  0.015,  0.010,  0.005 ])
   
 #sig_array = np.arange( 0.1, 0.005, -0.005)
  
@@ -175,26 +175,24 @@ for THR in thr_array :
 	R_temp = []
 	
 	#local_path = '../data/jobs_corr/'
-	local_path = '../data/jobs_corr_bold/'
-	
+	#local_path = '../data/jobs_corr_bold/'
+	local_path = '/media/0a5437d3-d51c-4c40-8c7a-06738fd0c83a/sheyma_bayrak_2015/jobs_corr_bold/'
 	#for VEL in vel_array :
 		
 		#input_name = name[0:18] + str(THR) + name[20:40] + str(VEL) + name[42:]		
 		
 	for SIG in sig_array :
 		
-		input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]		
-		
-		print input_name
+		input_name = name[0:18] + str(THR) + name[20:27] + str(SIG) + name[30:]	
 	
 		try:
 			mtx_simuli = load_matrix(local_path + input_name)
+		
 		except :
 			R_val      = np.nan
 		else :
 			R_val      = pearson_coef(mtx_empiri, mtx_simuli)
-	
-		
+			
 		R_temp     = np.append(R_temp, R_val)
 	R_thr[THR] 	   = np.array(R_temp)
 
@@ -221,7 +219,8 @@ cbar = pl.colorbar()
 
 
 #PLOT PA OVER SIGMA
-b = sig_array
+#b = sig_array
+b = np.array([0.05, 0.04, 0.03, 0.02, 0.01])
 pl.ylabel('$c$', fontsize=65)
 
 ##PLOT PA OVER VELOCITY
@@ -240,7 +239,9 @@ pl.xlabel('$p$', fontsize = 65)
 #pl.setp(ax , xticks=np.arange(1,len(thr_array),3), xticklabels = a )
 #pl.xlabel('$r$', fontsize = 65)
 
-pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
+#pl.setp(ax , yticks=np.arange(0,len(b),1), yticklabels = b)
+
+pl.setp(ax , yticks=np.arange(0,len(sig_array),2), yticklabels = b)
 
 for t in cbar.ax.get_yticklabels():
 	t.set_fontsize(50)
