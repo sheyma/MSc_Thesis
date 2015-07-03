@@ -1,0 +1,16 @@
+
+"Figure X" refers to the figure on the paper, I tried to explain the changes for these figures with mentioning names of new figures.
+
+-------------------------------------------------
+
+Figure 5 : Now, I cut p-value at 0.79 for small-worldness. At p=0.79, our brain graph starts having multiple components. Please check figures "network_meas_02.eps" and "network_meas_03.eps", they are the same in principle but one of them indicates p=0.79 and S=4.45 with dashed green line.
+
+Figure 6 : "PA_ACM_BOLD_v_3_new.eps" refers exactly the same parameters in Figure 6 but threshold is cut from p=0.34 for compatibility. p-range on figure corresponds to the following network density : 0.23 (equal and greater to) > kappa> (equal and greater to) 0.17 (this needs to be corrected on page 7). One can also have a look at "PA_ACM_BOLD_v_6_new.eps", this figure represents v=6 m/s, which is not our interest actually..
+
+Figure 8 : "cor_BOLD_ACM_sim_no_best_new.eps" , the legends are removed. Actual simulation time is 7.5 mins but 20seconds are cut from the beginning of simulated BOLD signal (discarding transient), so it stops now at 7.17 mins
+
+Figure 9: Both figures (left, FHN) (right, BOLD) are generated for v=3m/s. I have alsa changed c-values as it is compatible to that of Figure 6. "Random_ACM_PA_task_v_3_FHN.eps" and "Random_ACM_PA_task_v_3_BOLD.eps" are the new figures wiht v=3 now. 
+
+Figure 10 : Histograms are chosen from "Random_ACM_PA_task_v_3_FHN.eps" now: one from the red color meaning that they are different, see "histo_r_054_v_3_c_005_fhn.eps", one from the cold color meaning that they are similar, see "histo_r_054_v_3_c_0005_fhn.eps". I have checked several histogram distributions for hot/cold colors from Figure 9 left/right, the histograms behaved always very consistent.
+
+---------------------------------
